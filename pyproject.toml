@@ -1,0 +1,86 @@
+[tool.poetry]
+name = "vr_dash"
+version = "0.0.0"
+description = ""
+authors = ["Matthias Hauth <matthias.hauth@deltares.nl>"]
+maintainers = [
+]
+readme = "README.md"
+repository = "https://github.com/Deltares/VrtoolDashboard"
+packages = [{include="vrtool"},]
+keywords = ["civil-engineering", "dikes", "flood-defence", "deltares", "dashboard", "vrtool"]
+classifiers = [
+  'Programming Language :: Python :: 3',
+  'Natural Language :: English',
+  'Intended Audience :: Science/Research',
+  'Topic :: Software Development :: Libraries :: Python Modules',
+  'Topic :: Scientific/Engineering',
+  'Topic :: Scientific/Engineering :: GIS',
+  'Topic :: Scientific/Engineering :: Mathematics',
+  'Topic :: Scientific/Engineering :: Physics',
+  'Topic :: Scientific/Engineering :: Hydrology',
+]
+
+[tool.poetry.dependencies]
+python = "^3.9, <3.11"
+dash = "^2.10.2"
+vrtool = {git = "https://github.com/Deltares/Veiligheidsrendement"}
+
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.2.1"
+pytest-cov = "^3.0.0"
+coverage = "^6.4.4"
+teamcity-messages = "^1.32"
+
+[tool.poetry.group.dev.dependencies]
+black = "^22.8.0"
+isort = "^5.10.1"
+commitizen = "^3.0.1"
+urllib3 = "1.26.15"
+
+
+[tool.black]
+line-length = 88
+target-version = ['py310']
+exclude = '''
+(
+  /(
+      \.git         # exclude a few common directories in the
+    | \.github          # root of the project
+    | \.env
+    | \.venv
+    | \.config
+    | .pytest_cache
+    | .scannerwork
+    | .vscode
+    | site
+  )/
+)
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+skip = [".git", ".github", ".env", ".venv", ".config", ".pytest_cache", ".scannerwork", ".vscode", "site"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "externals: marks tests that require of external binaries (deselect with '-m \"not externals\"')",
+]
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.0.2"
+tag_format = "v$major.$minor.$patch"
+changelog_file = "docs/changelog.md"
+update_changelog_on_bump = true
+version_files= [
+    "vrtool/__init__.py",
+    "pyproject.toml:version",]
