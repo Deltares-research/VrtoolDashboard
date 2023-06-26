@@ -3,8 +3,11 @@ import dash_bootstrap_components as dbc
 
 
 # Define the navbar structure
-def Navbar():
-
+def Navbar() -> html.Div:
+    """
+    This function returns the navigation bar layout
+    :return:
+    """
     layout = html.Div([
         dbc.NavbarSimple(
             children=[
