@@ -1,11 +1,10 @@
 import base64
-import html
 import io
-from datetime import datetime
+import datetime
 
 import pandas as pd
 import geopandas as gpd
-from dash import dcc
+from dash import dcc, html
 
 
 def parse_contents(contents, filename, date):
