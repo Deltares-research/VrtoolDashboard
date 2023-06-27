@@ -17,7 +17,8 @@ def Navbar() -> html.Div:
             brand="Veiligheidrendement Dashboard",
             brand_style={'font-size': '30px', "color": 'white'},
             brand_href="/",
-            color="primary",
+            color="#141e95",  # this is Deltares color
+            # color='primary'
         ),
     ])
 
