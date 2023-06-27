@@ -1,7 +1,7 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 
-from src.components.upload_dike_files import FileDikeUpload
+from .upload_dike_files import FileDikeUpload
 
 
 def make_layout_main_page() -> dbc.Row:

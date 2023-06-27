@@ -1,10 +1,10 @@
 from dash import html, dcc, Output, Input, State
-from app import app
 import dash_bootstrap_components as dbc
 
-from components.navigation_bar import Navbar
+from src.components.navigation_bar import Navbar
 from src.components.layout_main_page import make_layout_main_page
 from src.plotly_graphs.plotly_maps import plot_overview_map_dummy
+from src.app import app
 from src.utils.importers import parse_contents
 
 # Define the app layout

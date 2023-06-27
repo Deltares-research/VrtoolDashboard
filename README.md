@@ -5,3 +5,38 @@
 # Veiligheidsrendement Dashboard #
 
 This is the repository of the dashboard connecting to the VeiligheidsrendementTool. The dashboard is developed in Dash and Plotly.
+
+
+
+
+# Installation of the dashboard #
+
+The dashboard currently runs locally on your own machine. To install and use the dashboard, follow the steps below:
+
+1. Clone the repository to your local machine in a directory of your choice.
+    ```bash
+    cd C:\repos
+    git clone https://github.com/Deltares/VrtoolDashboard.git
+    ```
+
+2. Navigate to your 'VrtoolDashboard' directory and create a virtual environment (make sure you already have anaconda installed).
+    ```bash
+    cd C:\repos\VrtoolDashboard
+    conda env create -f .config\environment.yml
+    conda activate vrtool_dash
+    poetry install
+    ```
+   
+3. The dashboard is now installed and ready to use. To run the dashboard, run the following command:
+
+   ```bash
+   python -m src.index
+   ```
+
+The dashboard should pop up in your default browser. If not, navigate to http address displayed in the terminal.
+Once the dashboard is already installed, only the third step is required to start the dashboard again.
+
+
+
+
+
