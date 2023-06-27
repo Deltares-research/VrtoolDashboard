@@ -26,6 +26,7 @@ python = "^3.9, <3.11"
 dash = "^2.10.2"
 vrtool = {git = "https://github.com/Deltares/Veiligheidsrendement"}
 dash-bootstrap-components = "^1.4.1"
+geopandas = "^0.13.2"
 
 
 [tool.poetry.group.test.dependencies]
