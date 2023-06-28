@@ -5,6 +5,8 @@ import plotly.graph_objects as go
 from src.utils.gws_convertor import GWSRDConvertor
 
 
+
+
 def plot_overview_map_dummy(data: list[dict]):
     """
     TODO: display the correct information as color and hover.
