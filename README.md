@@ -8,7 +8,6 @@ This is the repository of the dashboard connecting to the VeiligheidsrendementTo
 
 
 
-
 # Installation of the dashboard #
 
 The dashboard currently runs locally on your own machine. To install and use the dashboard, follow the steps below:
@@ -26,6 +25,7 @@ The dashboard currently runs locally on your own machine. To install and use the
     conda activate vrtool_dash
     poetry install
     ```
+If the installation of all the packages is not successful and error messages are appearing, run ```poetry install``` again.
    
 3. The dashboard is now installed and ready to use. To run the dashboard, run the following command:
 
@@ -34,7 +34,7 @@ The dashboard currently runs locally on your own machine. To install and use the
    ```
 
 The dashboard should pop up in your default browser. If not, navigate to http address displayed in the terminal.
-Once the dashboard is already installed, only the third step is required to start the dashboard again.
+Once the dashboard is already installed, only the third step is required to start the dashboard again (provided that the virtual environment is activated, if not rerun ```conda activate vrtool_dash```).
 
 
 
