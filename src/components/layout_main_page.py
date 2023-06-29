@@ -1,7 +1,7 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 
-from .upload_dike_files import FileDikeUpload, ZipDikeUpload
+from .upload_dike_files import ZipDikeUpload
 
 
 def make_layout_main_page() -> dbc.Row:
@@ -26,7 +26,6 @@ def make_layout_main_page() -> dbc.Row:
     
                             '''
                         ),
-                        FileDikeUpload(),
                         ZipDikeUpload(),
 
                     ]

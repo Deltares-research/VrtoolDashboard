@@ -28,6 +28,7 @@ class DikeTraject(BaseLinearObject):
                                    )
 
             if section['vaknaam'] in _final_measure_doorsnede_dict.keys():
+                _section.is_reinforced = True
                 _section.final_measure_doorsnede = _final_measure_doorsnede_dict[section['vaknaam']]
                 _section.final_measure_veiligheidrendement = _final_measure_vh_dict[section['vaknaam']]
 
@@ -39,9 +40,13 @@ class DikeTraject(BaseLinearObject):
         """Serialize the DikeTraject object to a dict, in order to be saved in dcc.Store"""
         return {
             'name': self.name,
-            'coordinates_rd': self.coordinates_rd,
             'dike_sections': [section.serialize() for section in self.dike_sections]
         }
+
+    @staticmethod
+    def deserialize(data):
+        sections = [DikeSection.deserialize(section_data) for section_data in data['dike_sections']]
+        return DikeTraject(name=data['name'], dike_sections=sections)
 
 
 

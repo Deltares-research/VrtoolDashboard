@@ -6,7 +6,7 @@ class BaseLinearObject:
     trajectory: LineString
 
     def __init__(self, coordinates_rd: list[tuple[float, float]]):
-        coordinates_rd = coordinates_rd
+        self.coordinates_rd = coordinates_rd
         trajectory = LineString(coordinates_rd)
 
     def coordinates_wgs84(self):

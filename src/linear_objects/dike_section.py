@@ -7,14 +7,16 @@ class DikeSection(BaseLinearObject):
     coordinates_rd: list[tuple[float, float]]  # from parent class
     name: str
     in_analyse: bool
+    is_reinforced: bool
     initial_assessment: dict
     final_measure_veiligheidrendement: dict
     final_measure_doorsnede: dict  # replace dict with a Measure Object
 
-    def __init__(self, name: str, in_analyse: bool, coordinates_rd: list[tuple[float, float]]):
+    def __init__(self, name: str, coordinates_rd: list[tuple[float, float]], in_analyse: bool,):
         super().__init__(coordinates_rd)
         self.name = name
-        self.in_analyse = False
+        self.in_analyse = in_analyse  # What does this mean?
+        self.is_reinforced = False
         self.initial_assessment = {}
         self.final_measure_veiligheidrendement = {}
         self.final_measure_doorsnede = {}
@@ -26,8 +28,18 @@ class DikeSection(BaseLinearObject):
             'coordinates_rd': self.coordinates_rd,
             'name': self.name,
             'in_analyse': self.in_analyse,
+            'is_reinforced': self.is_reinforced,
             'initial_assessment': self.initial_assessment,
             'final_measure_veiligheidrendement': self.final_measure_veiligheidrendement,
             'final_measure_doorsnede': self.final_measure_doorsnede,
         }
+
+    @staticmethod
+    def deserialize(data):
+        section = DikeSection(name=data['name'], in_analyse=data['in_analyse'], coordinates_rd=data['coordinates_rd'])
+        section.initial_assessment = data['initial_assessment']
+        section.is_reinforced = data['is_reinforced']
+        section.final_measure_veiligheidrendement = data['final_measure_veiligheidrendement']
+        section.final_measure_doorsnede = data['final_measure_doorsnede']
+        return section
 

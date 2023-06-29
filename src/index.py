@@ -23,18 +23,6 @@ app.layout = dbc.Container(
 
 
 # Define the callbacks
-@app.callback(Output('output-data-upload', 'children'),
-              Input('upload-data', 'contents'),
-              State('upload-data', 'filename'),
-              State('upload-data', 'last_modified'))
-def update_output(list_of_contents: list, list_of_names: list[str], list_of_dates: list[str]) -> list[html.Div]:
-    """Returns the uploaded file in a table"""
-    if list_of_contents is not None:
-        children = [
-            parse_contents(c, n, d) for c, n, d in
-            zip(list_of_contents, list_of_names, list_of_dates)]
-        return children
-
 
 @app.callback([Output('output-data-upload-zip', 'children'),
                Output("upload-toast", "is_open")],
@@ -62,17 +50,18 @@ def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
         return html.Div("No file has been uploaded yet"), False
 
 
-@app.callback(Output('output-divvv', 'children'),
+@app.callback(Output('output-div', 'children'),
               Input('stored-data', 'data'))
-def make_graph_overview_dike(data: list[dict]) -> dcc.Graph:
+def make_graph_overview_dike(dike_traject_data: list[dict]) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
 
-    :param data: list of dictionaries containing the dike data. Each element of the list is a different dijkvak.
+    :param dike_traject_data:
 
     """
-    fig = plot_overview_map_dummy(data)
-    return dcc.Graph(figure=fig, style={'width': '100%', 'height': '100%'})
+    _dike_traject = DikeTraject.deserialize(dike_traject_data)
+    _fig = plot_overview_map_dummy(_dike_traject)
+    return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
 
 
 @app.callback(
