@@ -18,3 +18,16 @@ class DikeSection(BaseLinearObject):
         self.initial_assessment = {}
         self.final_measure_veiligheidrendement = {}
         self.final_measure_doorsnede = {}
+
+
+    def serialize(self):
+        """Serialize the DikeSection object to a dict, in order to be saved in dcc.Store"""
+        return {
+            'coordinates_rd': self.coordinates_rd,
+            'name': self.name,
+            'in_analyse': self.in_analyse,
+            'initial_assessment': self.initial_assessment,
+            'final_measure_veiligheidrendement': self.final_measure_veiligheidrendement,
+            'final_measure_doorsnede': self.final_measure_doorsnede,
+        }
+

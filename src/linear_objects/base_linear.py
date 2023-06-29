@@ -12,6 +12,5 @@ class BaseLinearObject:
     def coordinates_wgs84(self):
         pass
 
-
     def serialize(self):
         pass

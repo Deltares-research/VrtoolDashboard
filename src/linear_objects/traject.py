@@ -35,6 +35,13 @@ class DikeTraject(BaseLinearObject):
 
         return cls(name=zipname, dike_sections=_dike_sections)
 
+    def serialize(self):
+        """Serialize the DikeTraject object to a dict, in order to be saved in dcc.Store"""
+        return {
+            'name': self.name,
+            'coordinates_rd': self.coordinates_rd,
+            'dike_sections': [section.serialize() for section in self.dike_sections]
+        }
 
 
 
