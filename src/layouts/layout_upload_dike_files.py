@@ -2,12 +2,8 @@ from dash import html, dcc
 import dash_bootstrap_components as dbc
 
 
-def ZipDikeUpload() -> html.Div:
-    """
-    This function returns the div for uploading dike files as zip.
-    :return:
-    """
-    layout = html.Div([
+
+layout_upload_button = html.Div([
 
         dcc.Upload(
             id='upload-data-zip',
@@ -43,5 +39,3 @@ def ZipDikeUpload() -> html.Div:
         ),
         html.Div(id='output-data-upload-zip'),
     ])
-
-    return layout
