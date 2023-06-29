@@ -1,11 +1,14 @@
+import time
+
 from dash import html, dcc, Output, Input, State
 import dash_bootstrap_components as dbc
 
 from src.components.navigation_bar import Navbar
 from src.components.layout_main_page import make_layout_main_page
+from src.linear_objects.traject import DikeTraject
 from src.plotly_graphs.plotly_maps import plot_overview_map_dummy
 from src.app import app
-from src.utils.importers import parse_contents
+from src.utils.importers import parse_contents, parse_zip_content
 
 # Define the app layout
 app.layout = dbc.Container(
@@ -18,6 +21,7 @@ app.layout = dbc.Container(
     ],
     fluid=True,
 )
+
 
 # Define the callbacks
 @app.callback(Output('output-data-upload', 'children'),
@@ -33,7 +37,29 @@ def update_output(list_of_contents: list, list_of_names: list[str], list_of_date
         return children
 
 
-@app.callback(Output('output-div', 'children'),
+@app.callback([Output('output-data-upload-zip', 'children'),
+               Output("upload-toast", "is_open")],
+              [Input('upload-data-zip', 'contents')],
+              [State('upload-data-zip', 'filename')])
+def upload_and_save_traject_input(contents: str, filename: str):
+    """This is the callback for the upload of the zip files of the traject data.
+
+    :param contents: string content of the uploaded zip file. The zip should content at least:
+        - a geojson file with the dike data
+        - a csv file with the results of the Veiligheidrendement method.
+
+    :param filename: name of the uploaded zip file.
+    """
+    if contents is not None:
+        _dike_traject = DikeTraject.from_uploaded_zip(contents, filename)
+        return html.Div(
+            dcc.Store(id='stored-data', data=_dike_traject.serialize())), True
+
+    else:
+        return html.Div("File could not be uploaded"), False
+
+
+@app.callback(Output('output-divvv', 'children'),
               Input('stored-data', 'data'))
 def make_graph_overview_dike(data: list[dict]) -> dcc.Graph:
     """
@@ -50,7 +76,7 @@ def make_graph_overview_dike(data: list[dict]) -> dcc.Graph:
     Output("content_tab", "children"),
     [Input("tabs", "active_tab")]
 )
-def render_tab_content(active_tab: str) -> html.Div:
+def render_tab_map_content(active_tab: str) -> html.Div:
     """
     Renders the content of the selected tab for the general overview page.
     :param active_tab:
@@ -73,4 +99,5 @@ def render_tab_content(active_tab: str) -> html.Div:
 
 # Run the app on localhost:8050
 if __name__ == '__main__':
+    print("============================= RERUN THE APP ====================================")
     app.run_server(debug=True)

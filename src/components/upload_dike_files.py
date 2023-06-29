@@ -1,11 +1,12 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
+from dash.dependencies import Input
 
 
 # Define the navbar structure
 def FileDikeUpload() -> html.Div:
     """
-    This function returns the navigation bar layout
+    This function returns the div for uploading dike files as a geojson.
     :return:
     """
     layout = html.Div([
@@ -31,6 +32,51 @@ def FileDikeUpload() -> html.Div:
             accept='.geojson'
         ),
         html.Div(id='output-data-upload'),
+    ])
+
+    return layout
+
+
+def ZipDikeUpload() -> html.Div:
+    """
+    This function returns the div for uploading dike files as zip.
+    :return:
+    """
+    layout = html.Div([
+
+        dcc.Upload(
+            id='upload-data-zip',
+            children=html.Div([
+                'Drag and Drop a zip ',
+                html.A('Select Files')
+            ]),
+            style={
+                'width': '100%',
+                'height': '60px',
+                'lineHeight': '60px',
+                'borderWidth': '1px',
+                'borderStyle': 'dashed',
+                'borderRadius': '5px',
+                'textAlign': 'center',
+                'margin': '10px'
+            },
+            # Allow multiple files to be uploaded
+            multiple=False,
+            accept='.zip'
+        ),
+
+        dbc.Toast(
+
+            [html.P("File uploaded successfully!", className="mb-0")],
+            id="upload-toast",
+            header="Success",
+            icon="success",
+            duration=3000,  # Display duration in milliseconds
+            dismissable=True,
+            is_open=False,
+
+        ),
+        html.Div(id='output-data-upload-zip'),
     ])
 
     return layout
