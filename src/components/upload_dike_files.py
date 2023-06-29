@@ -1,6 +1,5 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
-from dash.dependencies import Input
 
 
 # Define the navbar structure
@@ -71,7 +70,7 @@ def ZipDikeUpload() -> html.Div:
             id="upload-toast",
             header="Success",
             icon="success",
-            duration=3000,  # Display duration in milliseconds
+            duration=5000,  # Display duration in milliseconds
             dismissable=True,
             is_open=False,
 

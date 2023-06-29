@@ -1,4 +1,3 @@
-import time
 
 from dash import html, dcc, Output, Input, State
 import dash_bootstrap_components as dbc
@@ -41,7 +40,7 @@ def update_output(list_of_contents: list, list_of_names: list[str], list_of_date
                Output("upload-toast", "is_open")],
               [Input('upload-data-zip', 'contents')],
               [State('upload-data-zip', 'filename')])
-def upload_and_save_traject_input(contents: str, filename: str):
+def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
     """This is the callback for the upload of the zip files of the traject data.
 
     :param contents: string content of the uploaded zip file. The zip should content at least:
@@ -49,6 +48,10 @@ def upload_and_save_traject_input(contents: str, filename: str):
         - a csv file with the results of the Veiligheidrendement method.
 
     :param filename: name of the uploaded zip file.
+
+    :return: Return a tuple with:
+        - html.Div with the serialized dike traject data.
+        - boolean indicating if the upload was successful.
     """
     if contents is not None:
         _dike_traject = DikeTraject.from_uploaded_zip(contents, filename)
@@ -56,7 +59,7 @@ def upload_and_save_traject_input(contents: str, filename: str):
             dcc.Store(id='stored-data', data=_dike_traject.serialize())), True
 
     else:
-        return html.Div("File could not be uploaded"), False
+        return html.Div("No file has been uploaded yet"), False
 
 
 @app.callback(Output('output-divvv', 'children'),
