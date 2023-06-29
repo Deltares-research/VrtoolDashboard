@@ -7,7 +7,7 @@ maintainers = [
 ]
 readme = "README.md"
 repository = "https://github.com/Deltares/VrtoolDashboard"
-packages = [{include="vrtool"},]
+packages = [{include="src"},]
 keywords = ["civil-engineering", "dikes", "flood-defence", "deltares", "dashboard", "vrtool"]
 classifiers = [
   'Programming Language :: Python :: 3',
@@ -27,7 +27,6 @@ dash = "^2.10.2"
 dash-bootstrap-components = "^1.4.1"
 geopandas = "^0.13.2"
 vrtool = {path = "externals/vrtool/vrtool-0.0.3.tar.gz"}
-
 
 
 [tool.poetry.group.test.dependencies]
