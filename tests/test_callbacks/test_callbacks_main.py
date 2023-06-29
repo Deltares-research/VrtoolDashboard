@@ -5,7 +5,7 @@ from pathlib import Path
 
 from dash import html, dcc
 
-from src.index import upload_and_save_traject_input, make_graph_overview_dike
+from src.callbacks.callbacks_main_page import upload_and_save_traject_input, make_graph_overview_dike
 
 
 class TestCallback:
