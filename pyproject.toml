@@ -7,7 +7,7 @@ maintainers = [
 ]
 readme = "README.md"
 repository = "https://github.com/Deltares/VrtoolDashboard"
-packages = [{include="vrtool"},]
+packages = [{include="src"},]
 keywords = ["civil-engineering", "dikes", "flood-defence", "deltares", "dashboard", "vrtool"]
 classifiers = [
   'Programming Language :: Python :: 3',
@@ -24,9 +24,9 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.9, <3.11"
 dash = "^2.10.2"
-vrtool = {git = "https://github.com/Deltares/Veiligheidsrendement"}
 dash-bootstrap-components = "^1.4.1"
 geopandas = "^0.13.2"
+vrtool = {path = "externals/vrtool/vrtool-0.0.3.tar.gz"}
 
 
 [tool.poetry.group.test.dependencies]
@@ -79,10 +79,10 @@ markers = [
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.0.2"
+version = "0.0.0"
 tag_format = "v$major.$minor.$patch"
 changelog_file = "docs/changelog.md"
 update_changelog_on_bump = true
 version_files= [
-    "vrtool/__init__.py",
+    "src/__init__.py",
     "pyproject.toml:version",]
