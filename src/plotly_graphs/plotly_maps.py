@@ -6,21 +6,22 @@ from src.linear_objects.traject import DikeTraject
 from src.utils.gws_convertor import GWSRDConvertor
 
 
-
-
-def plot_overview_map_dummy(dike_traject: DikeTraject):
+def plot_overview_map_dummy(dike_traject: DikeTraject) -> go.Figure:
     """
-    TODO: display the correct information as color and hover.
-    DISCLAIMER: This is a DUMMY function
     This function plots an overview Map of the current dike in data. It uses plotly Mapbox for the visualization.
 
-    :param data: serialized dike data from a geopandas dataframe that has been saved
+    :param dike_traject: DikeTraject object with the data of the dike.
     :return:
     """
     fig = go.Figure()
 
     for section in dike_traject.dike_sections:
-        convertor = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in section.coordinates_rd] # convert in GWS coordinates:
+        convertor = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
+                     section.coordinates_rd]  # convert in GWS coordinates:
+
+        if not section.in_analyse:
+            continue
+
         if section.is_reinforced:
             color = 'green' if section.final_measure_doorsnede == "Grondversterking binnenwaarts 2025" else 'red'
         else:

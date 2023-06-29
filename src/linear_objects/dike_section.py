@@ -1,5 +1,3 @@
-from dataclasses import dataclass
-
 from src.linear_objects.base_linear import BaseLinearObject
 
 
@@ -12,17 +10,23 @@ class DikeSection(BaseLinearObject):
     final_measure_veiligheidrendement: dict
     final_measure_doorsnede: dict  # replace dict with a Measure Object
 
-    def __init__(self, name: str, coordinates_rd: list[tuple[float, float]], in_analyse: bool,):
+    def __init__(self, name: str, coordinates_rd: list[tuple[float, float]], in_analyse: bool):
+        """
+        :param name: name of the dike section
+        :param coordinates_rd: list of tuples with the coordinates of the dike section in RD coordinates
+        :param in_analyse: boolean indicating whether the dike section is in the analysis, i.e. whether its reliability
+        is included in the reliability of the dike trajectory.
+        """
         super().__init__(coordinates_rd)
         self.name = name
-        self.in_analyse = in_analyse  # What does this mean?
+        self.in_analyse = in_analyse
         self.is_reinforced = False
         self.initial_assessment = {}
         self.final_measure_veiligheidrendement = {}
         self.final_measure_doorsnede = {}
 
 
-    def serialize(self):
+    def serialize(self) -> dict:
         """Serialize the DikeSection object to a dict, in order to be saved in dcc.Store"""
         return {
             'coordinates_rd': self.coordinates_rd,
@@ -35,11 +39,15 @@ class DikeSection(BaseLinearObject):
         }
 
     @staticmethod
-    def deserialize(data):
+    def deserialize(data: dict) -> 'DikeSection':
+        """Deserialize the DikeSection object from a dict, in order to be loaded from dcc.Store
+
+        :param data: serialized dict with the data of the DikeSection object
+
+        """
         section = DikeSection(name=data['name'], in_analyse=data['in_analyse'], coordinates_rd=data['coordinates_rd'])
         section.initial_assessment = data['initial_assessment']
         section.is_reinforced = data['is_reinforced']
         section.final_measure_veiligheidrendement = data['final_measure_veiligheidrendement']
         section.final_measure_doorsnede = data['final_measure_doorsnede']
         return section
-

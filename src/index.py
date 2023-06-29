@@ -52,7 +52,7 @@ def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
 
 @app.callback(Output('output-div', 'children'),
               Input('stored-data', 'data'))
-def make_graph_overview_dike(dike_traject_data: list[dict]) -> dcc.Graph:
+def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
 
