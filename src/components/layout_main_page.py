@@ -1,7 +1,7 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 
-from .upload_dike_files import FileDikeUpload
+from .upload_dike_files import ZipDikeUpload
 
 
 def make_layout_main_page() -> dbc.Row:
@@ -17,16 +17,16 @@ def make_layout_main_page() -> dbc.Row:
             dbc.Col(
                 html.Div(
                     [
-                        html.H2("Instellingen"),
+                        html.H2("Welcome to the dashboard of the Veiligheidrendement tool🌊"),
                         dcc.Markdown(
                             '''
-                            Welcome to the dashboard page of Veiligheidrendement 🌊.
+                            This dashboard is a tool to visualize the results of the Veiligheidrendement optimization for dike projects.
     
                             You can start using the dashboard by uploading below a Geojson file of a dike:
     
                             '''
                         ),
-                        FileDikeUpload(),
+                        ZipDikeUpload(),
 
                     ]
                 ),

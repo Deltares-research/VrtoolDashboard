@@ -2,35 +2,30 @@ from pathlib import Path
 
 import plotly.graph_objects as go
 
+from src.linear_objects.traject import DikeTraject
 from src.utils.gws_convertor import GWSRDConvertor
 
 
-
-
-def plot_overview_map_dummy(data: list[dict]):
+def plot_overview_map_dummy(dike_traject: DikeTraject) -> go.Figure:
     """
-    TODO: display the correct information as color and hover.
-    DISCLAIMER: This is a DUMMY function
     This function plots an overview Map of the current dike in data. It uses plotly Mapbox for the visualization.
 
-    :param data: serialized dike data from a geopandas dataframe that has been saved
+    :param dike_traject: DikeTraject object with the data of the dike.
     :return:
     """
     fig = go.Figure()
 
-    for dijkvak in data:
-        # convert in GWS coordinates:
-        linestring_rd = dijkvak['geometry']
-        convertor = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in linestring_rd]
+    for section in dike_traject.dike_sections:
+        convertor = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
+                     section.coordinates_rd]  # convert in GWS coordinates:
 
-        if dijkvak["objectid"] in [0, 1, 2, 4, 7, 8, 30, 31, 33, 34, 35]:
-            color = 'red'
-        elif dijkvak["objectid"] in [5, 6, 9, 10, 11, 12, 13, 14, 21, 22]:
-            color = 'orange'
-        elif dijkvak["objectid"] in [15, 16, 17, 18, 19, 20]:
-            color = 'green'
+        if not section.in_analyse:
+            continue
+
+        if section.is_reinforced:
+            color = 'green' if section.final_measure_doorsnede == "Grondversterking binnenwaarts 2025" else 'red'
         else:
-            color = 'blue'
+            color = 'grey'
 
         fig.add_trace(go.Scattermapbox(
             mode="lines",
@@ -39,7 +34,7 @@ def plot_overview_map_dummy(data: list[dict]):
             marker={'size': 10, 'color': color},
             line={'width': 5, 'color': color},
             name='Traject 38-1',
-            hovertemplate=f'Vaknaam {dijkvak["vaknaam"]}',
+            hovertemplate=f'Vaknaam {section.name}',
             showlegend=False, ))
 
     # Update layout of the figure and add token for mapbox

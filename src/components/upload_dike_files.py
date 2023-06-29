@@ -2,18 +2,17 @@ from dash import html, dcc
 import dash_bootstrap_components as dbc
 
 
-# Define the navbar structure
-def FileDikeUpload() -> html.Div:
+def ZipDikeUpload() -> html.Div:
     """
-    This function returns the navigation bar layout
+    This function returns the div for uploading dike files as zip.
     :return:
     """
     layout = html.Div([
 
         dcc.Upload(
-            id='upload-data',
+            id='upload-data-zip',
             children=html.Div([
-                'Drag and Drop or Dike geo reference or ',
+                'Drag and Drop a zip ',
                 html.A('Select Files')
             ]),
             style={
@@ -27,10 +26,22 @@ def FileDikeUpload() -> html.Div:
                 'margin': '10px'
             },
             # Allow multiple files to be uploaded
-            multiple=True,
-            accept='.geojson'
+            multiple=False,
+            accept='.zip'
         ),
-        html.Div(id='output-data-upload'),
+
+        dbc.Toast(
+
+            [html.P("File uploaded successfully!", className="mb-0")],
+            id="upload-toast",
+            header="Success",
+            icon="success",
+            duration=5000,  # Display duration in milliseconds
+            dismissable=True,
+            is_open=False,
+
+        ),
+        html.Div(id='output-data-upload-zip'),
     ])
 
     return layout
