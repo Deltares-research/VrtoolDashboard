@@ -101,7 +101,7 @@
       "name": "01A",
       "in_analyse": 1,
       "is_reinforced": true,
-      "initial_assessment": {},
+      "initial_assessment": null,
       "final_measure_veiligheidrendement": {
         "LCC": 2094823.285136492,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025"
@@ -159,7 +159,7 @@
       "name": "01B",
       "in_analyse": 1,
       "is_reinforced": true,
-      "initial_assessment": {},
+      "initial_assessment": null,
       "final_measure_veiligheidrendement": {
         "LCC": 493810.0,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025"
@@ -329,9 +329,9 @@
       "name": "2",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -401,9 +401,9 @@
       "name": "3",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -567,9 +567,9 @@
       "name": "4",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -617,9 +617,9 @@
       "name": "5",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -677,9 +677,9 @@
       "name": "6",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -775,9 +775,9 @@
       "name": "7",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -865,9 +865,9 @@
       "name": "8",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -1157,9 +1157,9 @@
       "name": "9",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -1349,9 +1349,9 @@
       "name": "10",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -1511,9 +1511,9 @@
       "name": "11",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -1699,7 +1699,7 @@
       "name": "12",
       "in_analyse": 1,
       "is_reinforced": true,
-      "initial_assessment": {},
+      "initial_assessment": null,
       "final_measure_veiligheidrendement": {
         "LCC": 16306400.0,
         "name": "Zelfkerende constructie"
@@ -1803,9 +1803,9 @@
       "name": "13",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -1843,9 +1843,9 @@
       "name": "14",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -1969,7 +1969,7 @@
       "name": "15",
       "in_analyse": 1,
       "is_reinforced": true,
-      "initial_assessment": {},
+      "initial_assessment": null,
       "final_measure_veiligheidrendement": {
         "LCC": 4831016.889541678,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025"
@@ -2039,9 +2039,9 @@
       "name": "16",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -2113,9 +2113,9 @@
       "name": "17",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -2157,9 +2157,9 @@
       "name": "18",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -2283,9 +2283,9 @@
       "name": "19",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -2385,9 +2385,9 @@
       "name": "20",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -2423,9 +2423,9 @@
       "name": "21",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -2633,9 +2633,9 @@
       "name": "22A",
       "in_analyse": 0,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -2679,9 +2679,9 @@
       "name": "22B",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -2721,9 +2721,9 @@
       "name": "23",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -2805,9 +2805,9 @@
       "name": "24",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -2857,9 +2857,9 @@
       "name": "25",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -2899,9 +2899,9 @@
       "name": "26",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -2963,9 +2963,9 @@
       "name": "27",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -3061,9 +3061,9 @@
       "name": "28",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -3171,9 +3171,9 @@
       "name": "29",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -3313,9 +3313,9 @@
       "name": "30",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -3497,9 +3497,9 @@
       "name": "31",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -3869,9 +3869,9 @@
       "name": "32",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -3965,7 +3965,7 @@
       "name": "33A",
       "in_analyse": 1,
       "is_reinforced": true,
-      "initial_assessment": {},
+      "initial_assessment": null,
       "final_measure_veiligheidrendement": {
         "LCC": 705755.0,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025"
@@ -4037,9 +4037,9 @@
       "name": "33B",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -4153,7 +4153,7 @@
       "name": "34",
       "in_analyse": 1,
       "is_reinforced": true,
-      "initial_assessment": {},
+      "initial_assessment": null,
       "final_measure_veiligheidrendement": {
         "LCC": 2355557.047332226,
         "name": "Grondversterking binnenwaarts 2025"
@@ -4231,9 +4231,9 @@
       "name": "35A",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -4257,9 +4257,9 @@
       "name": "35B",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -4495,9 +4495,9 @@
       "name": "35C",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -4651,9 +4651,9 @@
       "name": "36",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -4685,9 +4685,9 @@
       "name": "37A",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -4783,7 +4783,7 @@
       "name": "37B",
       "in_analyse": 1,
       "is_reinforced": true,
-      "initial_assessment": {},
+      "initial_assessment": null,
       "final_measure_veiligheidrendement": {
         "LCC": 1141285.7410841405,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025"
@@ -4843,9 +4843,9 @@
       "name": "38",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -4973,9 +4973,9 @@
       "name": "39",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -5051,7 +5051,7 @@
       "name": "40",
       "in_analyse": 1,
       "is_reinforced": true,
-      "initial_assessment": {},
+      "initial_assessment": null,
       "final_measure_veiligheidrendement": {
         "LCC": 288135.0,
         "name": "Grondversterking binnenwaarts 2025"
@@ -5125,9 +5125,9 @@
       "name": "41",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -5185,9 +5185,9 @@
       "name": "42",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -5325,9 +5325,9 @@
       "name": "43A",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -5389,9 +5389,9 @@
       "name": "43B",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -5493,9 +5493,9 @@
       "name": "44",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -5745,9 +5745,9 @@
       "name": "45",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -6023,9 +6023,9 @@
       "name": "46",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -6131,9 +6131,9 @@
       "name": "47",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -6203,9 +6203,9 @@
       "name": "48",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -6293,9 +6293,9 @@
       "name": "49",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -6427,7 +6427,7 @@
       "name": "50",
       "in_analyse": 1,
       "is_reinforced": true,
-      "initial_assessment": {},
+      "initial_assessment": null,
       "final_measure_veiligheidrendement": {
         "LCC": 286425.0,
         "name": "Grondversterking binnenwaarts 2025"
@@ -6761,9 +6761,9 @@
       "name": "51A",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -6901,9 +6901,9 @@
       "name": "51B",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -7059,9 +7059,9 @@
       "name": "52",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -7113,9 +7113,9 @@
       "name": "53A",
       "in_analyse": 1,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     },
     {
       "coordinates_rd": [
@@ -7371,9 +7371,9 @@
       "name": "53B",
       "in_analyse": 0,
       "is_reinforced": false,
-      "initial_assessment": {},
-      "final_measure_veiligheidrendement": {},
-      "final_measure_doorsnede": {}
+      "initial_assessment": null,
+      "final_measure_veiligheidrendement": null,
+      "final_measure_doorsnede": null
     }
   ]
 }

@@ -8,7 +8,7 @@ layout_upload_button = html.Div([
         dcc.Upload(
             id='upload-data-zip',
             children=html.Div([
-                'Drag and Drop a zip ',
+                'Drag and Drop a zip file or ',
                 html.A('Select Files')
             ]),
             style={

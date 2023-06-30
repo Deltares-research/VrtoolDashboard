@@ -48,38 +48,3 @@ def parse_zip_content(contents, zipname: str) -> dict[str, DataFrame]:
 
         return results
 
-
-def parse_contents(contents, filename, date):
-    content_type, content_string = contents.split(',')
-
-    decoded = base64.b64decode(content_string)
-    try:
-        if 'csv' in filename:
-            # Assume that the user uploaded a CSV file
-            df = pd.read_csv(
-                StringIO(decoded.decode('utf-8')))
-        elif 'xls' in filename:
-            # Assume that the user uploaded an excel file
-            df = pd.read_excel(BytesIO(decoded))
-
-        elif 'geojson' in filename:
-            df = gpd.read_file(BytesIO(decoded))
-            df["geometry"] = df["geometry"].apply(lambda x: list(x.coords))
-    except Exception as e:
-        print(e)
-        return html.Div([
-            'There was an error processing this file.'
-        ])
-
-    return html.Div([
-        html.H5(filename),
-        html.H6(datetime.datetime.fromtimestamp(date)),
-        # dash_table.DataTable(
-        #     data=df.to_dict('records'),
-        #     columns=[{'name': i, 'id': i} for i in df.columns],
-        #     page_size=15
-        # ),
-        dcc.Store(id='stored-data', data=df.to_dict('records')),
-
-        html.Hr(),  # horizontal line
-    ])

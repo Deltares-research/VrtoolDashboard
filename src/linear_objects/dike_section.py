@@ -1,3 +1,5 @@
+from typing import Optional
+
 from src.linear_objects.base_linear import BaseLinearObject
 
 
@@ -7,8 +9,8 @@ class DikeSection(BaseLinearObject):
     in_analyse: bool
     is_reinforced: bool
     initial_assessment: dict
-    final_measure_veiligheidrendement: dict
-    final_measure_doorsnede: dict  # replace dict with a Measure Object
+    final_measure_veiligheidrendement: Optional[dict]
+    final_measure_doorsnede: Optional[dict]  # replace dict with a Measure Object
 
     def __init__(self, name: str, coordinates_rd: list[tuple[float, float]], in_analyse: bool):
         """
@@ -22,8 +24,8 @@ class DikeSection(BaseLinearObject):
         self.in_analyse = in_analyse
         self.is_reinforced = False
         self.initial_assessment = {}
-        self.final_measure_veiligheidrendement = {}
-        self.final_measure_doorsnede = {}
+        self.final_measure_veiligheidrendement = None
+        self.final_measure_doorsnede = None
 
 
     def serialize(self) -> dict:

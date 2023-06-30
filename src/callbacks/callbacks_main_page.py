@@ -1,15 +1,16 @@
-
+import dash
 from dash import html, dcc, Output, Input, State
 
-from src.linear_objects.traject import DikeTraject
-from src.plotly_graphs.plotly_maps import plot_overview_map_dummy
+from src.layouts.layout_main_page import layout_tab_one, ResultType
+from src.linear_objects.dike_traject import DikeTraject
+from src.plotly_graphs.plotly_maps import plot_overview_map_dummy, plot_default_overview_map_dummy
 from src.app import app
 
 @app.callback([Output('output-data-upload-zip', 'children'),
                Output("upload-toast", "is_open")],
               [Input('upload-data-zip', 'contents')],
               [State('upload-data-zip', 'filename')])
-def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
+def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tuple:
     """This is the callback for the upload of the zip files of the traject data.
 
     :param contents: string content of the uploaded zip file. The zip should content at least:
@@ -23,25 +24,30 @@ def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
         - boolean indicating if the upload was successful.
     """
     if contents is not None:
+        # try:
         _dike_traject = DikeTraject.from_uploaded_zip(contents, filename)
         return html.Div(
-            dcc.Store(id='stored-data', data=_dike_traject.serialize())), True
-
+        dcc.Store(id='stored-data', data=_dike_traject.serialize())), True
+        # except:
+        #     return html.Div(children=["The uploaded zip file does not contain the correct files"]), False
     else:
         return html.Div("No file has been uploaded yet"), False
 
 
-@app.callback(Output('output-div', 'children'),
-              Input('stored-data', 'data'))
-def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
+@app.callback(Output('overview_map_div', 'children'),
+              [Input('stored-data', 'data'), Input("select_result_type", 'value')])
+def make_graph_overview_dike(dike_traject_data: dict, selected_result_type) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
 
     :param dike_traject_data:
 
     """
-    _dike_traject = DikeTraject.deserialize(dike_traject_data)
-    _fig = plot_overview_map_dummy(_dike_traject)
+    if dike_traject_data is None:
+        _fig = plot_default_overview_map_dummy()
+    else:
+        _dike_traject = DikeTraject.deserialize(dike_traject_data)
+        _fig = plot_overview_map_dummy(_dike_traject, selected_result_type)
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
 
 
@@ -56,14 +62,7 @@ def render_tab_map_content(active_tab: str) -> html.Div:
     :return:
     """
     if active_tab == "tab-1":
-        return html.Div(id="content_tab",
-                        children=[
-                            html.H2("Overzicht Kaart"),
-                            html.Div("The map below displays basic information about the imported dike traject."),
-                            html.Div(id='output-div',
-                                     style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
-
-                        ])
+        return layout_tab_one()
     elif active_tab == "tab-2":
         return html.Div("Content for Tab 2")
     else:
