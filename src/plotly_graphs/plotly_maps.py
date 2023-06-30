@@ -6,6 +6,7 @@ from src.layouts.layout_main_page import ResultType
 from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject
 from src.utils.gws_convertor import GWSRDConvertor
+from src.utils.utils import to_million_euros
 
 color_dict = {""}
 
@@ -52,7 +53,7 @@ def plot_overview_map_dummy(dike_traject: DikeTraject, selected_result_type: str
                                    'name'] == "Grondversterking binnenwaarts 2025" else 'red'
             hovertemplate = f'Vaknaam {section.name}<br>' \
                             f'Maatregel: {_measure_results["name"]} m<br>' \
-                            f'LCC: {_measure_results["LCC"]} €<br>'
+                            f'LCC: {to_million_euros(_measure_results["LCC"])} M€<br>'
         else:
             color = 'grey'
             hovertemplate = f'Vaknaam {section.name}<br>' \
