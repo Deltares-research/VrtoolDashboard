@@ -24,12 +24,12 @@ def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tup
         - boolean indicating if the upload was successful.
     """
     if contents is not None:
-        try:
-            _dike_traject = DikeTraject.from_uploaded_zip(contents, filename)
-            return html.Div(
-            dcc.Store(id='stored-data', data=_dike_traject.serialize())), True
-        except:
-            return html.Div(children=["The uploaded zip file does not contain the correct files"]), False
+        # try:
+        _dike_traject = DikeTraject.from_uploaded_zip(contents, filename)
+        return html.Div(
+        dcc.Store(id='stored-data', data=_dike_traject.serialize())), True
+        # except:
+        #     return html.Div(children=["The uploaded zip file does not contain the correct files"]), False
     else:
         return html.Div("No file has been uploaded yet"), False
 

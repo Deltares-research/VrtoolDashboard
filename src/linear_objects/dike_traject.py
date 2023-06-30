@@ -33,6 +33,9 @@ class DikeTraject(BaseLinearObject):
             if section['vaknaam'] in _final_measure_dsn_dict.keys():
                 _section.is_reinforced = True
                 _section.final_measure_doorsnede = _final_measure_dsn_dict[section['vaknaam']]
+
+            if section['vaknaam'] in _final_measure_vr_dict.keys():
+                _section.is_reinforced = True
                 _section.final_measure_veiligheidrendement = _final_measure_vr_dict[section['vaknaam']]
 
             _dike_sections.append(_section)
@@ -68,7 +71,7 @@ def parse_final_measures_results(all_unzipped_files: dict, filename: str) -> dic
     if filename not in all_unzipped_files.keys():
         raise ValueError(f'The zip file does not contain the required file: {filename}')
     final_measures_df = all_unzipped_files[filename]
-
+    final_measures_df.dropna(subset=['Section'], inplace=True)  # drop nan in Section column
     final_measures_df['Section'] = final_measures_df['Section'].str.replace('^DV', '',
                                                                             regex=True)  # remove DV from section names
     final_measures_df.set_index("Section", inplace=True)

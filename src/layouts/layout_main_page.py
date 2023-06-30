@@ -65,6 +65,7 @@ def layout_tab_one() -> html.Div:
                     children=[
                         html.H2("Overzicht Kaart"),
                         html.Div("The map below displays basic information about the imported dike traject."),
+                        dbc.Label("Select a result type:"),
                         dbc.RadioItems(
                             id="select_result_type",
                             options=[
@@ -73,7 +74,7 @@ def layout_tab_one() -> html.Div:
                                  "value": ResultType.VEILIGHEID_RENDEMENT.name},
                             ],
                             value=ResultType.VEILIGHEID_RENDEMENT.name,
-                            style={'width': '40vh', "height": "7vh", "margin": "20px"}
+                            style={'width': '40vh', "height": "6vh", "margin-top": "2px"}
                         ),
                         html.Div(id='overview_map_div',
                                  style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),

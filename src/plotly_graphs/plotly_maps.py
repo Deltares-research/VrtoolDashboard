@@ -46,8 +46,9 @@ def plot_overview_map_dummy(dike_traject: DikeTraject, selected_result_type: str
             continue
 
         _measure_results = section.final_measure_doorsnede if selected_result_type == ResultType.DOORSNEDE_EISEN.name else section.final_measure_veiligheidrendement
-        if section.is_reinforced:
-            color = 'green' if section.final_measure_doorsnede[
+        if _measure_results is not None:
+
+            color = 'green' if _measure_results[
                                    'name'] == "Grondversterking binnenwaarts 2025" else 'red'
             hovertemplate = f'Vaknaam {section.name}<br>' \
                             f'Maatregel: {_measure_results["name"]} m<br>' \
