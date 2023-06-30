@@ -35,7 +35,7 @@ class TestCallback:
 
         # 2. Define callback
         def run_callback():
-            return make_graph_overview_dike(_dike_data)
+            return make_graph_overview_dike(_dike_data, "VEILIGHEIDRENDEMENT")
 
         ctx = copy_context()
         output = ctx.run(run_callback)

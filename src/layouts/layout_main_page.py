@@ -6,7 +6,7 @@ from .layout_upload_dike_files import layout_upload_button
 
 class ResultType(Enum):
     DOORSNEDE_EISEN = "Doorsnede-Eisen"
-    VEILIGHEID_RENDEMENT = "Veiligheidsrendement"
+    VEILIGHEIDRENDEMENT = "Veiligheidsrendement"
 
 
 def make_layout_main_page() -> dbc.Row:
@@ -70,10 +70,10 @@ def layout_tab_one() -> html.Div:
                             id="select_result_type",
                             options=[
                                 {"label": ResultType.DOORSNEDE_EISEN.value, "value": ResultType.DOORSNEDE_EISEN.name},
-                                {"label": ResultType.VEILIGHEID_RENDEMENT.value,
-                                 "value": ResultType.VEILIGHEID_RENDEMENT.name},
+                                {"label": ResultType.VEILIGHEIDRENDEMENT.value,
+                                 "value": ResultType.VEILIGHEIDRENDEMENT.name},
                             ],
-                            value=ResultType.VEILIGHEID_RENDEMENT.name,
+                            value=ResultType.VEILIGHEIDRENDEMENT.name,
                             style={'width': '40vh', "height": "6vh", "margin-top": "2px"}
                         ),
                         html.Div(id='overview_map_div',
