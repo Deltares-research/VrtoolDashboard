@@ -17,22 +17,23 @@ class DikeTraject(BaseLinearObject):
         _all_unzipped_files = parse_zip_content(contents, zipname)
 
         # Parse the csv of the final measures of Doorsnede-eisen and Veiligheidsrendement;
-        _final_measure_doorsnede_dict = parse_final_measures_results(_all_unzipped_files,
+        _final_measure_dsn_dict = parse_final_measures_results(_all_unzipped_files,
                                                                      "FinalMeasures_Doorsnede-eisen")
-        _final_measure_vh_dict = parse_final_measures_results(_all_unzipped_files, "FinalMeasures_Veiligheidsrendement")
+        _final_measure_vr_dict = parse_final_measures_results(_all_unzipped_files, "FinalMeasures_Veiligheidsrendement")
 
         # Parse the geojson of the dike sections and add the final measures to the dike sections
         _dike_sections = []
+
         for _, section in _all_unzipped_files['traject_gdf'].iterrows():
             _section = DikeSection(name=section['vaknaam'],
                                    coordinates_rd=section['geometry'],
                                    in_analyse=section['in_analyse'],
                                    )
 
-            if section['vaknaam'] in _final_measure_doorsnede_dict.keys():
+            if section['vaknaam'] in _final_measure_dsn_dict.keys():
                 _section.is_reinforced = True
-                _section.final_measure_doorsnede = _final_measure_doorsnede_dict[section['vaknaam']]
-                _section.final_measure_veiligheidrendement = _final_measure_vh_dict[section['vaknaam']]
+                _section.final_measure_doorsnede = _final_measure_dsn_dict[section['vaknaam']]
+                _section.final_measure_veiligheidrendement = _final_measure_vr_dict[section['vaknaam']]
 
             _dike_sections.append(_section)
 

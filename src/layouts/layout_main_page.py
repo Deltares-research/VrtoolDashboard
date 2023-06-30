@@ -1,7 +1,12 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
-
+from enum import Enum
 from .layout_upload_dike_files import layout_upload_button
+
+
+class ResultType(Enum):
+    DOORSNEDE_EISEN = "Doorsnede-Eisen"
+    VEILIGHEID_RENDEMENT = "Veiligheidsrendement"
 
 
 def make_layout_main_page() -> dbc.Row:
@@ -53,3 +58,23 @@ def make_layout_main_page() -> dbc.Row:
         ]
     )
     return layout
+
+
+def layout_tab_one() -> html.Div:
+    return html.Div(id="content_tab",
+                    children=[
+                        html.H2("Overzicht Kaart"),
+                        html.Div("The map below displays basic information about the imported dike traject."),
+                        dbc.RadioItems(
+                            id="select_result_type",
+                            options=[
+                                {"label": ResultType.DOORSNEDE_EISEN.value, "value": ResultType.DOORSNEDE_EISEN.name},
+                                {"label": ResultType.VEILIGHEID_RENDEMENT.value,
+                                 "value": ResultType.VEILIGHEID_RENDEMENT.name},
+                            ],
+                            value=ResultType.VEILIGHEID_RENDEMENT.name,
+                            style={'width': '40vh', "height": "7vh", "margin": "20px"}
+                        ),
+                        html.Div(id='overview_map_div',
+                                 style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
+                    ])

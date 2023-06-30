@@ -1,4 +1,3 @@
-
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 
@@ -14,14 +13,14 @@ app.layout = dbc.Container(
     children=
     [
         dcc.Location(id='url', pathname='welcome', refresh=False),
+        dcc.Store(id='stored-data', data=None),
         nav_bar_layout,
         make_layout_main_page(),
     ],
     fluid=True,
 )
 
-
 # Run the app on localhost:8050
 if __name__ == '__main__':
     print("============================= RERUN THE APP ====================================")
-    app.run_server(debug=True)
+app.run_server(debug=True)
