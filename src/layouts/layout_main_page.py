@@ -61,7 +61,7 @@ def make_layout_main_page() -> dbc.Row:
 
 
 def layout_tab_one() -> html.Div:
-    return html.Div(id="content_tab",
+    return html.Div(
                     children=[
                         html.H2("Overzicht Kaart"),
                         html.Div("The map below displays basic information about the imported dike traject."),
@@ -79,3 +79,27 @@ def layout_tab_one() -> html.Div:
                         html.Div(id='overview_map_div',
                                  style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
                     ])
+
+
+def layout_tab_two() -> html.Div:
+
+    layout = html.Div(
+        children=[
+            html.H2("Betrouwbaarheid Kaart"),
+            dcc.Slider(2025, 2125, value=2025,
+                       marks={
+                           2025: {'label': '2025', },
+                           2045: {'label': '2045'},
+                           2075: {'label': '2075'},
+                           2125: {'label': '2125'}
+                       },
+                       included=False,
+                       tooltip={"placement": "bottom", "always_visible": True},
+
+                       ),
+            html.Div(id='dike_traject_reliability_map',
+                     style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
+        ]
+    )
+
+    return layout

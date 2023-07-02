@@ -51,5 +51,36 @@ class DikeSection(BaseLinearObject):
         section.initial_assessment = data['initial_assessment']
         section.is_reinforced = data['is_reinforced']
         section.final_measure_veiligheidrendement = data['final_measure_veiligheidrendement']
-        section.final_measure_doorsnede = data['final_measure_doorsnede']
+        section.final_measure = data['final_measure_doorsnede']
         return section
+
+    def set_measure_and_reliabilities_from_csv(self, final_measure_dict: dict,
+                                                   all_unzipped_files: dict, calc_type: str):
+
+        if self.name in final_measure_dict.keys():
+            self.is_reinforced = True
+
+            # Parse csv of the final measure dataframe and add them to the DikeSection object
+            _final_measure = final_measure_dict[self.name]
+
+            # Parse csv of the Section results and add them to the DikeSection object
+            _section_measure_betas = all_unzipped_files[f"DV{self.name}_Options_Doorsnede-eisen"]
+            _final_measure["years"] = _section_measure_betas.iloc[
+                0].dropna().unique()  # select the year for which the calculations were done
+
+            _section_measure_betas = _section_measure_betas.loc[
+                (_section_measure_betas.ID == _final_measure["ID"])
+                & (_section_measure_betas["yes/no"] == _final_measure["yes/no"])
+                & (_section_measure_betas.dcrest == _final_measure["dcrest"])
+                & (_section_measure_betas.dberm == _final_measure["dberm"])
+                ].squeeze()
+
+            _mechanisms = ['Overflow', 'StabilityInner', 'Piping']
+            for mechanism in _mechanisms:
+                _final_measure[mechanism] = {key: _section_measure_betas[key] for key in
+                                             _section_measure_betas.index if
+                                             key.startswith(mechanism)}
+
+            self.__setattr__(f"final_measure_{calc_type}", _final_measure)
+
+

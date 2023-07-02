@@ -46,7 +46,7 @@ def plot_overview_map_dummy(dike_traject: DikeTraject, selected_result_type: str
         if not section.in_analyse:
             continue
 
-        _measure_results = section.final_measure_doorsnede if selected_result_type == ResultType.DOORSNEDE_EISEN.name else section.final_measure_veiligheidrendement
+        _measure_results = section.final_measure if selected_result_type == ResultType.DOORSNEDE_EISEN.name else section.final_measure_veiligheidrendement
         if _measure_results is not None:
 
             color = 'green' if _measure_results[
