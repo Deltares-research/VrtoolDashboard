@@ -37,8 +37,13 @@ class DikeTraject(BaseLinearObject):
                                         coordinates_rd=section['geometry'],
                                         in_analyse=section['in_analyse'],
                                         )
-            _dike_section.set_measure_and_reliabilities_from_csv(_final_measure_dsn_dict, _all_unzipped_files, "doorsnede")
-            _dike_section.set_measure_and_reliabilities_from_csv(_final_measure_vr_dict, _all_unzipped_files, "veiligheidrendement")
+
+            # Parse dike results csv and add the measure and its associated reliabilities
+            _dike_section.set_measure_and_reliabilities_from_csv(_taken_measure_dsn_dict, _all_unzipped_files,
+                                                                 "doorsnede")
+            _dike_section.set_measure_and_reliabilities_from_csv(_taken_measure_vr_dict, _all_unzipped_files,
+                                                                 "veiligheidrendement")
+            _dike_section.set_initial_assessment_from_csv(_all_unzipped_files["InitialAssessment_Betas"])
 
             _dike_sections.append(_dike_section)
 

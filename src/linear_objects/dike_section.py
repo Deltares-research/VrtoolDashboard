@@ -1,5 +1,7 @@
 from typing import Optional
 
+from pandas import DataFrame
+
 from src.linear_objects.base_linear import BaseLinearObject
 
 
@@ -54,14 +56,23 @@ class DikeSection(BaseLinearObject):
         section.final_measure = data['final_measure_doorsnede']
         return section
 
-    def set_measure_and_reliabilities_from_csv(self, final_measure_dict: dict,
-                                                   all_unzipped_files: dict, calc_type: str):
+    def set_measure_and_reliabilities_from_csv(self, _measure_dict: dict,
+                                                   all_unzipped_files: dict, calc_type: str) -> None:
+        """
+        Set the measure to the dike section object and set its corresponding reliabilities for all mechanisms for all
+        the years for which the calculations were done.
 
-        if self.name in final_measure_dict.keys():
+        :param _measure_dict: measure dictionary parsed and filtered from a TakenMeasures.csv or FinalMeasures.csv
+        :param all_unzipped_files: dictionary with all the unzipped files from the zip file
+        :param calc_type: type of calculation, either "doorsnede" or "veiligheidrendement
+
+        """
+
+        if self.name in _measure_dict.keys():
             self.is_reinforced = True
 
             # Parse csv of the final measure dataframe and add them to the DikeSection object
-            _final_measure = final_measure_dict[self.name]
+            _final_measure = _measure_dict[self.name]
 
             # Parse csv of the Section results and add them to the DikeSection object
             _section_measure_betas = all_unzipped_files[f"DV{self.name}_Options_Doorsnede-eisen"]
@@ -82,5 +93,24 @@ class DikeSection(BaseLinearObject):
                                              key.startswith(mechanism)}
 
             self.__setattr__(f"final_measure_{calc_type}", _final_measure)
+
+    def set_initial_assessment_from_csv(self, initial_assessment_df: DataFrame) -> None:
+        """
+        Set the initial assessment of the dike section object from the initial assessment dataframe.
+        :param initial_assessment_df: Dataframe containing the initial reliability of all dike sections for all
+        mechanisms for all years.
+        :return:
+        """
+
+        _section_initial_betas_df = initial_assessment_df.loc[initial_assessment_df['name'] == f"DV{self.name}"].squeeze()
+
+        if not _section_initial_betas_df.empty:  # if df is empty, then section is not reinforced and skipped.
+            _mechanisms = ['Overflow', 'StabilityInner', 'Piping']
+            _years = _section_initial_betas_df.columns[2:-1].tolist()  # last column is Length and should be removed
+            for mechanism in _mechanisms:
+                self.initial_assessment[mechanism] = _section_initial_betas_df[_section_initial_betas_df['mechanism'] == mechanism].iloc[:, 2:-1].values.tolist()[0]
+
+
+
 
 
