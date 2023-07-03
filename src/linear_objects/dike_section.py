@@ -10,9 +10,10 @@ class DikeSection(BaseLinearObject):
     name: str
     in_analyse: bool
     is_reinforced: bool
-    initial_assessment: dict
+    initial_assessment: Optional[dict]
     final_measure_veiligheidrendement: Optional[dict]
     final_measure_doorsnede: Optional[dict]  # replace dict with a Measure Object
+    years: list[int]  # Years for which a reliability result is available (both for initial and measures)
 
     def __init__(self, name: str, coordinates_rd: list[tuple[float, float]], in_analyse: bool):
         """
@@ -25,9 +26,10 @@ class DikeSection(BaseLinearObject):
         self.name = name
         self.in_analyse = in_analyse
         self.is_reinforced = False
-        self.initial_assessment = {}
+        self.initial_assessment = None
         self.final_measure_veiligheidrendement = None
         self.final_measure_doorsnede = None
+        self.years = []
 
 
     def serialize(self) -> dict:
@@ -40,6 +42,7 @@ class DikeSection(BaseLinearObject):
             'initial_assessment': self.initial_assessment,
             'final_measure_veiligheidrendement': self.final_measure_veiligheidrendement,
             'final_measure_doorsnede': self.final_measure_doorsnede,
+            'years': self.years
         }
 
     @staticmethod
@@ -54,6 +57,7 @@ class DikeSection(BaseLinearObject):
         section.is_reinforced = data['is_reinforced']
         section.final_measure_veiligheidrendement = data['final_measure_veiligheidrendement']
         section.final_measure = data['final_measure_doorsnede']
+        section.years = data['years']
         return section
 
     def set_measure_and_reliabilities_from_csv(self, _measure_dict: dict,
@@ -76,7 +80,7 @@ class DikeSection(BaseLinearObject):
 
             # Parse csv of the Section results and add them to the DikeSection object
             _section_measure_betas = all_unzipped_files[f"DV{self.name}_Options_Doorsnede-eisen"]
-            _final_measure["years"] = _section_measure_betas.iloc[
+            self.years = _section_measure_betas.iloc[
                 0].dropna().unique()  # select the year for which the calculations were done
 
             _section_measure_betas = _section_measure_betas.loc[
@@ -86,7 +90,7 @@ class DikeSection(BaseLinearObject):
                 & (_section_measure_betas.dberm == _final_measure["dberm"])
                 ].squeeze()
 
-            _mechanisms = ['Overflow', 'StabilityInner', 'Piping']
+            _mechanisms = ["Overflow", "StabilityInner", "Piping", "Section"]
             for mechanism in _mechanisms:
                 _final_measure[mechanism] = {key: _section_measure_betas[key] for key in
                                              _section_measure_betas.index if
@@ -102,13 +106,19 @@ class DikeSection(BaseLinearObject):
         :return:
         """
 
-        _section_initial_betas_df = initial_assessment_df.loc[initial_assessment_df['name'] == f"DV{self.name}"].squeeze()
+        _section_initial_betas_df = initial_assessment_df.loc[initial_assessment_df["name"] == f"DV{self.name}"].squeeze()
 
         if not _section_initial_betas_df.empty:  # if df is empty, then section is not reinforced and skipped.
-            _mechanisms = ['Overflow', 'StabilityInner', 'Piping']
+            _initial_assessment_dict = {}
+            _mechanisms = ["Overflow", "StabilityInner", "Piping", "Section"]
             _years = _section_initial_betas_df.columns[2:-1].tolist()  # last column is Length and should be removed
             for mechanism in _mechanisms:
-                self.initial_assessment[mechanism] = _section_initial_betas_df[_section_initial_betas_df['mechanism'] == mechanism].iloc[:, 2:-1].values.tolist()[0]
+                _initial_assessment_dict[mechanism] = _section_initial_betas_df[_section_initial_betas_df["mechanism"] == mechanism].iloc[:, 2:-1].values.tolist()[0]
+
+            self.__setattr__(f"initial_assessment", _initial_assessment_dict)
+
+
+
 
 
 

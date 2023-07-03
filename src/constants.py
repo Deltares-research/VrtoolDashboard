@@ -1,0 +1,1 @@
+REFERENCE_YEAR = 2025  #  Reference year for the reliability analysis

@@ -85,7 +85,7 @@ def layout_tab_two() -> html.Div:
 
     layout = html.Div(
         children=[
-            html.H2("Betrouwbaarheid Kaart"),
+            html.H2("Initial Assessments"),
             dcc.Slider(2025, 2125, value=2025,
                        marks={
                            2025: {'label': '2025', },
@@ -95,6 +95,7 @@ def layout_tab_two() -> html.Div:
                        },
                        included=False,
                        tooltip={"placement": "bottom", "always_visible": True},
+                       id="slider_year_reliability_results",
 
                        ),
             html.Div(id='dike_traject_reliability_map',

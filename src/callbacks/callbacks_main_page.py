@@ -3,7 +3,8 @@ from dash import html, dcc, Output, Input, State
 
 from src.layouts.layout_main_page import layout_tab_one, ResultType, layout_tab_two
 from src.linear_objects.dike_traject import DikeTraject
-from src.plotly_graphs.plotly_maps import plot_overview_map_dummy, plot_default_overview_map_dummy
+from src.plotly_graphs.plotly_maps import plot_overview_map_dummy, plot_default_overview_map_dummy, \
+    plot_dike_traject_reliability_initial_assessment_map
 from src.app import app
 
 @app.callback([Output('output-data-upload-zip', 'children'),
@@ -52,8 +53,8 @@ def make_graph_overview_dike(dike_traject_data: dict, selected_result_type) -> d
 
 
 @app.callback(Output('dike_traject_reliability_map', 'children'),
-              [Input('stored-data', 'data')])
-def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
+              [Input('stored-data', 'data'), Input("slider_year_reliability_results", "value")])
+def make_graph_overview_dike(dike_traject_data: dict, selected_year: float) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
 
@@ -63,9 +64,9 @@ def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
     if dike_traject_data is None:
         _fig = plot_default_overview_map_dummy()
     else:
+        _dike_traject = DikeTraject.deserialize(dike_traject_data)
         _fig = plot_default_overview_map_dummy()
-        # _dike_traject = DikeTraject.deserialize(dike_traject_data)
-        # _fig = plot_overview_map_dummy(_dike_traject, selected_result_type)
+        _fig = plot_dike_traject_reliability_initial_assessment_map(_dike_traject, selected_year)
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
 
 
