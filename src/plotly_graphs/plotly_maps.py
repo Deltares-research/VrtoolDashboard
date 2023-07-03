@@ -6,11 +6,11 @@ import plotly.graph_objects as go
 from matplotlib import pyplot as plt, colors
 
 from src.constants import REFERENCE_YEAR
-from src.layouts.layout_main_page import ResultType
+from src.layouts.layout_main_page import CalcType, ResultType
 from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject
 from src.utils.gws_convertor import GWSRDConvertor
-from src.utils.utils import to_million_euros
+from src.utils.utils import to_million_euros, beta_to_pf, pf_to_beta
 
 color_dict = {""}
 
@@ -50,7 +50,7 @@ def plot_overview_map_dummy(dike_traject: DikeTraject, selected_result_type: str
         if not section.in_analyse:
             continue
 
-        _measure_results = section.final_measure_doorsnede if selected_result_type == ResultType.DOORSNEDE_EISEN.name else section.final_measure_veiligheidrendement
+        _measure_results = section.final_measure_doorsnede if selected_result_type == CalcType.DOORSNEDE_EISEN.name else section.final_measure_veiligheidrendement
         if _measure_results is not None:
 
             color = 'green' if _measure_results[
@@ -81,7 +81,7 @@ def plot_overview_map_dummy(dike_traject: DikeTraject, selected_result_type: str
     return fig
 
 
-def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraject, selected_year: float) -> go.Figure:
+def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraject, selected_year: float, result_type: str) -> go.Figure:
     fig = go.Figure()
 
     for section in dike_traject.dike_sections:
@@ -97,8 +97,14 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
         if _inital_results is not None:
             _year_index = bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
             _color = get_reliability_color(_inital_results["Section"][_year_index])
-            _hovertemplate = f'Vaknaam {section.name}<br>' \
-                             f'Betas section: {_inital_results["Section"][_year_index]}<br>'
+
+            if result_type == ResultType.RELIABILITY.name:
+                hover_res = f'Betas section: {_inital_results["Section"][_year_index]}:.2e<br>'
+            else:
+                hover_res = f'Pf section: {beta_to_pf(_inital_results["Section"][_year_index])}:.2e<br>'
+
+            _hovertemplate = f'Vaknaam {section.name}<br>' +  hover_res
+
         else:
             _color = 'grey'
             _hovertemplate = f'Vaknaam {section.name}<br>' \
@@ -114,7 +120,7 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
             hovertemplate=_hovertemplate,
             showlegend=False))
 
-    add_colorscale_bar(fig)
+    add_colorscale_bar(fig, result_type)
 
     # Update layout of the figure and add token for mapbox
     _middle_point = get_middle_point(dike_traject.dike_sections)
@@ -159,29 +165,52 @@ def update_layout_map_box(fig: go.Figure, center: tuple[float, float], zoom: int
         ))
 
 
-def add_colorscale_bar(fig: go.Figure):
-    """Add a dummy scatter trace to the figure to show the colorscale bar"""
+def add_colorscale_bar(fig: go.Figure, result_type: str):
+    """Add a dummy scatter trace to the figure to show the colorscale bar
+
+    :param fig: go.Figure object.
+    :param result_type: type of results to show: "probability" or "reliability".
+    """
+
+    if result_type == ResultType.PROBABILITY.name:
+        marker = dict(
+            colorscale='RdYlGn',
+            colorbar=dict(
+                title="Faalkans",
+                titleside='right',
+                tickmode='array',
+                tickvals=[2.3263478740408408, 3.090232306167813, 3.7190164854556804, 4.264890793922825, 4.753424308822899],
+                ticktext=['1e-2', '1e-3', '1e-4', '1e-5', '1e-6'],
+                ticks='outside',
+                len=0.5,
+            ),
+            showscale=True,
+            cmin=2,
+            cmax=5,
+        )
+    else:
+        marker = dict(
+            colorscale='RdYlGn',
+            colorbar=dict(
+                title="Betrouwbaarheid index",
+                titleside='right',
+                tickmode='array',
+                tickvals=[2, 3, 4, 5],
+                ticktext=['2', '3', '4', '5'],
+                ticks='outside',
+                len=0.5,
+            ),
+            showscale=True,
+            cmin=2,
+            cmax=5,
+        )
     fig.add_trace(
         go.Scatter(
             x=[None],
             y=[None],
             mode='markers',
             showlegend=False,
-            marker=dict(
-                colorscale='RdYlGn',  # or any other colorscale
-                colorbar=dict(
-                    title="Betrouwbaarheid index",
-                    titleside='right',
-                    tickmode='array',
-                    tickvals=[2, 3, 4, 5],  # you can adjust these values as per your min and max reliability values
-                    ticktext=['2', '3', '4', '5'],
-                    ticks='outside',
-                    len=0.5,
-                ),
-                showscale=True,
-                cmin=2,
-                cmax=5,
-            ),
+            marker=marker,
             hoverinfo='none'
         )
     )

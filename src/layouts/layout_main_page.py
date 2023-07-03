@@ -4,9 +4,14 @@ from enum import Enum
 from .layout_upload_dike_files import layout_upload_button
 
 
-class ResultType(Enum):
+class CalcType(Enum):
     DOORSNEDE_EISEN = "Doorsnede-Eisen"
     VEILIGHEIDRENDEMENT = "Veiligheidsrendement"
+
+
+class ResultType(Enum):
+    RELIABILITY = "Reliability"
+    PROBABILITY = "Probability"
 
 
 def make_layout_main_page() -> dbc.Row:
@@ -62,30 +67,30 @@ def make_layout_main_page() -> dbc.Row:
 
 def layout_tab_one() -> html.Div:
     return html.Div(
-                    children=[
-                        html.H2("Overzicht Kaart"),
-                        html.Div("The map below displays basic information about the imported dike traject."),
-                        dbc.Label("Select a result type:"),
-                        dbc.RadioItems(
-                            id="select_result_type",
-                            options=[
-                                {"label": ResultType.DOORSNEDE_EISEN.value, "value": ResultType.DOORSNEDE_EISEN.name},
-                                {"label": ResultType.VEILIGHEIDRENDEMENT.value,
-                                 "value": ResultType.VEILIGHEIDRENDEMENT.name},
-                            ],
-                            value=ResultType.VEILIGHEIDRENDEMENT.name,
-                            style={'width': '40vh', "height": "6vh", "margin-top": "2px"}
-                        ),
-                        html.Div(id='overview_map_div',
-                                 style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
-                    ])
+        children=[
+            html.H2("Overzicht Kaart"),
+            html.Div("The map below displays basic information about the imported dike traject."),
+            dbc.Label("Select a result type:"),
+            dbc.RadioItems(
+                id="select_calculation_type",
+                options=[
+                    {"label": CalcType.DOORSNEDE_EISEN.value, "value": CalcType.DOORSNEDE_EISEN.name},
+                    {"label": CalcType.VEILIGHEIDRENDEMENT.value,
+                     "value": CalcType.VEILIGHEIDRENDEMENT.name},
+                ],
+                value=CalcType.VEILIGHEIDRENDEMENT.name,
+                style={'width': '40vh', "height": "6vh", "margin-top": "2px"}
+            ),
+            html.Div(id='overview_map_div',
+                     style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
+        ])
 
 
 def layout_tab_two() -> html.Div:
-
     layout = html.Div(
         children=[
             html.H2("Initial Assessments"),
+            html.Div("The map below shows the reliability of the initial assessment for the entire dike traject. Use the slider to visualize another assessment year."),
             dcc.Slider(2025, 2125, value=2025,
                        marks={
                            2025: {'label': '2025', },
@@ -96,10 +101,20 @@ def layout_tab_two() -> html.Div:
                        included=False,
                        tooltip={"placement": "bottom", "always_visible": True},
                        id="slider_year_reliability_results",
-
                        ),
+            dbc.RadioItems(
+                id="select_result_type",
+                options=[
+                    {"label": ResultType.RELIABILITY.value, "value": ResultType.RELIABILITY.name},
+                    {"label": ResultType.PROBABILITY.value, "value": ResultType.PROBABILITY.name
+                     },
+                ],
+                value=ResultType.RELIABILITY.name,
+                style={'width': '40vh', "height": "6vh", "margin-top": "2px"}
+            ),
             html.Div(id='dike_traject_reliability_map',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
+
         ]
     )
 
