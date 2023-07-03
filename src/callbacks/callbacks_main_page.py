@@ -54,7 +54,7 @@ def make_graph_overview_dike(dike_traject_data: dict, selected_result_type) -> d
 
 @app.callback(Output('dike_traject_reliability_map', 'children'),
               [Input('stored-data', 'data'), Input("slider_year_reliability_results", "value"), Input("select_result_type", 'value')])
-def make_graph_overview_dike(dike_traject_data: dict, selected_year: float, result_type: str) -> dcc.Graph:
+def make_graph_initial_assessment(dike_traject_data: dict, selected_year: float, result_type: str) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
 
