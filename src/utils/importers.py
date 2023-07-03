@@ -31,13 +31,8 @@ def parse_zip_content(contents, zipname: str) -> dict[str, DataFrame]:
                 _file_content = file.read().decode('utf-8')
 
                 if _path_name.suffix == '.csv':
-                    if _path_name.stem == 'FinalMeasures_Veiligheidsrendement':
-                        df = pd.read_csv(StringIO(_file_content))
-                        results[_path_name.stem] = df
-
-                    elif _path_name.stem == 'FinalMeasures_Doorsnede-eisen':
-                        df = pd.read_csv(StringIO(_file_content))
-                        results[_path_name.stem] = df
+                    df = pd.read_csv(StringIO(_file_content))
+                    results[_path_name.stem] = df
 
                 if _path_name.suffix == '.geojson':
                     # TODO: check if the geometry is expressed in RD coordinates
