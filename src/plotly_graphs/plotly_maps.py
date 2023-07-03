@@ -98,11 +98,11 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
             _year_index = bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
             _color = get_reliability_color(_inital_results["Section"][_year_index])
             _hovertemplate = f'Vaknaam {section.name}<br>' \
-                            f'Betas: {_inital_results["Section"][_year_index]}<br>'
+                             f'Betas section: {_inital_results["Section"][_year_index]}<br>'
         else:
             _color = 'grey'
             _hovertemplate = f'Vaknaam {section.name}<br>' \
-                            f'Betas: NO DATA<br>'
+                             f'Betas: NO DATA<br>'
 
         fig.add_trace(go.Scattermapbox(
             mode="lines",
@@ -173,11 +173,14 @@ def add_colorscale_bar(fig: go.Figure):
                     title="Betrouwbaarheid index",
                     titleside='right',
                     tickmode='array',
-                    tickvals=[2, 5],  # you can adjust these values as per your min and max reliability values
-                    ticktext=['2', '5'],
-                    ticks='outside'
+                    tickvals=[2, 3, 4, 5],  # you can adjust these values as per your min and max reliability values
+                    ticktext=['2', '3', '4', '5'],
+                    ticks='outside',
+                    len=0.5,
                 ),
                 showscale=True,
+                cmin=2,
+                cmax=5,
             ),
             hoverinfo='none'
         )
