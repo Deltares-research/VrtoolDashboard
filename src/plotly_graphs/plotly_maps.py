@@ -96,14 +96,18 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
 
         if _inital_results is not None:
             _year_index = bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
-            _color = get_reliability_color(_inital_results["Section"][_year_index])
+            _beta_section = _inital_results["Section"][_year_index]
+            _beta_dict = {meca : beta[_year_index] for meca, beta in _inital_results.items() if meca != "Section"}
+            _mechanism = min(_beta_dict, key=_beta_dict.get)  # mechanism with lowest beta
+
+            _color = get_reliability_color(_beta_section)
 
             if result_type == ResultType.RELIABILITY.name:
-                hover_res = f'Betas section: {_inital_results["Section"][_year_index]}:.2e<br>'
+                hover_res = f'Betas section: {_beta_section:.2}<br>'
             else:
-                hover_res = f'Pf section: {beta_to_pf(_inital_results["Section"][_year_index])}:.2e<br>'
+                hover_res = f'Pf section: {beta_to_pf(_beta_section):.2e}<br>'
 
-            _hovertemplate = f'Vaknaam {section.name}<br>' +  hover_res
+            _hovertemplate = f'Vaknaam {section.name}<br>' + hover_res + f"Lowest beta: {_mechanism}<br>"
 
         else:
             _color = 'grey'
