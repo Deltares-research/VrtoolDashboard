@@ -1,19 +1,10 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
-from enum import Enum
+
+from .layout_collasping_menus import make_collapsing_menu
+from .layout_dike_settings import dike_settings_layout
 from .layout_upload_dike_files import layout_upload_button
-
-
-class CalcType(Enum):
-    DOORSNEDE_EISEN = "Doorsnede-Eisen"
-    VEILIGHEIDRENDEMENT = "Veiligheidsrendement"
-
-
-class ResultType(Enum):
-    RELIABILITY = "Betrouwbaarheid"
-    PROBABILITY = "Faalkans"
-    COST = "Kost"
-    MEASURE = "Maatregel"
+from ..constants import CalcType, ResultType
 
 
 def make_layout_main_page() -> dbc.Row:
@@ -33,12 +24,16 @@ def make_layout_main_page() -> dbc.Row:
                         dcc.Markdown(
                             '''
                             This dashboard is a tool to visualize the results of the Veiligheidrendement optimization for dike projects.
-    
-                            You can start using the dashboard by uploading below a Geojson file of a dike:
-    
                             '''
                         ),
-                        layout_upload_button,
+
+                        make_collapsing_menu(menu_name='Download',
+                                             collapse_id=1,
+                                             inner_layouts=[layout_upload_button]),
+
+                        make_collapsing_menu(menu_name="Instellingen",
+                                             collapse_id=2,
+                                             inner_layouts=[dike_settings_layout])
 
                     ]
                 ),
@@ -93,7 +88,8 @@ def layout_tab_two() -> html.Div:
     layout = html.Div(
         children=[
             html.H2("Beoordelingsresultaten"),
-            html.Div("The map below shows the reliability of the initial assessment for the entire dike traject. Use the slider to visualize another assessment year."),
+            html.Div(
+                "The map below shows the reliability of the initial assessment for the entire dike traject. Use the slider to visualize another assessment year."),
             dcc.Slider(2025, 2125, value=2025,
                        marks={
                            2025: {'label': '2025', },
@@ -128,10 +124,11 @@ def layout_tab_three() -> html.Div:
     layout = html.Div(
         children=[
             html.H2("Maatregelen"),
-            html.Div("The map below shows the reliability of the initial assessment for the entire dike traject. Use the slider to visualize anothex    r assessment year."),
+            html.Div(
+                "The map below shows the reliability of the initial assessment for the entire dike traject. Use the slider to visualize anothex    r assessment year."),
             dcc.Slider(2025, 2125, value=2025,
                        marks={
-                           2025: {'label': '2025', },
+                           2025: {'label': '2025'},
                            2045: {'label': '2045'},
                            2075: {'label': '2075'},
                            2125: {'label': '2125'}
@@ -156,5 +153,3 @@ def layout_tab_three() -> html.Div:
     )
 
     return layout
-
-
