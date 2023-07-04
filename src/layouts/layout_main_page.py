@@ -10,8 +10,10 @@ class CalcType(Enum):
 
 
 class ResultType(Enum):
-    RELIABILITY = "Reliability"
-    PROBABILITY = "Probability"
+    RELIABILITY = "Betrouwbaarheid"
+    PROBABILITY = "Faalkans"
+    COST = "Kost"
+    MEASURE = "Maatregel"
 
 
 def make_layout_main_page() -> dbc.Row:
@@ -90,7 +92,7 @@ def layout_tab_one() -> html.Div:
 def layout_tab_two() -> html.Div:
     layout = html.Div(
         children=[
-            html.H2("Initial Assessments"),
+            html.H2("Beoordelingsresultaten"),
             html.Div("The map below shows the reliability of the initial assessment for the entire dike traject. Use the slider to visualize another assessment year."),
             dcc.Slider(2025, 2125, value=2025,
                        marks={
@@ -142,11 +144,10 @@ def layout_tab_three() -> html.Div:
                 id="select_result_type_measures",
                 options=[
                     {"label": ResultType.RELIABILITY.value, "value": ResultType.RELIABILITY.name},
-                    {"label": ResultType.PROBABILITY.value, "value": ResultType.PROBABILITY.name
-                     },
+                    {"label": ResultType.PROBABILITY.value, "value": ResultType.PROBABILITY.name},
                 ],
                 value=ResultType.RELIABILITY.name,
-                style={'width': '40vh', "height": "6vh", "margin-top": "2px"}
+                style={'width': '40vh', "height": "8vh", "margin-top": "2px"}
             ),
             html.Div(id='dike_traject_reliability_map_measures',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),

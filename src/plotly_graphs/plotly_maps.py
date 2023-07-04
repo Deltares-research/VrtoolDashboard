@@ -143,6 +143,12 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
 
 def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraject, selected_year: float,
                                                           result_type: str) -> go.Figure:
+    """
+    This function plots a Map displaying the reliability of the dike traject after measures.
+    :param dike_traject:
+    :param selected_year: selected year by the user for which results must be displayed
+    :param result_type: one of "Reliability" or "Probability"
+    """
     fig = go.Figure()
     for section in dike_traject.dike_sections:
         _coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
@@ -152,10 +158,9 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
         if not section.in_analyse:
             continue
 
-        # _measure_results = section.final_measure_doorsnede if selected_result_type == CalcType.DOORSNEDE_EISEN.name else section.final_measure_veiligheidrendement
         _initial_results = section.initial_assessment
 
-        _measure_results = section.final_measure_veiligheidrendement
+        _measure_results = section.final_measure_veiligheidrendement  # TODO: connect with select CalcType
 
         if _measure_results is not None:
 
@@ -165,12 +170,14 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
                           key in ["StabilityInner", "Piping", "Overflow"]}
             _mechanism = min(_beta_dict, key=_beta_dict.get)  # mechanism with lowest beta
 
-            _color = get_reliability_color(_beta_section)
-
             if result_type == ResultType.RELIABILITY.name:
+                _color = get_reliability_color(_beta_section)
                 hover_res = f'Betas section: {_beta_section:.2}<br>'
-            else:
+            elif result_type == ResultType.PROBABILITY.name:
+                _color = get_reliability_color(_beta_section)
                 hover_res = f'Pf section: {beta_to_pf(_beta_section):.2e}<br>'
+            else:
+                raise NotImplementedError("This result type is not implemented yet")
 
             _hovertemplate = f'Vaknaam {section.name}<br>' + hover_res + f"Lowest beta: {_mechanism}<br>"
 
@@ -289,13 +296,26 @@ def add_colorscale_bar(fig: go.Figure, result_type: str):
     fig.update_xaxes(showticklabels=False)
     fig.update_yaxes(showticklabels=False)
 
+
 def get_reliability_color(reliability_value: float) -> str:
     """
-    Return the color of the reliability value B on a colorscale from 2 (scarlet) to 5 (green), as a rgb string.
+    Return the color of the reliability value Beta on a colorscale from 2 (scarlet) to 5 (green), as a rgb string.
     :param reliability_value:
     :return:
     """
     cmap = plt.cm.RdYlGn  # theme of the colorscale
     norm = colors.Normalize(vmin=2, vmax=5)  # Hardcoded boundaries
     rgb = cmap(norm(reliability_value))
+    return f'rgb({rgb[0]}, {rgb[1]}, {rgb[2]})'
+
+
+def get_cost_color(cost_value) -> str:
+    """
+    Return the color of the cost value  on a colorscale from 0M€ (scarlet) to 20M€ (green), as a rgb string.
+    :param reliability_value:
+    :return:
+    """
+    cmap = plt.cm.RdYlGn  # theme of the colorscale
+    norm = colors.Normalize(vmin=0, vmax=20)  # Hardcoded boundaries
+    rgb = cmap(norm(cost_value))
     return f'rgb({rgb[0]}, {rgb[1]}, {rgb[2]})'

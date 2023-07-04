@@ -6,6 +6,8 @@ from src.linear_objects.dike_traject import DikeTraject
 from src.plotly_graphs.plotly_maps import plot_overview_map_dummy, plot_default_overview_map_dummy, \
     plot_dike_traject_reliability_initial_assessment_map, plot_dike_traject_reliability_measures_assessment_map
 from src.app import app
+from src.utils.utils import export_to_json
+
 
 @app.callback([Output('output-data-upload-zip', 'children'),
                Output("upload-toast", "is_open")],
@@ -84,6 +86,7 @@ def make_graph_initial_assessment(dike_traject_data: dict, selected_year: float,
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
         _fig = plot_default_overview_map_dummy()
+        export_to_json(dike_traject_data)
         _fig = plot_dike_traject_reliability_measures_assessment_map(_dike_traject, selected_year, result_type)
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
 
