@@ -10,7 +10,7 @@ from src.utils.utils import export_to_json
 
 
 @app.callback([Output('output-data-upload-zip', 'children'),
-               Output("upload-toast", "is_open")],
+               Output("upload-toast", "is_open"),],
               [Input('upload-data-zip', 'contents')],
               [State('upload-data-zip', 'filename')])
 def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tuple:
@@ -27,14 +27,14 @@ def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tup
         - boolean indicating if the upload was successful.
     """
     if contents is not None:
-        # try:
-        _dike_traject = DikeTraject.from_uploaded_zip(contents, filename)
-        return html.Div(
-            dcc.Store(id='stored-data', data=_dike_traject.serialize())), True
-        # except:
-        #     return html.Div(children=["The uploaded zip file does not contain the correct files"]), False
+        try:
+            _dike_traject = DikeTraject.from_uploaded_zip(contents, filename)
+            return html.Div(
+                dcc.Store(id='stored-data', data=_dike_traject.serialize())), True
+        except:
+            return html.Div(children=["Something went wrong when uploading the file"]), False
     else:
-        return html.Div("No file has been uploaded yet"), False
+        return html.Div("Geen bestand geüpload"), False
 
 
 @app.callback(Output('overview_map_div', 'children'),
@@ -103,11 +103,11 @@ def render_tab_map_content(active_tab: str) -> html.Div:
     :param active_tab:
     :return:
     """
-    if active_tab == "tab-3":
+    if active_tab == "tab-1":
         return layout_tab_one()
     elif active_tab == "tab-2":
         return layout_tab_two()
-    elif active_tab == "tab-1":
+    elif active_tab == "tab-3":
         return layout_tab_three()
     else:
         return html.Div("Invalid tab selected")

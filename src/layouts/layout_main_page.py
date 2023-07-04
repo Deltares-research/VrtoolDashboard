@@ -20,7 +20,7 @@ def make_layout_main_page() -> dbc.Row:
             dbc.Col(
                 html.Div(
                     [
-                        html.H2("Welcome to the dashboard of the Veiligheidrendement tool🌊"),
+                        html.H2("Welkom bij het dashboard van de Veiligheidsrendementstool🌊"),
                         dcc.Markdown(
                             '''
                             This dashboard is a tool to visualize the results of the Veiligheidrendement optimization for dike projects.
@@ -68,17 +68,6 @@ def layout_tab_one() -> html.Div:
         children=[
             html.H2("Overzicht Kaart"),
             html.Div("The map below displays basic information about the imported dike traject."),
-            dbc.Label("Select a result type:"),
-            dbc.RadioItems(
-                id="select_calculation_type",
-                options=[
-                    {"label": CalcType.DOORSNEDE_EISEN.value, "value": CalcType.DOORSNEDE_EISEN.name},
-                    {"label": CalcType.VEILIGHEIDRENDEMENT.value,
-                     "value": CalcType.VEILIGHEIDRENDEMENT.name},
-                ],
-                value=CalcType.VEILIGHEIDRENDEMENT.name,
-                style={'width': '40vh', "height": "6vh", "margin-top": "2px"}
-            ),
             html.Div(id='overview_map_div',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
         ])
