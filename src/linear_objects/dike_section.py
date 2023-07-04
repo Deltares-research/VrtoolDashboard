@@ -77,9 +77,10 @@ class DikeSection(BaseLinearObject):
 
             # Parse csv of the final measure dataframe and add them to the DikeSection object
             _final_measure = _measure_dict[self.name]
+            _option = "Doorsnede-eisen" if calc_type == "doorsnede" else "Veiligheidsrendement"
 
             # Parse csv of the Section results and add them to the DikeSection object
-            _section_measure_betas = all_unzipped_files[f"DV{self.name}_Options_Doorsnede-eisen"]
+            _section_measure_betas = all_unzipped_files[f"DV{self.name}_Options_{_option}"]
             self.years = _section_measure_betas.iloc[
                 0].dropna().unique()  # select the year for which the calculations were done
 
@@ -92,9 +93,10 @@ class DikeSection(BaseLinearObject):
 
             _mechanisms = ["Overflow", "StabilityInner", "Piping", "Section"]
             for mechanism in _mechanisms:
-                _final_measure[mechanism] = {key: _section_measure_betas[key] for key in
+                _final_measure[mechanism] = [_section_measure_betas[key] for key in
                                              _section_measure_betas.index if
-                                             key.startswith(mechanism)}
+                                             key.startswith(mechanism)]
+
 
             self.__setattr__(f"final_measure_{calc_type}", _final_measure)
 

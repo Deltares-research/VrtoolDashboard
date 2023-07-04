@@ -50,6 +50,7 @@ def make_layout_main_page() -> dbc.Row:
                             [
                                 dbc.Tab(label="Tab 1", tab_id="tab-1"),
                                 dbc.Tab(label="Tab 2", tab_id="tab-2"),
+                                dbc.Tab(label="Tab 3", tab_id="tab-3")
                             ],
                             id="tabs",
                             active_tab="tab-1",  # Set the initial active tab
@@ -100,10 +101,10 @@ def layout_tab_two() -> html.Div:
                        },
                        included=False,
                        tooltip={"placement": "bottom", "always_visible": True},
-                       id="slider_year_reliability_results",
+                       id="slider_year_initial_reliability_results",
                        ),
             dbc.RadioItems(
-                id="select_result_type",
+                id="select_result_type_initial",
                 options=[
                     {"label": ResultType.RELIABILITY.value, "value": ResultType.RELIABILITY.name},
                     {"label": ResultType.PROBABILITY.value, "value": ResultType.PROBABILITY.name
@@ -112,10 +113,47 @@ def layout_tab_two() -> html.Div:
                 value=ResultType.RELIABILITY.name,
                 style={'width': '40vh', "height": "6vh", "margin-top": "2px"}
             ),
-            html.Div(id='dike_traject_reliability_map',
+            html.Div(id='dike_traject_reliability_map_initial',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
 
         ]
     )
 
     return layout
+
+
+def layout_tab_three() -> html.Div:
+    layout = html.Div(
+        children=[
+            html.H2("Maatregelen"),
+            html.Div("The map below shows the reliability of the initial assessment for the entire dike traject. Use the slider to visualize anothex    r assessment year."),
+            dcc.Slider(2025, 2125, value=2025,
+                       marks={
+                           2025: {'label': '2025', },
+                           2045: {'label': '2045'},
+                           2075: {'label': '2075'},
+                           2125: {'label': '2125'}
+                       },
+                       included=False,
+                       tooltip={"placement": "bottom", "always_visible": True},
+                       id="slider_year_reliability_results_measures",
+                       ),
+            dbc.RadioItems(
+                id="select_result_type_measures",
+                options=[
+                    {"label": ResultType.RELIABILITY.value, "value": ResultType.RELIABILITY.name},
+                    {"label": ResultType.PROBABILITY.value, "value": ResultType.PROBABILITY.name
+                     },
+                ],
+                value=ResultType.RELIABILITY.name,
+                style={'width': '40vh', "height": "6vh", "margin-top": "2px"}
+            ),
+            html.Div(id='dike_traject_reliability_map_measures',
+                     style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
+
+        ]
+    )
+
+    return layout
+
+

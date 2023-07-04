@@ -1,10 +1,10 @@
 import dash
 from dash import html, dcc, Output, Input, State
 
-from src.layouts.layout_main_page import layout_tab_one, CalcType, layout_tab_two
+from src.layouts.layout_main_page import layout_tab_one, CalcType, layout_tab_two, layout_tab_three
 from src.linear_objects.dike_traject import DikeTraject
 from src.plotly_graphs.plotly_maps import plot_overview_map_dummy, plot_default_overview_map_dummy, \
-    plot_dike_traject_reliability_initial_assessment_map
+    plot_dike_traject_reliability_initial_assessment_map, plot_dike_traject_reliability_measures_assessment_map
 from src.app import app
 
 @app.callback([Output('output-data-upload-zip', 'children'),
@@ -52,8 +52,8 @@ def make_graph_overview_dike(dike_traject_data: dict, selected_result_type) -> d
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
 
 
-@app.callback(Output('dike_traject_reliability_map', 'children'),
-              [Input('stored-data', 'data'), Input("slider_year_reliability_results", "value"), Input("select_result_type", 'value')])
+@app.callback(Output('dike_traject_reliability_map_initial', 'children'),
+              [Input('stored-data', 'data'), Input("slider_year_initial_reliability_results", "value"), Input("select_result_type_initial", 'value')])
 def make_graph_initial_assessment(dike_traject_data: dict, selected_year: float, result_type: str) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
@@ -70,6 +70,24 @@ def make_graph_initial_assessment(dike_traject_data: dict, selected_year: float,
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
 
 
+@app.callback(Output('dike_traject_reliability_map_measures', 'children'),
+              [Input('stored-data', 'data'), Input("slider_year_reliability_results_measures", "value"), Input("select_result_type_measures", 'value')])
+def make_graph_initial_assessment(dike_traject_data: dict, selected_year: float, result_type: str) -> dcc.Graph:
+    """
+    Call to display the graph of the overview map of the dike from the saved imported dike data.
+
+    :param dike_traject_data:
+
+    """
+    if dike_traject_data is None:
+        _fig = plot_default_overview_map_dummy()
+    else:
+        _dike_traject = DikeTraject.deserialize(dike_traject_data)
+        _fig = plot_default_overview_map_dummy()
+        _fig = plot_dike_traject_reliability_measures_assessment_map(_dike_traject, selected_year, result_type)
+    return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
+
+
 @app.callback(
     Output("content_tab", "children"),
     [Input("tabs", "active_tab")]
@@ -80,9 +98,11 @@ def render_tab_map_content(active_tab: str) -> html.Div:
     :param active_tab:
     :return:
     """
-    if active_tab == "tab-1":
+    if active_tab == "tab-3":
         return layout_tab_one()
     elif active_tab == "tab-2":
         return layout_tab_two()
+    elif active_tab == "tab-1":
+        return layout_tab_three()
     else:
         return html.Div("Invalid tab selected")
