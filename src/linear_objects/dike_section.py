@@ -75,7 +75,7 @@ class DikeSection(BaseLinearObject):
         if self.name in _measure_dict.keys():
             self.is_reinforced = True
 
-            # Parse csv of the final measure dataframe and add them to the DikeSection object
+            # Parse csv of the (optimal) measure dataframe and add them to the DikeSection object
             _final_measure = _measure_dict[self.name]
             _option = "Doorsnede-eisen" if calc_type == "doorsnede" else "Veiligheidsrendement"
 
@@ -96,7 +96,6 @@ class DikeSection(BaseLinearObject):
                 _final_measure[mechanism] = [_section_measure_betas[key] for key in
                                              _section_measure_betas.index if
                                              key.startswith(mechanism)]
-
 
             self.__setattr__(f"final_measure_{calc_type}", _final_measure)
 
