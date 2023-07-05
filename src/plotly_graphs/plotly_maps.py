@@ -142,7 +142,7 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
 
 
 def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraject, selected_year: float,
-                                                          result_type: str) -> go.Figure:
+                                                          result_type: str, calc_type: str) -> go.Figure:
     """
     This function plots a Map displaying the reliability of the dike traject after measures.
     :param dike_traject:
@@ -160,7 +160,7 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
 
         _initial_results = section.initial_assessment
 
-        _measure_results = section.final_measure_veiligheidrendement  # TODO: connect with select CalcType
+        _measure_results = section.final_measure_veiligheidrendement if calc_type == CalcType.VEILIGHEIDRENDEMENT.name else section.final_measure_doorsnede
 
         if _measure_results is not None:
 
@@ -179,7 +179,9 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
             else:
                 raise NotImplementedError("This result type is not implemented yet")
 
-            _hovertemplate = f'Vaknaam {section.name}<br>' + hover_res + f"Lowest beta: {_mechanism}<br>"
+            _hovertemplate = f'Vaknaam {section.name}<br>' \
+                             f'Maatregel: {_measure_results["name"]} m<br>' \
+                             f'LCC: {to_million_euros(_measure_results["LCC"])} M€<br>' + hover_res + f"Lowest beta: {_mechanism}<br>"
 
         else:
             _color = 'grey'

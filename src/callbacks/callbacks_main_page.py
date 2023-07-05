@@ -10,7 +10,7 @@ from src.utils.utils import export_to_json
 
 
 @app.callback([Output('output-data-upload-zip', 'children'),
-               Output("upload-toast", "is_open"),],
+               Output("upload-toast", "is_open"), ],
               [Input('upload-data-zip', 'contents')],
               [State('upload-data-zip', 'filename')])
 def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tuple:
@@ -75,13 +75,18 @@ def make_graph_initial_assessment(dike_traject_data: dict, selected_year: float,
 
 @app.callback(Output('dike_traject_reliability_map_measures', 'children'),
               [Input('stored-data', 'data'), Input("slider_year_reliability_results", "value"),
-               Input("select_result_type", 'value')])
-def make_graph_initial_assessment(dike_traject_data: dict, selected_year: float, result_type: str) -> dcc.Graph:
+               Input("select_result_type", 'value'), Input("select_calculation_type", "value")])
+def make_graph_assessment(dike_traject_data: dict, selected_year: float, result_type: str,
+                                  calc_type: str) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
 
     :param dike_traject_data:
+    :param selected_year: Selected year by the user from the slider
+    :param result_type: Selected result type by the user from the OptionField, one of "RELIABILITY" or "PROBABILITY"
+    :param calc_type: Selected calculation type by the user from the OptionField, one of "VEILIGHEIDRENDEMENT" or "DOORSNEDE"
 
+    :return: dcc.Graph with the plotly figure
     """
     if dike_traject_data is None:
         _fig = plot_default_overview_map_dummy()
@@ -89,7 +94,8 @@ def make_graph_initial_assessment(dike_traject_data: dict, selected_year: float,
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
         _fig = plot_default_overview_map_dummy()
         export_to_json(dike_traject_data)
-        _fig = plot_dike_traject_reliability_measures_assessment_map(_dike_traject, selected_year, result_type)
+        _fig = plot_dike_traject_reliability_measures_assessment_map(_dike_traject, selected_year, result_type,
+                                                                     calc_type)
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
 
 
