@@ -21,7 +21,12 @@ class DikeTraject(BaseLinearObject):
 
     @classmethod
     def from_uploaded_zip(cls, contents: str, zipname: str):
-        """ Create a DikeTraject object from the uploaded zip file"""
+        """ Create a DikeTraject object from the uploaded zip file
+
+        :param contents: string content of the uploaded zip file
+        :param zipname: name of the uploaded zip file
+
+        """
         _all_unzipped_files = parse_zip_content(contents, zipname)
 
         # Parse the csv of the optimal measures of Doorsnede-eisen and Veiligheidsrendement:
@@ -79,6 +84,42 @@ class DikeTraject(BaseLinearObject):
                            dike_sections=sections,
                            reinforcement_order_vr=data['reinforcement_order_vr'],
                            reinforcement_order_dsn=data['reinforcement_order_dsn'])
+
+    def calc_traject_probability_array(self):
+
+        _beta_df = self.get_initial_assessment_df()
+        for section_name in self.reinforcement_order_dsn:
+            section = self.get_section(section_name)
+
+    def get_section(self, name: str) -> DikeSection:
+        """Get the section object by name"""
+        for section in self.dike_sections:
+            if section.name == name:
+                return section
+        raise ValueError(f"Section with name {name} not found")
+
+    def get_initial_assessment_df(self) -> DataFrame:
+        """Get the initial assessment dataframe from all children sections"""
+
+        years = self.dike_sections[0].years
+        df = pd.DataFrame(columns=["name", "mechanism"] + years + ["Length"])
+
+        for section in self.dike_sections:
+            if not section.is_reinforced:
+                continue
+            # add a row to the dataframe with the initial assessment of the section
+            for mechanism in ["Overflow", "Piping", "StabilityInner"]:
+                d = {"name": section.name, "mechanism": mechanism, "Length": 888,
+
+                     }
+                for year, beta in zip(years, section.initial_assessment[mechanism]):
+                    d[year] = beta
+                s = pd.DataFrame(d, index=[0])
+                df = pd.concat([df, s])
+
+        return df
+
+
 
 
 def parse_optimal_measures_results(all_unzipped_files: dict, filename: str) -> dict:

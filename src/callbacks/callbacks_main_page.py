@@ -119,6 +119,7 @@ def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_
         _fig = plot_default_overview_map_dummy()
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
+        _dike_traject.calc_traject_probability_array()
         _fig = plot_pf_length_cost(_dike_traject, selected_year)
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
 
@@ -133,13 +134,13 @@ def render_tab_map_content(active_tab: str) -> html.Div:
     :param active_tab:
     :return:
     """
-    if active_tab == "tab-1":
+    if active_tab == "tab-4":
         return layout_tab_one()
     elif active_tab == "tab-2":
         return layout_tab_two()
     elif active_tab == "tab-3":
         return layout_tab_three()
-    elif active_tab == "tab-4":
+    elif active_tab == "tab-1":
         return layout_tab_four()
     else:
         return html.Div("Invalid tab selected")

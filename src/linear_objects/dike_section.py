@@ -31,7 +31,6 @@ class DikeSection(BaseLinearObject):
         self.final_measure_doorsnede = None
         self.years = []
 
-
     def serialize(self) -> dict:
         """Serialize the DikeSection object to a dict, in order to be saved in dcc.Store"""
         return {
@@ -117,11 +116,3 @@ class DikeSection(BaseLinearObject):
                 _initial_assessment_dict[mechanism] = _section_initial_betas_df[_section_initial_betas_df["mechanism"] == mechanism].iloc[:, 2:-1].values.tolist()[0]
 
             self.__setattr__(f"initial_assessment", _initial_assessment_dict)
-
-
-
-
-
-
-
-
