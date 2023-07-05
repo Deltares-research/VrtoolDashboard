@@ -99,7 +99,7 @@ def layout_tab_three() -> html.Div:
                 options=[
                     {"label": ColorBarResultType.RELIABILITY.value, "value": ColorBarResultType.RELIABILITY.name},
                     {"label": ColorBarResultType.COST.value, "value": ColorBarResultType.COST.name},
-                    {"label": ColorBarResultType.MEASURE.value, "value": ColorBarResultType.MEASURE.name},
+                    {"label": ColorBarResultType.MEASURE.value, "value": ColorBarResultType.MEASURE.name, 'disabled': True},
                 ],
                 value=ColorBarResultType.RELIABILITY.name,
                 inline=True,

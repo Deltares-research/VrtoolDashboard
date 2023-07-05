@@ -26,8 +26,8 @@ class DikeTraject(BaseLinearObject):
         _taken_measure_dsn_dict = parse_final_measures_results(_all_unzipped_files, "TakenMeasures_Doorsnede-eisen")
 
         _final_measure_vr_dict = parse_final_measures_results(_all_unzipped_files, "FinalMeasures_Veiligheidsrendement")
-        _taken_measure_vr_dict = parse_final_measures_results(_all_unzipped_files, "TakenMeasures_Optimal_Veiligheidsrendement")
-
+        _taken_measure_vr_dict = parse_final_measures_results(_all_unzipped_files,
+                                                              "TakenMeasures_Optimal_Veiligheidsrendement")
 
         # Parse the geojson of the dike sections and add the final measures to the dike sections
         _dike_sections = []
@@ -47,9 +47,7 @@ class DikeTraject(BaseLinearObject):
 
             _dike_sections.append(_dike_section)
 
-
         return cls(name=zipname, dike_sections=_dike_sections)
-
 
     def serialize(self) -> dict:
         """Serialize the DikeTraject object to a dict, in order to be saved in dcc.Store"""
@@ -107,6 +105,3 @@ def get_traject_prob(beta_df, mechanisms=["StabilityInner", "Piping", "Overflow"
             # 1-prod(1-p)
         total_traject_prob += traject_probs[mechanism]
     return total_traject_prob, traject_probs
-
-
-

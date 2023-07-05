@@ -177,6 +177,7 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
 
             elif colorbar_result_type == ColorBarResultType.COST.name:
                 _color = get_cost_color(to_million_euros(_measure_results["LCC"]))
+
             elif colorbar_result_type == ColorBarResultType.MEASURE.name:
                 pass
             else:

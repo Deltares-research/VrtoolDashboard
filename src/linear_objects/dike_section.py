@@ -56,7 +56,7 @@ class DikeSection(BaseLinearObject):
         section.initial_assessment = data['initial_assessment']
         section.is_reinforced = data['is_reinforced']
         section.final_measure_veiligheidrendement = data['final_measure_veiligheidrendement']
-        section.final_measure = data['final_measure_doorsnede']
+        section.final_measure_doorsnede = data['final_measure_doorsnede']
         section.years = data['years']
         return section
 
