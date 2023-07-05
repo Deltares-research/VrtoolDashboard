@@ -57,11 +57,15 @@ def make_graph_overview_dike(dike_traject_data: dict, selected_result_type) -> d
 @app.callback(Output('dike_traject_reliability_map_initial', 'children'),
               [Input('stored-data', 'data'), Input("slider_year_reliability_results", "value"),
                Input("select_result_type", 'value')])
-def make_graph_initial_assessment(dike_traject_data: dict, selected_year: float, result_type: str) -> dcc.Graph:
+def make_graph_map_initial_assessment(dike_traject_data: dict, selected_year: float, result_type: str) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
 
     :param dike_traject_data:
+    :param selected_year: Selected year by the user from the slider
+    :param result_type: Selected result type by the user from the OptionField, one of "RELIABILITY" or "PROBABILITY"
+
+    :return: dcc.Graph with the plotly figure
 
     """
     if dike_traject_data is None:
@@ -76,7 +80,7 @@ def make_graph_initial_assessment(dike_traject_data: dict, selected_year: float,
 @app.callback(Output('dike_traject_reliability_map_measures', 'children'),
               [Input('stored-data', 'data'), Input("slider_year_reliability_results", "value"),
                Input("select_result_type", 'value'), Input("select_calculation_type", "value")])
-def make_graph_assessment(dike_traject_data: dict, selected_year: float, result_type: str,
+def make_graph_map_measures(dike_traject_data: dict, selected_year: float, result_type: str,
                                   calc_type: str) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
