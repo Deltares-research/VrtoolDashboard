@@ -13,13 +13,13 @@ dike_settings_layout = html.Div([
                },
                included=False,
                tooltip={"placement": "bottom", "always_visible": True},
-               id="slider_year_initial_reliability_results",
+               id="slider_year_reliability_results",
                ),
 
     dbc.Row([
 
         dbc.Col([dbc.RadioItems(
-            id="select_result_type_initial",
+            id="select_result_type",
             options=[
                 {"label": ResultType.RELIABILITY.value, "value": ResultType.RELIABILITY.name},
                 {"label": ResultType.PROBABILITY.value, "value": ResultType.PROBABILITY.name
