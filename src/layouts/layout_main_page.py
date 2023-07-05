@@ -93,7 +93,20 @@ def layout_tab_three() -> html.Div:
         children=[
             html.H2("Maatregelen"),
             html.Div(
-                "The map below shows the reliability of the initial assessment for the entire dike traject. Use the slider to visualize anothex    r assessment year."),
+                "The map below shows the reliability of the initial assessment for the entire dike traject. Use the slider  assessment year."),
+            dcc.RadioItems(
+                id="select_measure_map_result_type",
+                options=[
+                    {"label": ResultType.RELIABILITY.value, "value": ResultType.RELIABILITY.name},
+                    {"label": ResultType.COST.value, "value": ResultType.COST.name},
+                    {"label": ResultType.MEASURE.value, "value": ResultType.MEASURE.name},
+                ],
+                value=ResultType.RELIABILITY.name,
+                inline=True,
+                className='my-radio-items',  # add a class name
+                style={'width': '40vh', "height": "6vh", "margin-top": "2px"}
+
+            ),
             html.Div(id='dike_traject_reliability_map_measures',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
 

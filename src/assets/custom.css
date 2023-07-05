@@ -15,3 +15,8 @@
 .navbar-color {
   color: #141e95 !important;
 }
+
+
+.my-radio-items label {
+    margin-right: 20px;  /* Increasing horizontal padding between radio items */
+}

@@ -113,11 +113,11 @@ def render_tab_map_content(active_tab: str) -> html.Div:
     :param active_tab:
     :return:
     """
-    if active_tab == "tab-1":
+    if active_tab == "tab-3":
         return layout_tab_one()
     elif active_tab == "tab-2":
         return layout_tab_two()
-    elif active_tab == "tab-3":
+    elif active_tab == "tab-1":
         return layout_tab_three()
     else:
         return html.Div("Invalid tab selected")
