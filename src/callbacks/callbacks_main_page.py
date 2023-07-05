@@ -10,7 +10,7 @@ from src.utils.utils import export_to_json
 
 
 @app.callback([Output('output-data-upload-zip', 'children'),
-               Output("upload-toast", "is_open")],
+               Output("upload-toast", "is_open"), ],
               [Input('upload-data-zip', 'contents')],
               [State('upload-data-zip', 'filename')])
 def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tuple:
@@ -27,14 +27,14 @@ def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tup
         - boolean indicating if the upload was successful.
     """
     if contents is not None:
-        # try:
-        _dike_traject = DikeTraject.from_uploaded_zip(contents, filename)
-        return html.Div(
-        dcc.Store(id='stored-data', data=_dike_traject.serialize())), True
-        # except:
-        #     return html.Div(children=["The uploaded zip file does not contain the correct files"]), False
+        try:
+            _dike_traject = DikeTraject.from_uploaded_zip(contents, filename)
+            return html.Div(
+                dcc.Store(id='stored-data', data=_dike_traject.serialize())), True
+        except:
+            return html.Div(children=["Something went wrong when uploading the file"]), False
     else:
-        return html.Div("No file has been uploaded yet"), False
+        return html.Div("Geen bestand geüpload"), False
 
 
 @app.callback(Output('overview_map_div', 'children'),
@@ -55,12 +55,17 @@ def make_graph_overview_dike(dike_traject_data: dict, selected_result_type) -> d
 
 
 @app.callback(Output('dike_traject_reliability_map_initial', 'children'),
-              [Input('stored-data', 'data'), Input("slider_year_initial_reliability_results", "value"), Input("select_result_type_initial", 'value')])
-def make_graph_initial_assessment(dike_traject_data: dict, selected_year: float, result_type: str) -> dcc.Graph:
+              [Input('stored-data', 'data'), Input("slider_year_reliability_results", "value"),
+               Input("select_result_type", 'value')])
+def make_graph_map_initial_assessment(dike_traject_data: dict, selected_year: float, result_type: str) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
 
     :param dike_traject_data:
+    :param selected_year: Selected year by the user from the slider
+    :param result_type: Selected result type by the user from the OptionField, one of "RELIABILITY" or "PROBABILITY"
+
+    :return: dcc.Graph with the plotly figure
 
     """
     if dike_traject_data is None:
@@ -73,13 +78,19 @@ def make_graph_initial_assessment(dike_traject_data: dict, selected_year: float,
 
 
 @app.callback(Output('dike_traject_reliability_map_measures', 'children'),
-              [Input('stored-data', 'data'), Input("slider_year_reliability_results_measures", "value"), Input("select_result_type_measures", 'value')])
-def make_graph_initial_assessment(dike_traject_data: dict, selected_year: float, result_type: str) -> dcc.Graph:
+              [Input('stored-data', 'data'), Input("slider_year_reliability_results", "value"),
+               Input("select_result_type", 'value'), Input("select_calculation_type", "value")])
+def make_graph_map_measures(dike_traject_data: dict, selected_year: float, result_type: str,
+                                  calc_type: str) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
 
     :param dike_traject_data:
+    :param selected_year: Selected year by the user from the slider
+    :param result_type: Selected result type by the user from the OptionField, one of "RELIABILITY" or "PROBABILITY"
+    :param calc_type: Selected calculation type by the user from the OptionField, one of "VEILIGHEIDRENDEMENT" or "DOORSNEDE"
 
+    :return: dcc.Graph with the plotly figure
     """
     if dike_traject_data is None:
         _fig = plot_default_overview_map_dummy()
@@ -87,7 +98,8 @@ def make_graph_initial_assessment(dike_traject_data: dict, selected_year: float,
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
         _fig = plot_default_overview_map_dummy()
         export_to_json(dike_traject_data)
-        _fig = plot_dike_traject_reliability_measures_assessment_map(_dike_traject, selected_year, result_type)
+        _fig = plot_dike_traject_reliability_measures_assessment_map(_dike_traject, selected_year, result_type,
+                                                                     calc_type)
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
 
 
@@ -101,11 +113,45 @@ def render_tab_map_content(active_tab: str) -> html.Div:
     :param active_tab:
     :return:
     """
-    if active_tab == "tab-3":
+    if active_tab == "tab-1":
         return layout_tab_one()
     elif active_tab == "tab-2":
         return layout_tab_two()
-    elif active_tab == "tab-1":
+    elif active_tab == "tab-3":
         return layout_tab_three()
     else:
         return html.Div("Invalid tab selected")
+
+
+@app.callback(
+    Output("collapse_1", "is_open"),
+    [Input("collapse_button_1", "n_clicks")],
+    [State("collapse_1", "is_open")],
+)
+def toggle_collapse(n: int, is_open: bool):
+    """
+    Callback to toggle the collapse of the first section.
+    :param n: dummy integer
+    :param is_open: boolean indicating if the collapse is open or not.
+    :return:
+    """
+    if n:
+        return not is_open
+    return is_open
+
+
+@app.callback(
+    Output("collapse_2", "is_open"),
+    [Input("collapse_button_2", "n_clicks")],
+    [State("collapse_2", "is_open")],
+)
+def toggle_collapse2(n: int, is_open: bool):
+    """
+    Callback to toggle the collapse of the second section.
+    :param n: dummy integer
+    :param is_open: boolean indicating if the collapse is open or not.
+    :return:
+    """
+    if n:
+        return not is_open
+    return is_open

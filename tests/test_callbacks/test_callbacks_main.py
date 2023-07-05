@@ -6,7 +6,8 @@ from pathlib import Path
 from dash import html, dcc
 
 from src.callbacks.callbacks_main_page import upload_and_save_traject_input, make_graph_overview_dike, \
-    make_graph_initial_assessment
+    make_graph_map_initial_assessment, make_graph_map_measures
+from src.constants import CalcType
 from src.layouts.layout_main_page import ResultType
 
 
@@ -52,7 +53,23 @@ class TestCallback:
 
         # 2. Define callback
         def run_callback():
-            return make_graph_initial_assessment(_dike_data, 2025, ResultType.RELIABILITY.name)
+            return make_graph_map_initial_assessment(_dike_data, 2025, ResultType.RELIABILITY.name)
+
+        ctx = copy_context()
+        output = ctx.run(run_callback)
+
+        # 3. Assert
+        assert isinstance(output, dcc.Graph)
+
+
+    def test_make_graph_map_measures_callback(self):
+
+        # 1. Define data
+        _dike_data = json.load(open(Path(__file__).parent.parent / 'data/TestCase1_38-1_no_housing/reference' / 'dike_38_1_data_small.json'))
+
+        # 2. Define callback
+        def run_callback():
+            return make_graph_map_measures(_dike_data, 2025, ResultType.RELIABILITY.name, CalcType.VEILIGHEIDRENDEMENT.name)
 
         ctx = copy_context()
         output = ctx.run(run_callback)
