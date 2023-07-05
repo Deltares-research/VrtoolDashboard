@@ -4,7 +4,7 @@ import dash_bootstrap_components as dbc
 from .layout_collasping_menus import make_collapsing_menu
 from .layout_dike_settings import dike_settings_layout
 from .layout_upload_dike_files import layout_upload_button
-from ..constants import CalcType, ResultType
+from ..constants import CalcType, ResultType, ColorBarResultType
 
 
 def make_layout_main_page() -> dbc.Row:
@@ -93,7 +93,20 @@ def layout_tab_three() -> html.Div:
         children=[
             html.H2("Maatregelen"),
             html.Div(
-                "The map below shows the reliability of the initial assessment for the entire dike traject. Use the slider to visualize anothex    r assessment year."),
+                "The map below shows the reliability of the initial assessment for the entire dike traject. Use the slider  assessment year."),
+            dcc.RadioItems(
+                id="select_measure_map_result_type",
+                options=[
+                    {"label": ColorBarResultType.RELIABILITY.value, "value": ColorBarResultType.RELIABILITY.name},
+                    {"label": ColorBarResultType.COST.value, "value": ColorBarResultType.COST.name},
+                    {"label": ColorBarResultType.MEASURE.value, "value": ColorBarResultType.MEASURE.name, 'disabled': True},
+                ],
+                value=ColorBarResultType.RELIABILITY.name,
+                inline=True,
+                className='my-radio-items',  # add a class name
+                style={'width': '40vh', "height": "6vh", "margin-top": "2px"}
+
+            ),
             html.Div(id='dike_traject_reliability_map_measures',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
 
