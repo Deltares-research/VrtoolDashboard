@@ -133,7 +133,7 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
             hovertemplate=_hovertemplate,
             showlegend=False))
 
-    add_colorscale_bar(fig, result_type)
+    add_colorscale_bar(fig, result_type, ColorBarResultType.RELIABILITY.name)
 
     # Update layout of the figure and add token for mapbox
     _middle_point = get_middle_point(dike_traject.dike_sections)
