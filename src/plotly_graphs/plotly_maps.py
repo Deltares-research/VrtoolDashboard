@@ -5,7 +5,7 @@ import numpy as np
 import plotly.graph_objects as go
 from matplotlib import pyplot as plt, colors
 
-from src.constants import REFERENCE_YEAR
+from src.constants import REFERENCE_YEAR, ColorBarResultType
 from src.layouts.layout_main_page import CalcType, ResultType
 from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject
@@ -27,6 +27,7 @@ def plot_default_overview_map_dummy() -> go.Figure:
         lon=[],
         showlegend=False))
 
+    # this is centered on the Netherlands and zoomed out
     update_layout_map_box(fig, center=(51.798160177811454, 5.200357914732026), zoom=8)
     return fig
 
@@ -142,7 +143,8 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
 
 
 def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraject, selected_year: float,
-                                                          result_type: str, calc_type: str) -> go.Figure:
+                                                          result_type: str, calc_type: str,
+                                                          colorbar_result_type: str) -> go.Figure:
     """
     This function plots a Map displaying the reliability of the dike traject after measures.
     :param dike_traject:
@@ -170,18 +172,22 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
                           key in ["StabilityInner", "Piping", "Overflow"]}
             _mechanism = min(_beta_dict, key=_beta_dict.get)  # mechanism with lowest beta
 
-            if result_type == ResultType.RELIABILITY.name:
+            if colorbar_result_type == ColorBarResultType.RELIABILITY.name:
                 _color = get_reliability_color(_beta_section)
-                hover_res = f'Betas section: {_beta_section:.2}<br>'
-            elif result_type == ResultType.PROBABILITY.name:
-                _color = get_reliability_color(_beta_section)
-                hover_res = f'Pf section: {beta_to_pf(_beta_section):.2e}<br>'
+
+            elif colorbar_result_type == ColorBarResultType.COST.name:
+                _color = get_cost_color(to_million_euros(_measure_results["LCC"]))
+            elif colorbar_result_type == ColorBarResultType.MEASURE.name:
+                pass
             else:
                 raise NotImplementedError("This result type is not implemented yet")
 
             _hovertemplate = f'Vaknaam {section.name}<br>' \
                              f'Maatregel: {_measure_results["name"]} m<br>' \
-                             f'LCC: {to_million_euros(_measure_results["LCC"])} M€<br>' + hover_res + f"Lowest beta: {_mechanism}<br>"
+                             f'LCC: {to_million_euros(_measure_results["LCC"])} M€<br>' \
+                             f'Betas section: {_beta_section:.2}<br>' \
+                             f'Pf section: {beta_to_pf(_beta_section):.2e}<br>' \
+                             f"Lowest beta: {_mechanism}<br>"
 
         else:
             _color = 'grey'
@@ -198,7 +204,7 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
             hovertemplate=_hovertemplate,
             showlegend=False))
 
-    add_colorscale_bar(fig, result_type)
+    add_colorscale_bar(fig, result_type, colorbar_result_type)
 
     # Update layout of the figure and add token for mapbox
     _middle_point = get_middle_point(dike_traject.dike_sections)
@@ -243,14 +249,15 @@ def update_layout_map_box(fig: go.Figure, center: tuple[float, float], zoom: int
         ))
 
 
-def add_colorscale_bar(fig: go.Figure, result_type: str):
+def add_colorscale_bar(fig: go.Figure, result_type: str, colorbar_result_type: str):
     """Add a dummy scatter trace to the figure to show the colorscale bar
 
     :param fig: go.Figure object.
-    :param result_type: type of results to show: "probability" or "reliability".
+    :param result_type: type of results to show: "PROBABILITY" or "RELIABILITY".
+    :param colorbar_result_type: type of colorbar to show: "RELIABILITY", "COST" or "MEASURE".
     """
 
-    if result_type == ResultType.PROBABILITY.name:
+    if colorbar_result_type == ColorBarResultType.RELIABILITY.name and result_type == ResultType.PROBABILITY.name:
         marker = dict(
             colorscale='RdYlGn',
             colorbar=dict(
@@ -267,7 +274,7 @@ def add_colorscale_bar(fig: go.Figure, result_type: str):
             cmin=2,
             cmax=5,
         )
-    else:
+    elif colorbar_result_type == ColorBarResultType.RELIABILITY.name and result_type == ResultType.RELIABILITY.name:
         marker = dict(
             colorscale='RdYlGn',
             colorbar=dict(
@@ -283,6 +290,25 @@ def add_colorscale_bar(fig: go.Figure, result_type: str):
             cmin=2,
             cmax=5,
         )
+
+    elif colorbar_result_type == ColorBarResultType.COST.name:
+        marker = dict(
+            colorscale='RdYlGn',
+            reversescale=True,
+            colorbar=dict(
+                title="Kost (M€)",
+                titleside='right',
+                tickmode='array',
+                tickvals=[0, 5, 10, 15, 20],
+                ticktext=['0', '5', '10', '15', '20'],
+                ticks='outside',
+                len=0.5,
+            ),
+            showscale=True,
+            cmin=0,
+            cmax=20,
+        )
+
     fig.add_trace(
         go.Scatter(
             x=[None],
@@ -318,6 +344,7 @@ def get_cost_color(cost_value) -> str:
     :return:
     """
     cmap = plt.cm.RdYlGn  # theme of the colorscale
+    cmap = cmap.reversed()
     norm = colors.Normalize(vmin=0, vmax=20)  # Hardcoded boundaries
     rgb = cmap(norm(cost_value))
     return f'rgb({rgb[0]}, {rgb[1]}, {rgb[2]})'

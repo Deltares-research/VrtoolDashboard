@@ -16,3 +16,8 @@ class ResultType(Enum):
     PROBABILITY = "Faalkans"
     COST = "Kost"
     MEASURE = "Maatregel"
+
+class ColorBarResultType(Enum):
+    RELIABILITY = "Betrouwbaarheid"
+    COST = "Kost"
+    MEASURE = "Maatregel"

@@ -69,7 +69,8 @@ class TestCallback:
 
         # 2. Define callback
         def run_callback():
-            return make_graph_map_measures(_dike_data, 2025, ResultType.RELIABILITY.name, CalcType.VEILIGHEIDRENDEMENT.name)
+            return make_graph_map_measures(_dike_data, 2025, ResultType.RELIABILITY.name,
+                                           CalcType.VEILIGHEIDRENDEMENT.name, )
 
         ctx = copy_context()
         output = ctx.run(run_callback)
