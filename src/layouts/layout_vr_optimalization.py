@@ -47,10 +47,10 @@ dike_vr_optimization_layout = html.Div([
             md=5),
 
         dbc.Col([ dcc.Upload(
-            id='upload-data-zip',
+            id='upload-data-zip2',
             children=html.Div([
                 'Upload database',
-                html.A('Select Files')
+                html.A('')
             ]),
             style={
                 'width': '100%',
