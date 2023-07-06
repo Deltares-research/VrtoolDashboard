@@ -113,7 +113,7 @@ class DikeTraject(BaseLinearObject):
             for mechanism in ["Overflow", "Piping", "StabilityInner"]:
                 mask = (_beta_df['name'] == section.name) & (_beta_df['mechanism'] == mechanism)
                 # replace the row in the dataframe with the betas of the section if both the name and mechanism match
-                d = {"name": section.name, "mechanism": mechanism, "Length": 888, #TODO fix length
+                d = {"name": section.name, "mechanism": mechanism, "Length": section.length
 
                      }
                 for year, beta in zip(years, getattr(section, _section_measure)[mechanism]):
@@ -143,7 +143,7 @@ class DikeTraject(BaseLinearObject):
                 continue
             # add a row to the dataframe with the initial assessment of the section
             for mechanism in ["Overflow", "Piping", "StabilityInner"]:
-                d = {"name": section.name, "mechanism": mechanism, "Length": 888,
+                d = {"name": section.name, "mechanism": mechanism, "Length": section.length
 
                      }
                 for year, beta in zip(years, section.initial_assessment[mechanism]):
