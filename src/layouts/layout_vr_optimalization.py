@@ -72,7 +72,11 @@ dike_vr_optimization_layout = html.Div([
 
 
     ]),
-    dbc.Table(table_header + table_body, bordered=True)
+    dbc.Table(table_header + table_body, bordered=True),
+    html.Div(
+    [dbc.Button("Optimize", id="button_optimize", color="primary", className="mr-1"),
+     dbc.Tooltip("Click to call VRCore optimization routine via the new calculation constraints.", target="button_optimize")
+     ])
 
 ])
 
