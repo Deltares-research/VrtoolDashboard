@@ -80,6 +80,9 @@ class DikeSection(BaseLinearObject):
 
             # Parse csv of the (optimal) measure dataframe and add them to the DikeSection object
             _final_measure = _measure_dict[self.name]
+            if _final_measure["name"] == "No measure":
+                return
+
             _option = "Doorsnede-eisen" if calc_type == "doorsnede" else "Veiligheidsrendement"
 
             # Parse csv of the Section results and add them to the DikeSection object

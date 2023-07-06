@@ -105,7 +105,7 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
 
         if _initial_results is not None:
             _year_index = bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
-            _beta_section = _initial_results["Section"][_year_index]
+            _beta_section = _initial_results["Overflow"][_year_index]
             _beta_dict = {meca: beta[_year_index] for meca, beta in _initial_results.items() if meca != "Section"}
             _mechanism = min(_beta_dict, key=_beta_dict.get)  # mechanism with lowest beta
 

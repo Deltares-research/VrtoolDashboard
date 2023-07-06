@@ -99,7 +99,6 @@ def make_graph_map_measures(dike_traject_data: dict, selected_year: float, resul
         _fig = plot_default_overview_map_dummy()
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
-        export_to_json(dike_traject_data)
         _fig = plot_dike_traject_reliability_measures_assessment_map(_dike_traject, selected_year, result_type,
                                                                      calc_type, color_bar_result_type)
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
@@ -110,6 +109,11 @@ def make_graph_map_measures(dike_traject_data: dict, selected_year: float, resul
                Input("select_result_type", 'value')])
 def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_type: str) -> dcc.Graph:
     """
+    Call to display the graph of the plot of the probability of failure vs the cost of the measures.
+
+    :param dike_traject_data:
+    :param selected_year: Selected year by the user from the slider
+    :param result_type: Selected result type by the user from the OptionField, one of "RELIABILITY" or "PROBABILITY"
 
     """
     if dike_traject_data is None:
@@ -130,13 +134,13 @@ def render_tab_map_content(active_tab: str) -> html.Div:
     :param active_tab:
     :return:
     """
-    if active_tab == "tab-4":
+    if active_tab == "tab-1":
         return layout_tab_one()
     elif active_tab == "tab-2":
         return layout_tab_two()
     elif active_tab == "tab-3":
         return layout_tab_three()
-    elif active_tab == "tab-1":
+    elif active_tab == "tab-4":
         return layout_tab_four()
     else:
         return html.Div("Invalid tab selected")
