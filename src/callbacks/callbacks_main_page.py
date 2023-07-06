@@ -51,7 +51,6 @@ def make_graph_overview_dike(dike_traject_data: dict, selected_result_type) -> d
         _fig = plot_default_overview_map_dummy()
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
-        export_to_json(dike_traject_data)
         _fig = plot_overview_map_dummy(_dike_traject, selected_result_type)
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
 
