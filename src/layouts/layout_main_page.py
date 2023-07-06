@@ -4,6 +4,7 @@ import dash_bootstrap_components as dbc
 from .layout_collasping_menus import make_collapsing_menu
 from .layout_dike_settings import dike_settings_layout
 from .layout_upload_dike_files import layout_upload_button
+from .layout_vr_optimalization import dike_vr_optimization_layout
 from ..constants import CalcType, ResultType, ColorBarResultType
 
 
@@ -33,7 +34,11 @@ def make_layout_main_page() -> dbc.Row:
 
                         make_collapsing_menu(menu_name="Instellingen",
                                              collapse_id=2,
-                                             inner_layouts=[dike_settings_layout])
+                                             inner_layouts=[dike_settings_layout]),
+
+                        make_collapsing_menu(menu_name="VR optimalisatie",
+                                             collapse_id=3,
+                                             inner_layouts=[dike_vr_optimization_layout]),
 
                     ]
                 ),
@@ -100,7 +105,8 @@ def layout_tab_three() -> html.Div:
                 options=[
                     {"label": ColorBarResultType.RELIABILITY.value, "value": ColorBarResultType.RELIABILITY.name},
                     {"label": ColorBarResultType.COST.value, "value": ColorBarResultType.COST.name},
-                    {"label": ColorBarResultType.MEASURE.value, "value": ColorBarResultType.MEASURE.name, 'disabled': True},
+                    {"label": ColorBarResultType.MEASURE.value, "value": ColorBarResultType.MEASURE.name,
+                     'disabled': True},
                 ],
                 value=ColorBarResultType.RELIABILITY.name,
                 inline=True,
@@ -116,8 +122,8 @@ def layout_tab_three() -> html.Div:
 
     return layout
 
-def layout_tab_four() -> html.Div:
 
+def layout_tab_four() -> html.Div:
     layout = html.Div(
         children=[
             html.H2("Optimalisatie"),

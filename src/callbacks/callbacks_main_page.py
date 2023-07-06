@@ -174,3 +174,26 @@ def toggle_collapse2(n: int, is_open: bool):
     if n:
         return not is_open
     return is_open
+
+@app.callback(
+    Output("collapse_3", "is_open"),
+    [Input("collapse_button_3", "n_clicks")],
+    [State("collapse_3", "is_open")],
+)
+def toggle_collapse3(n: int, is_open: bool):
+    """
+    Callback to toggle the collapse of the second section.
+    :param n: dummy integer
+    :param is_open: boolean indicating if the collapse is open or not.
+    :return:
+    """
+    if n:
+        return not is_open
+    return is_open
+
+# @app.callback(
+#     Output('dd-output_container', 'children'),
+#     Input('my_dropdown', 'value')
+# )
+# def update_output(value):
+#     return f'You have selected {value}'
