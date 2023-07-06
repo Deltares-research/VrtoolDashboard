@@ -105,7 +105,7 @@ class DikeTraject(BaseLinearObject):
         for section_name in _section_order:
             section = self.get_section(section_name)
 
-            if not (section.in_analyse and section.is_reinforced): # skip if the section is not reinforced
+            if not (section.in_analyse): # skip if the section is not reinforced
                 continue
 
 
@@ -142,7 +142,7 @@ class DikeTraject(BaseLinearObject):
             if not section.is_reinforced:
                 continue
             # add a row to the dataframe with the initial assessment of the section
-            for mechanism in ["Overflow", "Piping", "StabilityInner"]:
+            for mechanism in ["Overflow", "StabilityInner", "Piping"]:
                 d = {"name": section.name, "mechanism": mechanism, "Length": section.length
 
                      }
