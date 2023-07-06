@@ -16,7 +16,7 @@ class DikeSection(BaseLinearObject):
     final_measure_doorsnede: Optional[dict]  # replace dict with a Measure Object
     years: list[int]  # Years for which a reliability result is available (both for initial and measures)
 
-    def __init__(self, name: str, coordinates_rd: list[tuple[float, float]], in_analyse: bool):
+    def __init__(self, name: str, coordinates_rd: list[tuple[float, float]], in_analyse: int):
         """
         :param name: name of the dike section
         :param coordinates_rd: list of tuples with the coordinates of the dike section in RD coordinates
@@ -25,7 +25,7 @@ class DikeSection(BaseLinearObject):
         """
         super().__init__(coordinates_rd)
         self.name = name
-        self.in_analyse = in_analyse
+        self.in_analyse = True if in_analyse == 1 else False
         self.length = -999
         self.is_reinforced = False
         self.initial_assessment = None
