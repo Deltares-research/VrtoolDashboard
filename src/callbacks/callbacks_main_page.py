@@ -3,7 +3,7 @@ from dash import html, dcc, Output, Input, State
 
 from src.layouts.layout_main_page import layout_tab_one, CalcType, layout_tab_two, layout_tab_three, layout_tab_four
 from src.linear_objects.dike_traject import DikeTraject
-from src.plotly_graphs.pf_length_cost import plot_pf_length_cost
+from src.plotly_graphs.pf_length_cost import plot_pf_length_cost, plot_default_scatter_dummy
 from src.plotly_graphs.plotly_maps import plot_overview_map_dummy, plot_default_overview_map_dummy, \
     plot_dike_traject_reliability_initial_assessment_map, plot_dike_traject_reliability_measures_assessment_map
 from src.app import app
@@ -111,15 +111,11 @@ def make_graph_map_measures(dike_traject_data: dict, selected_year: float, resul
 def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_type: str) -> dcc.Graph:
     """
 
-
-
-
     """
     if dike_traject_data is None:
-        _fig = plot_default_overview_map_dummy()
+        _fig = plot_default_scatter_dummy()
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
-        _dike_traject.calc_traject_probability_array()
         _fig = plot_pf_length_cost(_dike_traject, selected_year)
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
 

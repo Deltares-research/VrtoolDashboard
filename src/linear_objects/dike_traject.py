@@ -85,11 +85,45 @@ class DikeTraject(BaseLinearObject):
                            reinforcement_order_vr=data['reinforcement_order_vr'],
                            reinforcement_order_dsn=data['reinforcement_order_dsn'])
 
-    def calc_traject_probability_array(self):
+    def calc_traject_probability_array(self, calc_type: str):
 
         _beta_df = self.get_initial_assessment_df()
-        for section_name in self.reinforcement_order_dsn:
+        _traject_pf, _ = get_traject_prob(_beta_df)
+        years = self.dike_sections[0].years
+
+        if calc_type == "vr":
+            _section_order = self.reinforcement_order_vr
+            _section_measure = "final_measure_veiligheidrendement"
+
+        elif calc_type == "dsn":
+            _section_order = self.reinforcement_order_dsn
+            _section_measure = "final_measure_doorsnede"
+
+        else:
+            raise ValueError("calc_type should be either 'vr' or 'dsn'")
+
+        for section_name in _section_order:
             section = self.get_section(section_name)
+
+            if not (section.in_analyse and section.is_reinforced): # skip if the section is not reinforced
+                continue
+
+
+            # add a row to the dataframe with the initial assessment of the section
+            for mechanism in ["Overflow", "Piping", "StabilityInner"]:
+                mask = (_beta_df['name'] == section.name) & (_beta_df['mechanism'] == mechanism)
+                # replace the row in the dataframe with the betas of the section if both the name and mechanism match
+                d = {"name": section.name, "mechanism": mechanism, "Length": 888, #TODO fix length
+
+                     }
+                for year, beta in zip(years, getattr(section, _section_measure)[mechanism]):
+                    d[year] = beta
+                _beta_df.loc[mask, years] = d
+
+            _reinforced_traject_pf, _ = get_traject_prob(_beta_df)
+            _traject_pf = np.concatenate((_traject_pf, _reinforced_traject_pf), axis=0)
+
+        return np.array(_traject_pf)
 
     def get_section(self, name: str) -> DikeSection:
         """Get the section object by name"""
@@ -118,6 +152,40 @@ class DikeTraject(BaseLinearObject):
                 df = pd.concat([df, s])
 
         return df
+
+    def get_cum_cost(self, calc_type: str) -> np.ndarray:
+        """Get the cumulative cost (M€) of the dike traject for various reinforcement states
+
+        :param calc_type: either 'vr' or 'dsn'
+
+        :return: np.ndarray with the cumulative cost of the dike traject. The first element is the cost of the
+        unreinforced dike traject (0€), the second element is the cost of the first reinforced section, the third
+        element is the cost of the first and second reinforced sections, etc...
+        The last element is the cost of the fully reinforced dike traject for the given calc_type.
+
+        """
+
+        cost_list = [0]
+
+        if calc_type == "vr":
+            _section_order = self.reinforcement_order_vr
+            _section_measure = "final_measure_veiligheidrendement"
+        elif calc_type == "dsn":
+            _section_order = self.reinforcement_order_dsn
+            _section_measure = "final_measure_doorsnede"
+        else:
+            raise ValueError("calc_type should be either 'vr' or 'dsn'")
+
+        for section_name in _section_order:
+            section = self.get_section(section_name)
+
+            if not (section.in_analyse and section.is_reinforced): # skip if the section is not reinforced
+                continue
+
+            cost_list.append(getattr(section, _section_measure)['LCC'])
+
+        return np.cumsum(cost_list) / 1e6
+
 
 
 
@@ -155,4 +223,28 @@ def determine_reinforcement_order(all_unzipped_files: dict, filename: str) -> li
     if filename not in all_unzipped_files.keys():
         raise ValueError(f'The zip file does not contain the required file: {filename}')
     final_measures_df = all_unzipped_files[filename]
+    final_measures_df['Section'] = final_measures_df['Section'].str.replace('^DV', '', regex=True)
     return final_measures_df['Section'].dropna().unique()
+
+
+def get_traject_prob(beta_df, mechanisms=['StabilityInner', 'Piping', 'Overflow']):
+    # determines the probability of failure for a traject based on the standardized beta input
+
+    beta_df = beta_df.reset_index().set_index('mechanism').drop(columns=['name'])
+    beta_df = beta_df.drop(columns=['Length', "index"])
+
+    traject_probs = dict((el, []) for el in mechanisms)
+    total_traject_prob = np.empty((1, beta_df.shape[1]))
+    for mechanism in mechanisms:
+        if mechanism == 'Overflow':
+            # take min beta in each column
+            traject_probs[mechanism] = beta_to_pf(beta_df.loc[mechanism].min().values)
+        else:
+            pf_df = beta_to_pf(beta_df.loc[mechanism].values)
+            pnonf_df = np.subtract(1, pf_df)
+            pnonf_traject = np.product(pnonf_df, axis=0)
+            traject_probs[mechanism] = 1 - pnonf_traject
+            # convert to probability
+            # 1-prod(1-p)
+        total_traject_prob += traject_probs[mechanism]
+    return total_traject_prob, traject_probs
