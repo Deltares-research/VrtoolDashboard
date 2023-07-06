@@ -8,6 +8,7 @@ from src.linear_objects.base_linear import BaseLinearObject
 class DikeSection(BaseLinearObject):
     coordinates_rd: list[tuple[float, float]]  # from parent class
     name: str
+    length: float
     in_analyse: bool
     is_reinforced: bool
     initial_assessment: Optional[dict]
@@ -15,7 +16,7 @@ class DikeSection(BaseLinearObject):
     final_measure_doorsnede: Optional[dict]  # replace dict with a Measure Object
     years: list[int]  # Years for which a reliability result is available (both for initial and measures)
 
-    def __init__(self, name: str, coordinates_rd: list[tuple[float, float]], in_analyse: bool):
+    def __init__(self, name: str, coordinates_rd: list[tuple[float, float]], in_analyse: int):
         """
         :param name: name of the dike section
         :param coordinates_rd: list of tuples with the coordinates of the dike section in RD coordinates
@@ -24,19 +25,20 @@ class DikeSection(BaseLinearObject):
         """
         super().__init__(coordinates_rd)
         self.name = name
-        self.in_analyse = in_analyse
+        self.in_analyse = True if in_analyse == 1 else False
+        self.length = -999
         self.is_reinforced = False
         self.initial_assessment = None
         self.final_measure_veiligheidrendement = None
         self.final_measure_doorsnede = None
         self.years = []
 
-
     def serialize(self) -> dict:
         """Serialize the DikeSection object to a dict, in order to be saved in dcc.Store"""
         return {
             'coordinates_rd': self.coordinates_rd,
             'name': self.name,
+            'length': self.length,
             'in_analyse': self.in_analyse,
             'is_reinforced': self.is_reinforced,
             'initial_assessment': self.initial_assessment,
@@ -53,6 +55,7 @@ class DikeSection(BaseLinearObject):
 
         """
         section = DikeSection(name=data['name'], in_analyse=data['in_analyse'], coordinates_rd=data['coordinates_rd'])
+        section.length = data['length']
         section.initial_assessment = data['initial_assessment']
         section.is_reinforced = data['is_reinforced']
         section.final_measure_veiligheidrendement = data['final_measure_veiligheidrendement']
@@ -75,7 +78,7 @@ class DikeSection(BaseLinearObject):
         if self.name in _measure_dict.keys():
             self.is_reinforced = True
 
-            # Parse csv of the final measure dataframe and add them to the DikeSection object
+            # Parse csv of the (optimal) measure dataframe and add them to the DikeSection object
             _final_measure = _measure_dict[self.name]
             _option = "Doorsnede-eisen" if calc_type == "doorsnede" else "Veiligheidsrendement"
 
@@ -97,12 +100,12 @@ class DikeSection(BaseLinearObject):
                                              _section_measure_betas.index if
                                              key.startswith(mechanism)]
 
-
             self.__setattr__(f"final_measure_{calc_type}", _final_measure)
 
     def set_initial_assessment_from_csv(self, initial_assessment_df: DataFrame) -> None:
         """
         Set the initial assessment of the dike section object from the initial assessment dataframe.
+        Also set the length of the section because it is only available in the initial assessment dataframe.
         :param initial_assessment_df: Dataframe containing the initial reliability of all dike sections for all
         mechanisms for all years.
         :return:
@@ -118,11 +121,5 @@ class DikeSection(BaseLinearObject):
                 _initial_assessment_dict[mechanism] = _section_initial_betas_df[_section_initial_betas_df["mechanism"] == mechanism].iloc[:, 2:-1].values.tolist()[0]
 
             self.__setattr__(f"initial_assessment", _initial_assessment_dict)
-
-
-
-
-
-
-
+            self.__setattr__(f"length", _section_initial_betas_df["Length"].iloc[0])
 

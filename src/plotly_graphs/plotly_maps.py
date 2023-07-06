@@ -149,7 +149,9 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
     This function plots a Map displaying the reliability of the dike traject after measures.
     :param dike_traject:
     :param selected_year: selected year by the user for which results must be displayed
-    :param result_type: one of "Reliability" or "Probability"
+    :param result_type: one of "RELIABILITY" or "PROBABILITY"
+    :param calc_type: one of "VEILIGHEIDRENDEMENT" or "DOORSNEDE"
+    :param colorbar_result_type: one of "RELIABILITY" or "COST" or "MEASURE"
     """
     fig = go.Figure()
     for section in dike_traject.dike_sections:
@@ -340,8 +342,8 @@ def get_reliability_color(reliability_value: float) -> str:
 
 def get_cost_color(cost_value) -> str:
     """
-    Return the color of the cost value  on a colorscale from 0M€ (scarlet) to 20M€ (green), as a rgb string.
-    :param reliability_value:
+    Return the color of the cost value  on a colorscale from 0M€ (green) to 20M€ (scarlet), as a rgb string.
+    :param cost_value:
     :return:
     """
     cmap = plt.cm.RdYlGn  # theme of the colorscale

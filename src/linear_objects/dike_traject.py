@@ -16,18 +16,30 @@ from src.utils.utils import beta_to_pf
 class DikeTraject(BaseLinearObject):
     name: str
     dike_sections: list[DikeSection]
+    reinforcement_order_vr: list[str]
+    reinforcement_order_dsn: list[str]
 
     @classmethod
     def from_uploaded_zip(cls, contents: str, zipname: str):
-        """ Create a DikeTraject object from the uploaded zip file"""
-        _all_unzipped_files = parse_zip_content(contents, zipname)
-        # Parse the csv of the final measures of Doorsnede-eisen and Veiligheidsrendement;
-        _final_measure_dsn_dict = parse_final_measures_results(_all_unzipped_files, "FinalMeasures_Doorsnede-eisen")
-        _taken_measure_dsn_dict = parse_final_measures_results(_all_unzipped_files, "TakenMeasures_Doorsnede-eisen")
+        """ Create a DikeTraject object from the uploaded zip file
 
-        _final_measure_vr_dict = parse_final_measures_results(_all_unzipped_files, "FinalMeasures_Veiligheidsrendement")
-        _taken_measure_vr_dict = parse_final_measures_results(_all_unzipped_files,
-                                                              "TakenMeasures_Optimal_Veiligheidsrendement")
+        :param contents: string content of the uploaded zip file
+        :param zipname: name of the uploaded zip file
+
+        """
+        _all_unzipped_files = parse_zip_content(contents, zipname)
+
+        # Parse the csv of the optimal measures of Doorsnede-eisen and Veiligheidsrendement:
+        #  -For dsn, the optimal measure is extracted from FinalMeasures_Doorsnede-eisen.csv
+        #  -For vr, the optimal measure is extracted from TakenMeasures_Optimal_Veiligheidsrendement.csv
+        _optimal_measure_dsn_dict = parse_optimal_measures_results(_all_unzipped_files, "FinalMeasures_Doorsnede-eisen")
+        _optimal_measure_vr_dict = parse_optimal_measures_results(_all_unzipped_files,
+                                                                  "TakenMeasures_Optimal_Veiligheidsrendement")
+
+        # Get the order of the reinforced sections
+        _order_reinforcement_dsn = determine_reinforcement_order(_all_unzipped_files, "TakenMeasures_Doorsnede-eisen")
+        _order_reinforcement_vr = determine_reinforcement_order(_all_unzipped_files,
+                                                                "TakenMeasures_Veiligheidsrendement")
 
         # Parse the geojson of the dike sections and add the final measures to the dike sections
         _dike_sections = []
@@ -39,37 +51,171 @@ class DikeTraject(BaseLinearObject):
                                         )
 
             # Parse dike results csv and add the measure and its associated reliabilities
-            _dike_section.set_measure_and_reliabilities_from_csv(_taken_measure_dsn_dict, _all_unzipped_files,
+            _dike_section.set_measure_and_reliabilities_from_csv(_optimal_measure_dsn_dict, _all_unzipped_files,
                                                                  "doorsnede")
-            _dike_section.set_measure_and_reliabilities_from_csv(_taken_measure_vr_dict, _all_unzipped_files,
+            _dike_section.set_measure_and_reliabilities_from_csv(_optimal_measure_vr_dict, _all_unzipped_files,
                                                                  "veiligheidrendement")
             _dike_section.set_initial_assessment_from_csv(_all_unzipped_files["InitialAssessment_Betas"])
 
             _dike_sections.append(_dike_section)
 
-        return cls(name=zipname, dike_sections=_dike_sections)
+        return cls(name=zipname,
+                   dike_sections=_dike_sections,
+                   reinforcement_order_vr=_order_reinforcement_vr,
+                   reinforcement_order_dsn=_order_reinforcement_dsn)
 
     def serialize(self) -> dict:
         """Serialize the DikeTraject object to a dict, in order to be saved in dcc.Store"""
         return {
             'name': self.name,
-            'dike_sections': [section.serialize() for section in self.dike_sections]
+            'dike_sections': [section.serialize() for section in self.dike_sections],
+            'reinforcement_order_vr': self.reinforcement_order_vr,
+            'reinforcement_order_dsn': self.reinforcement_order_dsn,
         }
 
     @staticmethod
     def deserialize(data: dict) -> 'DikeTraject':
         """
         Deserialize the DikeTraject object from a dict, in order to be loaded from dcc.Store
-        #TODO: make it classmethod .from_dict()
         :param data: serialized dict with the data of the DikeTraject object
         """
         sections = [DikeSection.deserialize(section_data) for section_data in data['dike_sections']]
-        return DikeTraject(name=data['name'], dike_sections=sections)
+        return DikeTraject(name=data['name'],
+                           dike_sections=sections,
+                           reinforcement_order_vr=data['reinforcement_order_vr'],
+                           reinforcement_order_dsn=data['reinforcement_order_dsn'])
+
+    def calc_traject_probability_array(self, calc_type: str):
+
+        _beta_df = self.get_initial_assessment_df()
+        _traject_pf, _ = get_traject_prob(_beta_df)
+        years = self.dike_sections[0].years
+
+        if calc_type == "vr":
+            _section_order = self.reinforcement_order_vr
+            _section_measure = "final_measure_veiligheidrendement"
+
+        elif calc_type == "dsn":
+            _section_order = self.reinforcement_order_dsn
+            _section_measure = "final_measure_doorsnede"
+
+        else:
+            raise ValueError("calc_type should be either 'vr' or 'dsn'")
+
+        for section_name in _section_order:
+            section = self.get_section(section_name)
+
+            if not (section.in_analyse and section.is_reinforced): # skip if the section is not reinforced
+                continue
 
 
-def parse_final_measures_results(all_unzipped_files: dict, filename: str) -> dict:
+            # add a row to the dataframe with the initial assessment of the section
+            for mechanism in ["Overflow", "Piping", "StabilityInner"]:
+                mask = (_beta_df['name'] == section.name) & (_beta_df['mechanism'] == mechanism)
+                # replace the row in the dataframe with the betas of the section if both the name and mechanism match
+                d = {"name": section.name, "mechanism": mechanism, "Length": section.length
+
+                     }
+                for year, beta in zip(years, getattr(section, _section_measure)[mechanism]):
+                    d[year] = beta
+                _beta_df.loc[mask, years] = d
+
+            _reinforced_traject_pf, _ = get_traject_prob(_beta_df)
+            _traject_pf = np.concatenate((_traject_pf, _reinforced_traject_pf), axis=0)
+
+        return np.array(_traject_pf)
+
+    def get_section(self, name: str) -> DikeSection:
+        """Get the section object by name"""
+        for section in self.dike_sections:
+            if section.name == name:
+                return section
+        raise ValueError(f"Section with name {name} not found")
+
+    def get_initial_assessment_df(self) -> DataFrame:
+        """Get the initial assessment dataframe from all children sections"""
+
+        years = self.dike_sections[0].years
+        df = pd.DataFrame(columns=["name", "mechanism"] + years + ["Length"])
+
+        for section in self.dike_sections:
+            if not section.is_reinforced:
+                continue
+            # add a row to the dataframe with the initial assessment of the section
+            for mechanism in ["Overflow", "Piping", "StabilityInner"]:
+                d = {"name": section.name, "mechanism": mechanism, "Length": section.length
+
+                     }
+                for year, beta in zip(years, section.initial_assessment[mechanism]):
+                    d[year] = beta
+                s = pd.DataFrame(d, index=[0])
+                df = pd.concat([df, s])
+
+        return df
+
+    def get_cum_cost(self, calc_type: str) -> np.ndarray:
+        """Get the cumulative cost (M€) of the dike traject for various reinforcement states
+
+        :param calc_type: either 'vr' or 'dsn'
+
+        :return: np.ndarray with the cumulative cost of the dike traject. The first element is the cost of the
+        unreinforced dike traject (0€), the second element is the cost of the first reinforced section, the third
+        element is the cost of the first and second reinforced sections, etc...
+        The last element is the cost of the fully reinforced dike traject for the given calc_type.
+
+        """
+
+        cost_list = [0]
+
+        if calc_type == "vr":
+            _section_order = self.reinforcement_order_vr
+            _section_measure = "final_measure_veiligheidrendement"
+        elif calc_type == "dsn":
+            _section_order = self.reinforcement_order_dsn
+            _section_measure = "final_measure_doorsnede"
+        else:
+            raise ValueError("calc_type should be either 'vr' or 'dsn'")
+
+        for section_name in _section_order:
+            section = self.get_section(section_name)
+
+            if not (section.in_analyse and section.is_reinforced): # skip if the section is not reinforced
+                continue
+
+            cost_list.append(getattr(section, _section_measure)['LCC'])
+
+        return np.cumsum(cost_list) / 1e6
+
+
+
+
+
+def parse_optimal_measures_results(all_unzipped_files: dict, filename: str) -> dict:
     """
-    Parse the final measures results from the csv files in the zip file.
+    Parse the optimal measures results from the csv files in the zip file. Each section should have one and only one
+    optimal measure.
+    :param all_unzipped_files: dict with all the unzipped files from the zip file
+    :param filename: name of the csv file with the final measures results
+    :return:
+    """
+    if filename not in all_unzipped_files.keys():
+        raise ValueError(f'The zip file does not contain the required file: {filename}')
+    _measures_df = all_unzipped_files[filename]
+    _measures_df.dropna(subset=['Section'], inplace=True)  # drop nan in Section column
+    _measures_df['Section'] = _measures_df['Section'].str.replace('^DV', '',
+                                                                  regex=True)  # remove DV from section names
+    _measures_df.set_index("Section", inplace=True)
+
+    if not _measures_df.index.is_unique:
+        raise ValueError(f"Error: the file {filename} contains duplicate section names")
+
+    _measure_dict = _measures_df[["LCC", 'name', "ID", "yes/no", "dberm", "dcrest"]].to_dict('index')
+    return _measure_dict
+
+
+def determine_reinforcement_order(all_unzipped_files: dict, filename: str) -> list[str]:
+    """
+    Parse the taken measures csv file to obtain the order of the reinforcement measures
     :param all_unzipped_files: dict with all the unzipped files from the zip file
     :param filename: name of the csv file with the final measures results
     :return:
@@ -77,23 +223,20 @@ def parse_final_measures_results(all_unzipped_files: dict, filename: str) -> dic
     if filename not in all_unzipped_files.keys():
         raise ValueError(f'The zip file does not contain the required file: {filename}')
     final_measures_df = all_unzipped_files[filename]
-    final_measures_df.dropna(subset=['Section'], inplace=True)  # drop nan in Section column
-    final_measures_df['Section'] = final_measures_df['Section'].str.replace('^DV', '',
-                                                                            regex=True)  # remove DV from section names
-    final_measures_df.set_index("Section", inplace=True)
-
-    final_measure_dict = final_measures_df[["LCC", 'name', "ID", "yes/no", "dberm", "dcrest"]].to_dict(orient='index')
-    return final_measure_dict
+    final_measures_df['Section'] = final_measures_df['Section'].str.replace('^DV', '', regex=True)
+    return final_measures_df['Section'].dropna().unique()
 
 
-def get_traject_prob(beta_df, mechanisms=["StabilityInner", "Piping", "Overflow"]):
-    """From VRUtils postprocessing"""
+def get_traject_prob(beta_df, mechanisms=['StabilityInner', 'Piping', 'Overflow']):
     # determines the probability of failure for a traject based on the standardized beta input
-    beta_df = beta_df.reset_index().set_index("mechanism").drop(columns=["name"])
+
+    beta_df = beta_df.reset_index().set_index('mechanism').drop(columns=['name'])
+    beta_df = beta_df.drop(columns=['Length', "index"])
+
     traject_probs = dict((el, []) for el in mechanisms)
     total_traject_prob = np.empty((1, beta_df.shape[1]))
     for mechanism in mechanisms:
-        if mechanism == "Overflow":
+        if mechanism == 'Overflow':
             # take min beta in each column
             traject_probs[mechanism] = beta_to_pf(beta_df.loc[mechanism].min().values)
         else:
