@@ -9,3 +9,8 @@ app = dash.Dash(__name__,
                 external_stylesheets=[theme],
                 meta_tags=[{"name": "viewport", "content": "width=device-width"}],
                 suppress_callback_exceptions=True)
+
+
+app.config.suppress_callback_exceptions = True
+app.css.config.serve_locally = True
+app.scripts.config.serve_locally = True

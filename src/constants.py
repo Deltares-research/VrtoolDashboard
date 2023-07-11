@@ -21,3 +21,9 @@ class ColorBarResultType(Enum):
     RELIABILITY = "Betrouwbaarheid"
     COST = "Kost"
     MEASURE = "Maatregel"
+
+class Mechanism(Enum):
+    STABILITY = "Stabiliteit"
+    PIPING = "Piping"
+    OVERFLOW = "Overslag"
+    SECTION = "Sectie"
