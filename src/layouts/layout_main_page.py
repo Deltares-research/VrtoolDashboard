@@ -21,7 +21,7 @@ def make_layout_main_page() -> dbc.Row:
             dbc.Col(
                 html.Div(
                     [
-                        html.H2("Welkom bij het dashboard van de Veiligheidsrendementstool🌊"),
+                        html.H2("Welkom bij het dashboard van de Veiligheidsrendementstool 🌊"),
                         dcc.Markdown(
                             '''
                             This dashboard is a tool to visualize the results of the Veiligheidrendement optimization for dike projects.

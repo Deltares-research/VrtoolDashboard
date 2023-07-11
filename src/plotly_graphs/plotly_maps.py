@@ -4,8 +4,9 @@ from pathlib import Path
 import numpy as np
 import plotly.graph_objects as go
 from matplotlib import pyplot as plt, colors
+from pandas import DataFrame
 
-from src.constants import REFERENCE_YEAR, ColorBarResultType
+from src.constants import REFERENCE_YEAR, ColorBarResultType, Mechanism
 from src.layouts.layout_main_page import CalcType, ResultType
 from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject
@@ -83,12 +84,15 @@ def plot_overview_map_dummy(dike_traject: DikeTraject, selected_result_type: str
 
 
 def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraject, selected_year: float,
-                                                         result_type: str) -> go.Figure:
+                                                         result_type: str, mechanism_type: str) -> go.Figure:
     """
     This function plots a Map displaying the initial reliability of the dike traject.
     :param dike_traject:
     :param selected_year: selected year by the user for which results must be displayed
     :param result_type: one of "Reliability" or "Probability"
+    :param mechanism_type: Selected mechanism type by the user from the OptionField, one of "PIPING", "STABILITY",
+    "OVERFLOW" or "SECTION"
+
     :return:
     """
     fig = go.Figure()
@@ -105,18 +109,20 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
 
         if _initial_results is not None:
             _year_index = bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
-            _beta_section = _initial_results["Overflow"][_year_index]
+            _beta_section = get_betas(_initial_results, _year_index, mechanism_type)
             _beta_dict = {meca: beta[_year_index] for meca, beta in _initial_results.items() if meca != "Section"}
-            _mechanism = min(_beta_dict, key=_beta_dict.get)  # mechanism with lowest beta
-
             _color = get_reliability_color(_beta_section)
 
             if result_type == ResultType.RELIABILITY.name:
-                hover_res = f'Betas section: {_beta_section:.2}<br>'
+                _hover_res = f'Betas section: {_beta_section:.2}<br>'
             else:
-                hover_res = f'Pf section: {beta_to_pf(_beta_section):.2e}<br>'
+                _hover_res = f'Pf section: {beta_to_pf(_beta_section):.2e}<br>'
 
-            _hovertemplate = f'Vaknaam {section.name}<br>' + hover_res + f"Lowest beta: {_mechanism}<br>"
+            _hovertemplate = f'Vaknaam {section.name}<br>' + _hover_res
+
+            if mechanism_type == Mechanism.SECTION.name:
+                _mechanism = min(_beta_dict, key=_beta_dict.get) # mechanism with lowest beta
+                _hovertemplate += f"Lowest beta: {_mechanism}<br>"
 
         else:
             _color = 'grey'
@@ -144,7 +150,7 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
 
 def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraject, selected_year: float,
                                                           result_type: str, calc_type: str,
-                                                          colorbar_result_type: str) -> go.Figure:
+                                                          colorbar_result_type: str, mechanism_type: str) -> go.Figure:
     """
     This function plots a Map displaying the reliability of the dike traject after measures.
     :param dike_traject:
@@ -152,6 +158,9 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
     :param result_type: one of "RELIABILITY" or "PROBABILITY"
     :param calc_type: one of "VEILIGHEIDRENDEMENT" or "DOORSNEDE"
     :param colorbar_result_type: one of "RELIABILITY" or "COST" or "MEASURE"
+    :param mechanism_type: Selected mechanism type by the user from the OptionField, one of "PIPING", "STABILITY",
+    "OVERFLOW" or "SECTION".
+
     """
     fig = go.Figure()
     for section in dike_traject.dike_sections:
@@ -169,10 +178,10 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
         if _measure_results is not None:
 
             _year_index = bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
-            _beta_section = _measure_results["Section"][_year_index]
+            _beta_section = get_betas(_measure_results, _year_index, mechanism_type)
+
             _beta_dict = {key: value[_year_index] for key, value in _measure_results.items() if
                           key in ["StabilityInner", "Piping", "Overflow"]}
-            _mechanism = min(_beta_dict, key=_beta_dict.get)  # mechanism with lowest beta
 
             if colorbar_result_type == ColorBarResultType.RELIABILITY.name:
                 _color = get_reliability_color(_beta_section)
@@ -189,8 +198,10 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
                              f'Maatregel: {_measure_results["name"]} m<br>' \
                              f'LCC: {to_million_euros(_measure_results["LCC"])} M€<br>' \
                              f'Betas section: {_beta_section:.2}<br>' \
-                             f'Pf section: {beta_to_pf(_beta_section):.2e}<br>' \
-                             f"Lowest beta: {_mechanism}<br>"
+                             f'Pf section: {beta_to_pf(_beta_section):.2e}<br>'
+            if mechanism_type == Mechanism.SECTION.name:
+                _mechanism = min(_beta_dict, key=_beta_dict.get)  # mechanism with lowest beta
+                _hovertemplate += f"Lowest beta: {_mechanism}<br>"
 
         else:
             _color = 'grey'
@@ -351,3 +362,14 @@ def get_cost_color(cost_value) -> str:
     norm = colors.Normalize(vmin=0, vmax=20)  # Hardcoded boundaries
     rgb = cmap(norm(cost_value))
     return f'rgb({rgb[0]}, {rgb[1]}, {rgb[2]})'
+
+
+def get_betas(results: dict, _year_index: int, mechanism: str):
+    if mechanism == Mechanism.SECTION.name:
+        return results["Section"][_year_index]
+    elif mechanism == Mechanism.PIPING.name:
+        return results["Piping"][_year_index]
+    elif mechanism == Mechanism.OVERFLOW.name:
+        return results["Overflow"][_year_index]
+    elif mechanism == Mechanism.STABILITY.name:
+        return results["StabilityInner"][_year_index]

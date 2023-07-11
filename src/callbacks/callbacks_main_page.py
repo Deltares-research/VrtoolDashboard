@@ -57,14 +57,16 @@ def make_graph_overview_dike(dike_traject_data: dict, selected_result_type) -> d
 
 @app.callback(Output('dike_traject_reliability_map_initial', 'children'),
               [Input('stored-data', 'data'), Input("slider_year_reliability_results", "value"),
-               Input("select_result_type", 'value')])
-def make_graph_map_initial_assessment(dike_traject_data: dict, selected_year: float, result_type: str) -> dcc.Graph:
+               Input("select_result_type", 'value'), Input("select_mechanism_type", 'value')])
+def make_graph_map_initial_assessment(dike_traject_data: dict, selected_year: float, result_type: str, mechanism_type: str) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
 
     :param dike_traject_data:
     :param selected_year: Selected year by the user from the slider
     :param result_type: Selected result type by the user from the OptionField, one of "RELIABILITY" or "PROBABILITY"
+    :param mechanism_type: Selected mechanism type by the user from the OptionField, one of "PIPING", "STABILITY",
+    "OVERFLOW" or "SECTION"
 
     :return: dcc.Graph with the plotly figure
 
@@ -73,16 +75,16 @@ def make_graph_map_initial_assessment(dike_traject_data: dict, selected_year: fl
         _fig = plot_default_overview_map_dummy()
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
-        _fig = plot_dike_traject_reliability_initial_assessment_map(_dike_traject, selected_year, result_type)
+        _fig = plot_dike_traject_reliability_initial_assessment_map(_dike_traject, selected_year, result_type, mechanism_type)
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
 
 
 @app.callback(Output('dike_traject_reliability_map_measures', 'children'),
               [Input('stored-data', 'data'), Input("slider_year_reliability_results", "value"),
                Input("select_result_type", 'value'), Input("select_calculation_type", "value"),
-               Input("select_measure_map_result_type", "value")])
+               Input("select_measure_map_result_type", "value"), Input("select_mechanism_type", 'value')])
 def make_graph_map_measures(dike_traject_data: dict, selected_year: float, result_type: str,
-                            calc_type: str, color_bar_result_type: str) -> dcc.Graph:
+                            calc_type: str, color_bar_result_type: str, mechanism_type: str) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
 
@@ -92,6 +94,8 @@ def make_graph_map_measures(dike_traject_data: dict, selected_year: float, resul
     :param calc_type: Selected calculation type by the user from the OptionField, one of "VEILIGHEIDRENDEMENT" or "DOORSNEDE"
     :param color_bar_result_type: Select which type of colored result must be displayed on the map for the measures: either
     show the reliability, the cost of the type of measure. Must be one of "RELIABILITY" or "COST" or "MEASURE",
+    :param mechanism_type: Selected mechanism type by the user from the OptionField, one of "PIPING", "STABILITY",
+    "OVERFLOW" or "SECTION"
 
     :return: dcc.Graph with the plotly figure
     """
@@ -100,7 +104,7 @@ def make_graph_map_measures(dike_traject_data: dict, selected_year: float, resul
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
         _fig = plot_dike_traject_reliability_measures_assessment_map(_dike_traject, selected_year, result_type,
-                                                                     calc_type, color_bar_result_type)
+                                                                     calc_type, color_bar_result_type, mechanism_type)
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
 
 
