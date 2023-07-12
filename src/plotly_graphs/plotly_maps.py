@@ -194,7 +194,7 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
                 _color, _hovertemplate = get_color_hover_absolute_cost(section, _beta_section, _measure_results)
 
             elif colorbar_result_type == ColorBarResultType.COST.name and sub_result_type == SubResultType.DIFFERENCE.name:
-                _color, _hovertemplate = get_color_hover_difference_cost()
+                _color, _hovertemplate = get_color_hover_difference_cost(section)
 
             elif colorbar_result_type == ColorBarResultType.MEASURE.name:
                 raise NotImplementedError("This result type is not implemented yet")
@@ -330,7 +330,7 @@ def add_colorscale_bar(fig: go.Figure, result_type: str, colorbar_result_type: s
             cmax=3,
         )
 
-    elif colorbar_result_type == ColorBarResultType.COST.name:
+    elif colorbar_result_type == ColorBarResultType.COST.name and sub_result_type == SubResultType.ABSOLUTE.name:
         marker = dict(
             colorscale='RdYlGn',
             reversescale=True,
@@ -346,6 +346,24 @@ def add_colorscale_bar(fig: go.Figure, result_type: str, colorbar_result_type: s
             showscale=True,
             cmin=0,
             cmax=20,
+        )
+
+    elif colorbar_result_type == ColorBarResultType.COST.name and sub_result_type == SubResultType.DIFFERENCE.name:
+        marker = dict(
+            colorscale='RdYlGn',
+            reversescale=True,
+            colorbar=dict(
+                title="Kost (M€)",
+                titleside='right',
+                tickmode='array',
+                tickvals=[-10, 0, 1],
+                ticktext=['-10', '0', '1'],
+                ticks='outside',
+                len=0.5,
+            ),
+            showscale=True,
+            cmin=-10,
+            cmax=1,
         )
 
     fig.add_trace(
@@ -402,6 +420,17 @@ def get_cost_color(cost_value) -> str:
     cmap = plt.cm.RdYlGn  # theme of the colorscale
     cmap = cmap.reversed()
     return get_color(cost_value, cmap, 0, 20)
+
+
+def get_color_diff_cost(cost_value) -> str:
+    """
+    return the color of the difference of cost between Veiligheidsrendement and Doorsnede.
+    :param cost_value: diff cost
+    :return:
+    """
+    cmap = plt.cm.RdYlGn  # theme of the colorscale
+    cmap = cmap.reversed()
+    return get_color(cost_value, cmap, -10, 10)  # center on 0 so that yellow is at 0 and very few section turn red
 
 
 def get_beta(results: dict, year_index: int, mechanism: str) -> float:
@@ -461,5 +490,16 @@ def get_color_hover_absolute_cost(section: DikeSection, beta_section: float, mea
     return _color, _hovertemplate
 
 
-def get_color_hover_difference_cost() -> Tuple[str, str]:
-    return '', ''
+def get_color_hover_difference_cost(section: DikeSection) -> Tuple[str, str]:
+    _cost_vr = section.final_measure_veiligheidrendement["LCC"]
+    _cost_dsn = section.final_measure_doorsnede["LCC"]
+    _diff = _cost_vr - _cost_dsn
+
+    _color = get_color_diff_cost(to_million_euros(_diff))
+
+    _hovertemplate = f'Vaknaam {section.name}<br>' \
+                     f'Kosten Veiligheidsrendement: {to_million_euros(_cost_vr)} M€<br>' \
+                     f'Kosten Doorsnede: {to_million_euros(_cost_dsn)} M€<br>' \
+                     f'Kostenverschil: {to_million_euros(_diff)} M€<br>'
+
+    return _color, _hovertemplate

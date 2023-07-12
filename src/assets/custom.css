@@ -17,6 +17,6 @@
 }
 
 
-.my-radio-items label {
-    margin-right: 20px;  /* Increasing horizontal padding between radio items */
+input[type="radio"]:disabled + label {
+    color: grey;
 }

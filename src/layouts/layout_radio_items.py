@@ -3,7 +3,11 @@ import dash_bootstrap_components as dbc
 
 from src.constants import ColorBarResultType, ResultType, CalcType, Mechanism, SubResultType
 
-layout_radio_color_bar_result_type = dcc.RadioItems(
+"""
+Keep preferably RadioItems components from .dbc library as they can be styled easily from css file.
+"""
+
+layout_radio_color_bar_result_type = dbc.RadioItems(
     id="select_measure_map_result_type",
     options=[
         {"label": ColorBarResultType.RELIABILITY.value,
@@ -42,19 +46,19 @@ layout_radio_calc_type = dbc.RadioItems(
 )
 
 layout_radio_mechanism = dbc.RadioItems(
-            id="select_mechanism_type",
-            options=[
-                {"label": Mechanism.PIPING.value, "value": Mechanism.PIPING.name},
-                {"label": Mechanism.STABILITY.value, "value": Mechanism.STABILITY.name},
-                {"label": Mechanism.OVERFLOW.value, "value": Mechanism.OVERFLOW.name},
-                {"label": Mechanism.SECTION.value, "value": Mechanism.SECTION.name},
-            ],
-            value=Mechanism.SECTION.name,
-            style={'width': '40vh', "height": "6vh", "margin-top": "2px"}
-        )
+    id="select_mechanism_type",
+    options=[
+        {"label": Mechanism.PIPING.value, "value": Mechanism.PIPING.name},
+        {"label": Mechanism.STABILITY.value, "value": Mechanism.STABILITY.name},
+        {"label": Mechanism.OVERFLOW.value, "value": Mechanism.OVERFLOW.name},
+        {"label": Mechanism.SECTION.value, "value": Mechanism.SECTION.name},
+    ],
+    value=Mechanism.SECTION.name,
+    style={'width': '40vh', "height": "6vh", "margin-top": "2px"}
+)
 
 layout_radio_sub_type_result = dcc.RadioItems(
-        id='select_sub_result_type_measure_map',
-        options=[],
-        value=SubResultType.ABSOLUTE.name,
-    )
+    id='select_sub_result_type_measure_map',
+    options=[],
+    value=SubResultType.ABSOLUTE.name,
+)
