@@ -3,7 +3,8 @@ import dash_bootstrap_components as dbc
 
 from .layout_collasping_menus import make_collapsing_menu
 from .layout_dike_settings import dike_settings_layout
-from .layout_radio_items import layout_radio_color_bar_result_type, layout_radio_sub_type_result
+from .layout_radio_items import layout_radio_color_bar_result_type, layout_radio_sub_type_result, \
+    layout_radio_length_switch
 from .layout_upload_dike_files import layout_upload_button
 from .layout_vr_optimalization import dike_vr_optimization_layout
 from ..constants import CalcType, ResultType, ColorBarResultType
@@ -125,6 +126,14 @@ def layout_tab_four() -> html.Div:
             html.H2("Optimalisatie"),
             html.Div(
                 "De figuur laat zien de relatie tussen de trajectfaalkans en de kosten van de versterking voor de geselecteerd referentie jaar."),
+
+            dbc.Row([
+
+                dbc.Col([layout_radio_length_switch], md=4),
+
+            ]),
+
+
 
             html.Div(id='dike_traject_pf_cost_graph',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),

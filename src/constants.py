@@ -26,6 +26,7 @@ class ColorBarResultType(Enum):
     MEASURE = "Maatregel"
 
 
+
 class Mechanism(Enum):
     STABILITY = "Stabiliteit"
     PIPING = "Piping"
