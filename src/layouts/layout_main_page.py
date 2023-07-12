@@ -5,6 +5,7 @@ from .layout_collasping_menus import make_collapsing_menu
 from .layout_dike_settings import dike_settings_layout
 from .layout_radio_items import layout_radio_color_bar_result_type, layout_radio_sub_type_result, \
     layout_radio_length_switch
+from .layout_sliders import layout_urgency_length_slider
 from .layout_upload_dike_files import layout_upload_button
 from .layout_vr_optimalization import dike_vr_optimization_layout
 from ..constants import CalcType, ResultType, ColorBarResultType
@@ -56,6 +57,7 @@ def make_layout_main_page() -> dbc.Row:
                                 dbc.Tab(label="Tab 2", tab_id="tab-2"),
                                 dbc.Tab(label="Tab 3", tab_id="tab-3"),
                                 dbc.Tab(label="Tab 4", tab_id="tab-4"),
+                                dbc.Tab(label="Tab 5", tab_id="tab-5")
                             ],
                             id="tabs",
                             active_tab="tab-1",  # Set the initial active tab
@@ -136,6 +138,30 @@ def layout_tab_four() -> html.Div:
 
 
             html.Div(id='dike_traject_pf_cost_graph',
+                     style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
+
+        ]
+    )
+
+    return layout
+
+def layout_tab_five() -> html.Div:
+    layout = html.Div(
+        children=[
+            html.H2("Prioritering"),
+            html.Div(
+                "Kies "),
+
+            layout_urgency_length_slider,
+
+            dbc.Row([
+
+
+
+            ]),
+
+
+            html.Div(id='dike_traject_urgency_map',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
 
         ]

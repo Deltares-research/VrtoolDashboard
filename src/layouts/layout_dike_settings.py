@@ -1,20 +1,11 @@
-from dash import html, dcc
+from dash import html
 import dash_bootstrap_components as dbc
 
 from src.layouts.layout_radio_items import layout_radio_result_type, layout_radio_calc_type, layout_radio_mechanism
+from src.layouts.layout_sliders import layout_year_slider
 
 dike_settings_layout = html.Div([
-    dcc.Slider(2025, 2125, value=2025,
-               marks={
-                   2025: {'label': '2025'},
-                   2045: {'label': '2045'},
-                   2075: {'label': '2075'},
-                   2125: {'label': '2125'}
-               },
-               included=False,
-               tooltip={"placement": "bottom", "always_visible": True},
-               id="slider_year_reliability_results",
-               ),
+    layout_year_slider,
 
     dbc.Row([
 

@@ -140,3 +140,4 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
     fig.update_layout(showlegend=True, template='plotly_white')
 
     return fig
+
