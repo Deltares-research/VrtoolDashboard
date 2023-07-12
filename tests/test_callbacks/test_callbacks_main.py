@@ -94,7 +94,9 @@ class TestCallback:
         def run_callback():
             return make_graph_pf_vs_cost(_dike_data,
                                          2025,
-                                         ResultType.RELIABILITY.name)
+                                         ResultType.RELIABILITY.name,
+                                         "COST"
+                                         )
 
         ctx = copy_context()
         output = ctx.run(run_callback)
