@@ -250,20 +250,19 @@ def plot_dike_traject_urgency(dike_traject: DikeTraject, selected_year: float, l
 
     if calc_type == CalcType.VEILIGHEIDRENDEMENT.name:
         _section_index = bisect_right(dike_traject.get_cum_length("vr"), length_urgency * 1e3)
-        _sections = dike_traject.reinforcement_order_vr[:_section_index]
+        _ordered_sections = dike_traject.reinforcement_order_vr[:_section_index]
 
     elif calc_type == CalcType.DOORSNEDE_EISEN.name:
         _section_index = bisect_right(dike_traject.get_cum_length("dsn"), length_urgency * 1e3)
-        _sections = dike_traject.reinforcement_order_dsn[:_section_index]
+        _ordered_sections = dike_traject.reinforcement_order_dsn[:_section_index]
     else:
         raise ValueError("Wrong calc type")
 
     cum_length = 0  # cumulative length of the sections
     added_to_legend = {}
 
-    for section in dike_traject.dike_sections:
-        if section.name not in _sections:
-            continue
+    for section_name in _ordered_sections:
+        section = dike_traject.get_section(section_name)
 
         _coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
                             section.coordinates_rd]  # convert in GWS coordinates:

@@ -112,7 +112,6 @@ def layout_tab_three() -> html.Div:
 
             ]),
 
-
             html.Div(id='dike_traject_reliability_map_measures',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
 
@@ -135,8 +134,6 @@ def layout_tab_four() -> html.Div:
 
             ]),
 
-
-
             html.Div(id='dike_traject_pf_cost_graph',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
 
@@ -145,22 +142,14 @@ def layout_tab_four() -> html.Div:
 
     return layout
 
+
 def layout_tab_five() -> html.Div:
     layout = html.Div(
         children=[
             html.H2("Prioritering"),
             html.Div(
-                "Kies "),
-
+                "Kies hoeveel cumulatieve lengte van de dijk de hoogste prioriteit heeft:"),
             layout_urgency_length_slider,
-
-            dbc.Row([
-
-
-
-            ]),
-
-
             html.Div(id='dike_traject_urgency_map',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
 
