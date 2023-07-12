@@ -1,9 +1,6 @@
 from enum import Enum
 
-REFERENCE_YEAR = 2025  #  Reference year for the reliability analysis
-
-
-
+REFERENCE_YEAR = 2025  # Reference year for the reliability analysis
 
 
 class CalcType(Enum):
@@ -17,10 +14,17 @@ class ResultType(Enum):
     COST = "Kost"
     MEASURE = "Maatregel"
 
+
+class SubResultType(Enum):
+    ABSOLUTE = "Absoluut"
+    DIFFERENCE = "Verschil vr - dsn"
+    RATIO = "Verhouding vr / dsn"
+
 class ColorBarResultType(Enum):
     RELIABILITY = "Betrouwbaarheid"
     COST = "Kost"
     MEASURE = "Maatregel"
+
 
 class Mechanism(Enum):
     STABILITY = "Stabiliteit"

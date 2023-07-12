@@ -1,7 +1,7 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 
-from src.constants import ResultType, CalcType, Mechanism
+from src.layouts.layout_radio_items import layout_radio_result_type, layout_radio_calc_type, layout_radio_mechanism
 
 dike_settings_layout = html.Div([
     dcc.Slider(2025, 2125, value=2025,
@@ -18,43 +18,12 @@ dike_settings_layout = html.Div([
 
     dbc.Row([
 
-        dbc.Col([dbc.RadioItems(
-            id="select_result_type",
-            options=[
-                {"label": ResultType.RELIABILITY.value, "value": ResultType.RELIABILITY.name},
-                {"label": ResultType.PROBABILITY.value, "value": ResultType.PROBABILITY.name
-                 },
-            ],
-            value=ResultType.RELIABILITY.name,
-            style={'width': '40vh', "height": "6vh", "margin-top": "2px"}
-        ), ],
-            md=4),
+        dbc.Col([layout_radio_result_type], md=4),
 
-        dbc.Col([dbc.RadioItems(
-            id="select_calculation_type",
-            options=[
-                {"label": CalcType.DOORSNEDE_EISEN.value, "value": CalcType.DOORSNEDE_EISEN.name},
-                {"label": CalcType.VEILIGHEIDRENDEMENT.value,
-                 "value": CalcType.VEILIGHEIDRENDEMENT.name},
-            ],
-            value=CalcType.VEILIGHEIDRENDEMENT.name,
-            style={'width': '40vh', "height": "6vh", "margin-top": "2px"}
-        ), ]
-            , md=5),
+        dbc.Col([layout_radio_calc_type], md=5),
 
-        dbc.Col([dbc.RadioItems(
-            id="select_mechanism_type",
-            options=[
-                {"label": Mechanism.PIPING.value, "value": Mechanism.PIPING.name},
-                {"label": Mechanism.STABILITY.value, "value": Mechanism.STABILITY.name},
-                {"label": Mechanism.OVERFLOW.value, "value": Mechanism.OVERFLOW.name},
-                {"label": Mechanism.SECTION.value, "value": Mechanism.SECTION.name},
-            ],
-            value=Mechanism.SECTION.name,
-            style={'width': '40vh', "height": "6vh", "margin-top": "2px"}
-        ), ]
-            , md=3),
+        dbc.Col([layout_radio_mechanism], md=3),
 
-    ], ),
+    ]),
 
 ])

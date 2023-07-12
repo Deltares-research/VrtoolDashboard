@@ -7,7 +7,7 @@ from dash import html, dcc
 
 from src.callbacks.callbacks_main_page import upload_and_save_traject_input, make_graph_overview_dike, \
     make_graph_map_initial_assessment, make_graph_map_measures, make_graph_pf_vs_cost
-from src.constants import CalcType, ColorBarResultType, Mechanism
+from src.constants import CalcType, ColorBarResultType, Mechanism, SubResultType
 from src.layouts.layout_main_page import ResultType
 
 
@@ -53,7 +53,9 @@ class TestCallback:
 
         # 2. Define callback
         def run_callback():
-            return make_graph_map_initial_assessment(_dike_data, 2025, ResultType.RELIABILITY.name,
+            return make_graph_map_initial_assessment(_dike_data,
+                                                     2025,
+                                                     ResultType.RELIABILITY.name,
                                                      Mechanism.SECTION.name)
 
         ctx = copy_context()
@@ -69,9 +71,13 @@ class TestCallback:
 
         # 2. Define callback
         def run_callback():
-            return make_graph_map_measures(_dike_data, 2025, ResultType.RELIABILITY.name,
-                                           CalcType.VEILIGHEIDRENDEMENT.name, ColorBarResultType.RELIABILITY.name,
-                                           Mechanism.SECTION.name)
+            return make_graph_map_measures(_dike_data,
+                                           2025,
+                                           ResultType.RELIABILITY.name,
+                                           CalcType.VEILIGHEIDRENDEMENT.name,
+                                           ColorBarResultType.RELIABILITY.name,
+                                           Mechanism.SECTION.name,
+                                           SubResultType.ABSOLUTE.name)
 
         ctx = copy_context()
         output = ctx.run(run_callback)
@@ -86,7 +92,9 @@ class TestCallback:
 
         # 2. Define callback
         def run_callback():
-            return make_graph_pf_vs_cost(_dike_data, 2025, ResultType.RELIABILITY.name)
+            return make_graph_pf_vs_cost(_dike_data,
+                                         2025,
+                                         ResultType.RELIABILITY.name)
 
         ctx = copy_context()
         output = ctx.run(run_callback)
