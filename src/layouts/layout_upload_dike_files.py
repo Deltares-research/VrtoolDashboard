@@ -8,8 +8,8 @@ layout_upload_button = html.Div([
         dcc.Upload(
             id='upload-data-zip',
             children=html.Div([
-                'Drag and Drop a zip file or ',
-                html.A('Select Files')
+                'Drag and Drop een zip-bestand of ',
+                html.A('Selecteer een bestand')
             ]),
             style={
                 'width': '100%',
@@ -28,7 +28,7 @@ layout_upload_button = html.Div([
 
         dbc.Toast(
 
-            [html.P("File uploaded successfully!", className="mb-0")],
+            [html.P("Bestand succesvol geüpload!", className="mb-0")],
             id="upload-toast",
             header="Success",
             icon="success",

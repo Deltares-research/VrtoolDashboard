@@ -46,7 +46,7 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float) -> go.F
                              marker=dict(size=6, color='blue'),
                              hovertemplate="<b>%{customdata}</b><br><br>" +
                                              "Kosten: €%{x:.2f} mln<br>" +
-                                                "Kans: %{y:.2e}<br>"
+                                                "Trajectfaalkans: %{y:.2e}<br>"
                              ))
 
     fig.add_trace(go.Scatter(x=dike_traject.get_cum_cost("vr"),
@@ -58,7 +58,7 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float) -> go.F
                              marker=dict(size=6, color='gold'),
                              hovertemplate="<b>%{customdata}</b><br><br>" +
                                                 "Kosten: €%{x:.2f} mln<br>" +
-                                                "Kans: %{y:.2e}<br>"
+                                                "Trajectfaalkans: %{y:.2e}<br>"
 
                              ))
 
