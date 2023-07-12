@@ -6,7 +6,7 @@ from pathlib import Path
 from dash import html, dcc
 
 from src.callbacks.callbacks_main_page import upload_and_save_traject_input, make_graph_overview_dike, \
-    make_graph_map_initial_assessment, make_graph_map_measures, make_graph_pf_vs_cost
+    make_graph_map_initial_assessment, make_graph_map_measures, make_graph_pf_vs_cost, make_graph_map_urgency
 from src.constants import CalcType, ColorBarResultType, Mechanism, SubResultType
 from src.layouts.layout_main_page import ResultType
 
@@ -97,6 +97,21 @@ class TestCallback:
                                          ResultType.RELIABILITY.name,
                                          "COST"
                                          )
+
+        ctx = copy_context()
+        output = ctx.run(run_callback)
+
+        # 3. Assert
+        assert isinstance(output, dcc.Graph)
+
+    def test_make_graph_map_urgency(self):
+        # 1. Define data
+        _dike_data = json.load(
+            open(Path(__file__).parent.parent / 'data/Case_38_1_sterker_VZG2/reference' / 'dike_data.json'))
+
+        # 2. Define callback
+        def run_callback():
+            return make_graph_map_urgency(_dike_data, 2025, 10, CalcType.VEILIGHEIDRENDEMENT.name)
 
         ctx = copy_context()
         output = ctx.run(run_callback)
