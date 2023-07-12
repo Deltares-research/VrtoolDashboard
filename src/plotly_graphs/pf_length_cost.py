@@ -18,11 +18,16 @@ def plot_default_scatter_dummy() -> go.Figure:
     return fig
 
 
-def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float) -> go.Figure:
+def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_type: str,
+                        cost_length_switch: str) -> go.Figure:
     """
 
     :param dike_traject:
     :param selected_year:
+    :param result_type:
+    :param cost_length_switch:
+
+
     :return:
     """
 
@@ -37,7 +42,18 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float) -> go.F
     traject_pf_array_dsn = dike_traject.calc_traject_probability_array("dsn")
     traject_pf_array_vr = dike_traject.calc_traject_probability_array("vr")
 
-    fig.add_trace(go.Scatter(x=dike_traject.get_cum_cost("dsn"),
+    if cost_length_switch == "COST":
+        x_vr = dike_traject.get_cum_cost("vr")
+        x_dsn = dike_traject.get_cum_cost("dsn")
+        title_x_axis = "Kosten (mln €)"
+    elif cost_length_switch == "LENGTH":
+        x_vr = dike_traject.get_cum_length("vr")
+        x_dsn = dike_traject.get_cum_length("dsn")
+        title_x_axis = "Lengte (km)"
+    else:
+        raise ValueError("Wrong cost_length_switch value")
+
+    fig.add_trace(go.Scatter(x=x_dsn,
                              y=traject_pf_array_dsn[:, _year_index],
                              customdata=section_order_dsn,
                              mode='markers+lines',
@@ -45,11 +61,11 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float) -> go.F
                              line=dict(color='blue'),
                              marker=dict(size=6, color='blue'),
                              hovertemplate="<b>%{customdata}</b><br><br>" +
-                                             "Kosten: €%{x:.2f} mln<br>" +
-                                                "Trajectfaalkans: %{y:.2e}<br>"
+                                           "Kosten: €%{x:.2f} mln<br>" +
+                                           "Trajectfaalkans: %{y:.2e}<br>"
                              ))
 
-    fig.add_trace(go.Scatter(x=dike_traject.get_cum_cost("vr"),
+    fig.add_trace(go.Scatter(x=x_vr,
                              y=traject_pf_array_vr[:, _year_index],
                              customdata=section_order_vr,
                              mode='markers+lines',
@@ -57,9 +73,8 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float) -> go.F
                              line=dict(color='gold'),
                              marker=dict(size=6, color='gold'),
                              hovertemplate="<b>%{customdata}</b><br><br>" +
-                                                "Kosten: €%{x:.2f} mln<br>" +
-                                                "Trajectfaalkans: %{y:.2e}<br>"
-
+                                           "Kosten: €%{x:.2f} mln<br>" +
+                                           "Trajectfaalkans: %{y:.2e}<br>"
                              ))
 
     fig.add_trace(go.Scatter(x=[0], y=[1e-7], showlegend=False, visible=True, mode="markers", marker=dict(size=0)))
@@ -71,7 +86,8 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float) -> go.F
                   y1=standards['Signaleringswaarde'],
                   line=dict(color='black', dash='dot'), name='Signaleringswaarde')
 
-    fig.update_xaxes(range=[0, 200], title="Kosten in miljoenen euro's")
+    x_max = np.max([np.max(x_vr), np.max(x_dsn)])
+    fig.update_xaxes(range=[0, x_max], title=title_x_axis)
     fig.update_layout(title=f'Faalkans i.r.t. kosten ({selected_year})', yaxis_title='Trajectfaalkans per jaar')
     fig.update_yaxes(range=[None, 1e-7],
                      type='log',

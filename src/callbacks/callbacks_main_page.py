@@ -118,21 +118,22 @@ def make_graph_map_measures(dike_traject_data: dict, selected_year: float, resul
 
 @app.callback(Output('dike_traject_pf_cost_graph', 'children'),
               [Input('stored-data', 'data'), Input("slider_year_reliability_results", "value"),
-               Input("select_result_type", 'value')])
-def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_type: str) -> dcc.Graph:
+               Input("select_result_type", 'value'), Input("select_length_cost_switch", "value")])
+def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_type: str, cost_length_switch: str) -> dcc.Graph:
     """
     Call to display the graph of the plot of the probability of failure vs the cost of the measures.
 
     :param dike_traject_data:
     :param selected_year: Selected year by the user from the slider
     :param result_type: Selected result type by the user from the OptionField, one of "RELIABILITY" or "PROBABILITY"
+    :param cost_length_switch: Selected cost length switch by the user from the OptionField, one of "COST" or "LENGTH"
 
     """
     if dike_traject_data is None:
         _fig = plot_default_scatter_dummy()
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
-        _fig = plot_pf_length_cost(_dike_traject, selected_year)
+        _fig = plot_pf_length_cost(_dike_traject, selected_year, result_type, cost_length_switch)
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
 
 

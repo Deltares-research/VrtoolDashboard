@@ -105,9 +105,8 @@ class DikeTraject(BaseLinearObject):
         for section_name in _section_order:
             section = self.get_section(section_name)
 
-            if not (section.in_analyse): # skip if the section is not reinforced
+            if not (section.in_analyse):  # skip if the section is not reinforced
                 continue
-
 
             # add a row to the dataframe with the initial assessment of the section
             for mechanism in ["Overflow", "Piping", "StabilityInner"]:
@@ -179,15 +178,33 @@ class DikeTraject(BaseLinearObject):
         for section_name in _section_order:
             section = self.get_section(section_name)
 
-            if not (section.in_analyse and section.is_reinforced): # skip if the section is not reinforced
+            if not (section.in_analyse and section.is_reinforced):  # skip if the section is not reinforced
                 continue
 
             cost_list.append(getattr(section, _section_measure)['LCC'])
 
         return np.cumsum(cost_list) / 1e6
 
+    def get_cum_length(self, calc_type: str) -> np.ndarray:
 
+        length_list = [0]
+        if calc_type == "vr":
+            _section_order = self.reinforcement_order_vr
+            _section_measure = "final_measure_veiligheidrendement"
+        elif calc_type == "dsn":
+            _section_order = self.reinforcement_order_dsn
+            _section_measure = "final_measure_doorsnede"
+        else:
+            raise ValueError("calc_type should be either 'vr' or 'dsn'")
 
+        for section_name in _section_order:
+            section = self.get_section(section_name)
+
+            if not (section.in_analyse and section.is_reinforced):  # skip if the section is not reinforced
+                continue
+            length_list.append(section.length)
+
+        return np.cumsum(length_list)
 
 
 def parse_optimal_measures_results(all_unzipped_files: dict, filename: str) -> dict:
