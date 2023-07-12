@@ -2,11 +2,13 @@ import dash
 from dash import html, dcc, Output, Input, State
 
 from src.constants import ColorBarResultType, SubResultType
-from src.layouts.layout_main_page import layout_tab_one, CalcType, layout_tab_two, layout_tab_three, layout_tab_four
+from src.layouts.layout_main_page import layout_tab_one, CalcType, layout_tab_two, layout_tab_three, layout_tab_four, \
+    layout_tab_five
 from src.linear_objects.dike_traject import DikeTraject
 from src.plotly_graphs.pf_length_cost import plot_pf_length_cost, plot_default_scatter_dummy
 from src.plotly_graphs.plotly_maps import plot_overview_map_dummy, plot_default_overview_map_dummy, \
-    plot_dike_traject_reliability_initial_assessment_map, plot_dike_traject_reliability_measures_assessment_map
+    plot_dike_traject_reliability_initial_assessment_map, plot_dike_traject_reliability_measures_assessment_map, \
+    plot_dike_traject_urgency
 from src.app import app
 from src.utils.utils import export_to_json
 
@@ -119,7 +121,8 @@ def make_graph_map_measures(dike_traject_data: dict, selected_year: float, resul
 @app.callback(Output('dike_traject_pf_cost_graph', 'children'),
               [Input('stored-data', 'data'), Input("slider_year_reliability_results", "value"),
                Input("select_result_type", 'value'), Input("select_length_cost_switch", "value")])
-def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_type: str, cost_length_switch: str) -> dcc.Graph:
+def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_type: str,
+                          cost_length_switch: str) -> dcc.Graph:
     """
     Call to display the graph of the plot of the probability of failure vs the cost of the measures.
 
@@ -137,6 +140,31 @@ def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
 
 
+@app.callback(Output('dike_traject_urgency_map', 'children'),
+              [Input('stored-data', 'data'), Input("slider_year_reliability_results", "value"),
+               Input("slider_urgency_length", "value"), Input("select_calculation_type", "value")])
+def make_graph_map_urgency(dike_traject_data: dict, selected_year: float, length_urgency: float,
+                           calc_type: str) -> dcc.Graph:
+    """
+    Call to display the graph of the overview map of the dike from the saved imported dike data.
+
+    :param dike_traject_data:
+    :param selected_year: Selected year by the user from the slider
+    :param length_urgency: Selected length of the urgency by the user from the slider
+    :param calc_type: Selected calculation type by the user from the OptionField, one of "VEILIGHEIDRENDEMENT" or "DOORSNEDE"
+
+    or "RATIO"
+
+    :return: dcc.Graph with the plotly figure
+    """
+    if dike_traject_data is None:
+        _fig = plot_default_overview_map_dummy()
+    else:
+        _dike_traject = DikeTraject.deserialize(dike_traject_data)
+        _fig = plot_dike_traject_urgency(_dike_traject, selected_year, length_urgency, calc_type)
+    return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
+
+
 @app.callback(
     Output("content_tab", "children"),
     [Input("tabs", "active_tab")]
@@ -147,14 +175,16 @@ def render_tab_map_content(active_tab: str) -> html.Div:
     :param active_tab:
     :return:
     """
-    if active_tab == "tab-4":
+    if active_tab == "tab-1":
         return layout_tab_one()
     elif active_tab == "tab-2":
         return layout_tab_two()
     elif active_tab == "tab-3":
         return layout_tab_three()
-    elif active_tab == "tab-1":
+    elif active_tab == "tab-4":
         return layout_tab_four()
+    elif active_tab == "tab-5":
+        return layout_tab_five()
     else:
         return html.Div("Invalid tab selected")
 

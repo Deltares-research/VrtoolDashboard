@@ -233,6 +233,79 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
     return fig
 
 
+def plot_dike_traject_urgency(dike_traject: DikeTraject, selected_year: float, length_urgency: float,
+                              calc_type: str) -> go.Figure:
+    """
+    This function plots a Map displaying the urgency of the dike traject after measures based on the length of the dijvak.
+
+    :param dike_traject:
+    :param selected_year: Selected year by the user for which results must be displayed
+    :param length_urgency: Selected length of the urgency by the user
+    :param calc_type: one of "VEILIGHEIDRENDEMENT" or "DOORSNEDE"
+    :return:
+    """
+    fig = go.Figure()
+
+    _year_index = bisect_right(dike_traject.dike_sections[0].years, selected_year - REFERENCE_YEAR) - 1
+
+    if calc_type == CalcType.VEILIGHEIDRENDEMENT.name:
+        _section_index = bisect_right(dike_traject.get_cum_length("vr"), length_urgency * 1e3)
+        _ordered_sections = dike_traject.reinforcement_order_vr[:_section_index]
+
+    elif calc_type == CalcType.DOORSNEDE_EISEN.name:
+        _section_index = bisect_right(dike_traject.get_cum_length("dsn"), length_urgency * 1e3)
+        _ordered_sections = dike_traject.reinforcement_order_dsn[:_section_index]
+    else:
+        raise ValueError("Wrong calc type")
+
+    cum_length = 0  # cumulative length of the sections
+    added_to_legend = {}
+
+    for section_name in _ordered_sections:
+        section = dike_traject.get_section(section_name)
+
+        _coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
+                            section.coordinates_rd]  # convert in GWS coordinates:
+
+        if cum_length < 5000:  # first 5 km
+            _color = "#f46e88"
+            _group = "<5km"
+        elif cum_length < 10000:  # next 5 km
+            _color = '#94a329'
+            _group = "<10km"
+        elif cum_length < 15000:  # next 5 km
+            _color = '#a38af6'
+            _group = "<15km"
+        else:  # last 5 km
+            _color = 'yellow'
+            _group = ">15km"
+
+        _hovertemplate = f'Vaknaam {section.name}<br>' \
+                         f'Length: {section.length}m <br>'
+
+        showlegend = _group not in added_to_legend
+
+        fig.add_trace(go.Scattermapbox(
+            mode="lines",
+            lat=[x[0] for x in _coordinates_wgs],
+            lon=[x[1] for x in _coordinates_wgs],
+            marker={'size': 10, 'color': _color},
+            line={'width': 5, 'color': _color},
+            name=_group,
+            legendgroup=_group,
+            hovertemplate=_hovertemplate,
+            showlegend=showlegend))
+
+        cum_length += section.length
+        added_to_legend[_group] = True
+
+    # Update layout of the figure and add token for mapbox
+    _middle_point = get_middle_point(dike_traject.dike_sections)
+    update_layout_map_box(fig, _middle_point)
+
+    return fig
+
+
 def get_middle_point(sections: list[DikeSection]) -> tuple[float, float]:
     """Return the middle point in GWS coordinates of the dik trajectory.
 
