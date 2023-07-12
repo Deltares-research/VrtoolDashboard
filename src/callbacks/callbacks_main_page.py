@@ -85,9 +85,11 @@ def make_graph_map_initial_assessment(dike_traject_data: dict, selected_year: fl
 @app.callback(Output('dike_traject_reliability_map_measures', 'children'),
               [Input('stored-data', 'data'), Input("slider_year_reliability_results", "value"),
                Input("select_result_type", 'value'), Input("select_calculation_type", "value"),
-               Input("select_measure_map_result_type", "value"), Input("select_mechanism_type", 'value')])
+               Input("select_measure_map_result_type", "value"), Input("select_mechanism_type", 'value'),
+               Input("select_sub_result_type_measure_map", "value")])
 def make_graph_map_measures(dike_traject_data: dict, selected_year: float, result_type: str,
-                            calc_type: str, color_bar_result_type: str, mechanism_type: str) -> dcc.Graph:
+                            calc_type: str, color_bar_result_type: str, mechanism_type: str,
+                            sub_result_type: str) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
 
@@ -106,6 +108,7 @@ def make_graph_map_measures(dike_traject_data: dict, selected_year: float, resul
     if dike_traject_data is None:
         _fig = plot_default_overview_map_dummy()
     else:
+        print("sub_result_type", sub_result_type)
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
         _fig = plot_dike_traject_reliability_measures_assessment_map(_dike_traject, selected_year, result_type,
                                                                      calc_type, color_bar_result_type, mechanism_type)
@@ -206,7 +209,7 @@ def toggle_collapse3(n: int, is_open: bool):
 
 
 @app.callback(
-    Output('container_for_sub_radio', 'children'),
+    Output('select_sub_result_type_measure_map', 'options'),
     Input('select_measure_map_result_type', 'value'),
 )
 def update_radio_sub_result_type(result_type: str) -> dcc:
@@ -231,7 +234,4 @@ def update_radio_sub_result_type(result_type: str) -> dcc:
     else:
         options = []
 
-    return dcc.RadioItems(
-        id='select_sub_result_type_measure_map',
-        options=options
-    )
+    return options

@@ -3,7 +3,7 @@ import dash_bootstrap_components as dbc
 
 from .layout_collasping_menus import make_collapsing_menu
 from .layout_dike_settings import dike_settings_layout
-from .layout_radio_items import layout_radio_color_bar_result_type
+from .layout_radio_items import layout_radio_color_bar_result_type, layout_radio_sub_type_result
 from .layout_upload_dike_files import layout_upload_button
 from .layout_vr_optimalization import dike_vr_optimization_layout
 from ..constants import CalcType, ResultType, ColorBarResultType
@@ -105,7 +105,7 @@ def layout_tab_three() -> html.Div:
             dbc.Row([
 
                 dbc.Col([layout_radio_color_bar_result_type], md=4),
-                dbc.Col([html.Div(id='container_for_sub_radio')], md=4),
+                dbc.Col([layout_radio_sub_type_result], md=4),
 
             ]),
 
