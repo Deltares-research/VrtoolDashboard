@@ -1,6 +1,7 @@
 import dash
 from dash import html, dcc, Output, Input, State
 
+from src.constants import ColorBarResultType
 from src.layouts.layout_main_page import layout_tab_one, CalcType, layout_tab_two, layout_tab_three, layout_tab_four
 from src.linear_objects.dike_traject import DikeTraject
 from src.plotly_graphs.pf_length_cost import plot_pf_length_cost, plot_default_scatter_dummy
@@ -58,7 +59,8 @@ def make_graph_overview_dike(dike_traject_data: dict, selected_result_type) -> d
 @app.callback(Output('dike_traject_reliability_map_initial', 'children'),
               [Input('stored-data', 'data'), Input("slider_year_reliability_results", "value"),
                Input("select_result_type", 'value'), Input("select_mechanism_type", 'value')])
-def make_graph_map_initial_assessment(dike_traject_data: dict, selected_year: float, result_type: str, mechanism_type: str) -> dcc.Graph:
+def make_graph_map_initial_assessment(dike_traject_data: dict, selected_year: float, result_type: str,
+                                      mechanism_type: str) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
 
@@ -75,7 +77,8 @@ def make_graph_map_initial_assessment(dike_traject_data: dict, selected_year: fl
         _fig = plot_default_overview_map_dummy()
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
-        _fig = plot_dike_traject_reliability_initial_assessment_map(_dike_traject, selected_year, result_type, mechanism_type)
+        _fig = plot_dike_traject_reliability_initial_assessment_map(_dike_traject, selected_year, result_type,
+                                                                    mechanism_type)
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
 
 
@@ -183,6 +186,7 @@ def toggle_collapse2(n: int, is_open: bool):
         return not is_open
     return is_open
 
+
 @app.callback(
     Output("collapse_3", "is_open"),
     [Input("collapse_button_3", "n_clicks")],
@@ -199,9 +203,26 @@ def toggle_collapse3(n: int, is_open: bool):
         return not is_open
     return is_open
 
-# @app.callback(
-#     Output('dd-output_container', 'children'),
-#     Input('my_dropdown', 'value')
-# )
-# def update_output(value):
-#     return f'You have selected {value}'
+
+@app.callback(
+    Output('select_sub_result_type', 'children'),
+    Input('select_measure_map_result_type', 'value'),
+)
+def update_radio2(value):
+    if value == ColorBarResultType.RELIABILITY.name:
+        options = [
+            {'label': 'Absoluut', 'value': 'absolute_pf'},
+            {'label': 'Ratio dsn/vr', 'value': 'ratio_pf_dsn/vr'}
+        ]
+    elif value == ColorBarResultType.COST.name:
+        options = [
+            {'label': 'Absoluut', 'value': 'absolute_cost'},
+            {'label': 'Verschil vr-dsn', 'value': 'difference_cost_vr-dsn'},
+        ]
+    else:
+        options = []
+
+    return dcc.RadioItems(
+        id='radio-2',
+        options=options
+    )
