@@ -3,7 +3,7 @@ import dash_bootstrap_components as dbc
 
 
 
-def make_collapsing_menu(menu_name: str, inner_layouts: list, collapse_id: id) -> html.Div:
+def make_collapsing_menu(menu_name: str, inner_layouts: list, collapse_id: id, is_open: bool = True) -> html.Div:
     """
     Make a standard collasping menu with a download button and a list of inner layouts
     :param inner_layouts:
@@ -26,7 +26,7 @@ def make_collapsing_menu(menu_name: str, inner_layouts: list, collapse_id: id) -
                     inner_layouts,
                 )),
                 id=f"collapse_{collapse_id}",
-                is_open=True,
+                is_open=is_open,
             ),
         ]
     )

@@ -4,6 +4,7 @@ from dash import html, dcc, Output, Input, State
 from src.constants import ColorBarResultType, SubResultType
 from src.layouts.layout_main_page import layout_tab_one, CalcType, layout_tab_two, layout_tab_three, layout_tab_four, \
     layout_tab_five
+from src.layouts.layout_radio_items import layout_radio_calc_type
 from src.linear_objects.dike_traject import DikeTraject
 from src.plotly_graphs.pf_length_cost import plot_pf_length_cost, plot_default_scatter_dummy
 from src.plotly_graphs.plotly_maps import plot_overview_map_dummy, plot_default_overview_map_dummy, \
@@ -166,7 +167,7 @@ def make_graph_map_urgency(dike_traject_data: dict, selected_year: float, length
 
 
 @app.callback(
-    Output("content_tab", "children"),
+    [Output("content_tab", "children"), Output("select_calculation_type", "options")],
     [Input("tabs", "active_tab")]
 )
 def render_tab_map_content(active_tab: str) -> html.Div:
@@ -175,16 +176,21 @@ def render_tab_map_content(active_tab: str) -> html.Div:
     :param active_tab:
     :return:
     """
+
+    base_layout_calc_type = layout_radio_calc_type
+    disabled_calc_type = [{'label': option['label'], 'value': option['value'], 'disabled': True} for option in
+                          base_layout_calc_type.options]
+
     if active_tab == "tab-1":
-        return layout_tab_one()
+        return layout_tab_one(), disabled_calc_type
     elif active_tab == "tab-2":
-        return layout_tab_two()
+        return layout_tab_two(), disabled_calc_type
     elif active_tab == "tab-3":
-        return layout_tab_three()
+        return layout_tab_three(), base_layout_calc_type.options
     elif active_tab == "tab-4":
-        return layout_tab_four()
+        return layout_tab_four(), base_layout_calc_type.options
     elif active_tab == "tab-5":
-        return layout_tab_five()
+        return layout_tab_five(), base_layout_calc_type.options
     else:
         return html.Div("Invalid tab selected")
 
