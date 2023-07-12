@@ -1,12 +1,13 @@
 from bisect import bisect_right
 from pathlib import Path
+from typing import Tuple
 
 import numpy as np
 import plotly.graph_objects as go
 from matplotlib import pyplot as plt, colors
 from pandas import DataFrame
 
-from src.constants import REFERENCE_YEAR, ColorBarResultType, Mechanism
+from src.constants import REFERENCE_YEAR, ColorBarResultType, Mechanism, SubResultType
 from src.layouts.layout_main_page import CalcType, ResultType
 from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject
@@ -109,7 +110,7 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
 
         if _initial_results is not None:
             _year_index = bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
-            _beta_section = get_betas(_initial_results, _year_index, mechanism_type)
+            _beta_section = get_beta(_initial_results, _year_index, mechanism_type)
             _beta_dict = {meca: beta[_year_index] for meca, beta in _initial_results.items() if meca != "Section"}
             _color = get_reliability_color(_beta_section)
 
@@ -120,85 +121,6 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
 
             _hovertemplate = f'Vaknaam {section.name}<br>' + _hover_res
 
-            if mechanism_type == Mechanism.SECTION.name:
-                _mechanism = min(_beta_dict, key=_beta_dict.get) # mechanism with lowest beta
-                _hovertemplate += f"Laagste beta: {_mechanism}<br>"
-
-        else:
-            _color = 'grey'
-            _hovertemplate = f'Vaknaam {section.name}<br>' \
-                             f'Beta: NO DATA<br>'
-
-        fig.add_trace(go.Scattermapbox(
-            mode="lines",
-            lat=[x[0] for x in _coordinates_wgs],
-            lon=[x[1] for x in _coordinates_wgs],
-            marker={'size': 10, 'color': _color},
-            line={'width': 5, 'color': _color},
-            name='Traject 38-1',
-            hovertemplate=_hovertemplate,
-            showlegend=False))
-
-    add_colorscale_bar(fig, result_type, ColorBarResultType.RELIABILITY.name)
-
-    # Update layout of the figure and add token for mapbox
-    _middle_point = get_middle_point(dike_traject.dike_sections)
-    update_layout_map_box(fig, _middle_point)
-
-    return fig
-
-
-def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraject, selected_year: float,
-                                                          result_type: str, calc_type: str,
-                                                          colorbar_result_type: str, mechanism_type: str) -> go.Figure:
-    """
-    This function plots a Map displaying the reliability of the dike traject after measures.
-    :param dike_traject:
-    :param selected_year: selected year by the user for which results must be displayed
-    :param result_type: one of "RELIABILITY" or "PROBABILITY"
-    :param calc_type: one of "VEILIGHEIDRENDEMENT" or "DOORSNEDE"
-    :param colorbar_result_type: one of "RELIABILITY" or "COST" or "MEASURE"
-    :param mechanism_type: Selected mechanism type by the user from the OptionField, one of "PIPING", "STABILITY",
-    "OVERFLOW" or "SECTION".
-
-    """
-    fig = go.Figure()
-    for section in dike_traject.dike_sections:
-        _coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
-                            section.coordinates_rd]  # convert in GWS coordinates:
-
-        # if a section is not in analyse, skip it, and it turns blank on the map.
-        if not section.in_analyse:
-            continue
-
-        _initial_results = section.initial_assessment
-
-        _measure_results = section.final_measure_veiligheidrendement if calc_type == CalcType.VEILIGHEIDRENDEMENT.name else section.final_measure_doorsnede
-
-        if _measure_results is not None:
-
-            _year_index = bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
-            _beta_section = get_betas(_measure_results, _year_index, mechanism_type)
-
-            _beta_dict = {key: value[_year_index] for key, value in _measure_results.items() if
-                          key in ["StabilityInner", "Piping", "Overflow"]}
-
-            if colorbar_result_type == ColorBarResultType.RELIABILITY.name:
-                _color = get_reliability_color(_beta_section)
-
-            elif colorbar_result_type == ColorBarResultType.COST.name:
-                _color = get_cost_color(to_million_euros(_measure_results["LCC"]))
-
-            elif colorbar_result_type == ColorBarResultType.MEASURE.name:
-                pass
-            else:
-                raise NotImplementedError("This result type is not implemented yet")
-
-            _hovertemplate = f'Vaknaam {section.name}<br>' \
-                             f'Maatregel: {_measure_results["name"]} m<br>' \
-                             f'LCC: {to_million_euros(_measure_results["LCC"])} M€<br>' \
-                             f'Beta sectie: {_beta_section:.2}<br>' \
-                             f'Pf sectie: {beta_to_pf(_beta_section):.2e}<br>'
             if mechanism_type == Mechanism.SECTION.name:
                 _mechanism = min(_beta_dict, key=_beta_dict.get)  # mechanism with lowest beta
                 _hovertemplate += f"Laagste beta: {_mechanism}<br>"
@@ -218,7 +140,91 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
             hovertemplate=_hovertemplate,
             showlegend=False))
 
-    add_colorscale_bar(fig, result_type, colorbar_result_type)
+    add_colorscale_bar(fig, result_type, ColorBarResultType.RELIABILITY.name, SubResultType.ABSOLUTE.name)
+
+    # Update layout of the figure and add token for mapbox
+    _middle_point = get_middle_point(dike_traject.dike_sections)
+    update_layout_map_box(fig, _middle_point)
+
+    return fig
+
+
+def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraject, selected_year: float,
+                                                          result_type: str, calc_type: str,
+                                                          colorbar_result_type: str, mechanism_type: str,
+                                                          sub_result_type: str) -> go.Figure:
+    """
+    This function plots a Map displaying the reliability of the dike traject after measures.
+    :param dike_traject:
+    :param selected_year: selected year by the user for which results must be displayed
+    :param result_type: one of "RELIABILITY" or "PROBABILITY"
+    :param calc_type: one of "VEILIGHEIDRENDEMENT" or "DOORSNEDE"
+    :param colorbar_result_type: one of "RELIABILITY" or "COST" or "MEASURE"
+    :param mechanism_type: Selected mechanism type by the user from the OptionField, one of "PIPING", "STABILITY",
+    "OVERFLOW" or "SECTION".
+    :param sub_result_type: Selected sub result type by the user from the OptionField, one of "ABSOLUTE" or "DIFFERENCE"
+    or "RATIO"
+
+    """
+    fig = go.Figure()
+    for section in dike_traject.dike_sections:
+        _coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
+                            section.coordinates_rd]  # convert in GWS coordinates:
+
+        # if a section is not in analyse, skip it, and it turns blank on the map.
+        if not section.in_analyse:
+            continue
+
+        _initial_results = section.initial_assessment
+
+        _measure_results = section.final_measure_veiligheidrendement if calc_type == CalcType.VEILIGHEIDRENDEMENT.name else section.final_measure_doorsnede
+
+        if _measure_results is not None:
+
+            _year_index = bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
+            _beta_section = get_beta(_measure_results, _year_index, mechanism_type)
+
+            if colorbar_result_type == ColorBarResultType.RELIABILITY.name and sub_result_type == SubResultType.ABSOLUTE.name:
+                _color, _hovertemplate = get_color_hover_absolute_reliability(section, _beta_section, _measure_results)
+
+            elif colorbar_result_type == ColorBarResultType.RELIABILITY.name and sub_result_type == SubResultType.RATIO.name:
+                _color, _hovertemplate = get_color_hover_prob_ratio(section, _year_index, mechanism_type)
+
+            elif colorbar_result_type == ColorBarResultType.COST.name and sub_result_type == SubResultType.ABSOLUTE.name:
+                _color, _hovertemplate = get_color_hover_absolute_cost(section, _beta_section, _measure_results)
+
+            elif colorbar_result_type == ColorBarResultType.COST.name and sub_result_type == SubResultType.DIFFERENCE.name:
+                _color, _hovertemplate = get_color_hover_difference_cost()
+
+            elif colorbar_result_type == ColorBarResultType.MEASURE.name:
+                raise NotImplementedError("This result type is not implemented yet")
+
+            else:
+                raise ValueError("Wrong combination of settings? or not implemented yet")
+
+            if mechanism_type == Mechanism.SECTION.name and sub_result_type == SubResultType.ABSOLUTE.name:
+                _beta_dict = {key: value[_year_index] for key, value in _measure_results.items() if
+                              key in ["StabilityInner", "Piping", "Overflow"]}
+                _mechanism = min(_beta_dict, key=_beta_dict.get)  # mechanism with lowest beta
+                _hovertemplate += f"Laagste beta: {_mechanism}<br>"
+
+        # If no results are available for the dijkvak, return blank data.
+        else:
+            _color = 'grey'
+            _hovertemplate = f'Vaknaam {section.name}<br>' \
+                             f'Beta: NO DATA<br>'
+
+        fig.add_trace(go.Scattermapbox(
+            mode="lines",
+            lat=[x[0] for x in _coordinates_wgs],
+            lon=[x[1] for x in _coordinates_wgs],
+            marker={'size': 10, 'color': _color},
+            line={'width': 5, 'color': _color},
+            name='Traject 38-1',
+            hovertemplate=_hovertemplate,
+            showlegend=False))
+
+    add_colorscale_bar(fig, result_type, colorbar_result_type, sub_result_type)
 
     # Update layout of the figure and add token for mapbox
     _middle_point = get_middle_point(dike_traject.dike_sections)
@@ -263,7 +269,7 @@ def update_layout_map_box(fig: go.Figure, center: tuple[float, float], zoom: int
         ))
 
 
-def add_colorscale_bar(fig: go.Figure, result_type: str, colorbar_result_type: str):
+def add_colorscale_bar(fig: go.Figure, result_type: str, colorbar_result_type: str, sub_result_type: str):
     """Add a dummy scatter trace to the figure to show the colorscale bar
 
     :param fig: go.Figure object.
@@ -271,7 +277,8 @@ def add_colorscale_bar(fig: go.Figure, result_type: str, colorbar_result_type: s
     :param colorbar_result_type: type of colorbar to show: "RELIABILITY", "COST" or "MEASURE".
     """
 
-    if colorbar_result_type == ColorBarResultType.RELIABILITY.name and result_type == ResultType.PROBABILITY.name:
+    if colorbar_result_type == ColorBarResultType.RELIABILITY.name and result_type == ResultType.PROBABILITY.name \
+            and sub_result_type == SubResultType.ABSOLUTE.name:
         marker = dict(
             colorscale='RdYlGn',
             colorbar=dict(
@@ -288,7 +295,8 @@ def add_colorscale_bar(fig: go.Figure, result_type: str, colorbar_result_type: s
             cmin=2,
             cmax=5,
         )
-    elif colorbar_result_type == ColorBarResultType.RELIABILITY.name and result_type == ResultType.RELIABILITY.name:
+    elif colorbar_result_type == ColorBarResultType.RELIABILITY.name and result_type == ResultType.RELIABILITY.name \
+            and sub_result_type == SubResultType.ABSOLUTE.name:
         marker = dict(
             colorscale='RdYlGn',
             colorbar=dict(
@@ -303,6 +311,23 @@ def add_colorscale_bar(fig: go.Figure, result_type: str, colorbar_result_type: s
             showscale=True,
             cmin=2,
             cmax=5,
+        )
+    elif colorbar_result_type == ColorBarResultType.RELIABILITY.name and sub_result_type == SubResultType.RATIO.name:
+        marker = dict(
+            colorscale='BrBG',
+            reversescale=True,
+            colorbar=dict(
+                title="Verhouding pf vr/dsn",
+                titleside='right',
+                tickmode='array',
+                tickvals=[0, 1, 2, 3],
+                ticktext=['1', '10', '10', '100'],
+                ticks='outside',
+                len=0.5,
+            ),
+            showscale=True,
+            cmin=0,
+            cmax=3,
         )
 
     elif colorbar_result_type == ColorBarResultType.COST.name:
@@ -339,16 +364,33 @@ def add_colorscale_bar(fig: go.Figure, result_type: str, colorbar_result_type: s
     fig.update_yaxes(showticklabels=False)
 
 
+def get_color(value: float, cmap, vmin: float, vmax: float) -> str:
+    """
+    Return the color of the value on a colorscale, as a rgb string.
+    :param value: value for which a color must be assigned
+    :param cmap: color scale theme
+    :param vmin: min value of the color scale
+    :param vmax: max value of the color scale
+    :return: color as rbg string
+    """
+    norm = colors.Normalize(vmin=vmin, vmax=vmax)  # Hardcoded boundaries
+    rgb = cmap(norm(value))
+    return f'rgb({rgb[0]}, {rgb[1]}, {rgb[2]})'
+
+
 def get_reliability_color(reliability_value: float) -> str:
     """
     Return the color of the reliability value Beta on a colorscale from 2 (scarlet) to 5 (green), as a rgb string.
     :param reliability_value:
     :return:
     """
-    cmap = plt.cm.RdYlGn  # theme of the colorscale
-    norm = colors.Normalize(vmin=2, vmax=5)  # Hardcoded boundaries
-    rgb = cmap(norm(reliability_value))
-    return f'rgb({rgb[0]}, {rgb[1]}, {rgb[2]})'
+    return get_color(reliability_value, plt.cm.RdYlGn, 2, 5)
+
+
+def get_probability_ratio_color(probability_ratio: float) -> str:
+    cmap = plt.cm.BrBG  # theme of the colorscale
+    cmap = cmap.reversed()
+    return get_color(np.log(probability_ratio), cmap, 0, 3)
 
 
 def get_cost_color(cost_value) -> str:
@@ -359,17 +401,65 @@ def get_cost_color(cost_value) -> str:
     """
     cmap = plt.cm.RdYlGn  # theme of the colorscale
     cmap = cmap.reversed()
-    norm = colors.Normalize(vmin=0, vmax=20)  # Hardcoded boundaries
-    rgb = cmap(norm(cost_value))
-    return f'rgb({rgb[0]}, {rgb[1]}, {rgb[2]})'
+    return get_color(cost_value, cmap, 0, 20)
 
 
-def get_betas(results: dict, _year_index: int, mechanism: str):
+def get_beta(results: dict, year_index: int, mechanism: str) -> float:
+    """Get the reliability value of a mechanism for a given year index.
+
+    :param results: dict of results.
+    :param year_index: int of the year index.
+    :param mechanism: str of the mechanism.
+    :return: float of the reliability value.
+
+    """
     if mechanism == Mechanism.SECTION.name:
-        return results["Section"][_year_index]
+        return results["Section"][year_index]
     elif mechanism == Mechanism.PIPING.name:
-        return results["Piping"][_year_index]
+        return results["Piping"][year_index]
     elif mechanism == Mechanism.OVERFLOW.name:
-        return results["Overflow"][_year_index]
+        return results["Overflow"][year_index]
     elif mechanism == Mechanism.STABILITY.name:
-        return results["StabilityInner"][_year_index]
+        return results["StabilityInner"][year_index]
+
+
+def get_color_hover_prob_ratio(section: DikeSection, year_index: int, mechanism_type: str) -> Tuple[str, str]:
+    _beta_vr = get_beta(section.final_measure_veiligheidrendement, year_index, mechanism_type)
+    _beta_dsn = get_beta(section.final_measure_doorsnede, year_index, mechanism_type)
+    _ratio_pf = beta_to_pf(_beta_vr) / beta_to_pf(_beta_dsn)
+    _color = get_probability_ratio_color(_ratio_pf)
+
+    _hovertemplate = f'Vaknaam {section.name}<br>' \
+                     f'Pf Veiligheidsrendement: {beta_to_pf(_beta_vr):.2e}<br>' \
+                     f'Pf Doorsnede: {beta_to_pf(_beta_dsn):.2e}<br>' \
+                     f'Ratio Pf vr/dsn: {round(_ratio_pf, 1)}<br>'
+
+    return _color, _hovertemplate
+
+
+def get_color_hover_absolute_reliability(section: DikeSection, beta_section: float, measure_results: dict) -> Tuple[
+    str, str]:
+    _color = get_reliability_color(beta_section)
+
+    _hovertemplate = f'Vaknaam {section.name}<br>' \
+                     f'Maatregel: {measure_results["name"]} m<br>' \
+                     f'LCC: {to_million_euros(measure_results["LCC"])} M€<br>' \
+                     f'Beta sectie: {beta_section:.2}<br>' \
+                     f'Pf sectie: {beta_to_pf(beta_section):.2e}<br>'
+
+    return _color, _hovertemplate
+
+
+def get_color_hover_absolute_cost(section: DikeSection, beta_section: float, measure_results: dict) -> Tuple[str, str]:
+    _color = get_cost_color(to_million_euros(measure_results["LCC"]))
+    _hovertemplate = f'Vaknaam {section.name}<br>' \
+                     f'Maatregel: {measure_results["name"]} m<br>' \
+                     f'LCC: {to_million_euros(measure_results["LCC"])} M€<br>' \
+                     f'Beta sectie: {beta_section:.2}<br>' \
+                     f'Pf sectie: {beta_to_pf(beta_section):.2e}<br>'
+
+    return _color, _hovertemplate
+
+
+def get_color_hover_difference_cost() -> Tuple[str, str]:
+    return '', ''

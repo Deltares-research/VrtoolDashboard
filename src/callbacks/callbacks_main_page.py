@@ -101,17 +101,18 @@ def make_graph_map_measures(dike_traject_data: dict, selected_year: float, resul
     show the reliability, the cost of the type of measure. Must be one of "RELIABILITY" or "COST" or "MEASURE",
     :param mechanism_type: Selected mechanism type by the user from the OptionField, one of "PIPING", "STABILITY",
     "OVERFLOW" or "SECTION"
-    :param sub_result_type: Selected sub result type by the user from the OptionField, one of "RELIABILITY", "COST",
+    :param sub_result_type: Selected sub result type by the user from the OptionField, one of "ABSOLUTE" or "DIFFERENCE"
+    or "RATIO"
 
     :return: dcc.Graph with the plotly figure
     """
     if dike_traject_data is None:
         _fig = plot_default_overview_map_dummy()
     else:
-        print("sub_result_type", sub_result_type)
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
         _fig = plot_dike_traject_reliability_measures_assessment_map(_dike_traject, selected_year, result_type,
-                                                                     calc_type, color_bar_result_type, mechanism_type)
+                                                                     calc_type, color_bar_result_type, mechanism_type,
+                                                                     sub_result_type)
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
 
 
@@ -145,11 +146,11 @@ def render_tab_map_content(active_tab: str) -> html.Div:
     :param active_tab:
     :return:
     """
-    if active_tab == "tab-1":
+    if active_tab == "tab-3":
         return layout_tab_one()
     elif active_tab == "tab-2":
         return layout_tab_two()
-    elif active_tab == "tab-3":
+    elif active_tab == "tab-1":
         return layout_tab_three()
     elif active_tab == "tab-4":
         return layout_tab_four()
