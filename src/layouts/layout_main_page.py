@@ -41,7 +41,8 @@ def make_layout_main_page() -> dbc.Row:
 
                         make_collapsing_menu(menu_name="VR optimalisatie",
                                              collapse_id=3,
-                                             inner_layouts=[dike_vr_optimization_layout]),
+                                             inner_layouts=[dike_vr_optimization_layout],
+                                             is_open=False),
 
                     ]
                 ),
@@ -53,11 +54,11 @@ def make_layout_main_page() -> dbc.Row:
 
                         dbc.Tabs(
                             [
-                                dbc.Tab(label="Tab 1", tab_id="tab-1"),
-                                dbc.Tab(label="Tab 2", tab_id="tab-2"),
-                                dbc.Tab(label="Tab 3", tab_id="tab-3"),
-                                dbc.Tab(label="Tab 4", tab_id="tab-4"),
-                                dbc.Tab(label="Tab 5", tab_id="tab-5")
+                                dbc.Tab(label="Overzicht", tab_id="tab-1"),
+                                dbc.Tab(label="Beoordelingsresultaten Kaart", tab_id="tab-2"),
+                                dbc.Tab(label="Verstreking Kaart", tab_id="tab-3"),
+                                dbc.Tab(label="Optimalisatie resultaten", tab_id="tab-4"),
+                                dbc.Tab(label="Prioritering Kaart", tab_id="tab-5")
                             ],
                             id="tabs",
                             active_tab="tab-1",  # Set the initial active tab
