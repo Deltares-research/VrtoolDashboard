@@ -24,7 +24,7 @@ def make_layout_main_page() -> dbc.Row:
                         html.H2("Welkom bij het dashboard van de Veiligheidsrendementstool 🌊"),
                         dcc.Markdown(
                             '''
-                            This dashboard is a tool to visualize the results of the Veiligheidrendement optimization for dike projects.
+                            Dit dashboard is een tool om de resultaten van de optimalisatie van Veiligheidsrendement voor dijkprojecten te visualiseren.
                             '''
                         ),
 
@@ -73,7 +73,7 @@ def layout_tab_one() -> html.Div:
     return html.Div(
         children=[
             html.H2("Overzicht Kaart"),
-            html.Div("The map below displays basic information about the imported dike traject."),
+            html.Div("De onderstaande kaart geeft basisinformatie weer over het geïmporteerde dijktraject."),
             html.Div(id='overview_map_div',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
         ])
@@ -84,7 +84,7 @@ def layout_tab_two() -> html.Div:
         children=[
             html.H2("Beoordelingsresultaten"),
             html.Div(
-                "The map below shows the reliability of the initial assessment for the entire dike traject. Use the slider to visualize another assessment year."),
+                "De onderstaande kaart toont de betrouwbaarheid van de initiële beoordeling voor het gehele dijktraject. Gebruik de schuifregelaar om een andere beoordelingsjaar te visualiseren."),
             html.Div(id='dike_traject_reliability_map_initial',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
 
@@ -99,7 +99,7 @@ def layout_tab_three() -> html.Div:
         children=[
             html.H2("Maatregelen"),
             html.Div(
-                "The map below shows the reliability of the initial assessment for the entire dike traject. Use the slider  assessment year."),
+                " "),
             dcc.RadioItems(
                 id="select_measure_map_result_type",
                 options=[

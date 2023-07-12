@@ -114,20 +114,20 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
             _color = get_reliability_color(_beta_section)
 
             if result_type == ResultType.RELIABILITY.name:
-                _hover_res = f'Betas section: {_beta_section:.2}<br>'
+                _hover_res = f'Beta sectie: {_beta_section:.2}<br>'
             else:
-                _hover_res = f'Pf section: {beta_to_pf(_beta_section):.2e}<br>'
+                _hover_res = f'Pf sectie: {beta_to_pf(_beta_section):.2e}<br>'
 
             _hovertemplate = f'Vaknaam {section.name}<br>' + _hover_res
 
             if mechanism_type == Mechanism.SECTION.name:
                 _mechanism = min(_beta_dict, key=_beta_dict.get) # mechanism with lowest beta
-                _hovertemplate += f"Lowest beta: {_mechanism}<br>"
+                _hovertemplate += f"Laagste beta: {_mechanism}<br>"
 
         else:
             _color = 'grey'
             _hovertemplate = f'Vaknaam {section.name}<br>' \
-                             f'Betas: NO DATA<br>'
+                             f'Beta: NO DATA<br>'
 
         fig.add_trace(go.Scattermapbox(
             mode="lines",
@@ -197,16 +197,16 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
             _hovertemplate = f'Vaknaam {section.name}<br>' \
                              f'Maatregel: {_measure_results["name"]} m<br>' \
                              f'LCC: {to_million_euros(_measure_results["LCC"])} M€<br>' \
-                             f'Betas section: {_beta_section:.2}<br>' \
-                             f'Pf section: {beta_to_pf(_beta_section):.2e}<br>'
+                             f'Beta sectie: {_beta_section:.2}<br>' \
+                             f'Pf sectie: {beta_to_pf(_beta_section):.2e}<br>'
             if mechanism_type == Mechanism.SECTION.name:
                 _mechanism = min(_beta_dict, key=_beta_dict.get)  # mechanism with lowest beta
-                _hovertemplate += f"Lowest beta: {_mechanism}<br>"
+                _hovertemplate += f"Laagste beta: {_mechanism}<br>"
 
         else:
             _color = 'grey'
             _hovertemplate = f'Vaknaam {section.name}<br>' \
-                             f'Betas: NO DATA<br>'
+                             f'Beta: NO DATA<br>'
 
         fig.add_trace(go.Scattermapbox(
             mode="lines",
