@@ -102,9 +102,13 @@ def layout_tab_three() -> html.Div:
             html.Div(
                 " "),
 
+            dbc.Row([
 
-            layout_radio_color_bar_result_type,
-            html.Div(id='select_sub_result_type'),  # This is a container for the sub RadioItems component
+                dbc.Col([layout_radio_color_bar_result_type], md=4),
+                dbc.Col([html.Div(id='container_for_sub_radio')], md=4),
+
+            ]),
+
 
             html.Div(id='dike_traject_reliability_map_measures',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),

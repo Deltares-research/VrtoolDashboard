@@ -1,7 +1,7 @@
 import dash
 from dash import html, dcc, Output, Input, State
 
-from src.constants import ColorBarResultType
+from src.constants import ColorBarResultType, SubResultType
 from src.layouts.layout_main_page import layout_tab_one, CalcType, layout_tab_two, layout_tab_three, layout_tab_four
 from src.linear_objects.dike_traject import DikeTraject
 from src.plotly_graphs.pf_length_cost import plot_pf_length_cost, plot_default_scatter_dummy
@@ -99,6 +99,7 @@ def make_graph_map_measures(dike_traject_data: dict, selected_year: float, resul
     show the reliability, the cost of the type of measure. Must be one of "RELIABILITY" or "COST" or "MEASURE",
     :param mechanism_type: Selected mechanism type by the user from the OptionField, one of "PIPING", "STABILITY",
     "OVERFLOW" or "SECTION"
+    :param sub_result_type: Selected sub result type by the user from the OptionField, one of "RELIABILITY", "COST",
 
     :return: dcc.Graph with the plotly figure
     """
@@ -205,24 +206,32 @@ def toggle_collapse3(n: int, is_open: bool):
 
 
 @app.callback(
-    Output('select_sub_result_type', 'children'),
+    Output('container_for_sub_radio', 'children'),
     Input('select_measure_map_result_type', 'value'),
 )
-def update_radio2(value):
-    if value == ColorBarResultType.RELIABILITY.name:
+def update_radio_sub_result_type(result_type: str) -> dcc:
+    """
+    This is a callback to update the sub Radio list depending on the result type selected by the user.
+    If the result type is "RELIABILITY" then the sub Radio list will contain the options "Absoluut" and "Ratio vr/dsn".
+    If the result type is "COST" then the sub Radio list will contain the options "Absoluut" and "Verschil vr-dsn".
+
+    :param value: one of "RELIABILITY" or "COST" or "MEASURE"
+    :return:
+    """
+    if result_type == ColorBarResultType.RELIABILITY.name:
         options = [
-            {'label': 'Absoluut', 'value': 'absolute_pf'},
-            {'label': 'Ratio dsn/vr', 'value': 'ratio_pf_dsn/vr'}
+            {'label': SubResultType.ABSOLUTE.value, 'value': SubResultType.ABSOLUTE.name},
+            {'label': SubResultType.RATIO.value, 'value': SubResultType.RATIO.name},
         ]
-    elif value == ColorBarResultType.COST.name:
+    elif result_type == ColorBarResultType.COST.name:
         options = [
-            {'label': 'Absoluut', 'value': 'absolute_cost'},
-            {'label': 'Verschil vr-dsn', 'value': 'difference_cost_vr-dsn'},
+            {'label': SubResultType.ABSOLUTE.value, 'value': SubResultType.ABSOLUTE.name},
+            {'label': SubResultType.DIFFERENCE.value, 'value': SubResultType.DIFFERENCE.name},
         ]
     else:
         options = []
 
     return dcc.RadioItems(
-        id='radio-2',
+        id='select_sub_result_type_measure_map',
         options=options
     )
