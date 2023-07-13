@@ -6,7 +6,7 @@ from src.layouts.layout_main_page import layout_tab_one, layout_tab_two, layout_
 from src.layouts.layout_radio_items import layout_radio_calc_type
 from src.linear_objects.dike_traject import DikeTraject
 from src.plotly_graphs.pf_length_cost import plot_pf_length_cost, plot_default_scatter_dummy
-from src.plotly_graphs.plotly_maps import plot_overview_map_dummy, plot_default_overview_map_dummy, \
+from src.plotly_graphs.plotly_maps import plot_overview_map, plot_default_overview_map_dummy, \
     plot_dike_traject_reliability_initial_assessment_map, plot_dike_traject_reliability_measures_assessment_map, \
     plot_dike_traject_urgency, dike_traject_pf_cost_helping_map
 from src.app import app
@@ -53,7 +53,7 @@ def make_graph_overview_dike(dike_traject_data: dict, selected_result_type) -> d
         _fig = plot_default_overview_map_dummy()
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
-        _fig = plot_overview_map_dummy(_dike_traject, selected_result_type)
+        _fig = plot_overview_map(_dike_traject, selected_result_type)
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
 
 
