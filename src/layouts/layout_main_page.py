@@ -53,14 +53,16 @@ def make_layout_main_page() -> dbc.Row:
 
                         dbc.Tabs(
                             [
+                                dbc.Tab(label="TEST", tab_id="tab-6"),
                                 dbc.Tab(label="Overzicht", tab_id="tab-1"),
                                 dbc.Tab(label="Beoordelingsresultaten Kaart", tab_id="tab-2"),
                                 dbc.Tab(label="Verstreking Kaart", tab_id="tab-3"),
                                 dbc.Tab(label="Optimalisatie resultaten", tab_id="tab-4"),
-                                dbc.Tab(label="Prioritering Kaart", tab_id="tab-5")
+                                dbc.Tab(label="Prioritering Kaart", tab_id="tab-5"),
+
                             ],
                             id="tabs",
-                            active_tab="tab-1",  # Set the initial active tab
+                            active_tab="tab-6",  # Set the initial active tab
                         ),
                         html.Div(id="content_tab"),
 
@@ -155,5 +157,16 @@ def layout_tab_five() -> html.Div:
 
         ]
     )
+
+    return layout
+
+
+def layout_test():
+    layout = html.Div(
+        children=[
+            html.H2("Test"),
+            html.Div(id="test_figure_1", style={'width': '130vh', 'height': '30vh', 'border': "2px solid black"}),
+            html.Div(id="test_figure_2", style={'width': '130vh', 'height': '30vh', 'border': "2px solid black"}),
+        ])
 
     return layout

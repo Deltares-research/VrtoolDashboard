@@ -69,6 +69,7 @@ def plot_overview_map_dummy(dike_traject: DikeTraject, selected_result_type: str
             mode="lines",
             lat=[x[0] for x in coordinates_wgs],
             lon=[x[1] for x in coordinates_wgs],
+            customdata=[section.name],
             marker={'size': 10, 'color': color},
             line={'width': 5, 'color': color},
             name='Traject 38-1',

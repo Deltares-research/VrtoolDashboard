@@ -3,12 +3,12 @@ import json
 from contextvars import copy_context
 from pathlib import Path
 
+import pytest
 from dash import html, dcc
 
 from src.callbacks.callbacks_main_page import upload_and_save_traject_input, make_graph_overview_dike, \
     make_graph_map_initial_assessment, make_graph_map_measures, make_graph_pf_vs_cost, make_graph_map_urgency
-from src.constants import CalcType, ColorBarResultType, Mechanism, SubResultType
-from src.layouts.layout_main_page import ResultType
+from src.constants import CalcType, ColorBarResultType, Mechanism, SubResultType, ResultType
 
 
 class TestCallback:
@@ -31,6 +31,7 @@ class TestCallback:
         assert isinstance(output[0], html.Div)
         assert isinstance(output[1], bool)
 
+    @pytest.mark.skip(reason="Avoid overcharging MapBox licence")
     def test_make_graph_overview_dike_callback(self):
         # 1. Define data
         _dike_data = json.load(
@@ -46,6 +47,7 @@ class TestCallback:
         # 3. Assert
         assert isinstance(output, dcc.Graph)
 
+    @pytest.mark.skip(reason="Avoid overcharging MapBox licence")
     def test_make_graph_initial_assessment_callback(self):
         # 1. Define data
         _dike_data = json.load(
@@ -64,6 +66,7 @@ class TestCallback:
         # 3. Assert
         assert isinstance(output, dcc.Graph)
 
+    @pytest.mark.skip(reason="Avoid overcharging MapBox licence")
     def test_make_graph_map_measures_callback(self):
         # 1. Define data
         _dike_data = json.load(
@@ -85,6 +88,7 @@ class TestCallback:
         # 3. Assert
         assert isinstance(output, dcc.Graph)
 
+    @pytest.mark.skip(reason="Avoid overcharging MapBox licence")
     def test_make_graph_pf_vs_cost_callback(self):
         # 1. Define data
         _dike_data = json.load(
@@ -104,6 +108,7 @@ class TestCallback:
         # 3. Assert
         assert isinstance(output, dcc.Graph)
 
+    @pytest.mark.skip(reason="Avoid overcharging MapBox licence")
     def test_make_graph_map_urgency(self):
         # 1. Define data
         _dike_data = json.load(

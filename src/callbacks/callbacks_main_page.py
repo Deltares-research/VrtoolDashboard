@@ -1,10 +1,11 @@
-from dash import html, dcc, Output, Input, State
+from dash import html, dcc, Output, Input, State, ClientsideFunction
 
-from src.constants import ColorBarResultType, SubResultType
+from src.constants import ColorBarResultType, SubResultType, CalcType, ResultType
 from src.layouts.layout_main_page import layout_tab_one, layout_tab_two, layout_tab_three, layout_tab_four, \
-    layout_tab_five
+    layout_tab_five, layout_test
 from src.layouts.layout_radio_items import layout_radio_calc_type
 from src.linear_objects.dike_traject import DikeTraject
+from src.plotly_graphs.dual_plot import fig_sanbox
 from src.plotly_graphs.pf_length_cost import plot_pf_length_cost, plot_default_scatter_dummy
 from src.plotly_graphs.plotly_maps import plot_overview_map_dummy, plot_default_overview_map_dummy, \
     plot_dike_traject_reliability_initial_assessment_map, plot_dike_traject_reliability_measures_assessment_map, \
@@ -164,6 +165,40 @@ def make_graph_map_urgency(dike_traject_data: dict, selected_year: float, length
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
 
 
+@app.callback([Output('test_figure_1', 'children'), Output('test_figure_2', 'children')],
+              [Input('stored-data', 'data')])
+def sandbox(dike_traject_data: dict):
+    """
+    Sandbox function to test new functions
+    :param dike_traject_data:
+    :return:
+    """
+    if dike_traject_data is None:
+        fig_1, fig_2 = fig_sanbox()
+    else:
+
+        _dike_traject = DikeTraject.deserialize(dike_traject_data)
+        fig_1 = plot_pf_length_cost(_dike_traject, 2030, ResultType.RELIABILITY.name, "COST")
+        fig_2 = plot_overview_map_dummy(_dike_traject, CalcType.VEILIGHEIDRENDEMENT.name)
+
+    container_1 = html.Div(
+        children=[dcc.Graph(id="metrics_graph", figure=fig_1, style={'width': '100%', 'height': '100%'}),
+                  html.Div(id="dummy")])
+    container_2 = dcc.Graph(
+        id="map_graph", figure=fig_2,
+        style={'width': '100%',
+               'height': '100%'})
+    return container_1, container_2
+
+
+app.clientside_callback(
+    ClientsideFunction(namespace="clientside", function_name="trigger_hover"),
+    Output("dummy", "data-hover"),
+    [Input("map_graph", "hoverData")],
+)
+
+
+
 @app.callback(
     [Output("content_tab", "children"), Output("select_calculation_type", "options")],
     [Input("tabs", "active_tab")]
@@ -189,6 +224,8 @@ def render_tab_map_content(active_tab: str) -> html.Div:
         return layout_tab_four(), base_layout_calc_type.options
     elif active_tab == "tab-5":
         return layout_tab_five(), base_layout_calc_type.options
+    elif active_tab == "tab-6":
+        return layout_test(), base_layout_calc_type.options
     else:
         return html.Div("Invalid tab selected")
 
