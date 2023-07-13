@@ -1,15 +1,14 @@
-from dash import html, dcc, Output, Input, State, ClientsideFunction
+from dash import html, dcc, Output, Input, State
 
-from src.constants import ColorBarResultType, SubResultType, CalcType, ResultType
+from src.constants import ColorBarResultType, SubResultType
 from src.layouts.layout_main_page import layout_tab_one, layout_tab_two, layout_tab_three, layout_tab_four, \
-    layout_tab_five, layout_test
+    layout_tab_five
 from src.layouts.layout_radio_items import layout_radio_calc_type
 from src.linear_objects.dike_traject import DikeTraject
-from src.plotly_graphs.dual_plot import fig_sanbox
 from src.plotly_graphs.pf_length_cost import plot_pf_length_cost, plot_default_scatter_dummy
 from src.plotly_graphs.plotly_maps import plot_overview_map_dummy, plot_default_overview_map_dummy, \
     plot_dike_traject_reliability_initial_assessment_map, plot_dike_traject_reliability_measures_assessment_map, \
-    plot_dike_traject_urgency
+    plot_dike_traject_urgency, dike_traject_pf_cost_helping_map
 from src.app import app
 
 
@@ -118,11 +117,12 @@ def make_graph_map_measures(dike_traject_data: dict, selected_year: float, resul
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
 
 
-@app.callback(Output('dike_traject_pf_cost_graph', 'children'),
+@app.callback(Output('dike_traject_pf_cost_graph', 'figure'),
               [Input('stored-data', 'data'), Input("slider_year_reliability_results", "value"),
-               Input("select_result_type", 'value'), Input("select_length_cost_switch", "value")])
+               Input("select_result_type", 'value'), Input("select_length_cost_switch", "value"),
+               ])
 def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_type: str,
-                          cost_length_switch: str) -> dcc.Graph:
+                          cost_length_switch: str):
     """
     Call to display the graph of the plot of the probability of failure vs the cost of the measures.
 
@@ -133,11 +133,11 @@ def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_
 
     """
     if dike_traject_data is None:
-        _fig = plot_default_scatter_dummy()
+        return plot_default_scatter_dummy()
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
         _fig = plot_pf_length_cost(_dike_traject, selected_year, result_type, cost_length_switch)
-    return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
+    return _fig
 
 
 @app.callback(Output('dike_traject_urgency_map', 'children'),
@@ -165,38 +165,26 @@ def make_graph_map_urgency(dike_traject_data: dict, selected_year: float, length
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
 
 
-@app.callback([Output('test_figure_1', 'children'), Output('test_figure_2', 'children')],
-              [Input('stored-data', 'data')])
-def sandbox(dike_traject_data: dict):
+@app.callback(Output("dike_traject_pf_cost_helping_map", "figure"), Input('stored-data', 'data'),
+              Input("dike_traject_pf_cost_graph", "clickData"),
+              )
+def update_hover(dike_traject_data: dict, click_data: dict):
     """
-    Sandbox function to test new functions
+
     :param dike_traject_data:
-    :return:
+    :param click_data: data obtained from Plotly API by clicking on the plot of Pf_vs_cost graph. This data
+    is typically a dictionary with the structure:
+    {'points': [{'curveNumber': 1, 'pointNumber': 40, 'pointIndex': 40, 'x': 103.3, 'y': 3.5, 'customdata': '33A', 'bbox': {'x0': 1194.28, 'x1': 1200.28, 'y0': 462.52, 'y1': 468.52}}]}
+    :return: Update the accompanying map of the Pf_vs_cost graph.
     """
+    #TODO: the maps here does not need to be plotly! or at at not a MapBox
+    if click_data is None:
+        return plot_default_overview_map_dummy()
     if dike_traject_data is None:
-        fig_1, fig_2 = fig_sanbox()
+        return plot_default_overview_map_dummy()
     else:
-
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
-        fig_1 = plot_pf_length_cost(_dike_traject, 2030, ResultType.RELIABILITY.name, "COST")
-        fig_2 = plot_overview_map_dummy(_dike_traject, CalcType.VEILIGHEIDRENDEMENT.name)
-
-    container_1 = html.Div(
-        children=[dcc.Graph(id="metrics_graph", figure=fig_1, style={'width': '100%', 'height': '100%'}),
-                  html.Div(id="dummy")])
-    container_2 = dcc.Graph(
-        id="map_graph", figure=fig_2,
-        style={'width': '100%',
-               'height': '100%'})
-    return container_1, container_2
-
-
-app.clientside_callback(
-    ClientsideFunction(namespace="clientside", function_name="trigger_hover"),
-    Output("dummy", "data-hover"),
-    [Input("map_graph", "hoverData")],
-)
-
+        return dike_traject_pf_cost_helping_map(_dike_traject, click_data["points"][0]["customdata"])
 
 
 @app.callback(
@@ -224,8 +212,7 @@ def render_tab_map_content(active_tab: str) -> html.Div:
         return layout_tab_four(), base_layout_calc_type.options
     elif active_tab == "tab-5":
         return layout_tab_five(), base_layout_calc_type.options
-    elif active_tab == "tab-6":
-        return layout_test(), base_layout_calc_type.options
+
     else:
         return html.Div("Invalid tab selected")
 

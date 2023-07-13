@@ -304,6 +304,39 @@ def plot_dike_traject_urgency(dike_traject: DikeTraject, selected_year: float, l
 
     return fig
 
+def dike_traject_pf_cost_helping_map(dike_traject: DikeTraject, clicked_section_name: str):
+    fig =go.Figure()
+
+    for section in dike_traject.dike_sections:
+        coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
+                           section.coordinates_rd]  # convert in GWS coordinates:
+
+        # if a section is not in analyse, skip it, and it turns blank on the map.
+        if not section.in_analyse:
+            continue
+
+        if section.name == clicked_section_name:
+            color = 'blue'
+        else:
+            color = 'grey'
+
+
+        fig.add_trace(go.Scattermapbox(
+            mode="lines",
+            lat=[x[0] for x in coordinates_wgs],
+            lon=[x[1] for x in coordinates_wgs],
+            customdata=[section.name],
+            marker={'size': 10, 'color': color},
+            line={'width': 5, 'color': color},
+            name='Traject 38-1',
+            showlegend=False))
+
+    # Update layout of the figure and add token for mapbox
+    _middle_point = get_middle_point(dike_traject.dike_sections)
+    update_layout_map_box(fig, _middle_point)
+
+    return fig
+
 
 def get_middle_point(sections: list[DikeSection]) -> tuple[float, float]:
     """Return the middle point in GWS coordinates of the dik trajectory.
