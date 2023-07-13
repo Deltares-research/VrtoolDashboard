@@ -1,4 +1,3 @@
-import copy
 from dataclasses import dataclass
 
 import numpy as np
@@ -88,7 +87,7 @@ class DikeTraject(BaseLinearObject):
     def calc_traject_probability_array(self, calc_type: str):
 
         _beta_df = self.get_initial_assessment_df()
-        _traject_pf, _ = get_traject_prob(_beta_df)
+        _traject_pf, _ = get_traject_prob(_beta_df, ['StabilityInner', 'Piping', 'Overflow'])
         years = self.dike_sections[0].years
 
         if calc_type == "vr":
@@ -119,7 +118,7 @@ class DikeTraject(BaseLinearObject):
                     d[year] = beta
                 _beta_df.loc[mask, years] = d
 
-            _reinforced_traject_pf, _ = get_traject_prob(_beta_df)
+            _reinforced_traject_pf, _ = get_traject_prob(_beta_df, ['StabilityInner', 'Piping', 'Overflow'])
             _traject_pf = np.concatenate((_traject_pf, _reinforced_traject_pf), axis=0)
 
         return np.array(_traject_pf)
@@ -244,7 +243,7 @@ def determine_reinforcement_order(all_unzipped_files: dict, filename: str) -> li
     return final_measures_df['Section'].dropna().unique()
 
 
-def get_traject_prob(beta_df, mechanisms=['StabilityInner', 'Piping', 'Overflow']):
+def get_traject_prob(beta_df: DataFrame, mechanisms: list) -> tuple[np.array, dict]:
     # determines the probability of failure for a traject based on the standardized beta input
 
     beta_df = beta_df.reset_index().set_index('mechanism').drop(columns=['name'])

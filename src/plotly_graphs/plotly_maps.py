@@ -5,14 +5,12 @@ from typing import Tuple
 import numpy as np
 import plotly.graph_objects as go
 from matplotlib import pyplot as plt, colors
-from pandas import DataFrame
 
-from src.constants import REFERENCE_YEAR, ColorBarResultType, Mechanism, SubResultType
-from src.layouts.layout_main_page import CalcType, ResultType
+from src.constants import REFERENCE_YEAR, ColorBarResultType, Mechanism, SubResultType, CalcType, ResultType
 from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject
 from src.utils.gws_convertor import GWSRDConvertor
-from src.utils.utils import to_million_euros, beta_to_pf, pf_to_beta
+from src.utils.utils import to_million_euros, beta_to_pf
 
 color_dict = {""}
 
@@ -71,6 +69,7 @@ def plot_overview_map_dummy(dike_traject: DikeTraject, selected_result_type: str
             mode="lines",
             lat=[x[0] for x in coordinates_wgs],
             lon=[x[1] for x in coordinates_wgs],
+            customdata=[section.name],
             marker={'size': 10, 'color': color},
             line={'width': 5, 'color': color},
             name='Traject 38-1',
@@ -298,6 +297,39 @@ def plot_dike_traject_urgency(dike_traject: DikeTraject, selected_year: float, l
 
         cum_length += section.length
         added_to_legend[_group] = True
+
+    # Update layout of the figure and add token for mapbox
+    _middle_point = get_middle_point(dike_traject.dike_sections)
+    update_layout_map_box(fig, _middle_point)
+
+    return fig
+
+def dike_traject_pf_cost_helping_map(dike_traject: DikeTraject, clicked_section_name: str):
+    fig =go.Figure()
+
+    for section in dike_traject.dike_sections:
+        coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
+                           section.coordinates_rd]  # convert in GWS coordinates:
+
+        # if a section is not in analyse, skip it, and it turns blank on the map.
+        if not section.in_analyse:
+            continue
+
+        if section.name == clicked_section_name:
+            color = 'blue'
+        else:
+            color = 'grey'
+
+
+        fig.add_trace(go.Scattermapbox(
+            mode="lines",
+            lat=[x[0] for x in coordinates_wgs],
+            lon=[x[1] for x in coordinates_wgs],
+            customdata=[section.name],
+            marker={'size': 10, 'color': color},
+            line={'width': 5, 'color': color},
+            name='Traject 38-1',
+            showlegend=False))
 
     # Update layout of the figure and add token for mapbox
     _middle_point = get_middle_point(dike_traject.dike_sections)

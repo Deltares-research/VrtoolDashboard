@@ -1,7 +1,6 @@
 from bisect import bisect_right
 
 import numpy as np
-import pandas as pd
 import plotly.graph_objects as go
 
 from src.constants import REFERENCE_YEAR, ResultType
@@ -140,4 +139,6 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
     fig.update_layout(showlegend=True, template='plotly_white')
 
     return fig
+
+
 
