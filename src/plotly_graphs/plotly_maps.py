@@ -32,7 +32,7 @@ def plot_default_overview_map_dummy() -> go.Figure:
     return fig
 
 
-def plot_overview_map_dummy(dike_traject: DikeTraject, selected_result_type: str) -> go.Figure:
+def plot_overview_map(dike_traject: DikeTraject, selected_result_type: str) -> go.Figure:
     """
     This function plots an overview Map of the current dike in data. It uses plotly Mapbox for the visualization.
 
@@ -43,27 +43,19 @@ def plot_overview_map_dummy(dike_traject: DikeTraject, selected_result_type: str
     """
     fig = go.Figure()
 
-    for section in dike_traject.dike_sections:
+    for index, section in enumerate(dike_traject.dike_sections):
         coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
                            section.coordinates_rd]  # convert in GWS coordinates:
 
         # if a section is not in analyse, skip it, and it turns blank on the map.
+        hovertemplate = f'Vaknaam {section.name}<br>' \
+                        f'Lengte: {section.length}m' \
+
         if not section.in_analyse:
-            continue
-
-        _measure_results = section.final_measure_doorsnede if selected_result_type == CalcType.DOORSNEDE_EISEN.name else section.final_measure_veiligheidrendement
-        if _measure_results is not None:
-
-            color = 'green' if _measure_results[
-                                   'name'] == "Grondversterking binnenwaarts 2025" else 'red'
-            hovertemplate = f'Vaknaam {section.name}<br>' \
-                            f'Maatregel: {_measure_results["name"]} m<br>' \
-                            f'LCC: {to_million_euros(_measure_results["LCC"])} M€<br>'
+            color = 'black'
+            hovertemplate += f'<br>Niet in analyse'
         else:
-            color = 'grey'
-            hovertemplate = f'Vaknaam {section.name}<br>' \
-                            f'Maatregel: {None} m<br>' \
-                            f'LCC: {0} €<br>'
+            color = "rgb(136,204,238)" if index % 2 == 0 else "rgb(51,34,136)"
 
         fig.add_trace(go.Scattermapbox(
             mode="lines",
