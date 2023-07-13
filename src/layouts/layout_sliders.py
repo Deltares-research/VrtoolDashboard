@@ -1,5 +1,4 @@
 from dash import dcc, html
-import dash_bootstrap_components as dbc
 
 layout_year_slider = dcc.Slider(2025, 2125, value=2025,
                                 marks={
@@ -13,7 +12,7 @@ layout_year_slider = dcc.Slider(2025, 2125, value=2025,
                                 id="slider_year_reliability_results",
                                 )
 
-layout_urgency_length_slider = html.Div([dcc.Slider(0, 20, value=0,
+layout_urgency_length_slider = html.Div([dcc.Slider(0, 20, value=10,
                                                     marks={
                                                         0: {'label': '0 km'},
                                                         5: {'label': '5 km'},

@@ -1,8 +1,7 @@
-import dash
 from dash import html, dcc, Output, Input, State
 
 from src.constants import ColorBarResultType, SubResultType
-from src.layouts.layout_main_page import layout_tab_one, CalcType, layout_tab_two, layout_tab_three, layout_tab_four, \
+from src.layouts.layout_main_page import layout_tab_one, layout_tab_two, layout_tab_three, layout_tab_four, \
     layout_tab_five
 from src.layouts.layout_radio_items import layout_radio_calc_type
 from src.linear_objects.dike_traject import DikeTraject
@@ -11,7 +10,6 @@ from src.plotly_graphs.plotly_maps import plot_overview_map_dummy, plot_default_
     plot_dike_traject_reliability_initial_assessment_map, plot_dike_traject_reliability_measures_assessment_map, \
     plot_dike_traject_urgency
 from src.app import app
-from src.utils.utils import export_to_json
 
 
 @app.callback([Output('output-data-upload-zip', 'children'),

@@ -8,7 +8,6 @@ from .layout_radio_items import layout_radio_color_bar_result_type, layout_radio
 from .layout_sliders import layout_urgency_length_slider
 from .layout_upload_dike_files import layout_upload_button
 from .layout_vr_optimalization import dike_vr_optimization_layout
-from ..constants import CalcType, ResultType, ColorBarResultType
 
 
 def make_layout_main_page() -> dbc.Row:

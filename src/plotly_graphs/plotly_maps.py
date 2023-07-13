@@ -5,14 +5,12 @@ from typing import Tuple
 import numpy as np
 import plotly.graph_objects as go
 from matplotlib import pyplot as plt, colors
-from pandas import DataFrame
 
-from src.constants import REFERENCE_YEAR, ColorBarResultType, Mechanism, SubResultType
-from src.layouts.layout_main_page import CalcType, ResultType
+from src.constants import REFERENCE_YEAR, ColorBarResultType, Mechanism, SubResultType, CalcType, ResultType
 from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject
 from src.utils.gws_convertor import GWSRDConvertor
-from src.utils.utils import to_million_euros, beta_to_pf, pf_to_beta
+from src.utils.utils import to_million_euros, beta_to_pf
 
 color_dict = {""}
 
