@@ -550,15 +550,20 @@ def get_beta(results: dict, year_index: int, mechanism: str) -> float:
 
 
 def get_color_hover_prob_ratio(section: DikeSection, year_index: int, mechanism_type: str) -> Tuple[str, str]:
-    _beta_vr = get_beta(section.final_measure_veiligheidrendement, year_index, mechanism_type)
-    _beta_dsn = get_beta(section.final_measure_doorsnede, year_index, mechanism_type)
-    _ratio_pf = beta_to_pf(_beta_vr) / beta_to_pf(_beta_dsn)
-    _color = get_probability_ratio_color(_ratio_pf)
+    if section.final_measure_veiligheidrendement is None or section.final_measure_doorsnede is None:
+        _color = 'grey'
+        _hovertemplate = f'Vaknaam {section.name}<br>' \
+                         f'Beta: NO DATA<br>'
+    else:
+        _beta_vr = get_beta(section.final_measure_veiligheidrendement, year_index, mechanism_type)
+        _beta_dsn = get_beta(section.final_measure_doorsnede, year_index, mechanism_type)
+        _ratio_pf = beta_to_pf(_beta_vr) / beta_to_pf(_beta_dsn)
+        _color = get_probability_ratio_color(_ratio_pf)
 
-    _hovertemplate = f'Vaknaam {section.name}<br>' \
-                     f'Pf Veiligheidsrendement: {beta_to_pf(_beta_vr):.2e}<br>' \
-                     f'Pf Doorsnede: {beta_to_pf(_beta_dsn):.2e}<br>' \
-                     f'Ratio Pf vr/dsn: {round(_ratio_pf, 1)}<br>'
+        _hovertemplate = f'Vaknaam {section.name}<br>' \
+                         f'Pf Veiligheidsrendement: {beta_to_pf(_beta_vr):.2e}<br>' \
+                         f'Pf Doorsnede: {beta_to_pf(_beta_dsn):.2e}<br>' \
+                         f'Ratio Pf vr/dsn: {round(_ratio_pf, 1)}<br>'
 
     return _color, _hovertemplate
 
