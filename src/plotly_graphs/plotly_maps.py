@@ -44,29 +44,17 @@ def plot_overview_map(dike_traject: DikeTraject, selected_result_type: str) -> g
     fig = go.Figure()
 
     for index, section in enumerate(dike_traject.dike_sections):
-        coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
-                           section.coordinates_rd]  # convert in GWS coordinates:
 
         # if a section is not in analyse, skip it, and it turns blank on the map.
-        hovertemplate = f'Vaknaam {section.name}<br>' \
-                        f'Lengte: {section.length}m' \
+        _hovertemplate = f'Vaknaam {section.name}<br>' + f'Lengte: {section.length}m'
 
         if not section.in_analyse:
-            color = 'black'
-            hovertemplate += f'<br>Niet in analyse'
+            _color = 'black'
+            _hovertemplate += f'<br>Niet in analyse'
         else:
-            color = "rgb(136,204,238)" if index % 2 == 0 else "rgb(51,34,136)"
+            _color = "rgb(136,204,238)" if index % 2 == 0 else "rgb(51,34,136)"
 
-        fig.add_trace(go.Scattermapbox(
-            mode="lines",
-            lat=[x[0] for x in coordinates_wgs],
-            lon=[x[1] for x in coordinates_wgs],
-            customdata=[section.name],
-            marker={'size': 10, 'color': color},
-            line={'width': 5, 'color': color},
-            name='Traject 38-1',
-            hovertemplate=hovertemplate,
-            showlegend=False))
+        add_section_trace(fig, section, name=dike_traject.name, color=_color, hovertemplate=_hovertemplate)
 
     # Update layout of the figure and add token for mapbox
     _middle_point = get_middle_point(dike_traject.dike_sections)
@@ -121,15 +109,7 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
             _hovertemplate = f'Vaknaam {section.name}<br>' \
                              f'Beta: NO DATA<br>'
 
-        fig.add_trace(go.Scattermapbox(
-            mode="lines",
-            lat=[x[0] for x in _coordinates_wgs],
-            lon=[x[1] for x in _coordinates_wgs],
-            marker={'size': 10, 'color': _color},
-            line={'width': 5, 'color': _color},
-            name='Traject 38-1',
-            hovertemplate=_hovertemplate,
-            showlegend=False))
+        add_section_trace(fig, section, name=dike_traject.name, color=_color, hovertemplate=_hovertemplate)
 
     add_colorscale_bar(fig, result_type, ColorBarResultType.RELIABILITY.name, SubResultType.ABSOLUTE.name)
 
@@ -159,8 +139,6 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
     """
     fig = go.Figure()
     for section in dike_traject.dike_sections:
-        _coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
-                            section.coordinates_rd]  # convert in GWS coordinates:
 
         # if a section is not in analyse, skip it, and it turns blank on the map.
         if not section.in_analyse:
@@ -205,15 +183,7 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
             _hovertemplate = f'Vaknaam {section.name}<br>' \
                              f'Beta: NO DATA<br>'
 
-        fig.add_trace(go.Scattermapbox(
-            mode="lines",
-            lat=[x[0] for x in _coordinates_wgs],
-            lon=[x[1] for x in _coordinates_wgs],
-            marker={'size': 10, 'color': _color},
-            line={'width': 5, 'color': _color},
-            name='Traject 38-1',
-            hovertemplate=_hovertemplate,
-            showlegend=False))
+        add_section_trace(fig, section, name=dike_traject.name, color=_color, hovertemplate=_hovertemplate)
 
     add_colorscale_bar(fig, result_type, colorbar_result_type, sub_result_type)
 
@@ -255,9 +225,6 @@ def plot_dike_traject_urgency(dike_traject: DikeTraject, selected_year: float, l
     for section_name in _ordered_sections:
         section = dike_traject.get_section(section_name)
 
-        _coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
-                            section.coordinates_rd]  # convert in GWS coordinates:
-
         if cum_length < 5000:  # first 5 km
             _color = "#f46e88"
             _group = "<5km"
@@ -276,16 +243,8 @@ def plot_dike_traject_urgency(dike_traject: DikeTraject, selected_year: float, l
 
         showlegend = _group not in added_to_legend
 
-        fig.add_trace(go.Scattermapbox(
-            mode="lines",
-            lat=[x[0] for x in _coordinates_wgs],
-            lon=[x[1] for x in _coordinates_wgs],
-            marker={'size': 10, 'color': _color},
-            line={'width': 5, 'color': _color},
-            name=_group,
-            legendgroup=_group,
-            hovertemplate=_hovertemplate,
-            showlegend=showlegend))
+        add_section_trace(fig, section, name=_group,
+                          color=_color, hovertemplate=_hovertemplate, legendgroup=_group, showlegend=showlegend)
 
         cum_length += section.length
         added_to_legend[_group] = True
@@ -296,32 +255,43 @@ def plot_dike_traject_urgency(dike_traject: DikeTraject, selected_year: float, l
 
     return fig
 
-def dike_traject_pf_cost_helping_map(dike_traject: DikeTraject, clicked_section_name: str):
-    fig =go.Figure()
+
+def add_section_trace(fig: go.Figure, section: DikeSection, name: str, color: str, hovertemplate: str,
+                      showlegend: bool = False, legendgroup: str = None):
+    """
+    Add a trace of a section to the figure which the given specifications for color and hover, etc...
+    """
+    _coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
+                        section.coordinates_rd]  # convert in GWS coordinates:
+
+    fig.add_trace(go.Scattermapbox(
+        mode="lines",
+        lat=[x[0] for x in _coordinates_wgs],
+        lon=[x[1] for x in _coordinates_wgs],
+        marker={'size': 10, 'color': color},
+        line={'width': 5, 'color': color},
+        name=name,
+        legendgroup=legendgroup,
+        hovertemplate=hovertemplate,
+        showlegend=showlegend))
+
+
+def dike_traject_pf_cost_helping_map(dike_traject: DikeTraject, clicked_section_name: str, curve_number: int):
+    fig = go.Figure()
 
     for section in dike_traject.dike_sections:
-        coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
-                           section.coordinates_rd]  # convert in GWS coordinates:
 
         # if a section is not in analyse, skip it, and it turns blank on the map.
         if not section.in_analyse:
             continue
 
         if section.name == clicked_section_name:
-            color = 'blue'
+            _color = 'blue' if curve_number == 0 else 'gold'
         else:
-            color = 'grey'
+            _color = 'grey'
+        _hovertemplate = f'Vaknaam {section.name}<br>'
 
-
-        fig.add_trace(go.Scattermapbox(
-            mode="lines",
-            lat=[x[0] for x in coordinates_wgs],
-            lon=[x[1] for x in coordinates_wgs],
-            customdata=[section.name],
-            marker={'size': 10, 'color': color},
-            line={'width': 5, 'color': color},
-            name='Traject 38-1',
-            showlegend=False))
+        add_section_trace(fig, section, name=dike_traject.name, color=_color, hovertemplate=_hovertemplate)
 
     # Update layout of the figure and add token for mapbox
     _middle_point = get_middle_point(dike_traject.dike_sections)

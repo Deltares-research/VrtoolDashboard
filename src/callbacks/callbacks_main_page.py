@@ -168,8 +168,10 @@ def make_graph_map_urgency(dike_traject_data: dict, selected_year: float, length
 @app.callback(Output("dike_traject_pf_cost_helping_map", "figure"), Input('stored-data', 'data'),
               Input("dike_traject_pf_cost_graph", "clickData"),
               )
-def update_hover(dike_traject_data: dict, click_data: dict):
+def update_click(dike_traject_data: dict, click_data: dict):
     """
+    Trigger callback when clicking over the Pf_vs_cost graph. This callback will update the accompanying map of the
+    traject by highlighting the selected dike section.
 
     :param dike_traject_data:
     :param click_data: data obtained from Plotly API by clicking on the plot of Pf_vs_cost graph. This data
@@ -177,21 +179,21 @@ def update_hover(dike_traject_data: dict, click_data: dict):
     {'points': [{'curveNumber': 1, 'pointNumber': 40, 'pointIndex': 40, 'x': 103.3, 'y': 3.5, 'customdata': '33A', 'bbox': {'x0': 1194.28, 'x1': 1200.28, 'y0': 462.52, 'y1': 468.52}}]}
     :return: Update the accompanying map of the Pf_vs_cost graph.
     """
-    #TODO: the maps here does not need to be plotly! or at at not a MapBox
+    # TODO: the maps here does not need to be plotly! or at least not a MapBox
     if click_data is None:
         return plot_default_overview_map_dummy()
     if dike_traject_data is None:
         return plot_default_overview_map_dummy()
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
-        return dike_traject_pf_cost_helping_map(_dike_traject, click_data["points"][0]["customdata"])
+        return dike_traject_pf_cost_helping_map(_dike_traject, click_data["points"][0]["customdata"], click_data["points"][0]["curveNumber"])
 
 
 @app.callback(
     [Output("content_tab", "children"), Output("select_calculation_type", "options")],
     [Input("tabs", "active_tab")]
 )
-def render_tab_map_content(active_tab: str) -> html.Div:
+def render_tab_map_content(active_tab: str) -> tuple[html.Div, list]:
     """
     Renders the content of the selected tab for the general overview page.
     :param active_tab:
@@ -214,7 +216,7 @@ def render_tab_map_content(active_tab: str) -> html.Div:
         return layout_tab_five(), base_layout_calc_type.options
 
     else:
-        return html.Div("Invalid tab selected")
+        return html.Div("Invalid tab selected"), []
 
 
 @app.callback(
