@@ -402,7 +402,7 @@ def add_colorscale_bar(fig: go.Figure, result_type: str, colorbar_result_type: s
             colorscale='RdYlGn',
             reversescale=True,
             colorbar=dict(
-                title="Kost (M€)",
+                title="Kost (M€/km)",
                 titleside='right',
                 tickmode='array',
                 tickvals=[0, 5, 10, 15, 20],
@@ -420,17 +420,17 @@ def add_colorscale_bar(fig: go.Figure, result_type: str, colorbar_result_type: s
             colorscale='RdYlGn',
             reversescale=True,
             colorbar=dict(
-                title="Kost (M€)",
+                title="Kost (M€/km)",
                 titleside='right',
                 tickmode='array',
-                tickvals=[-10, 0, 1],
-                ticktext=['-10', '0', '1'],
+                tickvals=[-10, 0, 10],
+                ticktext=['-10', '0', '10'],
                 ticks='outside',
                 len=0.5,
             ),
             showscale=True,
             cmin=-10,
-            cmax=1,
+            cmax=7,
         )
 
     fig.add_trace(
@@ -497,7 +497,7 @@ def get_color_diff_cost(cost_value) -> str:
     """
     cmap = plt.cm.RdYlGn  # theme of the colorscale
     cmap = cmap.reversed()
-    return get_color(cost_value, cmap, -10, 10)  # center on 0 so that yellow is at 0 and very few section turn red
+    return get_color(cost_value, cmap, -10, 7)
 
 
 def get_beta(results: dict, year_index: int, mechanism: str) -> float:
@@ -543,7 +543,7 @@ def get_color_hover_absolute_reliability(section: DikeSection, beta_section: flo
     _color = get_reliability_color(beta_section)
 
     _hovertemplate = f'Vaknaam {section.name}<br>' \
-                     f'Maatregel: {measure_results["name"]} m<br>' \
+                     f'Maatregel: {measure_results["name"]}<br>' \
                      f'LCC: {to_million_euros(measure_results["LCC"])} M€<br>' \
                      f'Beta sectie: {beta_section:.2}<br>' \
                      f'Pf sectie: {beta_to_pf(beta_section):.2e}<br>'
@@ -552,10 +552,13 @@ def get_color_hover_absolute_reliability(section: DikeSection, beta_section: flo
 
 
 def get_color_hover_absolute_cost(section: DikeSection, beta_section: float, measure_results: dict) -> Tuple[str, str]:
-    _color = get_cost_color(to_million_euros(measure_results["LCC"]))
-    _hovertemplate = f'Vaknaam {section.name}<br>' \
-                     f'Maatregel: {measure_results["name"]} m<br>' \
-                     f'LCC: {to_million_euros(measure_results["LCC"])} M€<br>' \
+    _cost_per_kilometer = to_million_euros(measure_results["LCC"] / (section.length / 1e3))
+
+    _color = get_cost_color(_cost_per_kilometer)
+    _hovertemplate = f'Vaknaam {section.name} : {section.length}m<br>' \
+                     f'Maatregel: {measure_results["name"]}<br>' \
+                     f'Kost sectie: {to_million_euros(measure_results["LCC"])} M€<br>' \
+                     f'Kost per kilometers: {_cost_per_kilometer} M€/km<br>' \
                      f'Beta sectie: {beta_section:.2}<br>' \
                      f'Pf sectie: {beta_to_pf(beta_section):.2e}<br>'
 
@@ -566,12 +569,14 @@ def get_color_hover_difference_cost(section: DikeSection) -> Tuple[str, str]:
     _cost_vr = section.final_measure_veiligheidrendement["LCC"]
     _cost_dsn = section.final_measure_doorsnede["LCC"]
     _diff = _cost_vr - _cost_dsn
+    _diff_per_kilometer = to_million_euros(_diff / (section.length / 1e3))
 
-    _color = get_color_diff_cost(to_million_euros(_diff))
+    _color = get_color_diff_cost(_diff_per_kilometer)
 
-    _hovertemplate = f'Vaknaam {section.name}<br>' \
+    _hovertemplate = f'Vaknaam {section.name} : {section.length}m<br>' \
                      f'Kosten Veiligheidsrendement: {to_million_euros(_cost_vr)} M€<br>' \
                      f'Kosten Doorsnede: {to_million_euros(_cost_dsn)} M€<br>' \
-                     f'Kostenverschil: {to_million_euros(_diff)} M€<br>'
+                     f'Kostenverschil: {to_million_euros(_diff)} M€<br>' \
+                     f'Kostenverschil per kilometer: {_diff_per_kilometer} M€/km<br>'
 
     return _color, _hovertemplate
