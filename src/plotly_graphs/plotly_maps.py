@@ -276,31 +276,22 @@ def add_section_trace(fig: go.Figure, section: DikeSection, name: str, color: st
         showlegend=showlegend))
 
 
-def dike_traject_pf_cost_helping_map(dike_traject: DikeTraject, clicked_section_name: str):
+def dike_traject_pf_cost_helping_map(dike_traject: DikeTraject, clicked_section_name: str, curve_number: int):
     fig = go.Figure()
 
     for section in dike_traject.dike_sections:
-        coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
-                           section.coordinates_rd]  # convert in GWS coordinates:
 
         # if a section is not in analyse, skip it, and it turns blank on the map.
         if not section.in_analyse:
             continue
 
         if section.name == clicked_section_name:
-            color = 'blue'
+            _color = 'blue' if curve_number == 0 else 'gold'
         else:
-            color = 'grey'
+            _color = 'grey'
+        _hovertemplate = f'Vaknaam {section.name}<br>'
 
-        fig.add_trace(go.Scattermapbox(
-            mode="lines",
-            lat=[x[0] for x in coordinates_wgs],
-            lon=[x[1] for x in coordinates_wgs],
-            customdata=[section.name],
-            marker={'size': 10, 'color': color},
-            line={'width': 5, 'color': color},
-            name='Traject 38-1',
-            showlegend=False))
+        add_section_trace(fig, section, name=dike_traject.name, color=_color, hovertemplate=_hovertemplate)
 
     # Update layout of the figure and add token for mapbox
     _middle_point = get_middle_point(dike_traject.dike_sections)
