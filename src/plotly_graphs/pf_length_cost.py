@@ -3,7 +3,7 @@ from bisect import bisect_right
 import numpy as np
 import plotly.graph_objects as go
 
-from src.constants import REFERENCE_YEAR, ResultType
+from src.constants import REFERENCE_YEAR, ResultType, ONDERGRENS, SIGNALERING
 from src.linear_objects.dike_traject import DikeTraject
 from src.utils.utils import pf_to_beta
 
@@ -34,19 +34,19 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
     fig = go.Figure()
     _year_index = bisect_right(dike_traject.dike_sections[0].years, selected_year - REFERENCE_YEAR) - 1
 
-    standards = {'Ondergrens': 1. / 10000, 'Signaleringswaarde': 1. / 30000}
-
-    section_order_dsn = dike_traject.reinforcement_order_dsn
-    section_order_vr = dike_traject.reinforcement_order_vr
+    section_order_dsn = ["Geen maatregel"] + dike_traject.reinforcement_order_dsn
+    section_order_vr = ["Geen maatregel"] + dike_traject.reinforcement_order_vr
 
     if cost_length_switch == "COST":
         x_vr = dike_traject.get_cum_cost("vr")
         x_dsn = dike_traject.get_cum_cost("dsn")
         title_x_axis = "Kosten (mln €)"
+        max_x = max(x_vr[-1], x_dsn[-1])
     elif cost_length_switch == "LENGTH":
         x_vr = dike_traject.get_cum_length("vr")
         x_dsn = dike_traject.get_cum_length("dsn")
         title_x_axis = "Lengte (km)"
+        max_x = max(x_vr[-1], x_dsn[-1])
     else:
         raise ValueError("Wrong cost_length_switch value")
 
@@ -54,20 +54,20 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
         y_vr = pf_to_beta(dike_traject.calc_traject_probability_array("vr")[:, _year_index])
         y_dsn = pf_to_beta(dike_traject.calc_traject_probability_array("dsn")[:, _year_index])
         title_y_axis = "Betrouwbaarheid"
-        y_ondergrens = pf_to_beta(standards['Ondergrens'])
-        y_signalering = pf_to_beta(standards['Signaleringswaarde'])
+        y_ondergrens = pf_to_beta(ONDERGRENS)
+        y_signalering = pf_to_beta(SIGNALERING)
 
     elif result_type == ResultType.PROBABILITY.name:
         y_vr = dike_traject.calc_traject_probability_array("vr")[:, _year_index]
         y_dsn = dike_traject.calc_traject_probability_array("dsn")[:, _year_index]
         title_y_axis = "Trajectfaalkans per jaar"
-        y_ondergrens = standards['Ondergrens']
-        y_signalering = standards['Signaleringswaarde']
+        y_ondergrens = ONDERGRENS
+        y_signalering = SIGNALERING
 
     else:
         raise ValueError("Wrong result_type value")
 
-    # add traces for Veilgiheidrendement and Doorsnede-eisen
+    # add traces for Veiligheidrendement and Doorsnede-eisen
     fig.add_trace(go.Scatter(x=x_dsn,
                              y=y_dsn,
                              customdata=section_order_dsn,
@@ -92,29 +92,40 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
                                            "Trajectfaalkans: %{y:.2e}<br>"
                              ))
 
-    fig.add_trace(go.Scatter(x=[0], y=[1e-7], showlegend=False, visible=True, mode="markers", marker=dict(size=0)))
-
-    # Add signalisation and lower bound lines
-    fig.add_shape(type='line', x0=0, x1=1e6, y0=y_ondergrens, y1=y_ondergrens,
-                  line=dict(color='black', dash='dash'), name='Ondergrens')
-    fig.add_shape(type='line', x0=0, x1=1e6, y0=y_signalering,
-                  y1=y_signalering,
-                  line=dict(color='black', dash='dot'), name='Signaleringswaarde')
+    fig.add_trace(go.Scatter(
+        x=[0, max_x],
+        y=[y_ondergrens, y_ondergrens],
+        mode="lines",
+        marker=dict(size=0),
+        showlegend=True,
+        name="Ondergrens",
+        line=dict(color='black', dash='dash')
+    ))
+    fig.add_trace(go.Scatter(
+        x=[0, max_x],
+        y=[y_signalering, y_signalering],
+        mode="lines",
+        marker=dict(size=0),
+        showlegend=True,
+        name="Signaleringswaarde",
+        line=dict(color='black', dash='dot')
+    ))
 
     # add annotations for dijkvaken order:
-
-    for x, section_name in zip(x_vr, section_order_vr):
+    for index, (x, section_name) in enumerate(zip(x_vr[1:], section_order_vr[1:])):
+        sign = 1 if index % 2 == 0 else -1
         fig.add_annotation(x=x,
-                           y=1,
+                           y=1 + sign * 0.15,
                            text=section_name,
                            textangle=270,
                            showarrow=False,
                            font=dict(size=14, color='gold'),
                            )
 
-    for x, section_name in zip(x_dsn, section_order_dsn):
+    for index, (x, section_name) in enumerate(zip(x_dsn[1:], section_order_dsn[1:])):
+        sign = 1 if index % 2 == 0 else -1
         fig.add_annotation(x=x,
-                           y=0,
+                           y=0 + sign * 0.15,
                            text=section_name,
                            textangle=270,
                            showarrow=False,
@@ -132,13 +143,7 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
         fig.update_yaxes(range=[None, 1e-7],
                          type='log',
                          exponentformat='power',
-                         tickmode='array',
-                         tickvals=[1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1],
-                         ticktext=['1e-7', '1e-6', '1e-5', '1e-4', '1e-3', '1e-2', '1e-1'],
                          )
     fig.update_layout(showlegend=True, template='plotly_white')
 
     return fig
-
-
-

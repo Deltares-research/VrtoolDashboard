@@ -1,7 +1,8 @@
 from enum import Enum
 
 REFERENCE_YEAR = 2025  # Reference year for the reliability analysis
-
+ONDERGRENS = 1. / 10000
+SIGNALERING = 1. / 30000
 
 class CalcType(Enum):
     DOORSNEDE_EISEN = "Doorsnede-Eisen"
