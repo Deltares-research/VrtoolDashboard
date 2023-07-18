@@ -32,7 +32,7 @@ def plot_default_overview_map_dummy() -> go.Figure:
     return fig
 
 
-def plot_overview_map(dike_traject: DikeTraject, selected_result_type: str) -> go.Figure:
+def plot_overview_map(dike_traject: DikeTraject) -> go.Figure:
     """
     This function plots an overview Map of the current dike in data. It uses plotly Mapbox for the visualization.
 
@@ -276,7 +276,7 @@ def add_section_trace(fig: go.Figure, section: DikeSection, name: str, color: st
         showlegend=showlegend))
 
 
-def dike_traject_pf_cost_helping_map(dike_traject: DikeTraject, clicked_section_name: str, curve_number: int):
+def dike_traject_pf_cost_helping_map(dike_traject: DikeTraject, clicked_section_name: str, curve_number: int) -> go.Figure:
     fig = go.Figure()
 
     for section in dike_traject.dike_sections:
@@ -325,12 +325,10 @@ def update_layout_map_box(fig: go.Figure, center: tuple[float, float], zoom: int
     :param zoom: int of the zoom level of the map.
 
     """
-    _mapbox_access_token = open(Path(__file__).parent.parent / "assets" / "mapbox_token.txt").read()
     fig.update_layout(
         margin=dict(l=0, r=0, t=0, b=0),
         showlegend=True,
         mapbox=dict(
-            accesstoken=_mapbox_access_token,
             center=dict(lat=center[0], lon=center[1]),
             zoom=zoom,
         ))
@@ -566,17 +564,23 @@ def get_color_hover_absolute_cost(section: DikeSection, beta_section: float, mea
 
 
 def get_color_hover_difference_cost(section: DikeSection) -> Tuple[str, str]:
-    _cost_vr = section.final_measure_veiligheidrendement["LCC"]
-    _cost_dsn = section.final_measure_doorsnede["LCC"]
-    _diff = _cost_vr - _cost_dsn
-    _diff_per_kilometer = to_million_euros(_diff / (section.length / 1e3))
 
-    _color = get_color_diff_cost(_diff_per_kilometer)
+    if section.final_measure_veiligheidrendement is None or section.final_measure_doorsnede is None:
+        _color = 'grey'
+        _hovertemplate = f'Vaknaam {section.name}<br>' \
+                         f'Beta: NO DATA<br>'
+    else:
+        _cost_vr = section.final_measure_veiligheidrendement["LCC"]
+        _cost_dsn = section.final_measure_doorsnede["LCC"]
+        _diff = _cost_vr - _cost_dsn
+        _diff_per_kilometer = to_million_euros(_diff / (section.length / 1e3))
 
-    _hovertemplate = f'Vaknaam {section.name} : {section.length}m<br>' \
-                     f'Kosten Veiligheidsrendement: {to_million_euros(_cost_vr)} M€<br>' \
-                     f'Kosten Doorsnede: {to_million_euros(_cost_dsn)} M€<br>' \
-                     f'Kostenverschil: {to_million_euros(_diff)} M€<br>' \
-                     f'Kostenverschil per kilometer: {_diff_per_kilometer} M€/km<br>'
+        _color = get_color_diff_cost(_diff_per_kilometer)
+
+        _hovertemplate = f'Vaknaam {section.name} : {section.length}m<br>' \
+                         f'Kosten Veiligheidsrendement: {to_million_euros(_cost_vr)} M€<br>' \
+                         f'Kosten Doorsnede: {to_million_euros(_cost_dsn)} M€<br>' \
+                         f'Kostenverschil: {to_million_euros(_diff)} M€<br>' \
+                         f'Kostenverschil per kilometer: {_diff_per_kilometer} M€/km<br>'
 
     return _color, _hovertemplate
