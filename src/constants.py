@@ -1,4 +1,5 @@
 from enum import Enum
+from pathlib import Path
 
 REFERENCE_YEAR = 2025  # Reference year for the reliability analysis
 ONDERGRENS = 1. / 10000
@@ -33,3 +34,7 @@ class Mechanism(Enum):
     PIPING = "Piping"
     OVERFLOW = "Overslag"
     SECTION = "Sectie"
+
+def get_mapbox_token() -> str:
+    with open(Path(__file__).parent / "assets" / "mapbox_token.txt") as f:
+        return f.read()

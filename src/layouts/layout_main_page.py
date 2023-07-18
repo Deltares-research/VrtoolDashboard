@@ -8,6 +8,7 @@ from .layout_radio_items import layout_radio_color_bar_result_type, layout_radio
 from .layout_sliders import layout_urgency_length_slider
 from .layout_upload_dike_files import layout_upload_button
 from .layout_vr_optimalization import dike_vr_optimization_layout
+from ..constants import get_mapbox_token
 from ..plotly_graphs.pf_length_cost import plot_default_scatter_dummy
 from ..plotly_graphs.plotly_maps import plot_default_overview_map_dummy
 
@@ -141,7 +142,7 @@ def layout_tab_four() -> html.Div:
                 style={'width': '130vh', 'height': '60vh', 'border': "2px solid black"},
                 children=[
                     dcc.Graph(id='dike_traject_pf_cost_graph', figure=plot_default_scatter_dummy(),
-                              style={'width': '100%', 'height': '100%'}),
+                              style={'width': '100%', 'height': '100%'}, config={'mapboxAccessToken': get_mapbox_token()}),
                     dcc.Store(id="store_clicked_section", data='all')
                 ],
 
@@ -151,7 +152,7 @@ def layout_tab_four() -> html.Div:
                 style={'width': '130vh', 'height': '30vh', 'border': "2px solid black"},
                 children=[
                     dcc.Graph(id='dike_traject_pf_cost_helping_map', figure=plot_default_overview_map_dummy(),
-                              style={'width': '100%', 'height': '100%'})
+                              style={'width': '100%', 'height': '100%'}, config={'mapboxAccessToken': get_mapbox_token()})
                 ]),
 
         ]

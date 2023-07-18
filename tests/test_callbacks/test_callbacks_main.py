@@ -5,9 +5,12 @@ from pathlib import Path
 
 import pytest
 from dash import html, dcc
+from plotly.graph_objs import Figure
 
 from src.callbacks.callbacks_main_page import upload_and_save_traject_input, make_graph_overview_dike, \
-    make_graph_map_initial_assessment, make_graph_map_measures, make_graph_pf_vs_cost, make_graph_map_urgency
+    make_graph_map_initial_assessment, make_graph_map_measures, make_graph_pf_vs_cost, make_graph_map_urgency, \
+    update_click, render_tab_map_content, toggle_collapse, toggle_collapse3, toggle_collapse2, \
+    update_radio_sub_result_type
 from src.constants import CalcType, ColorBarResultType, Mechanism, SubResultType, ResultType
 
 
@@ -39,7 +42,7 @@ class TestCallback:
 
         # 2. Define callback
         def run_callback():
-            return make_graph_overview_dike(_dike_data, "VEILIGHEIDRENDEMENT")
+            return make_graph_overview_dike(_dike_data)
 
         ctx = copy_context()
         output = ctx.run(run_callback)
@@ -106,7 +109,7 @@ class TestCallback:
         output = ctx.run(run_callback)
 
         # 3. Assert
-        assert isinstance(output, dcc.Graph)
+        assert isinstance(output, Figure)
 
     @pytest.mark.skip(reason="Avoid overcharging MapBox licence")
     def test_make_graph_map_urgency(self):
@@ -123,3 +126,81 @@ class TestCallback:
 
         # 3. Assert
         assert isinstance(output, dcc.Graph)
+
+    def test_update_click(self):
+        # 1. Define data
+        _dike_data = json.load(
+            open(Path(__file__).parent.parent / 'data/Case_38_1_sterker_VZG2/reference' / 'dike_data.json'))
+        _click_data = {'points': [
+            {'curveNumber': 1, 'pointNumber': 40, 'pointIndex': 40, 'x': 103.3, 'y': 3.5, 'customdata': '33A',
+             'bbox': {'x0': 1194.28, 'x1': 1200.28, 'y0': 462.52, 'y1': 468.52}}]}
+
+        # 2. Define callback
+        def run_callback():
+            return update_click(_dike_data, _click_data)
+
+        ctx = copy_context()
+        output = ctx.run(run_callback)
+
+        # 3. Assert
+        assert isinstance(output, Figure)
+
+    # parametrize:
+    @pytest.mark.parametrize("tab_id", ["tab-1", "tab-2", "tab-3", "tab-4", "tab-5"])
+    def test_render_tab_map_content(self, tab_id: str):
+        # 1. Call
+        def run_callback():
+            return render_tab_map_content(tab_id)
+
+        ctx = copy_context()
+        output = ctx.run(run_callback)
+
+        # 2. Assert
+        assert isinstance(output, tuple)
+        assert isinstance(output[0], html.Div)
+        assert isinstance(output[1], list)
+
+    def test_toggle_collapse(self):
+        def run_callback():
+            return toggle_collapse(1, True)
+
+        ctx = copy_context()
+        output = ctx.run(run_callback)
+
+        # 2. Assert
+
+        assert isinstance(output, bool)
+        assert output == False
+
+    def test_toggle_collapse2(self):
+        def run_callback():
+            return toggle_collapse2(1, True)
+
+        ctx = copy_context()
+        output = ctx.run(run_callback)
+
+        # 2. Assert
+
+        assert isinstance(output, bool)
+
+    def test_toggle_collapse3(self):
+        def run_callback():
+            return toggle_collapse3(1, True)
+
+        ctx = copy_context()
+        output = ctx.run(run_callback)
+
+        # 2. Assert
+
+        assert isinstance(output, bool)
+
+    @pytest.mark.parametrize("result_type", [ColorBarResultType.RELIABILITY, ColorBarResultType.COST])
+    def test_update_radio_sub_result_type(self, result_type: ColorBarResultType):
+
+        def run_callback():
+            return update_radio_sub_result_type(result_type.name)
+
+        ctx = copy_context()
+        output = ctx.run(run_callback)
+
+        assert isinstance(output, list)

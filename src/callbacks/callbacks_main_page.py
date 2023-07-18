@@ -1,6 +1,9 @@
-from dash import html, dcc, Output, Input, State
+from pathlib import Path
 
-from src.constants import ColorBarResultType, SubResultType
+from dash import html, dcc, Output, Input, State
+from plotly.graph_objs import Figure
+
+from src.constants import ColorBarResultType, SubResultType, get_mapbox_token
 from src.layouts.layout_main_page import layout_tab_one, layout_tab_two, layout_tab_three, layout_tab_four, \
     layout_tab_five
 from src.layouts.layout_radio_items import layout_radio_calc_type
@@ -10,7 +13,6 @@ from src.plotly_graphs.plotly_maps import plot_overview_map, plot_default_overvi
     plot_dike_traject_reliability_initial_assessment_map, plot_dike_traject_reliability_measures_assessment_map, \
     plot_dike_traject_urgency, dike_traject_pf_cost_helping_map
 from src.app import app
-
 
 @app.callback([Output('output-data-upload-zip', 'children'),
                Output("upload-toast", "is_open"), ],
@@ -41,20 +43,23 @@ def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tup
 
 
 @app.callback(Output('overview_map_div', 'children'),
-              [Input('stored-data', 'data'), Input("select_calculation_type", 'value')])
-def make_graph_overview_dike(dike_traject_data: dict, selected_result_type) -> dcc.Graph:
+              [Input('stored-data', 'data')])
+def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
 
     :param dike_traject_data:
 
     """
+
     if dike_traject_data is None:
         _fig = plot_default_overview_map_dummy()
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
-        _fig = plot_overview_map(_dike_traject, selected_result_type)
-    return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
+        _fig = plot_overview_map(_dike_traject)
+
+    return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'},
+                     config={'mapboxAccessToken': get_mapbox_token()})
 
 
 @app.callback(Output('dike_traject_reliability_map_initial', 'children'),
@@ -80,7 +85,8 @@ def make_graph_map_initial_assessment(dike_traject_data: dict, selected_year: fl
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
         _fig = plot_dike_traject_reliability_initial_assessment_map(_dike_traject, selected_year, result_type,
                                                                     mechanism_type)
-    return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
+    return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'},
+                     config={'mapboxAccessToken': get_mapbox_token()})
 
 
 @app.callback(Output('dike_traject_reliability_map_measures', 'children'),
@@ -114,7 +120,8 @@ def make_graph_map_measures(dike_traject_data: dict, selected_year: float, resul
         _fig = plot_dike_traject_reliability_measures_assessment_map(_dike_traject, selected_year, result_type,
                                                                      calc_type, color_bar_result_type, mechanism_type,
                                                                      sub_result_type)
-    return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
+    return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'},
+                     config={'mapboxAccessToken': get_mapbox_token()})
 
 
 @app.callback(Output('dike_traject_pf_cost_graph', 'figure'),
@@ -162,13 +169,14 @@ def make_graph_map_urgency(dike_traject_data: dict, selected_year: float, length
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
         _fig = plot_dike_traject_urgency(_dike_traject, selected_year, length_urgency, calc_type)
-    return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'})
+    return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'},
+                     config={'mapboxAccessToken': get_mapbox_token()})
 
 
 @app.callback(Output("dike_traject_pf_cost_helping_map", "figure"), Input('stored-data', 'data'),
               Input("dike_traject_pf_cost_graph", "clickData"),
               )
-def update_click(dike_traject_data: dict, click_data: dict):
+def update_click(dike_traject_data: dict, click_data: dict) -> Figure:
     """
     Trigger callback when clicking over the Pf_vs_cost graph. This callback will update the accompanying map of the
     traject by highlighting the selected dike section.
@@ -186,7 +194,8 @@ def update_click(dike_traject_data: dict, click_data: dict):
         return plot_default_overview_map_dummy()
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
-        return dike_traject_pf_cost_helping_map(_dike_traject, click_data["points"][0]["customdata"], click_data["points"][0]["curveNumber"])
+        return dike_traject_pf_cost_helping_map(_dike_traject, click_data["points"][0]["customdata"],
+                                                click_data["points"][0]["curveNumber"])
 
 
 @app.callback(
@@ -224,7 +233,7 @@ def render_tab_map_content(active_tab: str) -> tuple[html.Div, list]:
     [Input("collapse_button_1", "n_clicks")],
     [State("collapse_1", "is_open")],
 )
-def toggle_collapse(n: int, is_open: bool):
+def toggle_collapse(n: int, is_open: bool) -> bool:
     """
     Callback to toggle the collapse of the first section.
     :param n: dummy integer
@@ -241,7 +250,7 @@ def toggle_collapse(n: int, is_open: bool):
     [Input("collapse_button_2", "n_clicks")],
     [State("collapse_2", "is_open")],
 )
-def toggle_collapse2(n: int, is_open: bool):
+def toggle_collapse2(n: int, is_open: bool) -> bool:
     """
     Callback to toggle the collapse of the second section.
     :param n: dummy integer
@@ -258,7 +267,7 @@ def toggle_collapse2(n: int, is_open: bool):
     [Input("collapse_button_3", "n_clicks")],
     [State("collapse_3", "is_open")],
 )
-def toggle_collapse3(n: int, is_open: bool):
+def toggle_collapse3(n: int, is_open: bool) -> bool:
     """
     Callback to toggle the collapse of the second section.
     :param n: dummy integer
@@ -274,7 +283,7 @@ def toggle_collapse3(n: int, is_open: bool):
     Output('select_sub_result_type_measure_map', 'options'),
     Input('select_measure_map_result_type', 'value'),
 )
-def update_radio_sub_result_type(result_type: str) -> dcc:
+def update_radio_sub_result_type(result_type: str) -> list:
     """
     This is a callback to update the sub Radio list depending on the result type selected by the user.
     If the result type is "RELIABILITY" then the sub Radio list will contain the options "Absoluut" and "Ratio vr/dsn".
