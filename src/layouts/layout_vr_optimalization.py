@@ -10,10 +10,10 @@ table_header = [
                         ]))
 ]
 
-row1 = html.Tr([html.Td("01A"), html.Td("Ja"), html.Td("VZG"), html.Td("2025")])
-row2 = html.Tr([html.Td("01B"), html.Td("Nee"), html.Td("VZG"), html.Td("2025")])
-row3 = html.Tr([html.Td("2"), html.Td("Ja"), html.Td("Stabiliteit Scherm"), html.Td("2025")])
-row4 = html.Tr([html.Td("3"), html.Td("Ja"), html.Td("VZG"), html.Td("2045")])
+row1 = html.Tr([html.Td("01A"), html.Td("Aan"), html.Td("VZG"), html.Td("2025")])
+row2 = html.Tr([html.Td("01B"), html.Td("Uit"), html.Td("VZG"), html.Td("2025")])
+row3 = html.Tr([html.Td("2"), html.Td("Aan"), html.Td("Stabiliteit Scherm"), html.Td("2025")])
+row4 = html.Tr([html.Td("3"), html.Td("Aan"), html.Td("VZG"), html.Td("2045")])
 
 
 table_body = [html.Tbody([row1, row2, row3, row4])]

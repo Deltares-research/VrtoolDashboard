@@ -5,7 +5,10 @@ from src.layouts.layout_navigation_bar import nav_bar_layout
 from src.layouts.layout_main_page import make_layout_main_page
 
 from src.app import app
-from src.callbacks import callbacks_main_page  # !!! KEEP THIS LINE !!!
+# !!! Keep lines below to add callbacks to app !!!
+from src.callbacks.traject_page import callbacks_main_page
+from src.callbacks.traject_page import callback_tabs_switch
+from src.callbacks.traject_page import callbacks_tab_content
 
 # Define the app layout
 app.layout = dbc.Container(
