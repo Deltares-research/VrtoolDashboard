@@ -6,11 +6,11 @@ import numpy as np
 import plotly.graph_objects as go
 from matplotlib import pyplot as plt, colors
 
-from src.constants import REFERENCE_YEAR, ColorBarResultType, Mechanism, SubResultType, CalcType, ResultType
+from src.constants import REFERENCE_YEAR, ColorBarResultType, Mechanism, SubResultType, CalcType, ResultType, ONDERGRENS
 from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject
 from src.utils.gws_convertor import GWSRDConvertor
-from src.utils.utils import to_million_euros, beta_to_pf
+from src.utils.utils import to_million_euros, beta_to_pf, pf_to_beta
 
 color_dict = {""}
 
@@ -276,7 +276,8 @@ def add_section_trace(fig: go.Figure, section: DikeSection, name: str, color: st
         showlegend=showlegend))
 
 
-def dike_traject_pf_cost_helping_map(dike_traject: DikeTraject, clicked_section_name: str, curve_number: int) -> go.Figure:
+def dike_traject_pf_cost_helping_map(dike_traject: DikeTraject, clicked_section_name: str,
+                                     curve_number: int) -> go.Figure:
     fig = go.Figure()
 
     for section in dike_traject.dike_sections:
@@ -344,38 +345,42 @@ def add_colorscale_bar(fig: go.Figure, result_type: str, colorbar_result_type: s
 
     if colorbar_result_type == ColorBarResultType.RELIABILITY.name and result_type == ResultType.PROBABILITY.name \
             and sub_result_type == SubResultType.ABSOLUTE.name:
+        beta_ondergrsns = pf_to_beta(ONDERGRENS)
+        # This colorbar is centered around pf 1/10000
         marker = dict(
             colorscale='RdYlGn',
             colorbar=dict(
                 title="Faalkans",
                 titleside='right',
                 tickmode='array',
-                tickvals=[2.3263478740408408, 3.090232306167813, 3.7190164854556804, 4.264890793922825,
+                tickvals=[2.3263478740408408, 3.090232306167813, beta_ondergrsns, 4.264890793922825,
                           4.753424308822899],
                 ticktext=['1e-2', '1e-3', '1e-4', '1e-5', '1e-6'],
                 ticks='outside',
                 len=0.5,
             ),
             showscale=True,
-            cmin=2,
-            cmax=5,
+            cmin=beta_ondergrsns - 1.5,
+            cmax=beta_ondergrsns + 1.5
         )
     elif colorbar_result_type == ColorBarResultType.RELIABILITY.name and result_type == ResultType.RELIABILITY.name \
             and sub_result_type == SubResultType.ABSOLUTE.name:
+        beta_ondergrsns = pf_to_beta(ONDERGRENS)
+
         marker = dict(
             colorscale='RdYlGn',
             colorbar=dict(
                 title="Betrouwbaarheid index",
                 titleside='right',
                 tickmode='array',
-                tickvals=[2, 3, 4, 5],
-                ticktext=['2', '3', '4', '5'],
+                tickvals=[2, 3, beta_ondergrsns, 4, 5],
+                ticktext=['2', '3', str(round(beta_ondergrsns, 1)), '4', '5'],
                 ticks='outside',
                 len=0.5,
             ),
             showscale=True,
-            cmin=2,
-            cmax=5,
+            cmin=beta_ondergrsns - 1.5,
+            cmax=beta_ondergrsns + 1.5
         )
     elif colorbar_result_type == ColorBarResultType.RELIABILITY.name and sub_result_type == SubResultType.RATIO.name:
         marker = dict(
@@ -467,7 +472,10 @@ def get_reliability_color(reliability_value: float) -> str:
     :param reliability_value:
     :return:
     """
-    return get_color(reliability_value, plt.cm.RdYlGn, 2, 5)
+    beta_ondergrsns = pf_to_beta(ONDERGRENS)
+    cmin = beta_ondergrsns - 1.5  # corresponds to pf=1/100
+    cmax = beta_ondergrsns + 1.5  # corresponds to pf=1/100000
+    return get_color(reliability_value, plt.cm.RdYlGn, cmin, cmax)
 
 
 def get_probability_ratio_color(probability_ratio: float) -> str:
@@ -564,7 +572,6 @@ def get_color_hover_absolute_cost(section: DikeSection, beta_section: float, mea
 
 
 def get_color_hover_difference_cost(section: DikeSection) -> Tuple[str, str]:
-
     if section.final_measure_veiligheidrendement is None or section.final_measure_doorsnede is None:
         _color = 'grey'
         _hovertemplate = f'Vaknaam {section.name}<br>' \
