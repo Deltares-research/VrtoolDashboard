@@ -227,13 +227,13 @@ def plot_dike_traject_urgency(dike_traject: DikeTraject, selected_year: float, l
 
         if cum_length < 5000:  # first 5 km
             _color = "#f46e88"
-            _group = "<5km"
+            _group = "0-5km"
         elif cum_length < 10000:  # next 5 km
             _color = '#94a329'
-            _group = "<10km"
+            _group = "5-10km"
         elif cum_length < 15000:  # next 5 km
             _color = '#a38af6'
-            _group = "<15km"
+            _group = "10-15km"
         else:  # last 5 km
             _color = 'yellow'
             _group = ">15km"

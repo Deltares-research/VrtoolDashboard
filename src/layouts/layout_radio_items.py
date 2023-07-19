@@ -23,7 +23,7 @@ layout_radio_color_bar_result_type = dbc.RadioItems(
 
 )
 
-layout_radio_result_type = dcc.RadioItems(
+layout_radio_result_type = dbc.RadioItems(
     id="select_result_type",
     options=[
         {"label": ResultType.RELIABILITY.value, "value": ResultType.RELIABILITY.name},
@@ -57,7 +57,7 @@ layout_radio_mechanism = dbc.RadioItems(
     style={'width': '40vh', "height": "6vh", "margin-top": "2px"}
 )
 
-layout_radio_sub_type_result = dcc.RadioItems(
+layout_radio_sub_type_result = dbc.RadioItems(
     id='select_sub_result_type_measure_map',
     options=[],
     value=SubResultType.ABSOLUTE.name,
