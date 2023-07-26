@@ -27,9 +27,7 @@ def get_database():
 
     # Query the database
     traject = get_dike_traject(_traject)
-    section = traject.sections[0].name
     print(traject)
-    print(section)
     return
 
 
