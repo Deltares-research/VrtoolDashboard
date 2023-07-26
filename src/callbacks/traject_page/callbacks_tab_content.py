@@ -1,13 +1,38 @@
+from pathlib import Path
+
 from dash import dcc, Output, Input
 from plotly.graph_objs import Figure
+from vrtool.defaults.vrtool_config import VrtoolConfig
 
 from src.constants import get_mapbox_token
 from src.linear_objects.dike_traject import DikeTraject
+from src.orm.import_database import get_dike_traject
 from src.plotly_graphs.pf_length_cost import plot_pf_length_cost, plot_default_scatter_dummy
 from src.plotly_graphs.plotly_maps import plot_overview_map, plot_default_overview_map_dummy, \
     plot_dike_traject_reliability_initial_assessment_map, plot_dike_traject_reliability_measures_assessment_map, \
     plot_dike_traject_urgency, dike_traject_pf_cost_helping_map
 from src.app import app
+
+from peewee import *
+
+
+
+def get_database():
+    _casename, _traject = "testcase", "38-1"
+
+    _test_config = VrtoolConfig()
+    _test_config.traject = _traject
+    _test_config.input_database_path = Path(r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_38_1_miniset\vrtool_input.db")
+
+
+    # Query the database
+    traject = get_dike_traject(_traject)
+    section = traject.sections[0].name
+    print(traject)
+    print(section)
+    return
+
+
 @app.callback(Output('overview_map_div', 'children'),
               [Input('stored-data', 'data')])
 def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
@@ -17,6 +42,8 @@ def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
     :param dike_traject_data:
 
     """
+
+    traject = get_database()
 
     if dike_traject_data is None:
         _fig = plot_default_overview_map_dummy()

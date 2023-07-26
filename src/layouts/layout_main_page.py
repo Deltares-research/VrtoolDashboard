@@ -1,5 +1,6 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
+from dash.dash_table import DataTable
 
 from .layout_collasping_menus import make_collapsing_menu
 from .layout_dike_settings import dike_settings_layout
@@ -81,9 +82,11 @@ def layout_tab_one() -> html.Div:
     return html.Div(
         children=[
             html.H2("Overzicht Kaart"),
+            DataTable(id='table',),
             html.Div("De onderstaande kaart geeft basisinformatie weer over het geïmporteerde dijktraject."),
             html.Div(id='overview_map_div',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
+
         ])
 
 
