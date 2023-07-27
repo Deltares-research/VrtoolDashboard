@@ -27,7 +27,6 @@ def get_database() -> DikeTraject:
 
     # Query the database
     traject = get_dike_traject(_traject)
-    print(traject)
     return traject
 
 

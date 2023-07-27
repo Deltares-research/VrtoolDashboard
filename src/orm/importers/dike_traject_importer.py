@@ -2,13 +2,14 @@ from pathlib import Path
 
 from geopandas import GeoDataFrame
 from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol
-from vrtool.orm.models import SectionData
+from vrtool.orm.models import SectionData, MeasurePerSection
 
 from src.constants import SIGNALERING, ONDERGRENS
 from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject
 
 from src.orm.importers.dike_section_importer import DikeSectionImporter
+from src.orm.models import GreedyOptimizationOrder, TargetReliabilityBasedOrder, ModifiedMeasure
 from src.orm.models.dike_traject_info import DikeTrajectInfo
 
 import geopandas as gpd
@@ -16,7 +17,6 @@ import geopandas as gpd
 
 class DikeTrajectImporter(OrmImporterProtocol):
     path_dir: Path
-    path_geojson: Path
 
     def __init__(self, path_dir) -> None:
         self.path_dir = path_dir
@@ -44,7 +44,29 @@ class DikeTrajectImporter(OrmImporterProtocol):
 
         return _traject_gdf[["geometry", "section_name"]]
 
+    def _get_reinforcement_order(self, assessment_type: str) -> list[str]:
+        """
+        Get the reinforcement order for the given assessment type
+        :param assessment_type: one of "GreedyOptimizationBased" or "TargetReliabilityBased"
+        :return:
+        """
+
+        _order_table = GreedyOptimizationOrder if assessment_type == "GreedyOptimizationBased" else TargetReliabilityBasedOrder
+
+        _ordered_sections = []
+        for row in _order_table.select().order_by(_order_table.optimization_step):
+            _modified_measure = ModifiedMeasure.get(ModifiedMeasure.id == row.modified_measure_id)
+
+            _measure_per_section = MeasurePerSection.get(
+                MeasurePerSection.id == _modified_measure.measure_per_section_id)
+
+            _section = SectionData.get(SectionData.id == _measure_per_section.section_id)
+            _ordered_sections.append(_section.section_name)
+
+        return _ordered_sections
+
     def import_orm(self, orm_model) -> DikeTraject:
+        """Import a DikeTraject object from the ORM """
         _traject_name = orm_model.DikeTrajectInfo.get(orm_model.DikeTrajectInfo.traject_name == "38-1").traject_name
         _traject_id = DikeTrajectInfo.get(DikeTrajectInfo.traject_name == _traject_name).id
         _traject_geojson = DikeTrajectInfo.get(DikeTrajectInfo.traject_name == _traject_name).name_geojson
@@ -61,5 +83,7 @@ class DikeTrajectImporter(OrmImporterProtocol):
         _traject_gdf = self.parse_geo_dataframe(_traject_geojson)
 
         _dike_traject.dike_sections = self._import_dike_section_list(_selected_sections, _traject_gdf)
+        _dike_traject.reinforcement_order_vr = self._get_reinforcement_order("GreedyOptimizationBased")
+        _dike_traject.reinforcement_order_dsn = self._get_reinforcement_order("TargetReliabilityBased")
 
         return _dike_traject

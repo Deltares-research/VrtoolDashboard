@@ -148,6 +148,7 @@ class DikeSectionImporter(OrmImporterProtocol):
         return _coordinates
 
     def import_orm(self, orm_model: SectionData) -> DikeSection:
+        """ Import a SectionData ORM model into a DikeSection object"""
         if not orm_model:
             raise ValueError(f"No valid value given for {SectionData.__name__}.")
 
