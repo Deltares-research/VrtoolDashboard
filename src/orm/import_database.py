@@ -16,10 +16,11 @@ def get_dike_traject(traject_name: str):
     """
     Returns a dike traject with all the required section data.
     """
+    _path_dir = Path(r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_38_1_miniset")
+    _path_database = _path_dir.joinpath("vrtool_input.db")
 
-    _path_database = Path(r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_38_1_miniset\vrtool_input.db")
     open_database(_path_database)
 
-    _dike_traject = DikeTrajectImporter().import_orm(orm_model)
+    _dike_traject = DikeTrajectImporter(_path_dir).import_orm(orm_model)
     # vrtool_db.close()
     return _dike_traject

@@ -12,9 +12,7 @@ class MeasureCost(OrmBaseModel):
     modified_measure = ForeignKeyField(
         MechanismPerSection, backref="measure_cost"
     )
-    time = IntegerField()
-    mechanism = CharField(max_length=_max_char_length)
-    beta = FloatField()
+    cost = FloatField()
 
     class Meta:
         table_name = _get_table_name(__qualname__)

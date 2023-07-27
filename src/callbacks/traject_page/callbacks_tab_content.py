@@ -17,7 +17,7 @@ from peewee import *
 
 
 
-def get_database():
+def get_database() -> DikeTraject:
     _casename, _traject = "testcase", "38-1"
 
     _test_config = VrtoolConfig()
@@ -28,7 +28,7 @@ def get_database():
     # Query the database
     traject = get_dike_traject(_traject)
     print(traject)
-    return
+    return traject
 
 
 @app.callback(Output('overview_map_div', 'children'),
@@ -44,7 +44,9 @@ def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
     traject = get_database()
 
     if dike_traject_data is None:
-        _fig = plot_default_overview_map_dummy()
+        # _fig = plot_default_overview_map_dummy()
+        _dike_traject = traject
+        _fig = plot_overview_map(_dike_traject)
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
         _fig = plot_overview_map(_dike_traject)

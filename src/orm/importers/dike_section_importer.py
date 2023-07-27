@@ -1,97 +1,173 @@
-from __future__ import annotations
+from geopandas import GeoDataFrame
 
-import logging
-from pathlib import Path
-
-import pandas as pd
-
-from vrtool.flood_defence_system.mechanism_reliability_collection import (
-    MechanismReliabilityCollection,
-)
-from vrtool.flood_defence_system.section_reliability import SectionReliability
-from vrtool.orm.io.importers.mechanism_reliability_collection_importer import (
-    MechanismReliabilityCollectionImporter,
-)
 from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol
-from vrtool.orm.io.importers.water_level_importer import WaterLevelImporter
+from vrtool.orm.models import Mechanism, MechanismPerSection, ComputationScenario, MeasurePerSection, Measure
 from vrtool.orm.models.section_data import SectionData
 
 from src.linear_objects.dike_section import DikeSection
+from src.orm.models import ComputationScenarioResult, GreedyOptimizationOrder, ModifiedMeasure, MeasureCost, \
+    MeasureReliability, TargetReliabilityBasedOrder
 
 
 class DikeSectionImporter(OrmImporterProtocol):
-    input_directory: Path
-    selected_mechanisms: list[str]
-    computation_years: list[int]
-    t_0: int
-    externals: Path
+    traject_gdf: GeoDataFrame
+    assessment_time: list[int]
 
-    def __init__(self) -> DikeSectionImporter:
-        pass
+    def __init__(self, traject_gdf: GeoDataFrame):
+        self.traject_gdf = traject_gdf
 
-    def _get_mechanism_reliability_collection_list(
-        self, section_data: SectionData
-    ) -> list[MechanismReliabilityCollection]:
-        _importer = MechanismReliabilityCollectionImporter(self._config)
-        _mechanism_data = []
-        for _mechanism_per_section in section_data.mechanisms_per_section:
-            if not any(_mechanism_per_section.computation_scenarios):
-                logging.error(
-                    "No computation scenarios available for Section {} - Mechanism: {}".format(
-                        _mechanism_per_section.section.section_name,
-                        _mechanism_per_section.mechanism.name,
-                    )
-                )
-            else:
-                _mechanism_data.append(_importer.import_orm(_mechanism_per_section))
-        return _mechanism_data
+    def _get_initial_assessment(self,
+                                section_data: SectionData,
+                                ) -> dict:
+        """
+        Get the initial assessment of a section based on the table ComputationScenarioResult
+        :param section_data:
+        :return:
+        """
+        _initial_assessment = {}
+        _section_id = section_data.id
 
-    def _get_mechanism_data(
-        self, section_data: SectionData
-    ) -> dict[str, tuple[str, str]]:
-        _mechanism_data = {}
-        for _mechanism_per_section in section_data.mechanisms_per_section:
-            _available_cs = []
-            for _cs in _mechanism_per_section.computation_scenarios:
-                _available_cs.append((_cs.scenario_name, _cs.computation_type.name))
-            _mechanism_data[_mechanism_per_section.mechanism.name] = _available_cs
-        return _mechanism_data
+        for mechanism in ["Overflow", "StabilityInner", "Piping", "Section"]:
 
-    def _get_section_reliability(
-        self,
-        section_data: SectionData,
-    ) -> SectionReliability:
-        _section_reliability = SectionReliability()
+            if mechanism == "Section":  # TODO: handle this case
+                continue
+            elif mechanism == "Piping":  # TODO: multiple mechanism_per_section for the same computation_type_id. so what now???
+                # How to aggregate all the piping scenarios into a single beta?
+                # Should VRCore handle this and only wirte a single piping beta in the table ComputationScenarioResult?
+                continue
 
-        _section_reliability.load = WaterLevelImporter(gridpoints=1000).import_orm(
-            section_data
-        )
+            _mechanism_id = Mechanism.get(Mechanism.name == mechanism).id
+            _mechanism_per_section_id = MechanismPerSection.get(
+                (MechanismPerSection.section == _section_id) & (MechanismPerSection.mechanism == _mechanism_id)).id
+            _computation_scenario_id = ComputationScenario.get(
+                ComputationScenario.mechanism_per_section == _mechanism_per_section_id).id
 
-        _mechanism_collection = self._get_mechanism_reliability_collection_list(
-            section_data
-        )
-        for _mechanism_data in _mechanism_collection:
-            _section_reliability.failure_mechanisms.add_failure_mechanism_reliability_collection(
-                _mechanism_data
-            )
+            _query_betas = (ComputationScenarioResult
+                            .select(ComputationScenarioResult.year, ComputationScenarioResult.beta)
+                            .where(ComputationScenarioResult.computation_scenario_id == _computation_scenario_id)
+                            .order_by(ComputationScenarioResult.year))
 
-        return _section_reliability
+            _initial_assessment[mechanism] = [row.beta for row in _query_betas]
+
+        return _initial_assessment
+
+    def _get_taken_measure_modified_measure_id(self, section_id: int, assessment_type: str) -> int:
+        """
+        Get the corresponding ModifiedMeasure id for the section_id in either the GreedyOptimizationOrder or
+        TargetReliaiblityBasedOrder table
+        :param section_id: id of the Section of interest, for this id there should be one matching row in the
+        Order table
+        :param assessment_type: one of TargetReliabilityBased (doorsnede-eis) or
+         GreedyOptimizationBased (veiligheidrendement))
+        :return:
+        """
+
+        order_table = GreedyOptimizationOrder if assessment_type == "GreedyOptimizationBased" else TargetReliabilityBasedOrder
+
+        for row in order_table.select():
+            _modified_measure = ModifiedMeasure.get(ModifiedMeasure.id == row.modified_measure_id)
+
+            _measure_per_section = MeasurePerSection.get(
+                MeasurePerSection.id == _modified_measure.measure_per_section_id)
+
+            _section = SectionData.get(SectionData.id == _measure_per_section.section_id)
+            if _section.id == section_id:
+                return _modified_measure.id
+        raise ValueError(f"No match found for Section id={section_id} in {assessment_type} table")
+
+    def _get_measure_name(self, modified_measure_id: int) -> str:
+        """
+        Get the corresponding measure name from the ModifiedMeasure id
+        :param modified_measure_id:
+        :return:
+        """
+
+        _measure_per_section_id = ModifiedMeasure.get(ModifiedMeasure.id == modified_measure_id).measure_per_section_id
+        _measure_id = MeasurePerSection.get(MeasurePerSection.id == _measure_per_section_id).measure_id
+        _measure_name = Measure.get(Measure.id == _measure_id).name
+        return _measure_name
+
+    def _get_final_measure(self, section_data: SectionData, assessment_type: str) -> dict:
+        """
+
+        :param section_data:
+        :param assessment_type: one of TargetReliabilityBased or GreedyOptimizationBased
+        :return:
+        """
+
+        _final_measure = {}
+        _section_id = section_data.id
+
+        _modified_measure_id = self._get_taken_measure_modified_measure_id(_section_id, assessment_type)
+
+        _total_cost = MeasureCost.get(MeasureCost.modified_measure == _modified_measure_id).cost
+        _dberm = ModifiedMeasure.get(ModifiedMeasure.id == _modified_measure_id).dberm
+        _dcrest = ModifiedMeasure.get(ModifiedMeasure.id == _modified_measure_id).dcrest
+
+        _final_measure["total_cost"] = _total_cost
+        _final_measure["name"] = self._get_measure_name(_modified_measure_id)
+        _final_measure["dberm"] = _dberm
+        _final_measure["dcrest"] = _dcrest
+
+        for mechanism in ["Overflow", "StabilityInner", "Piping", "Section"]:
+
+            if mechanism == "Section":  # TODO: handle this case
+                continue
+            elif mechanism == "Piping":  # TODO: multiple mechanism_per_section for the same computation_type_id. so what now???
+                # How to aggregate all the piping scenarios into a single beta?
+                # Should VRCore handle this and only write a single piping beta in the table ComputationScenarioResult?
+                continue
+            _query_betas = (MeasureReliability
+                            .select(MeasureReliability.time, MeasureReliability.beta, MeasureReliability.id)
+                            .where((MeasureReliability.modified_measure == _modified_measure_id) & (
+                    MeasureReliability.mechanism == mechanism))
+                            # .order_by(MeasureReliability.time)
+                            )
+
+            _final_measure[mechanism] = [row.beta for row in _query_betas]
+
+        self.__setattr__("assessment_time", [row.time for row in _query_betas])
+        return _final_measure
+
+    def _get_coordinates(self, section_data: SectionData) -> list[tuple[float, float]]:
+        """
+        Get the RD coordinates of the section
+        :param section_data:
+        :return:
+        """
+        # Get the coordinates of the section
+
+        _section_name = section_data.section_name
+        # check if the section name is in the traject_gdf
+        if _section_name not in self.traject_gdf["section_name"].values:
+            raise ValueError(
+                f"Section name {_section_name} not found in traject_gdf, try renaming the section 0{_section_name} in the database.")
+
+        _coordinates = self.traject_gdf[self.traject_gdf["section_name"] == _section_name].geometry.iloc[0]
+
+        return _coordinates
 
     def import_orm(self, orm_model: SectionData) -> DikeSection:
         if not orm_model:
             raise ValueError(f"No valid value given for {SectionData.__name__}.")
 
-        print('orm_model SectionData: ', orm_model, type(orm_model))
-        print(orm_model.section_name)
         _dike_section = DikeSection(name=orm_model.section_name,
                                     coordinates_rd=[],
                                     in_analyse=True,
                                     )
+
+        # years: list[int]  # Years for which a reliability result is available (both for initial and measures)
         _dike_section.name = orm_model.section_name
-        print(_dike_section.name)
-        # # TODO: Not entirely sure mechanism_data is correctly set. Technically should not be needed anymore.
-        # _dike_section.mechanism_data = self._get_mechanism_data(orm_model)
-        # _dike_section.section_reliability = self._get_section_reliability(orm_model)
-        # _dike_section.Length = orm_model.section_length
+        _dike_section.length = orm_model.section_length
+        _dike_section.coordinates_rd = self._get_coordinates(orm_model)
+        _dike_section.in_analyse = orm_model.in_analysis
+        _dike_section.is_reinforced = True  # TODO remove this argument?
+        _dike_section.final_measure_veiligheidrendement = self._get_final_measure(orm_model,
+                                                                                  assessment_type="GreedyOptimizationBased")
+        _dike_section.final_measure_doorsnede = self._get_final_measure(orm_model,
+                                                                        assessment_type="TargetReliabilityBased")
+
+        _dike_section.initial_assessment = self._get_initial_assessment(orm_model)
+        _dike_section.years = self.assessment_time
 
         return _dike_section
