@@ -6,10 +6,6 @@ from src.orm.importers.dike_traject_importer import DikeTrajectImporter
 from src.orm import models as orm_model
 
 
-
-
-
-
 def get_dike_traject_from_ORM(traject_name: str) -> DikeTraject:
     """
     Returns a DikeTraject object with all the required data from the ORM for the specified traject.

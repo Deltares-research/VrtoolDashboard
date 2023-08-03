@@ -70,13 +70,15 @@ class DikeTrajectImporter(OrmImporterProtocol):
         _traject_name = orm_model.DikeTrajectInfo.get(orm_model.DikeTrajectInfo.traject_name == "38-1").traject_name
         _traject_id = DikeTrajectInfo.get(DikeTrajectInfo.traject_name == _traject_name).id
         _traject_geojson = DikeTrajectInfo.get(DikeTrajectInfo.traject_name == _traject_name).name_geojson
+        _traject_p_signal = DikeTrajectInfo.get(DikeTrajectInfo.traject_name == _traject_name).p_signal
+        _traject_p_lower_bound = DikeTrajectInfo.get(DikeTrajectInfo.traject_name == _traject_name).p_max
 
         _dike_traject = DikeTraject(name=_traject_name,
                                     dike_sections=[],
                                     reinforcement_order_vr=[],
                                     reinforcement_order_dsn=[],
-                                    signalering_value=SIGNALERING,
-                                    lower_bound_value=ONDERGRENS)
+                                    signalering_value=_traject_p_signal,
+                                    lower_bound_value=_traject_p_lower_bound)
         _selected_sections = orm_model.SectionData.select().where(
             SectionData.dike_traject == _traject_id
         )
