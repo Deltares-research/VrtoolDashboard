@@ -33,7 +33,7 @@ class DikeSectionImporter(OrmImporterProtocol):
                 continue
             elif mechanism == "Piping":  # TODO: multiple mechanism_per_section for the same computation_type_id. so what now???
                 # How to aggregate all the piping scenarios into a single beta?
-                # Should VRCore handle this and only wirte a single piping beta in the table ComputationScenarioResult?
+                # Should VRCore handle this and only write a single piping beta in the table ComputationScenarioResult?
                 continue
 
             _mechanism_id = Mechanism.get(Mechanism.name == mechanism).id
@@ -104,7 +104,7 @@ class DikeSectionImporter(OrmImporterProtocol):
         _dberm = ModifiedMeasure.get(ModifiedMeasure.id == _modified_measure_id).dberm
         _dcrest = ModifiedMeasure.get(ModifiedMeasure.id == _modified_measure_id).dcrest
 
-        _final_measure["total_cost"] = _total_cost
+        _final_measure["LCC"] = _total_cost
         _final_measure["name"] = self._get_measure_name(_modified_measure_id)
         _final_measure["dberm"] = _dberm
         _final_measure["dcrest"] = _dcrest

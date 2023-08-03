@@ -1,23 +1,24 @@
 from pathlib import Path
 from vrtool.orm.orm_controllers import open_database
 
+from src.linear_objects.dike_traject import DikeTraject
 from src.orm.importers.dike_traject_importer import DikeTrajectImporter
-from src.orm.orm_db import vrtool_db
 from src.orm import models as orm_model
-#
-
-
-# TODO: custom DikeTrajectImporter for the Dashboard
-# TODO: this include Importe for each new table and instanticate the classes of the Dashboard.
 
 
 
-def get_dike_traject(traject_name: str):
+
+
+
+def get_dike_traject_from_ORM(traject_name: str) -> DikeTraject:
     """
-    Returns a dike traject with all the required section data.
+    Returns a DikeTraject object with all the required data from the ORM for the specified traject.
+
+    :param traject_name: The name of the traject to be imported.
     """
     _path_dir = Path(r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_38_1_miniset")
-    _path_database = _path_dir.joinpath("vrtool_input.db")
+    # _path_database = _path_dir.joinpath("vrtool_input.db")
+    _path_database = _path_dir.joinpath("vrtool_input_with_sections.db")
 
     open_database(_path_database)
 

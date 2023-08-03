@@ -4,7 +4,7 @@ import dash_bootstrap_components as dbc
 
 
 layout_upload_button = html.Div([
-
+        dbc.Select(id='selection_traject_name', options=[{"label": "38-1", "value": "38-1"}]),
         dcc.Upload(
             id='upload-data-zip',
             children=html.Div([

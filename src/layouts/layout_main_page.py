@@ -34,7 +34,7 @@ def make_layout_main_page() -> dbc.Row:
                             '''
                         ),
 
-                        make_collapsing_menu(menu_name='Download',
+                        make_collapsing_menu(menu_name='Traject selectie',
                                              collapse_id=1,
                                              inner_layouts=[layout_upload_button]),
 
