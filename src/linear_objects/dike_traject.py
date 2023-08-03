@@ -76,6 +76,8 @@ class DikeTraject(BaseLinearObject):
             'dike_sections': [section.serialize() for section in self.dike_sections],
             'reinforcement_order_vr': self.reinforcement_order_vr,
             'reinforcement_order_dsn': self.reinforcement_order_dsn,
+            'signalering_value': self.signalering_value,
+            'lower_bound_value': self.lower_bound_value,
         }
 
     @staticmethod
@@ -89,8 +91,8 @@ class DikeTraject(BaseLinearObject):
                            dike_sections=sections,
                            reinforcement_order_vr=data['reinforcement_order_vr'],
                            reinforcement_order_dsn=data['reinforcement_order_dsn'],
-                           signalering_value=SIGNALERING,
-                           lower_bound_value=ONDERGRENS)
+                           signalering_value=data["signalering_value"],
+                           lower_bound_value=data["lower_bound_value"])
 
     def calc_traject_probability_array(self, calc_type: str):
 
