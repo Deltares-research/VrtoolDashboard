@@ -90,7 +90,7 @@ class DikeTraject(BaseLinearObject):
                            reinforcement_order_vr=data['reinforcement_order_vr'],
                            reinforcement_order_dsn=data['reinforcement_order_dsn'],
                            signalering_value=SIGNALERING,
-                           lower_bound_value=ONDERGRENS,)
+                           lower_bound_value=ONDERGRENS)
 
     def calc_traject_probability_array(self, calc_type: str):
 

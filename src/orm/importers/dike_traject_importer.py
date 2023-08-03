@@ -4,7 +4,6 @@ from geopandas import GeoDataFrame
 from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol
 from vrtool.orm.models import SectionData, MeasurePerSection
 
-from src.constants import SIGNALERING, ONDERGRENS
 from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject
 
