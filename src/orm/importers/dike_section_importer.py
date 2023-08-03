@@ -29,12 +29,12 @@ class DikeSectionImporter(OrmImporterProtocol):
 
         for mechanism in ["Overflow", "StabilityInner", "Piping", "Section"]:
 
-            if mechanism == "Section":  # TODO: handle this case
-                continue
-            elif mechanism == "Piping":  # TODO: multiple mechanism_per_section for the same computation_type_id. so what now???
-                # How to aggregate all the piping scenarios into a single beta?
-                # Should VRCore handle this and only write a single piping beta in the table ComputationScenarioResult?
-                continue
+            # TODO: multiple mechanism_per_section for the same computation_type_id. commented to avoid crashes
+
+            # if mechanism == "Piping":
+            #     # How to aggregate all the piping scenarios into a single beta?
+            #     # Should VRCore handle this and only write a single piping beta in the table ComputationScenarioResult?
+            #     continue
 
             _mechanism_id = Mechanism.get(Mechanism.name == mechanism).id
             _mechanism_per_section_id = MechanismPerSection.get(
@@ -111,12 +111,11 @@ class DikeSectionImporter(OrmImporterProtocol):
 
         for mechanism in ["Overflow", "StabilityInner", "Piping", "Section"]:
 
-            if mechanism == "Section":  # TODO: handle this case
-                continue
-            elif mechanism == "Piping":  # TODO: multiple mechanism_per_section for the same computation_type_id. so what now???
-                # How to aggregate all the piping scenarios into a single beta?
-                # Should VRCore handle this and only write a single piping beta in the table ComputationScenarioResult?
-                continue
+            # TODO: multiple mechanism_per_section for the same computation_type_id. commented to avoid crashes
+            # elif mechanism == "Piping":
+            #     # How to aggregate all the piping scenarios into a single beta?
+            #     # Should VRCore handle this and only write a single piping beta in the table ComputationScenarioResult?
+            #     continue
             _query_betas = (MeasureReliability
                             .select(MeasureReliability.time, MeasureReliability.beta, MeasureReliability.id)
                             .where((MeasureReliability.modified_measure == _modified_measure_id) & (
