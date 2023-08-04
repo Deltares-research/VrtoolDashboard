@@ -1,11 +1,7 @@
-from pathlib import Path
-
 from dash import dcc, Output, Input
 from plotly.graph_objs import Figure
-from vrtool.defaults.vrtool_config import VrtoolConfig
 
 from src.constants import get_mapbox_token
-from src.linear_objects.dike_traject import DikeTraject
 from src.orm.import_database import get_dike_traject_from_ORM
 from src.plotly_graphs.pf_length_cost import plot_pf_length_cost, plot_default_scatter_dummy
 from src.plotly_graphs.plotly_maps import plot_overview_map, plot_default_overview_map_dummy, \
