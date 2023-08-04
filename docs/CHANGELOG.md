@@ -19,6 +19,23 @@ None.
 ### Fixed
 None.
 
+## v0.2.1 [04/08/2023]
+
+### Added
+None.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+small bug fixes
+
 ## v0.2.0 [04/08/2023]
 
 ### Added
