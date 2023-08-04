@@ -5,6 +5,7 @@ from typing import Tuple
 import numpy as np
 import plotly.graph_objects as go
 from matplotlib import pyplot as plt, colors
+from shapely import LineString
 
 from src.constants import REFERENCE_YEAR, ColorBarResultType, Mechanism, SubResultType, CalcType, ResultType, ONDERGRENS
 from src.linear_objects.dike_section import DikeSection
@@ -138,6 +139,11 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
 
     """
     fig = go.Figure()
+
+    if colorbar_result_type == ColorBarResultType.MEASURE.name:
+        # In this case, returns a totally different figure
+        return plot_dike_traject_measures_map(dike_traject, sub_result_type, calc_type)
+
     for section in dike_traject.dike_sections:
 
         # if a section is not in analyse, skip it, and it turns blank on the map.
@@ -152,7 +158,6 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
 
             _year_index = bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
             _beta_section = get_beta(_measure_results, _year_index, mechanism_type)
-
             if colorbar_result_type == ColorBarResultType.RELIABILITY.name and sub_result_type == SubResultType.ABSOLUTE.name:
                 _color, _hovertemplate = get_color_hover_absolute_reliability(section, _beta_section, _measure_results)
 
@@ -164,9 +169,6 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
 
             elif colorbar_result_type == ColorBarResultType.COST.name and sub_result_type == SubResultType.DIFFERENCE.name:
                 _color, _hovertemplate = get_color_hover_difference_cost(section)
-
-            elif colorbar_result_type == ColorBarResultType.MEASURE.name:
-                raise NotImplementedError("This result type is not implemented yet")
 
             else:
                 raise ValueError("Wrong combination of settings? or not implemented yet")
@@ -254,6 +256,190 @@ def plot_dike_traject_urgency(dike_traject: DikeTraject, selected_year: float, l
     update_layout_map_box(fig, _middle_point)
 
     return fig
+
+
+def plot_dike_traject_measures_map(dike_traject: DikeTraject, subresult_type: str, calc_type: str):
+    fig = go.Figure()
+    _legend_display = {"2025": True, "2045": True, "VZG": True, "screen": True, "diaphram wall": True,
+                       "crest_heightening": True, "berm_widening": True}
+    for section in dike_traject.dike_sections:
+
+        # if a section is not in analyse, skip it, and it turns blank on the map.
+        if not section.in_analyse:
+            continue
+
+        _measure_results = section.final_measure_veiligheidrendement if calc_type == CalcType.VEILIGHEIDRENDEMENT.name else section.final_measure_doorsnede
+
+        if _measure_results is not None:
+            if subresult_type == SubResultType.MEASURE_TYPE.name:
+                add_measure_type_trace(fig, section, _measure_results, _legend_display)
+
+            elif subresult_type == SubResultType.CREST_HIGHTENING.name:
+                add_measure_crest_heightening_trace(fig, section, _measure_results)
+
+            elif subresult_type == SubResultType.BERM_WIDENING.name:
+                add_measure_berm_widening_trace(fig, section, _measure_results)
+
+    _middle_point = get_middle_point(dike_traject.dike_sections)
+    update_layout_map_box(fig, _middle_point)
+
+    return fig
+
+
+def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results: dict, legend_display: dict):
+    """
+    This function adds a trace to the figure for the measure type.
+    :param fig:
+    :param section: DikeSection
+    :param measure_results:
+    :param legend_display: dict to avoid double legend entries
+    """
+    if "Grondversterking binnenwaarts" in measure_results['name']:
+        _trajectory_buffer = section.trajectory_rd.buffer(60, cap_style=2)
+
+        _coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
+                            _trajectory_buffer.exterior.coords]  # convert in GWS coordinates:
+        if "2025" in measure_results['name']:
+            _color = '#008000'  # Green
+            _showlegend = legend_display.get("2025")
+            legend_display["2025"] = False
+            _name = "Grondversterking binnenwaarts 2025"
+        elif "2045" in measure_results['name']:
+            _color = '#bfdbbf'  # Lighter green
+            _showlegend = legend_display.get("2045")
+            legend_display["2045"] = False
+            _name = "Grondversterking binnenwaarts 2045"
+        else:
+            raise ValueError("2025 or 2045 must be in the name of the measure")
+
+        fig.add_trace(go.Scattermapbox(
+            name=_name,
+            legendgroup=_name,
+            mode="lines",
+            lat=[x[0] for x in _coordinates_wgs],
+            lon=[x[1] for x in _coordinates_wgs],
+            fillcolor=_color,
+            line={'width': 1, 'color': _color},
+            fill="toself",
+            showlegend=_showlegend,
+            hovertemplate=f'Vaknaam {section.name}<br>' \
+                          f"Maatregel: {measure_results['name']} <br>" \
+                          f"Kruin verhoging: {measure_results['dcrest']}m <br>" \
+                          f"Bermverbreding: {measure_results['dberm']}m <br>"
+
+        ))
+
+    if "Verticaal Zanddicht Geotextiel" in measure_results['name']:
+        _color = "red"
+        _coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
+                            section.coordinates_rd]  # convert in GWS coordinates:
+        fig.add_trace(go.Scattermapbox(
+            name="VZG",
+            legendgroup="VZG",
+            mode="lines",
+            lat=[x[0] for x in _coordinates_wgs],
+            lon=[x[1] for x in _coordinates_wgs],
+            line={'color': _color, 'width': 4},
+            showlegend=legend_display.get("VZG"),
+            hovertemplate=f'Vaknaam {section.name}<br>' \
+                          f"{measure_results['name']}",
+        ))
+        legend_display["VZG"] = False
+
+    if "stabiliteitsscherm" in measure_results['name']:
+        _color = "blue"
+        _coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
+                            section.coordinates_rd]  # convert in GWS coordinates:
+        fig.add_trace(go.Scattermapbox(
+            name='Stabiliteitsscherm',
+            legendgroup='screen',
+            mode="lines",
+            lat=[x[0] for x in _coordinates_wgs],
+            lon=[x[1] for x in _coordinates_wgs],
+            line={'color': _color, 'width': 4},
+            showlegend=legend_display.get("screen"),
+            hovertemplate=f'Vaknaam {section.name}<br>' \
+                          f"{measure_results['name']}",
+        ))
+        legend_display["screen"] = False
+
+    if "Zelfkerende constructie" in measure_results['name']:
+        _trajectory_buffer = section.trajectory_rd.buffer(40, cap_style=2)
+
+        _coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
+                            _trajectory_buffer.exterior.coords]  # convert in GWS coordinates:
+        fig.add_trace(go.Scattermapbox(
+            name='Zelfkerende constructie',
+            legendgroup='diaphram wall',
+            mode="lines",
+            lat=[x[0] for x in _coordinates_wgs],
+            lon=[x[1] for x in _coordinates_wgs],
+            fillcolor="black",
+            line={'width': 1, 'color': "black"},
+            fill="toself",
+            showlegend=legend_display.get("diaphram wall"),
+            hovertemplate=f'Vaknaam {section.name}<br>' \
+                          f"{measure_results['name']}",
+        ))
+        legend_display["diaphram wall"] = False
+
+
+def add_measure_crest_heightening_trace(fig: go.Figure, section: DikeSection, measure_results: dict):
+    if "Grondversterking binnenwaarts" in measure_results['name']:
+        if measure_results['dcrest'] > 0:
+            _trajectory_buffer = section.trajectory_rd.buffer(60, cap_style=2)
+
+            _coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
+                                _trajectory_buffer.exterior.coords]  # convert in GWS coordinates:
+
+            _color = get_crest_heightening_color(measure_results['dcrest'])
+
+            fig.add_trace(go.Scattermapbox(
+                name=measure_results['name'],
+                legendgroup=measure_results['name'],
+                mode="lines",
+                lat=[x[0] for x in _coordinates_wgs],
+                lon=[x[1] for x in _coordinates_wgs],
+                fillcolor=_color,
+                line={'width': 1, 'color': _color},
+                fill="toself",
+                showlegend=False,
+                hovertemplate=f'Vaknaam {section.name}<br>' \
+                              f"Maatregel: {measure_results['name']} <br>" \
+                              f"Kruin verhoging: {measure_results['dcrest']}m <br>" \
+                              f"Bermverbreding: {measure_results['dberm']}m <br>"
+
+            ))
+            add_colorscale_bar_crest_heigtening(fig)
+
+
+def add_measure_berm_widening_trace(fig: go.Figure, section: DikeSection, measure_results: dict):
+    if "Grondversterking binnenwaarts" in measure_results['name']:
+        if measure_results['dberm'] > 0:
+            _trajectory_buffer = section.trajectory_rd.buffer(60, cap_style=2)
+
+            _coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
+                                _trajectory_buffer.exterior.coords]  # convert in GWS coordinates:
+
+            _color = get_berm_widening_color(measure_results['dberm'])
+
+            fig.add_trace(go.Scattermapbox(
+                name=measure_results['name'],
+                legendgroup=measure_results['name'],
+                mode="lines",
+                lat=[x[0] for x in _coordinates_wgs],
+                lon=[x[1] for x in _coordinates_wgs],
+                fillcolor=_color,
+                line={'width': 1, 'color': _color},
+                fill="toself",
+                showlegend=False,
+                hovertemplate=f'Vaknaam {section.name}<br>' \
+                              f"Maatregel: {measure_results['name']} <br>" \
+                              f"Kruin verhoging: {measure_results['dcrest']}m <br>" \
+                              f"Bermverbreding: {measure_results['dberm']}m <br>"
+
+            ))
+            add_colorscale_bar_berm_widening(fig)
 
 
 def add_section_trace(fig: go.Figure, section: DikeSection, name: str, color: str, hovertemplate: str,
@@ -452,6 +638,70 @@ def add_colorscale_bar(fig: go.Figure, result_type: str, colorbar_result_type: s
     fig.update_yaxes(showticklabels=False)
 
 
+def add_colorscale_bar_crest_heigtening(fig: go.Figure):
+    marker = dict(
+        colorscale='Blues',
+        colorbar=dict(
+            title="Kruinverhoging (m)",
+            titleside='right',
+            tickmode='array',
+            tickvals=[0, 0.5, 1, 1.5, 2],
+            ticktext=['0', '0.5', '1', '1.5', '2'],
+            ticks='outside',
+            len=0.5,
+        ),
+        showscale=True,
+        cmin=0,
+        cmax=2,
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=[None],
+            y=[None],
+            mode='markers',
+            showlegend=False,
+            marker=marker,
+            hoverinfo='none'
+        )
+    )
+
+    # remove ticks from dummy scatter plot
+    fig.update_xaxes(showticklabels=False)
+    fig.update_yaxes(showticklabels=False)
+
+
+def add_colorscale_bar_berm_widening(fig: go.Figure):
+    marker = dict(
+        colorscale='Greens',
+        colorbar=dict(
+            title="Kruinverhoging (m)",
+            titleside='right',
+            tickmode='array',
+            tickvals=[0, 10, 20, 30],
+            ticktext=['0', '10', '20', '30'],
+            ticks='outside',
+            len=0.5,
+        ),
+        showscale=True,
+        cmin=0,
+        cmax=30,
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=[None],
+            y=[None],
+            mode='markers',
+            showlegend=False,
+            marker=marker,
+            hoverinfo='none'
+        )
+    )
+
+    # remove ticks from dummy scatter plot
+    fig.update_xaxes(showticklabels=False)
+    fig.update_yaxes(showticklabels=False)
+
+
 def get_color(value: float, cmap, vmin: float, vmax: float) -> str:
     """
     Return the color of the value on a colorscale, as a rgb string.
@@ -504,6 +754,26 @@ def get_color_diff_cost(cost_value) -> str:
     cmap = plt.cm.RdYlGn  # theme of the colorscale
     cmap = cmap.reversed()
     return get_color(cost_value, cmap, -10, 7)
+
+
+def get_crest_heightening_color(crest_hightening_value) -> str:
+    """
+    Return the color of the crest heightening value on a colorscale from 0m (white) to 2m (dark blue), as a rgb string.
+    :param crest_hightening_value: value of the heightening of the crest
+    :return:
+    """
+    cmap = plt.cm.Blues
+    return get_color(crest_hightening_value, cmap, 0, 2)
+
+
+def get_berm_widening_color(berm_widening_value: float) -> str:
+    """
+    Return the color of the berm widening value on a colorscale from 0m (white) to 2m (dark blue), as a rgb string.
+    :param berm_widening_value: value of the heightening of the crest
+    :return:
+    """
+    cmap = plt.cm.Greens
+    return get_color(berm_widening_value, cmap, 0, 30)
 
 
 def get_beta(results: dict, year_index: int, mechanism: str) -> float:

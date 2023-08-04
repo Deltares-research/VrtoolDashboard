@@ -34,7 +34,6 @@ def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tup
         return html.Div("Geen bestand geüpload"), False
 
 
-
 @app.callback(
     Output("collapse_1", "is_open"),
     [Input("collapse_button_1", "n_clicks")],
@@ -96,7 +95,7 @@ def update_radio_sub_result_type(result_type: str) -> list:
     If the result type is "RELIABILITY" then the sub Radio list will contain the options "Absoluut" and "Ratio vr/dsn".
     If the result type is "COST" then the sub Radio list will contain the options "Absoluut" and "Verschil vr-dsn".
 
-    :param value: one of "RELIABILITY" or "COST" or "MEASURE"
+    :param result_type: one of "RELIABILITY" or "COST" or "MEASURE"
     :return:
     """
     if result_type == ColorBarResultType.RELIABILITY.name:
@@ -108,6 +107,12 @@ def update_radio_sub_result_type(result_type: str) -> list:
         options = [
             {'label': SubResultType.ABSOLUTE.value, 'value': SubResultType.ABSOLUTE.name},
             {'label': SubResultType.DIFFERENCE.value, 'value': SubResultType.DIFFERENCE.name},
+        ]
+    elif result_type == ColorBarResultType.MEASURE.name:
+        options = [
+            {'label': SubResultType.MEASURE_TYPE.value, 'value': SubResultType.MEASURE_TYPE.name},
+            {'label': SubResultType.BERM_WIDENING.value, 'value': SubResultType.BERM_WIDENING.name},
+            {'label': SubResultType.CREST_HIGHTENING.value, 'value': SubResultType.CREST_HIGHTENING.name},
         ]
     else:
         options = []
