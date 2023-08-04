@@ -19,6 +19,23 @@ None.
 ### Fixed
 None.
 
+## v0.2.0 [04/08/2023]
+
+### Added
+Map of measure types, berm widening and crest heightening.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
 ## v0.1.0 [17/07/2023]
 
 ### Added
