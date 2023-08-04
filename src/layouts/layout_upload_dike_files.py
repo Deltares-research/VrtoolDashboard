@@ -1,41 +1,19 @@
-from dash import html, dcc
+from dash import html
 import dash_bootstrap_components as dbc
 
+layout_traject_select = html.Div([
+    dbc.Select(id='selection_traject_name', options=[{"label": "38-1", "value": "38-1"}]),
 
+    dbc.Toast(
 
-layout_upload_button = html.Div([
-        dbc.Select(id='selection_traject_name', options=[{"label": "38-1", "value": "38-1"}]),
-        dcc.Upload(
-            id='upload-data-zip',
-            children=html.Div([
-                'Drag and Drop een zip-bestand of ',
-                html.A('Selecteer een bestand')
-            ]),
-            style={
-                'width': '100%',
-                'height': '60px',
-                'lineHeight': '60px',
-                'borderWidth': '1px',
-                'borderStyle': 'dashed',
-                'borderRadius': '5px',
-                'textAlign': 'center',
-                'margin': '10px'
-            },
-            # Allow multiple files to be uploaded
-            multiple=False,
-            accept='.zip'
-        ),
+        [html.P("Bestand succesvol geüpload!", className="mb-0")],
+        id="upload-toast",
+        header="Success",
+        icon="success",
+        duration=5000,  # Display duration in milliseconds
+        dismissable=True,
+        is_open=False,
 
-        dbc.Toast(
-
-            [html.P("Bestand succesvol geüpload!", className="mb-0")],
-            id="upload-toast",
-            header="Success",
-            icon="success",
-            duration=5000,  # Display duration in milliseconds
-            dismissable=True,
-            is_open=False,
-
-        ),
-        html.Div(id='output-data-upload-zip'),
-    ])
+    ),
+    html.Div(id='output-data-upload-zip'),
+])
