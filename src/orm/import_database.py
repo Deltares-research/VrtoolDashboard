@@ -16,8 +16,8 @@ def get_dike_traject_from_ORM(traject_name: str = "") -> DikeTraject:
     # _path_database = _path_dir.joinpath("vrtool_input.db")
     _path_database = _path_dir.joinpath("vrtool_input_with_sections.db")
 
-    open_database(_path_database)
+    vrtool_db = open_database(_path_database)
 
     _dike_traject = DikeTrajectImporter(_path_dir).import_orm(orm_model)
-    # vrtool_db.close()
+    vrtool_db.close()
     return _dike_traject
