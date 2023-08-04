@@ -15,7 +15,7 @@ layout_radio_color_bar_result_type = dbc.RadioItems(
         {"label": ColorBarResultType.COST.value, "value": ColorBarResultType.COST.name},
         {"label": ColorBarResultType.MEASURE.value, "value": ColorBarResultType.MEASURE.name},
     ],
-    value=ColorBarResultType.MEASURE.name,
+    value=ColorBarResultType.RELIABILITY.name,
     inline=True,
     className='my-radio-items',  # add a class name
     style={'width': '40vh', "height": "6vh", "margin-top": "2px"}

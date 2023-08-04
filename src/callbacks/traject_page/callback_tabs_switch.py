@@ -28,7 +28,7 @@ def render_tab_map_content(active_tab: str) -> tuple[html.Div, list, list, list]
     disabled_mechanism_options = disable_all_radio_options(enabled_mechanism_options)
 
     if active_tab == "tab-1":
-        return layout_tab_three(), disabled_calc_type_options, disabled_result_type_options, disabled_mechanism_options
+        return layout_tab_one(), disabled_calc_type_options, disabled_result_type_options, disabled_mechanism_options
     elif active_tab == "tab-2":
         return layout_tab_two(), disabled_calc_type_options, enabled_result_type_options, enabled_mechanism_options
     elif active_tab == "tab-3":
