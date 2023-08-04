@@ -1,12 +1,11 @@
 from bisect import bisect_right
-from pathlib import Path
 from typing import Tuple
 
 import numpy as np
 import plotly.graph_objects as go
 from matplotlib import pyplot as plt, colors
 
-from src.constants import REFERENCE_YEAR, ColorBarResultType, Mechanism, SubResultType, CalcType, ResultType, ONDERGRENS
+from src.constants import REFERENCE_YEAR, ColorBarResultType, Mechanism, SubResultType, CalcType, ResultType
 from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject
 from src.utils.gws_convertor import GWSRDConvertor
@@ -91,7 +90,7 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
             _year_index = bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
             _beta_section = get_beta(_initial_results, _year_index, mechanism_type)
             _beta_dict = {meca: beta[_year_index] for meca, beta in _initial_results.items() if meca != "Section"}
-            _color = get_reliability_color(_beta_section)
+            _color = get_reliability_color(_beta_section, dike_traject.lower_bound_value)
 
             if result_type == ResultType.RELIABILITY.name:
                 _hover_res = f'Beta sectie: {_beta_section:.2}<br>'
@@ -111,7 +110,7 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
 
         add_section_trace(fig, section, name=dike_traject.name, color=_color, hovertemplate=_hovertemplate)
 
-    add_colorscale_bar(fig, result_type, ColorBarResultType.RELIABILITY.name, SubResultType.ABSOLUTE.name)
+    add_colorscale_bar(fig, result_type, ColorBarResultType.RELIABILITY.name, SubResultType.ABSOLUTE.name, dike_traject.lower_bound_value)
 
     # Update layout of the figure and add token for mapbox
     _middle_point = get_middle_point(dike_traject.dike_sections)
@@ -154,7 +153,7 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
             _beta_section = get_beta(_measure_results, _year_index, mechanism_type)
 
             if colorbar_result_type == ColorBarResultType.RELIABILITY.name and sub_result_type == SubResultType.ABSOLUTE.name:
-                _color, _hovertemplate = get_color_hover_absolute_reliability(section, _beta_section, _measure_results)
+                _color, _hovertemplate = get_color_hover_absolute_reliability(section, _beta_section, _measure_results, dike_traject.lower_bound_value)
 
             elif colorbar_result_type == ColorBarResultType.RELIABILITY.name and sub_result_type == SubResultType.RATIO.name:
                 _color, _hovertemplate = get_color_hover_prob_ratio(section, _year_index, mechanism_type)
@@ -185,7 +184,7 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
 
         add_section_trace(fig, section, name=dike_traject.name, color=_color, hovertemplate=_hovertemplate)
 
-    add_colorscale_bar(fig, result_type, colorbar_result_type, sub_result_type)
+    add_colorscale_bar(fig, result_type, colorbar_result_type, sub_result_type, dike_traject.lower_bound_value)
 
     # Update layout of the figure and add token for mapbox
     _middle_point = get_middle_point(dike_traject.dike_sections)
@@ -335,7 +334,7 @@ def update_layout_map_box(fig: go.Figure, center: tuple[float, float], zoom: int
         ))
 
 
-def add_colorscale_bar(fig: go.Figure, result_type: str, colorbar_result_type: str, sub_result_type: str):
+def add_colorscale_bar(fig: go.Figure, result_type: str, colorbar_result_type: str, sub_result_type: str, lower_bound_pf: float):
     """Add a dummy scatter trace to the figure to show the colorscale bar
 
     :param fig: go.Figure object.
@@ -345,7 +344,7 @@ def add_colorscale_bar(fig: go.Figure, result_type: str, colorbar_result_type: s
 
     if colorbar_result_type == ColorBarResultType.RELIABILITY.name and result_type == ResultType.PROBABILITY.name \
             and sub_result_type == SubResultType.ABSOLUTE.name:
-        beta_ondergrsns = pf_to_beta(ONDERGRENS)
+        beta_ondergrsns = pf_to_beta(lower_bound_pf)
         # This colorbar is centered around pf 1/10000
         marker = dict(
             colorscale='RdYlGn',
@@ -365,7 +364,7 @@ def add_colorscale_bar(fig: go.Figure, result_type: str, colorbar_result_type: s
         )
     elif colorbar_result_type == ColorBarResultType.RELIABILITY.name and result_type == ResultType.RELIABILITY.name \
             and sub_result_type == SubResultType.ABSOLUTE.name:
-        beta_ondergrsns = pf_to_beta(ONDERGRENS)
+        beta_ondergrsns = pf_to_beta(lower_bound_pf)
 
         marker = dict(
             colorscale='RdYlGn',
@@ -466,15 +465,16 @@ def get_color(value: float, cmap, vmin: float, vmax: float) -> str:
     return f'rgb({rgb[0]}, {rgb[1]}, {rgb[2]})'
 
 
-def get_reliability_color(reliability_value: float) -> str:
+def get_reliability_color(reliability_value: float, center_pf: float) -> str:
     """
     Return the color of the reliability value Beta on a colorscale from 2 (scarlet) to 5 (green), as a rgb string.
     :param reliability_value:
+    :param center_pf: probability for which the color scale is centered
     :return:
     """
-    beta_ondergrsns = pf_to_beta(ONDERGRENS)
-    cmin = beta_ondergrsns - 1.5  # corresponds to pf=1/100
-    cmax = beta_ondergrsns + 1.5  # corresponds to pf=1/100000
+    beta_center = pf_to_beta(center_pf)
+    cmin = beta_center - 1.5  # corresponds to pf=1/100
+    cmax = beta_center + 1.5  # corresponds to pf=1/100000
     return get_color(reliability_value, plt.cm.RdYlGn, cmin, cmax)
 
 
@@ -544,9 +544,9 @@ def get_color_hover_prob_ratio(section: DikeSection, year_index: int, mechanism_
     return _color, _hovertemplate
 
 
-def get_color_hover_absolute_reliability(section: DikeSection, beta_section: float, measure_results: dict) -> Tuple[
+def get_color_hover_absolute_reliability(section: DikeSection, beta_section: float, measure_results: dict, pf_lower_bound: float) -> Tuple[
     str, str]:
-    _color = get_reliability_color(beta_section)
+    _color = get_reliability_color(beta_section, pf_lower_bound)
 
     _hovertemplate = f'Vaknaam {section.name}<br>' \
                      f'Maatregel: {measure_results["name"]}<br>' \

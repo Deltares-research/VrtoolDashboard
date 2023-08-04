@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from pandas import DataFrame
 
+from src.constants import SIGNALERING, ONDERGRENS
 from src.linear_objects.base_linear import BaseLinearObject
 from src.linear_objects.dike_section import DikeSection
 
@@ -14,6 +15,8 @@ from src.utils.utils import beta_to_pf
 @dataclass
 class DikeTraject(BaseLinearObject):
     name: str
+    signalering_value: float  # Signaleerwaarde
+    lower_bound_value: float  # Ondergrens
     dike_sections: list[DikeSection]
     reinforcement_order_vr: list[str]
     reinforcement_order_dsn: list[str]
@@ -61,7 +64,10 @@ class DikeTraject(BaseLinearObject):
         return cls(name=zipname,
                    dike_sections=_dike_sections,
                    reinforcement_order_vr=_order_reinforcement_vr,
-                   reinforcement_order_dsn=_order_reinforcement_dsn)
+                   reinforcement_order_dsn=_order_reinforcement_dsn,
+                   signalering_value=SIGNALERING,
+                   lower_bound_value=ONDERGRENS,
+                   )
 
     def serialize(self) -> dict:
         """Serialize the DikeTraject object to a dict, in order to be saved in dcc.Store"""
@@ -70,6 +76,8 @@ class DikeTraject(BaseLinearObject):
             'dike_sections': [section.serialize() for section in self.dike_sections],
             'reinforcement_order_vr': self.reinforcement_order_vr,
             'reinforcement_order_dsn': self.reinforcement_order_dsn,
+            'signalering_value': self.signalering_value,
+            'lower_bound_value': self.lower_bound_value,
         }
 
     @staticmethod
@@ -82,7 +90,9 @@ class DikeTraject(BaseLinearObject):
         return DikeTraject(name=data['name'],
                            dike_sections=sections,
                            reinforcement_order_vr=data['reinforcement_order_vr'],
-                           reinforcement_order_dsn=data['reinforcement_order_dsn'])
+                           reinforcement_order_dsn=data['reinforcement_order_dsn'],
+                           signalering_value=data["signalering_value"],
+                           lower_bound_value=data["lower_bound_value"])
 
     def calc_traject_probability_array(self, calc_type: str):
 
