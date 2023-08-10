@@ -16,9 +16,11 @@ import geopandas as gpd
 
 class DikeTrajectImporter(OrmImporterProtocol):
     path_dir: Path
+    traject_name: str
 
-    def __init__(self, path_dir) -> None:
+    def __init__(self, path_dir: Path, traject_name: str) -> None:
         self.path_dir = path_dir
+        self.traject_name = traject_name
 
     def _import_dike_section_list(
             self, orm_dike_section_list: list[SectionData], traject_gdf: GeoDataFrame
@@ -60,13 +62,18 @@ class DikeTrajectImporter(OrmImporterProtocol):
                 MeasurePerSection.id == _modified_measure.measure_per_section_id)
 
             _section = SectionData.get(SectionData.id == _measure_per_section.section_id)
-            _ordered_sections.append(_section.section_name)
+
+            _dike_traject_name = DikeTrajectInfo.get(DikeTrajectInfo.id == _section.dike_traject_id).traject_name
+
+            if _dike_traject_name == self.traject_name:
+                _ordered_sections.append(_section.section_name)
 
         return _ordered_sections
 
     def import_orm(self, orm_model) -> DikeTraject:
         """Import a DikeTraject object from the ORM """
-        _traject_name = orm_model.DikeTrajectInfo.get(orm_model.DikeTrajectInfo.traject_name == "38-1").traject_name
+        _traject_name = orm_model.DikeTrajectInfo.get(
+            orm_model.DikeTrajectInfo.traject_name == self.traject_name).traject_name
         _traject_id = DikeTrajectInfo.get(DikeTrajectInfo.traject_name == _traject_name).id
         _traject_geojson = DikeTrajectInfo.get(DikeTrajectInfo.traject_name == _traject_name).name_geojson
         _traject_p_signal = DikeTrajectInfo.get(DikeTrajectInfo.traject_name == _traject_name).p_signal
