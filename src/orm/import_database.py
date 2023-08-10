@@ -6,7 +6,7 @@ from src.orm.importers.dike_traject_importer import DikeTrajectImporter
 from src.orm import models as orm_model
 
 
-def get_dike_traject_from_ORM(traject_name: str = "") -> DikeTraject:
+def get_dike_traject_from_ORM(traject_name: str) -> DikeTraject:
     """
     Returns a DikeTraject object with all the required data from the ORM for the specified traject.
 
@@ -18,6 +18,6 @@ def get_dike_traject_from_ORM(traject_name: str = "") -> DikeTraject:
 
     vrtool_db = open_database(_path_database)
 
-    _dike_traject = DikeTrajectImporter(_path_dir).import_orm(orm_model)
+    _dike_traject = DikeTrajectImporter(_path_dir, traject_name).import_orm(orm_model)
     vrtool_db.close()
     return _dike_traject

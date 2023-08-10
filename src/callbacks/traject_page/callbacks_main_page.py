@@ -128,7 +128,7 @@ def fill_traject_table_from_database(selection_traject_name: str) -> list[dict]:
     """
 
     if selection_traject_name is not None:
-        _traject_db = get_dike_traject_from_ORM("38-1")
+        _traject_db = get_dike_traject_from_ORM(selection_traject_name)
 
         data = []
         for section in _traject_db.dike_sections:

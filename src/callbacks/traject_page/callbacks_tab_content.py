@@ -23,7 +23,7 @@ def make_graph_overview_dike(selection_traject_name: str) -> dcc.Graph:
     if selection_traject_name is None:
         _fig = plot_default_overview_map_dummy()
     else:
-        _traject_db = get_dike_traject_from_ORM("38-1")
+        _traject_db = get_dike_traject_from_ORM(selection_traject_name)
         _fig = plot_overview_map(_traject_db)
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'},
                      config={'mapboxAccessToken': get_mapbox_token()})
@@ -49,7 +49,7 @@ def make_graph_map_initial_assessment(selection_traject_name: str, selected_year
     if selection_traject_name is None:
         _fig = plot_default_overview_map_dummy()
     else:
-        _traject_db = get_dike_traject_from_ORM("38-1")
+        _traject_db = get_dike_traject_from_ORM(selection_traject_name)
         _fig = plot_dike_traject_reliability_initial_assessment_map(_traject_db, selected_year, result_type,
                                                                     mechanism_type)
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'},
@@ -83,7 +83,7 @@ def make_graph_map_measures(selection_traject_name: str, selected_year: float, r
     if selection_traject_name is None:
         _fig = plot_default_overview_map_dummy()
     else:
-        _traject_db = get_dike_traject_from_ORM("38-1")
+        _traject_db = get_dike_traject_from_ORM(selection_traject_name)
         _fig = plot_dike_traject_reliability_measures_assessment_map(_traject_db, selected_year, result_type,
                                                                      calc_type, color_bar_result_type, mechanism_type,
                                                                      sub_result_type)
@@ -109,7 +109,7 @@ def make_graph_pf_vs_cost(selection_traject_name: str, selected_year: float, res
     if selection_traject_name is None:
         return plot_default_scatter_dummy()
     else:
-        _traject_db = get_dike_traject_from_ORM("38-1")
+        _traject_db = get_dike_traject_from_ORM(selection_traject_name)
         _fig = plot_pf_length_cost(_traject_db, selected_year, result_type, cost_length_switch)
     return _fig
 
@@ -134,7 +134,7 @@ def make_graph_map_urgency(selection_traject_name: str, selected_year: float, le
     if selection_traject_name is None:
         _fig = plot_default_overview_map_dummy()
     else:
-        _traject_db = get_dike_traject_from_ORM("38-1")
+        _traject_db = get_dike_traject_from_ORM(selection_traject_name)
         _fig = plot_dike_traject_urgency(_traject_db, selected_year, length_urgency, calc_type)
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'},
                      config={'mapboxAccessToken': get_mapbox_token()})
@@ -160,6 +160,6 @@ def update_click(selection_traject_name: str, click_data: dict) -> Figure:
     if selection_traject_name is None:
         return plot_default_overview_map_dummy()
     else:
-        _traject_db = get_dike_traject_from_ORM("38-1")
+        _traject_db = get_dike_traject_from_ORM(selection_traject_name)
         return dike_traject_pf_cost_helping_map(_traject_db, click_data["points"][0]["customdata"],
                                                 click_data["points"][0]["curveNumber"])
