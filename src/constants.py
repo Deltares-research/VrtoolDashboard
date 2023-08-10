@@ -35,6 +35,15 @@ class Mechanism(Enum):
     OVERFLOW = "Overslag"
     SECTION = "Sectie"
 
+
+class Measures(Enum):
+    GROUND_IMPROVEMENT = "Grondversterking"
+    GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN = "Grondversterking met stabiliteitsscherm"
+    GEOTEXTILE = "VZG"
+    DIAPHRAGM_WALL = "Zelferende constructie"
+    STABILITY_SCREEN = "Stabiliteitsscherm"
+
+
 def get_mapbox_token() -> str:
     with open(Path(__file__).parent / "assets" / "mapbox_token.txt") as f:
         return f.read()

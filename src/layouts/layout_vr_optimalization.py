@@ -1,20 +1,13 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
+from dash.dash_table import DataTable
 
-
-table_header = [
-    html.Thead(html.Tr([html.Th("Dijkvak"),
-                        html.Th("Versterking"),
-                        html.Th("Maatregel"),
-                        html.Th("Referentiejaar"),
-                        ]))
-]
+from src.constants import Measures
 
 row1 = html.Tr([html.Td("01A"), html.Td("Aan"), html.Td("VZG"), html.Td("2025")])
 row2 = html.Tr([html.Td("01B"), html.Td("Uit"), html.Td("VZG"), html.Td("2025")])
 row3 = html.Tr([html.Td("2"), html.Td("Aan"), html.Td("Stabiliteit Scherm"), html.Td("2025")])
 row4 = html.Tr([html.Td("3"), html.Td("Aan"), html.Td("VZG"), html.Td("2045")])
-
 
 table_body = [html.Tbody([row1, row2, row3, row4])]
 
@@ -46,39 +39,33 @@ dike_vr_optimization_layout = html.Div([
         ],
             md=5),
 
-        dbc.Col([ dcc.Upload(
-            id='upload-data-zip2',
-            children=html.Div([
-                'Upload database',
-                html.A('')
-            ]),
-            style={
-                'width': '100%',
-                'height': '60px',
-                'lineHeight': '60px',
-                'borderWidth': '1px',
-                'borderStyle': 'dashed',
-                'borderRadius': '5px',
-                'textAlign': 'center',
-                'margin': '10px'
-            },
-            # Allow multiple files to be uploaded
-            multiple=False,
-            accept='.zip'
-        ),
-            ],
-            md=7),
-
-
-
     ]),
-    dbc.Table(table_header + table_body, bordered=True),
+    DataTable(id='editable_traject_table',
+              columns=(
+                  [{'id': 'section_col', 'name': 'Dijkvak'},
+                   {'id': 'reinforcement_col', 'name': 'Versterking', 'presentation': 'dropdown'},
+                   {'id': 'measure_col', 'name': 'Maatregel', 'presentation': 'dropdown'},
+                   {'id': 'reference_year_col', 'name': 'Referentiejaar'},
+                   ]
+              ),
+              data=[],
+              dropdown={
+                  'reinforcement_col': {
+                      'options': [{'label': 'Aan', 'value': "yes"}, {'label': 'Uit', 'value': "no"}]},
+                  'measure_col': {
+                      'options': [{'label': meas.value, 'value': meas.name} for meas in Measures]},
+              },
+              style_cell={'textAlign': 'left'},
+              editable=True,
+              # fixed_rows={'headers': True},  # either fix row with risk of overlap or have a slider
+              style_table={'overflowX': 'scroll'},
+
+              ),
+
     html.Div(
-    [dbc.Button("Optimize", id="button_optimize", color="primary", className="mr-1"),
-     dbc.Tooltip("Click to call VRCore optimization routine via the new calculation constraints.", target="button_optimize")
-     ])
+        [dbc.Button("Optimize", id="button_optimize", color="primary", className="mr-1"),
+         dbc.Tooltip("Click to call VRCore optimization routine via the new calculation constraints.",
+                     target="button_optimize")
+         ])
 
 ])
-
-
-
