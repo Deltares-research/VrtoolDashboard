@@ -1,9 +1,10 @@
 from dash import html, dcc, Output, Input, State
 
-from src.constants import ColorBarResultType, SubResultType
+from src.constants import ColorBarResultType, SubResultType, Measures
 from src.linear_objects.dike_traject import DikeTraject
 
 from src.app import app
+from src.orm.import_database import get_dike_traject_from_ORM
 
 
 @app.callback([Output('output-data-upload-zip', 'children'),
@@ -113,3 +114,27 @@ def update_radio_sub_result_type(result_type: str) -> list:
         options = []
 
     return options
+
+@app.callback(
+    Output("editable_traject_table", "data"),
+    Input('selection_traject_name', 'value'),
+)
+def fill_traject_table_from_database(selection_traject_name: str) -> list[dict]:
+    """
+    This is a callback to fill the editable table with the data from the database for the selected database.
+
+    :param selection_traject_name:
+    :return:
+    """
+
+    if selection_traject_name is not None:
+        _traject_db = get_dike_traject_from_ORM("38-1")
+
+        data = []
+        for section in _traject_db.dike_sections:
+            data.append({"section_col": section.name, "reinforcement_col": "yes",
+                         'measure_col': Measures.GROUND_IMPROVEMENT.name, 'reference_year_col': '2045'})
+
+        return data
+
+
