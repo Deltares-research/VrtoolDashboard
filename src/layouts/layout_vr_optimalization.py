@@ -58,7 +58,8 @@ dike_vr_optimization_layout = html.Div([
               style_cell={'textAlign': 'left'},
               editable=True,
               # fixed_rows={'headers': True},  # either fix row with risk of overlap or have a slider
-              style_table={'overflowX': 'scroll'},
+              style_table={'overflowX': 'scroll',
+                           'overflowY': 'scroll'},
 
               ),
 
