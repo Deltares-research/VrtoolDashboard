@@ -1,5 +1,5 @@
 {
-  "name": "38_1_small.zip",
+  "name": "38-1",
   "dike_sections": [
     {
       "coordinates_rd": [
@@ -15479,5 +15479,7 @@
     "40",
     "33A",
     "50"
-  ]
+  ],
+  "signalering_value": 3.33e-5,
+  "lower_bound_value": 0.0001
 }

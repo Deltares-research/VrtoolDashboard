@@ -3,7 +3,7 @@ from bisect import bisect_right
 import numpy as np
 import plotly.graph_objects as go
 
-from src.constants import REFERENCE_YEAR, ResultType, ONDERGRENS, SIGNALERING
+from src.constants import REFERENCE_YEAR, ResultType
 from src.linear_objects.dike_traject import DikeTraject
 from src.utils.utils import pf_to_beta
 
@@ -54,15 +54,15 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
         y_vr = pf_to_beta(dike_traject.calc_traject_probability_array("vr")[:, _year_index])
         y_dsn = pf_to_beta(dike_traject.calc_traject_probability_array("dsn")[:, _year_index])
         title_y_axis = "Betrouwbaarheid"
-        y_ondergrens = pf_to_beta(ONDERGRENS)
-        y_signalering = pf_to_beta(SIGNALERING)
+        y_ondergrens = pf_to_beta(dike_traject.lower_bound_value)
+        y_signalering = pf_to_beta(dike_traject.signalering_value)
 
     elif result_type == ResultType.PROBABILITY.name:
         y_vr = dike_traject.calc_traject_probability_array("vr")[:, _year_index]
         y_dsn = dike_traject.calc_traject_probability_array("dsn")[:, _year_index]
         title_y_axis = "Trajectfaalkans per jaar"
-        y_ondergrens = ONDERGRENS
-        y_signalering = SIGNALERING
+        y_ondergrens = dike_traject.lower_bound_value
+        y_signalering = dike_traject.signalering_value
 
     else:
         raise ValueError("Wrong result_type value")
