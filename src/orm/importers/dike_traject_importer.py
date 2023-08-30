@@ -13,6 +13,8 @@ from src.orm.models.dike_traject_info import DikeTrajectInfo
 
 import geopandas as gpd
 
+from src.utils.utils import get_signal_value
+
 
 class DikeTrajectImporter(OrmImporterProtocol):
     path_dir: Path
@@ -76,7 +78,7 @@ class DikeTrajectImporter(OrmImporterProtocol):
             orm_model.DikeTrajectInfo.traject_name == self.traject_name).traject_name
         _traject_id = DikeTrajectInfo.get(DikeTrajectInfo.traject_name == _traject_name).id
         _traject_p_lower_bound = DikeTrajectInfo.get(DikeTrajectInfo.traject_name == _traject_name).p_max
-        _traject_p_signal = _traject_p_lower_bound / 3  # TODO: this is a temporary solution, apply conversion table
+        _traject_p_signal = get_signal_value(_traject_p_lower_bound)
 
         _dike_traject = DikeTraject(name=_traject_name,
                                     dike_sections=[],
@@ -84,6 +86,7 @@ class DikeTrajectImporter(OrmImporterProtocol):
                                     reinforcement_order_dsn=[],
                                     signalering_value=_traject_p_signal,
                                     lower_bound_value=_traject_p_lower_bound)
+
         _selected_sections = orm_model.SectionData.select().where(
             SectionData.dike_traject == _traject_id
         )
