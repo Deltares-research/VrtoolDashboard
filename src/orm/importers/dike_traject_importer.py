@@ -93,7 +93,5 @@ class DikeTrajectImporter(OrmImporterProtocol):
         # _dike_traject.reinforcement_order_vr = self._get_reinforcement_order("GreedyOptimizationBased")
         # _dike_traject.reinforcement_order_dsn = self._get_reinforcement_order("TargetReliabilityBased")
 
-        print(_dike_traject.dike_sections)
-
         return _dike_traject
 

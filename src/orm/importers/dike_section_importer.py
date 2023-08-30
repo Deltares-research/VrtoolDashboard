@@ -28,28 +28,26 @@ class DikeSectionImporter(OrmImporterProtocol):
         _initial_assessment = {}
         _section_id = section_data.id
 
+        # Add mechanism results
         for mechanism in ["Overflow", "StabilityInner", "Piping"]:
-
-            # TODO: multiple mechanism_per_section for the same computation_type_id. commented to avoid crashes
-
-            # if mechanism == "Piping":
-            #     # How to aggregate all the piping scenarios into a single beta?
-            #     # Should VRCore handle this and only write a single piping beta in the table ComputationScenarioResult?
-            #     continue
-
             _mechanism_id = Mechanism.get(Mechanism.name == mechanism).id
             _mechanism_per_section_id = MechanismPerSection.get(
                 (MechanismPerSection.section == _section_id) & (MechanismPerSection.mechanism == _mechanism_id)).id
-
-
 
             _query_betas = (AssessmentMechanismResult
                             .select(AssessmentMechanismResult.time, AssessmentMechanismResult.beta)
                             .where(AssessmentMechanismResult.mechanism_per_section == _mechanism_per_section_id)
                             .order_by(AssessmentMechanismResult.time))
 
-
             _initial_assessment[mechanism] = [row.beta for row in _query_betas]
+
+        # Add section results
+        _query_betas = (AssessmentSectionResult
+                        .select(AssessmentSectionResult.time, AssessmentSectionResult.beta)
+                        .where(AssessmentSectionResult.section_data == _section_id)
+                        .order_by(AssessmentSectionResult.time))
+
+        _initial_assessment["Section"] = [row.beta for row in _query_betas]
 
         self.__setattr__("assessment_time", [row.time for row in _query_betas])
 
@@ -114,7 +112,6 @@ class DikeSectionImporter(OrmImporterProtocol):
         _final_measure["dcrest"] = _dcrest
 
         for mechanism in ["Overflow", "StabilityInner", "Piping", "Section"]:
-
             # TODO: multiple mechanism_per_section for the same computation_type_id. commented to avoid crashes
             # elif mechanism == "Piping":
             #     # How to aggregate all the piping scenarios into a single beta?
