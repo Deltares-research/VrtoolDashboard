@@ -5,8 +5,8 @@ from vrtool.orm.models import Mechanism, MechanismPerSection, ComputationScenari
 from vrtool.orm.models.section_data import SectionData
 
 from src.linear_objects.dike_section import DikeSection
-from src.orm.models import ComputationScenarioResult, GreedyOptimizationOrder, ModifiedMeasure, MeasureCost, \
-    MeasureReliability, TargetReliabilityBasedOrder
+from src.orm.models import GreedyOptimizationOrder, ModifiedMeasure, MeasureCost, \
+    MeasureReliability, TargetReliabilityBasedOrder, AssessmentMechanismResult, AssessmentSectionResult
 
 
 class DikeSectionImporter(OrmImporterProtocol):
@@ -20,14 +20,15 @@ class DikeSectionImporter(OrmImporterProtocol):
                                 section_data: SectionData,
                                 ) -> dict:
         """
-        Get the initial assessment of a section based on the table ComputationScenarioResult
+        Gets the initial assessment of a section based on the table ComputationScenarioResult.
+        Also sets the attribute assessment_time to the list of times for which the assessment is computed.
         :param section_data:
         :return:
         """
         _initial_assessment = {}
         _section_id = section_data.id
 
-        for mechanism in ["Overflow", "StabilityInner", "Piping", "Section"]:
+        for mechanism in ["Overflow", "StabilityInner", "Piping"]:
 
             # TODO: multiple mechanism_per_section for the same computation_type_id. commented to avoid crashes
 
@@ -39,15 +40,18 @@ class DikeSectionImporter(OrmImporterProtocol):
             _mechanism_id = Mechanism.get(Mechanism.name == mechanism).id
             _mechanism_per_section_id = MechanismPerSection.get(
                 (MechanismPerSection.section == _section_id) & (MechanismPerSection.mechanism == _mechanism_id)).id
-            _computation_scenario_id = ComputationScenario.get(
-                ComputationScenario.mechanism_per_section == _mechanism_per_section_id).id
 
-            _query_betas = (ComputationScenarioResult
-                            .select(ComputationScenarioResult.year, ComputationScenarioResult.beta)
-                            .where(ComputationScenarioResult.computation_scenario_id == _computation_scenario_id)
-                            .order_by(ComputationScenarioResult.year))
+
+
+            _query_betas = (AssessmentMechanismResult
+                            .select(AssessmentMechanismResult.time, AssessmentMechanismResult.beta)
+                            .where(AssessmentMechanismResult.mechanism_per_section == _mechanism_per_section_id)
+                            .order_by(AssessmentMechanismResult.time))
+
 
             _initial_assessment[mechanism] = [row.beta for row in _query_betas]
+
+        self.__setattr__("assessment_time", [row.time for row in _query_betas])
 
         return _initial_assessment
 
@@ -162,12 +166,13 @@ class DikeSectionImporter(OrmImporterProtocol):
         _dike_section.coordinates_rd = self._get_coordinates(orm_model)
         _dike_section.in_analyse = orm_model.in_analysis
         _dike_section.is_reinforced = True  # TODO remove this argument?
-        _dike_section.final_measure_veiligheidrendement = self._get_final_measure(orm_model,
-                                                                                  assessment_type="GreedyOptimizationBased")
-        _dike_section.final_measure_doorsnede = self._get_final_measure(orm_model,
-                                                                        assessment_type="TargetReliabilityBased")
+        # _dike_section.final_measure_veiligheidrendement = self._get_final_measure(orm_model,
+        #                                                                           assessment_type="GreedyOptimizationBased")
+        # _dike_section.final_measure_doorsnede = self._get_final_measure(orm_model,
+        #                                                                 assessment_type="TargetReliabilityBased")
 
         _dike_section.initial_assessment = self._get_initial_assessment(orm_model)
+
         _dike_section.years = self.assessment_time
 
         return _dike_section

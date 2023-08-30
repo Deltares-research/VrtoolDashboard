@@ -14,7 +14,8 @@ def get_dike_traject_from_ORM(traject_name: str) -> DikeTraject:
     """
     _path_dir = Path(r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_38_1_miniset")
     # _path_database = _path_dir.joinpath("vrtool_input.db")
-    _path_database = _path_dir.joinpath("vrtool_input_with_sections.db")
+    # _path_database = _path_dir.joinpath("vrtool_input_with_sections.db") old mockup db
+    _path_database = _path_dir.joinpath("vrtool_input_test_bd.db")
 
     vrtool_db = open_database(_path_database)
 

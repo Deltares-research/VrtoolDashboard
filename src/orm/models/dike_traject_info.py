@@ -18,10 +18,8 @@ class DikeTrajectInfo(OrmBaseModel):
     b_stability_inner = FloatField(default=50)
     beta_max = FloatField(default=float("nan"), null=True)
     p_max = FloatField(default=float("nan"), null=True)
-    p_signal = FloatField(default=float("nan"), null=True)
     flood_damage = FloatField(default=float("nan"), null=True)
     traject_length = FloatField(default=float("nan"), null=True)
-    name_geojson = CharField()
 
     class Meta:
         table_name = _get_table_name(__qualname__)
