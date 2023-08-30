@@ -169,7 +169,6 @@ class DikeSectionImporter(OrmImporterProtocol):
         #                                                                 assessment_type="TargetReliabilityBased")
 
         _dike_section.initial_assessment = self._get_initial_assessment(orm_model)
-
         _dike_section.years = self.assessment_time
 
         return _dike_section
