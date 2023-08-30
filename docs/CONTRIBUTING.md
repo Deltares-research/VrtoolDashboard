@@ -5,3 +5,11 @@
     poetry run pytest --cov=src --cov-report html:coverage-reports/html
     ```
 
+
+
+# Add git tag #
+
+    ```bash
+    git tag -a v0.0.0 -m "v0.0.0"
+    git push origin v0.0.0
+    ```

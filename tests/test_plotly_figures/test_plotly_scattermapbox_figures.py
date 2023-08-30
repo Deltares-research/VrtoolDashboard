@@ -96,6 +96,27 @@ class TestPlotlyScatterMapBox():
         assert isinstance(_fig, Figure)
 
     @pytest.mark.parametrize("calc_type", [CalcType.VEILIGHEIDRENDEMENT, CalcType.DOORSNEDE_EISEN])
+    @pytest.mark.parametrize("sub_result_type", [SubResultType.MEASURE_TYPE, SubResultType.BERM_WIDENING, SubResultType.CREST_HIGHTENING])
+    def test_plot_dike_traject_reliability_measures_assessment_map_measure(self,calc_type: Enum,
+                                                                        sub_result_type: Enum):
+        # 1. Define data
+        _dike_data = json.load(
+            open(Path(__file__).parent.parent / 'data/Case_38_1_sterker_VZG2/reference' / 'dike_data.json'))
+        _dike_traject = DikeTraject.deserialize(_dike_data)
+
+        # 2. Call
+        _fig = plot_dike_traject_reliability_measures_assessment_map(_dike_traject,
+                                                                     2025,
+                                                                     ResultType.RELIABILITY.name,
+                                                                     calc_type.name,
+                                                                     ColorBarResultType.MEASURE.name,
+                                                                     Mechanism.SECTION.name,
+                                                                     sub_result_type.name)
+
+        # 3. Assert
+        assert isinstance(_fig, Figure)
+
+    @pytest.mark.parametrize("calc_type", [CalcType.VEILIGHEIDRENDEMENT, CalcType.DOORSNEDE_EISEN])
     def test_plot_dike_traject_urgency(self, calc_type: Enum):
         # 1. Define data
         _dike_data = json.load(

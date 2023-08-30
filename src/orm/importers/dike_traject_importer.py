@@ -13,6 +13,8 @@ from src.orm.models.dike_traject_info import DikeTrajectInfo
 
 import geopandas as gpd
 
+from src.utils.utils import get_signal_value
+
 
 class DikeTrajectImporter(OrmImporterProtocol):
     path_dir: Path
@@ -28,12 +30,12 @@ class DikeTrajectImporter(OrmImporterProtocol):
         _ds_importer = DikeSectionImporter(traject_gdf)
         return list(map(_ds_importer.import_orm, orm_dike_section_list))
 
-    def parse_geo_dataframe(self, traject_geojson_name: str) -> GeoDataFrame:
+    def parse_geo_dataframe(self, traject_name: str) -> GeoDataFrame:
         """Open the geojson of the spatial coordinates of the dike traject and parse it to a GeoDataFrame
 
         /!\ This function might not be general enough to accomodate to every variation of column names.
         """
-        _traject_gdf = gpd.read_file(self.path_dir / traject_geojson_name)
+        _traject_gdf = gpd.read_file(self.path_dir / traject_name.__add__(".geojson"))
         _traject_gdf["geometry"] = _traject_gdf["geometry"].apply(
             lambda x: list(x.coords))  # Serialize the geometry column to a list of coordinates
 
@@ -75,9 +77,8 @@ class DikeTrajectImporter(OrmImporterProtocol):
         _traject_name = orm_model.DikeTrajectInfo.get(
             orm_model.DikeTrajectInfo.traject_name == self.traject_name).traject_name
         _traject_id = DikeTrajectInfo.get(DikeTrajectInfo.traject_name == _traject_name).id
-        _traject_geojson = DikeTrajectInfo.get(DikeTrajectInfo.traject_name == _traject_name).name_geojson
-        _traject_p_signal = DikeTrajectInfo.get(DikeTrajectInfo.traject_name == _traject_name).p_signal
         _traject_p_lower_bound = DikeTrajectInfo.get(DikeTrajectInfo.traject_name == _traject_name).p_max
+        _traject_p_signal = get_signal_value(_traject_p_lower_bound)
 
         _dike_traject = DikeTraject(name=_traject_name,
                                     dike_sections=[],
@@ -85,13 +86,15 @@ class DikeTrajectImporter(OrmImporterProtocol):
                                     reinforcement_order_dsn=[],
                                     signalering_value=_traject_p_signal,
                                     lower_bound_value=_traject_p_lower_bound)
+
         _selected_sections = orm_model.SectionData.select().where(
             SectionData.dike_traject == _traject_id
         )
-        _traject_gdf = self.parse_geo_dataframe(_traject_geojson)
+        _traject_gdf = self.parse_geo_dataframe(_traject_name)
 
         _dike_traject.dike_sections = self._import_dike_section_list(_selected_sections, _traject_gdf)
-        _dike_traject.reinforcement_order_vr = self._get_reinforcement_order("GreedyOptimizationBased")
-        _dike_traject.reinforcement_order_dsn = self._get_reinforcement_order("TargetReliabilityBased")
+        # _dike_traject.reinforcement_order_vr = self._get_reinforcement_order("GreedyOptimizationBased")
+        # _dike_traject.reinforcement_order_dsn = self._get_reinforcement_order("TargetReliabilityBased")
 
         return _dike_traject
+

@@ -21,6 +21,9 @@ class SubResultType(Enum):
     ABSOLUTE = "Absoluut"
     DIFFERENCE = "Verschil vr - dsn"
     RATIO = "Verhouding vr / dsn"
+    MEASURE_TYPE = "Maatregeltype"
+    BERM_WIDENING = "Bermverbreding"
+    CREST_HIGHTENING = "Kruinverhoging"
 
 class ColorBarResultType(Enum):
     RELIABILITY = "Betrouwbaarheid"

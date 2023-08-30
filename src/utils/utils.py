@@ -26,6 +26,21 @@ def export_to_json(data):
         json.dump(data, outfile)
 
 
+def get_signal_value(p_max: float):
+    """Obtain a signal value (Signaleringswaarde) from a given maximum probability of failure
+    Note that p_signal is always approximately 3 times smaller (just rounded)
+
+    :param p_max: Maximum probability of failure
+
+    :return: Signal value
+
+    """
+    if p_max == 1 / 3000:
+        return 1 / 10000
+    else:
+        return p_max / 3.0
+
+
 def get_WBI_category(P_f_dsn: float, traject_length: float) -> str:
     """
 
