@@ -86,10 +86,9 @@ class DikeSection(BaseLinearObject):
             _option = "Doorsnede-eisen" if calc_type == "doorsnede" else "Veiligheidsrendement"
 
             # Parse csv of the Section results and add them to the DikeSection object
-            _section_measure_betas = all_unzipped_files[f"DV{self.name}_Options_{_option}"]
+            _section_measure_betas = all_unzipped_files[f"{self.name}_Options_{_option}"]
             self.years = _section_measure_betas.iloc[
                 0].dropna().unique()  # select the year for which the calculations were done
-
             _section_measure_betas = _section_measure_betas.loc[
                 (_section_measure_betas.ID == _final_measure["ID"])
                 & (_section_measure_betas["yes/no"] == _final_measure["yes/no"])
@@ -113,16 +112,13 @@ class DikeSection(BaseLinearObject):
         mechanisms for all years.
         :return:
         """
-
-        _section_initial_betas_df = initial_assessment_df.loc[initial_assessment_df["name"] == f"DV{self.name}"].squeeze()
-
+        _section_initial_betas_df = initial_assessment_df.loc[initial_assessment_df["name"] == f"{self.name}"].squeeze()
         if not _section_initial_betas_df.empty:  # if df is empty, then section is not reinforced and skipped.
             _initial_assessment_dict = {}
             _mechanisms = ["Overflow", "StabilityInner", "Piping", "Section"]
             _years = _section_initial_betas_df.columns[2:-1].tolist()  # last column is Length and should be removed
             for mechanism in _mechanisms:
                 _initial_assessment_dict[mechanism] = _section_initial_betas_df[_section_initial_betas_df["mechanism"] == mechanism].iloc[:, 2:-1].values.tolist()[0]
-
             self.__setattr__(f"initial_assessment", _initial_assessment_dict)
             self.__setattr__(f"length", _section_initial_betas_df["Length"].iloc[0])
 

@@ -218,8 +218,10 @@ def parse_optimal_measures_results(all_unzipped_files: dict, filename: str) -> d
         raise ValueError(f'The zip file does not contain the required file: {filename}')
     _measures_df = all_unzipped_files[filename]
     _measures_df.dropna(subset=['Section'], inplace=True)  # drop nan in Section column
-    _measures_df['Section'] = _measures_df['Section'].str.replace('^DV', '',
-                                                                  regex=True)  # remove DV from section names
+    # _measures_df['Section'] = _measures_df['Section'].str.replace('^DV', '',
+    #                                                               regex=True)  # remove DV from section names
+    #change type of Section column to string
+    _measures_df['Section'] = _measures_df['Section'].astype(str)
     _measures_df.set_index("Section", inplace=True)
 
     if not _measures_df.index.is_unique:
@@ -239,7 +241,10 @@ def determine_reinforcement_order(all_unzipped_files: dict, filename: str) -> li
     if filename not in all_unzipped_files.keys():
         raise ValueError(f'The zip file does not contain the required file: {filename}')
     final_measures_df = all_unzipped_files[filename]
-    final_measures_df['Section'] = final_measures_df['Section'].str.replace('^DV', '', regex=True)
+    final_measures_df.dropna(subset=['Section'], inplace=True)  # drop nan in Section column
+
+    # final_measures_df['Section'] = final_measures_df['Section'].str.replace('^DV', '', regex=True)
+    final_measures_df['Section'] = final_measures_df['Section'].astype(str)
     return final_measures_df['Section'].dropna().unique()
 
 
