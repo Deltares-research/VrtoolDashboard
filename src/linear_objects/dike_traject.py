@@ -54,7 +54,7 @@ class DikeTraject(BaseLinearObject):
             _dike_section.set_measure_and_reliabilities_from_csv(_optimal_measure_dsn_dict, _all_unzipped_files,
                                                                  "doorsnede")
             _dike_section.set_measure_and_reliabilities_from_csv(_optimal_measure_vr_dict, _all_unzipped_files,
-                                                                 "veiligheidrendement")
+                                                                 "veiligheidsrendement")
 
             _dike_sections.append(_dike_section)
 
@@ -106,7 +106,10 @@ class DikeTraject(BaseLinearObject):
 
             if not section.in_analyse:  # skip if the section is not reinforced
                 continue
-
+            if (calc_type == 'doorsnede') and (not section.is_reinforced_doorsnede):  # skip if the section is not reinforced
+                continue
+            if (calc_type == 'veiligheidsrendement') and (not section.is_reinforced_veiligheidsrendement):  # skip if the section is not reinforced
+                continue
             # add a row to the dataframe with the initial assessment of the section
             for mechanism in ["Overflow", "Piping", "StabilityInner"]:
                 mask = (_beta_df['name'] == section.name) & (_beta_df['mechanism'] == mechanism)
@@ -114,6 +117,7 @@ class DikeTraject(BaseLinearObject):
                 d = {"name": section.name, "mechanism": mechanism, "Length": section.length
 
                      }
+
                 for year, beta in zip(years, getattr(section, _section_measure)[mechanism]):
                     d[year] = beta
                 _beta_df.loc[mask, years] = d

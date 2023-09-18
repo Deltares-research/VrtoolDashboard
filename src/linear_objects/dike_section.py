@@ -80,14 +80,14 @@ class DikeSection(BaseLinearObject):
         """
 
         if self.name in _measure_dict.keys():
-
+            _mechanisms = ["Overflow", "StabilityInner", "Piping", "Section"]
             # Parse csv of the (optimal) measure dataframe and add them to the DikeSection object
             _final_measure = _measure_dict[self.name]
             if _final_measure["name"] == "No measure":
                 #set to No measure with initial assessment for betas
-                _final_measure = self.initial_assessment
+                for mechanism in _mechanisms:
+                    _final_measure[mechanism] = self.initial_assessment[mechanism]
                 self.__setattr__(f"final_measure_{calc_type}", _final_measure)
-                # print('No measure for {} for {}'.format(self.name, calc_type))
                 return
 
             if calc_type == "doorsnede":
@@ -108,12 +108,10 @@ class DikeSection(BaseLinearObject):
                 & (_section_measure_betas.dberm == _final_measure["dberm"])
                 ].squeeze()
 
-            _mechanisms = ["Overflow", "StabilityInner", "Piping", "Section"]
             for mechanism in _mechanisms:
                 _final_measure[mechanism] = [_section_measure_betas[key] for key in
                                              _section_measure_betas.index if
                                              key.startswith(mechanism)]
-
             self.__setattr__(f"final_measure_{calc_type}", _final_measure)
 
     def set_initial_assessment_from_csv(self, initial_assessment_df: DataFrame) -> None:
