@@ -10,9 +10,10 @@ class DikeSection(BaseLinearObject):
     name: str
     length: float
     in_analyse: bool
-    is_reinforced: bool
+    is_reinforced_veiligheidsrendement: bool
+    is_reinforced_doorsnede: bool
     initial_assessment: Optional[dict]
-    final_measure_veiligheidrendement: Optional[dict]
+    final_measure_veiligheidsrendement: Optional[dict]
     final_measure_doorsnede: Optional[dict]  # replace dict with a Measure Object
     years: list[int]  # Years for which a reliability result is available (both for initial and measures)
 
@@ -24,12 +25,13 @@ class DikeSection(BaseLinearObject):
         is included in the reliability of the dike trajectory.
         """
         super().__init__(coordinates_rd)
-        self.name = name
+        self.name = str(name)
         self.in_analyse = True if in_analyse == 1 else False
         self.length = -999
-        self.is_reinforced = False
+        self.is_reinforced_veiligheidsrendement = False
+        self.is_reinforced_doorsnede = False
         self.initial_assessment = None
-        self.final_measure_veiligheidrendement = None
+        self.final_measure_veiligheidsrendement = None
         self.final_measure_doorsnede = None
         self.years = []
 
@@ -40,9 +42,10 @@ class DikeSection(BaseLinearObject):
             'name': self.name,
             'length': self.length,
             'in_analyse': self.in_analyse,
-            'is_reinforced': self.is_reinforced,
+            'is_reinforced_veiligheidsrendement': self.is_reinforced_veiligheidsrendement,
+            'is_reinforced_doorsnede': self.is_reinforced_doorsnede,
             'initial_assessment': self.initial_assessment,
-            'final_measure_veiligheidrendement': self.final_measure_veiligheidrendement,
+            'final_measure_veiligheidsrendement': self.final_measure_veiligheidsrendement,
             'final_measure_doorsnede': self.final_measure_doorsnede,
             'years': self.years
         }
@@ -57,8 +60,9 @@ class DikeSection(BaseLinearObject):
         section = DikeSection(name=data['name'], in_analyse=data['in_analyse'], coordinates_rd=data['coordinates_rd'])
         section.length = data['length']
         section.initial_assessment = data['initial_assessment']
-        section.is_reinforced = data['is_reinforced']
-        section.final_measure_veiligheidrendement = data['final_measure_veiligheidrendement']
+        section.is_reinforced_doorsnede = data['is_reinforced_veiligheidsrendement']
+        section.is_reinforced_veiligheidsrendement = data['is_reinforced_doorsnede']
+        section.final_measure_veiligheidsrendement = data['final_measure_veiligheidsrendement']
         section.final_measure_doorsnede = data['final_measure_doorsnede']
         section.years = data['years']
         return section
@@ -71,17 +75,25 @@ class DikeSection(BaseLinearObject):
 
         :param _measure_dict: measure dictionary parsed and filtered from a TakenMeasures.csv or FinalMeasures.csv
         :param all_unzipped_files: dictionary with all the unzipped files from the zip file
-        :param calc_type: type of calculation, either "doorsnede" or "veiligheidrendement
+        :param calc_type: type of calculation, either "doorsnede" or "veiligheidsrendement
 
         """
 
         if self.name in _measure_dict.keys():
-            self.is_reinforced = True
 
             # Parse csv of the (optimal) measure dataframe and add them to the DikeSection object
             _final_measure = _measure_dict[self.name]
             if _final_measure["name"] == "No measure":
+                #set to No measure with initial assessment for betas
+                _final_measure = self.initial_assessment
+                self.__setattr__(f"final_measure_{calc_type}", _final_measure)
+                # print('No measure for {} for {}'.format(self.name, calc_type))
                 return
+
+            if calc_type == "doorsnede":
+                self.is_reinforced_doorsnede = True
+            elif calc_type == 'veiligheidsrendement':
+                self.is_reinforced_veiligheidsrendement = True
 
             _option = "Doorsnede-eisen" if calc_type == "doorsnede" else "Veiligheidsrendement"
 

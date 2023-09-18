@@ -44,7 +44,7 @@ def parse_zip_content(contents, zipname: str) -> dict[str, DataFrame]:
                         lambda x: list(x.coords))  # Serialize the geometry column to a list of coordinates
 
                     # if vaknaam is a single digit, add a 0 in front of it
-                    traject_gdf["vaknaam"] = traject_gdf["vaknaam"].apply(lambda x: x.zfill(2))
+                    # traject_gdf["vaknaam"] = traject_gdf["vaknaam"].apply(lambda x: x.zfill(2))
 
                     results['traject_gdf'] = traject_gdf
 

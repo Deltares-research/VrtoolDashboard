@@ -3,7 +3,7 @@ Original code from https://pypi.org/project/rijksdriehoek/
 Slightly modified to make the package more practical.
 """
 from dataclasses import dataclass
-
+from shapely import Polygon, MultiPolygon
 
 @dataclass
 class GWSRDConvertor:
@@ -91,3 +91,15 @@ class GWSRDConvertor:
             lam += l * dx ** p * dy ** q / 3600
 
         return [phi, lam]
+
+    @staticmethod
+    def generate_coordinates_from_buffer(section_rd, buffersize = 60):
+        _trajectory_buffer = section_rd.buffer(buffersize, cap_style=2)
+        # distinguish Polygon and MultiPolygon
+        if isinstance(_trajectory_buffer, Polygon):
+            coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
+                                _trajectory_buffer.exterior.coords]  # convert in GWS coordinates:
+        elif isinstance(_trajectory_buffer, MultiPolygon):
+            coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for _trajectory_buffer_poly in _trajectory_buffer.geoms for pt in
+                                _trajectory_buffer_poly.exterior.coords]
+        return coordinates_wgs
