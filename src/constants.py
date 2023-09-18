@@ -7,13 +7,13 @@ SIGNALERING = 1. / 30000
 
 class CalcType(Enum):
     DOORSNEDE_EISEN = "Doorsnede-Eisen"
-    VEILIGHEIDRENDEMENT = "Veiligheidsrendement"
+    VEILIGHEIDSRENDEMENT = "Veiligheidsrendement"
 
 
 class ResultType(Enum):
     RELIABILITY = "Betrouwbaarheid"
     PROBABILITY = "Faalkans"
-    COST = "Kost"
+    COST = "Kosten"
     MEASURE = "Maatregel"
 
 
@@ -27,7 +27,7 @@ class SubResultType(Enum):
 
 class ColorBarResultType(Enum):
     RELIABILITY = "Betrouwbaarheid"
-    COST = "Kost"
+    COST = "Kosten"
     MEASURE = "Maatregel"
 
 

@@ -24,7 +24,7 @@ class TestDikeTraject:
         assert isinstance(_dike_section_1.name, str)
         assert isinstance(_dike_section_1.coordinates_rd, list)
         assert isinstance(_dike_section_1.final_measure_doorsnede, dict)
-        assert isinstance(_dike_section_1.final_measure_veiligheidrendement, dict)
+        assert isinstance(_dike_section_1.final_measure_veiligheidsrendement, dict)
         assert isinstance(_dike_section_1.initial_assessment, dict)
 
 
