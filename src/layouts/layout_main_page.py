@@ -56,11 +56,11 @@ def make_layout_main_page() -> dbc.Row:
 
                         dbc.Tabs(
                             [
-                                dbc.Tab(label="Overzicht", tab_id="tab-1"),
-                                dbc.Tab(label="Beoordelingsresultaten Kaart", tab_id="tab-2"),
-                                dbc.Tab(label="Verstreking Kaart", tab_id="tab-3"),
-                                dbc.Tab(label="Optimalisatie resultaten", tab_id="tab-4"),
-                                dbc.Tab(label="Prioritering Kaart", tab_id="tab-5"),
+                                dbc.Tab(label="Overzicht dijkvakken", tab_id="tab-1"),
+                                dbc.Tab(label="Beoordelingsresultaten", tab_id="tab-2"),
+                                dbc.Tab(label="Versterkingsmaatregelen", tab_id="tab-3"),
+                                dbc.Tab(label="Resultaten optimalisatie", tab_id="tab-4"),
+                                dbc.Tab(label="Prioritering dijkvakken", tab_id="tab-5"),
 
                             ],
                             id="tabs",
@@ -80,7 +80,7 @@ def make_layout_main_page() -> dbc.Row:
 def layout_tab_one() -> html.Div:
     return html.Div(
         children=[
-            html.H2("Overzicht Kaart"),
+            html.H2("Overzicht dijkvakken"),
             html.Div("De onderstaande kaart geeft basisinformatie weer over het geïmporteerde dijktraject."),
             html.Div(id='overview_map_div',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
