@@ -89,14 +89,11 @@ class DikeSection(BaseLinearObject):
                     _final_measure[mechanism] = self.initial_assessment[mechanism]
                 self.__setattr__(f"final_measure_{calc_type}", _final_measure)
                 return
-
             if calc_type == "doorsnede":
                 self.is_reinforced_doorsnede = True
             elif calc_type == 'veiligheidsrendement':
                 self.is_reinforced_veiligheidsrendement = True
-
             _option = "Doorsnede-eisen" if calc_type == "doorsnede" else "Veiligheidsrendement"
-
             # Parse csv of the Section results and add them to the DikeSection object
             _section_measure_betas = all_unzipped_files[f"{self.name}_Options_{_option}"]
             self.years = _section_measure_betas.iloc[
@@ -107,7 +104,6 @@ class DikeSection(BaseLinearObject):
                 & (_section_measure_betas.dcrest == _final_measure["dcrest"])
                 & (_section_measure_betas.dberm == _final_measure["dberm"])
                 ].squeeze()
-
             for mechanism in _mechanisms:
                 _final_measure[mechanism] = [_section_measure_betas[key] for key in
                                              _section_measure_betas.index if
@@ -122,6 +118,11 @@ class DikeSection(BaseLinearObject):
         mechanisms for all years.
         :return:
         """
+        try:
+            initial_assessment_df['name'] = initial_assessment_df['name'].str.replace('^DV', '',
+                                                                          regex=True)  # remove DV from section names
+        except:
+            pass
         _section_initial_betas_df = initial_assessment_df.loc[initial_assessment_df["name"] == f"{self.name}"].squeeze()
         if not _section_initial_betas_df.empty:  # if df is empty, then section is not reinforced and skipped.
             _initial_assessment_dict = {}
@@ -129,6 +130,9 @@ class DikeSection(BaseLinearObject):
             _years = _section_initial_betas_df.columns[2:-1].tolist()  # last column is Length and should be removed
             for mechanism in _mechanisms:
                 _initial_assessment_dict[mechanism] = _section_initial_betas_df[_section_initial_betas_df["mechanism"] == mechanism].iloc[:, 2:-1].values.tolist()[0]
+            print(_initial_assessment_dict)
+            # self.__setattr__(f"years", _years)
             self.__setattr__(f"initial_assessment", _initial_assessment_dict)
             self.__setattr__(f"length", _section_initial_betas_df["Length"].iloc[0])
-
+        else:
+            print (f"Section {self.name} has no initial data.")
