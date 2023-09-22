@@ -26,10 +26,10 @@ def make_layout_main_page() -> dbc.Row:
             dbc.Col(
                 html.Div(
                     [
-                        html.H2("Welkom bij het dashboard van de Veiligheidsrendementstool 🌊"),
+                        html.H2("Welkom bij het dashboard van Versterkingsaanpak vanuit Veiligheidsrendement 🌊"),
                         dcc.Markdown(
                             '''
-                            Dit dashboard is een tool om de resultaten van de optimalisatie van Veiligheidsrendement voor dijkprojecten te visualiseren.
+                            Dit dashboard kan worden gebruikt om de resultaten van veiligheidsrendementberekeningen te visualiseren, en deze te vertalen naar de scope van dijkversterkingsprojecten.
                             '''
                         ),
 
@@ -41,7 +41,7 @@ def make_layout_main_page() -> dbc.Row:
                                              collapse_id=2,
                                              inner_layouts=[dike_settings_layout]),
 
-                        make_collapsing_menu(menu_name="VR optimalisatie",
+                        make_collapsing_menu(menu_name="Maatregelen optimalisatie",
                                              collapse_id=3,
                                              inner_layouts=[dike_vr_optimization_layout],
                                              is_open=False),
@@ -57,10 +57,10 @@ def make_layout_main_page() -> dbc.Row:
                         dbc.Tabs(
                             [
                                 dbc.Tab(label="Overzicht", tab_id="tab-1"),
-                                dbc.Tab(label="Beoordelingsresultaten Kaart", tab_id="tab-2"),
-                                dbc.Tab(label="Verstreking Kaart", tab_id="tab-3"),
-                                dbc.Tab(label="Optimalisatie resultaten", tab_id="tab-4"),
-                                dbc.Tab(label="Prioritering Kaart", tab_id="tab-5"),
+                                dbc.Tab(label="Beoordelingsresultaten", tab_id="tab-2"),
+                                dbc.Tab(label="Versterkingsmaatregelen", tab_id="tab-3"),
+                                dbc.Tab(label="Resultaten optimalisatie", tab_id="tab-4"),
+                                dbc.Tab(label="Prioriteringsinformatie", tab_id="tab-5"),
 
                             ],
                             id="tabs",
@@ -80,8 +80,8 @@ def make_layout_main_page() -> dbc.Row:
 def layout_tab_one() -> html.Div:
     return html.Div(
         children=[
-            html.H2("Overzicht Kaart"),
-            html.Div("De onderstaande kaart geeft basisinformatie weer over het geïmporteerde dijktraject."),
+            html.H2("Overzicht dijkvakken"),
+            html.Div("De onderstaande kaart geeft een overzicht van de dijkvakken binnen het geïmporteerde dijktraject."),
             html.Div(id='overview_map_div',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
         ])
@@ -92,7 +92,7 @@ def layout_tab_two() -> html.Div:
         children=[
             html.H2("Beoordelingsresultaten"),
             html.Div(
-                "De onderstaande kaart toont de betrouwbaarheid van de initiële beoordeling voor het gehele dijktraject. Gebruik de schuifregelaar om een andere beoordelingsjaar te visualiseren."),
+                "De onderstaande kaart toont de betrouwbaarheid/faalkans van de initiële beoordeling voor het gehele dijktraject. Gebruik de schuifregelaar om een ander beoordelingsjaar te visualiseren."),
             html.Div(id='dike_traject_reliability_map_initial',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
 
@@ -130,7 +130,7 @@ def layout_tab_four() -> html.Div:
         children=[
             html.H2("Optimalisatie"),
             html.Div(
-                "De figuur laat zien de relatie tussen de trajectfaalkans en de kosten van de versterking voor de geselecteerd referentie jaar."),
+                "Onderstaande figuur toont de relatie tussen de trajectfaalkans en de kosten van de versterking voor het geselecteerde referentiejaar."),
 
             dbc.Row([
 
@@ -166,7 +166,7 @@ def layout_tab_five() -> html.Div:
         children=[
             html.H2("Prioritering"),
             html.Div(
-                "Kies hoeveel cumulatieve lengte van de dijk de hoogste prioriteit heeft:"),
+                "Onderstaande kaart geeft de meest urgente dijkvakken op basis van de optimalisatievolgorde."),
             layout_urgency_length_slider,
             html.Div(id='dike_traject_urgency_map',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
