@@ -6,14 +6,14 @@ table_header = [
     html.Thead(html.Tr([html.Th("Dijkvak"),
                         html.Th("Versterking"),
                         html.Th("Maatregel"),
-                        html.Th("Referentiejaar"),
+                        html.Th("Jaar van uitvoering"),
                         ]))
 ]
 
-row1 = html.Tr([html.Td("01A"), html.Td("Aan"), html.Td("VZG"), html.Td("2025")])
+row1 = html.Tr([html.Td("01A"), html.Td("Aan"), html.Td("Bermverbreding"), html.Td("2025")])
 row2 = html.Tr([html.Td("01B"), html.Td("Uit"), html.Td("VZG"), html.Td("2025")])
-row3 = html.Tr([html.Td("2"), html.Td("Aan"), html.Td("Stabiliteit Scherm"), html.Td("2025")])
-row4 = html.Tr([html.Td("3"), html.Td("Aan"), html.Td("VZG"), html.Td("2045")])
+row3 = html.Tr([html.Td("2"), html.Td("Aan"), html.Td("Stabiliteitsscherm"), html.Td("2035")])
+row4 = html.Tr([html.Td("3"), html.Td("Aan"), html.Td("VZG"), html.Td("2035")])
 
 
 table_body = [html.Tbody([row1, row2, row3, row4])]
