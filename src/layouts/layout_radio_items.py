@@ -64,7 +64,7 @@ layout_radio_sub_type_result = dbc.RadioItems(
 
 layout_radio_length_switch = dbc.RadioItems(
     id="select_length_cost_switch",
-    options=[{"label": "Kost", "value": "COST"},
+    options=[{"label": "Kosten", "value": "COST"},
              {"label": "Lengte", "value": "LENGTH"}],
     value="COST",
 )
