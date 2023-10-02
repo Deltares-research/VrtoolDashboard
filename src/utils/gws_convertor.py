@@ -3,7 +3,8 @@ Original code from https://pypi.org/project/rijksdriehoek/
 Slightly modified to make the package more practical.
 """
 from dataclasses import dataclass
-from shapely import Polygon, MultiPolygon
+from shapely import Polygon, MultiPolygon, LineString
+
 
 @dataclass
 class GWSRDConvertor:
@@ -93,13 +94,26 @@ class GWSRDConvertor:
         return [phi, lam]
 
     @staticmethod
-    def generate_coordinates_from_buffer(section_rd, buffersize = 60):
-        _trajectory_buffer = section_rd.buffer(buffersize, cap_style=2)
+    def generate_coordinates_from_buffer(section_trajectory_rd: LineString, buffersize=60) -> list[list[float]]:
+        """
+        Generate the GWS coordinates for the buffer area around a section. This function distinguishes between cases
+        where the buffer is a Polygon (most of the time) or a MultiPolygon (when the section is very short and at a
+        corner).
+
+        :param section_trajectory_rd: Linestring of the section trajectory in RD coordinates
+        :param buffersize: size of the buffer in meters
+
+        :return:
+        """
+        _trajectory_buffer = section_trajectory_rd.buffer(buffersize, cap_style=2)
         # distinguish Polygon and MultiPolygon
         if isinstance(_trajectory_buffer, Polygon):
             coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
-                                _trajectory_buffer.exterior.coords]  # convert in GWS coordinates:
+                               _trajectory_buffer.exterior.coords]  # convert in GWS coordinates:
         elif isinstance(_trajectory_buffer, MultiPolygon):
-            coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for _trajectory_buffer_poly in _trajectory_buffer.geoms for pt in
-                                _trajectory_buffer_poly.exterior.coords]
+            coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for _trajectory_buffer_poly in
+                               _trajectory_buffer.geoms for pt in
+                               _trajectory_buffer_poly.exterior.coords]
+        else:
+            raise ValueError("The buffer is not a Polygon or MultiPolygon")
         return coordinates_wgs

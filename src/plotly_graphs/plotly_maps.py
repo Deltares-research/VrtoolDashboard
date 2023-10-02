@@ -294,8 +294,9 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
     """
 
     if "Grondversterking binnenwaarts" in measure_results['name']:
-        _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(section.trajectory_rd,buffersize=60)
-             # convert in GWS coordinates:
+        # convert in GWS coordinates:
+
+        _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(section.trajectory_rd, buffersize=60)
         if "2025" in measure_results['name']:
             _color = '#008000'  # Green
             _showlegend = legend_display.get("2025")
@@ -361,7 +362,7 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
         legend_display["screen"] = False
 
     if "Zelfkerende constructie" in measure_results['name']:
-        _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(section.trajectory_rd,buffersize=60)
+        _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(section.trajectory_rd, buffersize=60)
 
         fig.add_trace(go.Scattermapbox(
             name='Zelfkerende constructie',

@@ -68,7 +68,7 @@ class DikeSection(BaseLinearObject):
         return section
 
     def set_measure_and_reliabilities_from_csv(self, _measure_dict: dict,
-                                                   all_unzipped_files: dict, calc_type: str) -> None:
+                                               all_unzipped_files: dict, calc_type: str) -> None:
         """
         Set the measure to the dike section object and set its corresponding reliabilities for all mechanisms for all
         the years for which the calculations were done.
@@ -83,32 +83,36 @@ class DikeSection(BaseLinearObject):
             _mechanisms = ["Overflow", "StabilityInner", "Piping", "Section"]
             # Parse csv of the (optimal) measure dataframe and add them to the DikeSection object
             _final_measure = _measure_dict[self.name]
+
             if _final_measure["name"] == "No measure":
-                #set to No measure with initial assessment for betas
+                # set to No measure with initial assessment for betas
                 for mechanism in _mechanisms:
                     _final_measure[mechanism] = self.initial_assessment[mechanism]
                 self.__setattr__(f"final_measure_{calc_type}", _final_measure)
-                return
-            if calc_type == "doorsnede":
-                self.is_reinforced_doorsnede = True
-            elif calc_type == 'veiligheidsrendement':
-                self.is_reinforced_veiligheidsrendement = True
-            _option = "Doorsnede-eisen" if calc_type == "doorsnede" else "Veiligheidsrendement"
-            # Parse csv of the Section results and add them to the DikeSection object
-            _section_measure_betas = all_unzipped_files[f"{self.name}_Options_{_option}"]
-            self.years = _section_measure_betas.iloc[
-                0].dropna().unique()  # select the year for which the calculations were done
-            _section_measure_betas = _section_measure_betas.loc[
-                (_section_measure_betas.ID == _final_measure["ID"])
-                & (_section_measure_betas["yes/no"] == _final_measure["yes/no"])
-                & (_section_measure_betas.dcrest == _final_measure["dcrest"])
-                & (_section_measure_betas.dberm == _final_measure["dberm"])
-                ].squeeze()
-            for mechanism in _mechanisms:
-                _final_measure[mechanism] = [_section_measure_betas[key] for key in
-                                             _section_measure_betas.index if
-                                             key.startswith(mechanism)]
-            self.__setattr__(f"final_measure_{calc_type}", _final_measure)
+
+            else:
+                if calc_type == "doorsnede":
+                    self.is_reinforced_doorsnede = True
+
+                elif calc_type == 'veiligheidsrendement':
+                    self.is_reinforced_veiligheidsrendement = True
+
+                _option = "Doorsnede-eisen" if calc_type == "doorsnede" else "Veiligheidsrendement"
+                # Parse csv of the Section results and add them to the DikeSection object
+                _section_measure_betas = all_unzipped_files[f"{self.name}_Options_{_option}"]
+                self.years = _section_measure_betas.iloc[
+                    0].dropna().unique()  # select the year for which the calculations were done
+                _section_measure_betas = _section_measure_betas.loc[
+                    (_section_measure_betas.ID == _final_measure["ID"])
+                    & (_section_measure_betas["yes/no"] == _final_measure["yes/no"])
+                    & (_section_measure_betas.dcrest == _final_measure["dcrest"])
+                    & (_section_measure_betas.dberm == _final_measure["dberm"])
+                    ].squeeze()
+                for mechanism in _mechanisms:
+                    _final_measure[mechanism] = [_section_measure_betas[key] for key in
+                                                 _section_measure_betas.index if
+                                                 key.startswith(mechanism)]
+                self.__setattr__(f"final_measure_{calc_type}", _final_measure)
 
     def set_initial_assessment_from_csv(self, initial_assessment_df: DataFrame) -> None:
         """
@@ -120,19 +124,21 @@ class DikeSection(BaseLinearObject):
         """
         try:
             initial_assessment_df['name'] = initial_assessment_df['name'].str.replace('^DV', '',
-                                                                          regex=True)  # remove DV from section names
+                                                                                      regex=True)  # remove DV from section names
         except:
             pass
+
         _section_initial_betas_df = initial_assessment_df.loc[initial_assessment_df["name"] == f"{self.name}"].squeeze()
+
         if not _section_initial_betas_df.empty:  # if df is empty, then section is not reinforced and skipped.
             _initial_assessment_dict = {}
             _mechanisms = ["Overflow", "StabilityInner", "Piping", "Section"]
             _years = _section_initial_betas_df.columns[2:-1].tolist()  # last column is Length and should be removed
             for mechanism in _mechanisms:
-                _initial_assessment_dict[mechanism] = _section_initial_betas_df[_section_initial_betas_df["mechanism"] == mechanism].iloc[:, 2:-1].values.tolist()[0]
-            print(_initial_assessment_dict)
-            # self.__setattr__(f"years", _years)
+                _initial_assessment_dict[mechanism] = \
+                _section_initial_betas_df[_section_initial_betas_df["mechanism"] == mechanism].iloc[:,
+                2:-1].values.tolist()[0]
             self.__setattr__(f"initial_assessment", _initial_assessment_dict)
             self.__setattr__(f"length", _section_initial_betas_df["Length"].iloc[0])
         else:
-            print (f"Section {self.name} has no initial data.")
+            print(f"Section {self.name} has no initial data.")
