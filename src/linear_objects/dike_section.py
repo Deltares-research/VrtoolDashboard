@@ -100,14 +100,16 @@ class DikeSection(BaseLinearObject):
                 _option = "Doorsnede-eisen" if calc_type == "doorsnede" else "Veiligheidsrendement"
                 # Parse csv of the Section results and add them to the DikeSection object
                 _section_measure_betas = all_unzipped_files[f"{self.name}_Options_{_option}"]
+
                 self.years = _section_measure_betas.iloc[
-                    0].dropna().unique()  # select the year for which the calculations were done
+                    0].dropna().unique()  #s select the year for which the calculations were done
                 _section_measure_betas = _section_measure_betas.loc[
-                    (_section_measure_betas.ID == _final_measure["ID"])
+                    (_section_measure_betas.ID == str(_final_measure["ID"]))
                     & (_section_measure_betas["yes/no"] == _final_measure["yes/no"])
                     & (_section_measure_betas.dcrest == _final_measure["dcrest"])
                     & (_section_measure_betas.dberm == _final_measure["dberm"])
                     ].squeeze()
+
                 for mechanism in _mechanisms:
                     _final_measure[mechanism] = [_section_measure_betas[key] for key in
                                                  _section_measure_betas.index if
@@ -122,11 +124,8 @@ class DikeSection(BaseLinearObject):
         mechanisms for all years.
         :return:
         """
-        try:
-            initial_assessment_df['name'] = initial_assessment_df['name'].str.replace('^DV', '',
-                                                                                      regex=True)  # remove DV from section names
-        except:
-            pass
+        initial_assessment_df['name'] = initial_assessment_df['name'].str.replace('^DV', '',
+                                                                                  regex=True)  # remove DV from section names
 
         _section_initial_betas_df = initial_assessment_df.loc[initial_assessment_df["name"] == f"{self.name}"].squeeze()
 
@@ -136,8 +135,8 @@ class DikeSection(BaseLinearObject):
             _years = _section_initial_betas_df.columns[2:-1].tolist()  # last column is Length and should be removed
             for mechanism in _mechanisms:
                 _initial_assessment_dict[mechanism] = \
-                _section_initial_betas_df[_section_initial_betas_df["mechanism"] == mechanism].iloc[:,
-                2:-1].values.tolist()[0]
+                    _section_initial_betas_df[_section_initial_betas_df["mechanism"] == mechanism].iloc[:,
+                    2:-1].values.tolist()[0]
             self.__setattr__(f"initial_assessment", _initial_assessment_dict)
             self.__setattr__(f"length", _section_initial_betas_df["Length"].iloc[0])
         else:

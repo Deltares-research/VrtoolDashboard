@@ -99,17 +99,22 @@ class DikeTraject(BaseLinearObject):
             _section_measure = "final_measure_doorsnede"
 
         else:
-            raise ValueError("calc_type should be either 'vr' or 'dsn'")
+            raise ValueError("calc_type should be either 'vr' or 'dsn' ")
 
         for section_name in _section_order:
             section = self.get_section(section_name)
 
             if not section.in_analyse:  # skip if the section is not reinforced
                 continue
-            if (calc_type == 'doorsnede') and (not section.is_reinforced_doorsnede):  # skip if the section is not reinforced
+
+            if (calc_type == 'doorsnede') and (
+            not section.is_reinforced_doorsnede):  # skip if the section is not reinforced
                 continue
-            if (calc_type == 'veiligheidsrendement') and (not section.is_reinforced_veiligheidsrendement):  # skip if the section is not reinforced
+
+            if (calc_type == 'veiligheidsrendement') and (
+            not section.is_reinforced_veiligheidsrendement):  # skip if the section is not reinforced
                 continue
+
             # add a row to the dataframe with the initial assessment of the section
             for mechanism in ["Overflow", "Piping", "StabilityInner"]:
                 mask = (_beta_df['name'] == section.name) & (_beta_df['mechanism'] == mechanism)
@@ -121,8 +126,8 @@ class DikeTraject(BaseLinearObject):
                 for year, beta in zip(years, getattr(section, _section_measure)[mechanism]):
                     d[year] = beta
                 _beta_df.loc[mask, years] = d
-
             _reinforced_traject_pf, _ = get_traject_prob(_beta_df, ['StabilityInner', 'Piping', 'Overflow'])
+
             _traject_pf = np.concatenate((_traject_pf, _reinforced_traject_pf), axis=0)
 
         return np.array(_traject_pf)
@@ -183,15 +188,17 @@ class DikeTraject(BaseLinearObject):
             section = self.get_section(section_name)
             if not (section.in_analyse):
                 continue
-            if (calc_type == 'doorsnede') and (not section.is_reinforced_doorsnede):  # skip if the section is not reinforced
+            if (calc_type == 'doorsnede') and (
+            not section.is_reinforced_doorsnede):  # skip if the section is not reinforced
                 continue
-            if (calc_type == 'veiligheidsrendement') and (not section.is_reinforced_veiligheidsrendement):  # skip if the section is not reinforced
+            if (calc_type == 'veiligheidsrendement') and (
+            not section.is_reinforced_veiligheidsrendement):  # skip if the section is not reinforced
                 continue
 
             try:
                 cost_list.append(getattr(section, _section_measure)['LCC'])
             except:
-                #temporary print for debugging
+                # temporary print for debugging
                 print('Geen maatregel op dijkvak {} voor {}'.format(section.name, calc_type))
 
         return np.cumsum(cost_list) / 1e6
@@ -213,9 +220,11 @@ class DikeTraject(BaseLinearObject):
 
             if not (section.in_analyse):
                 continue
-            if (calc_type == 'doorsnede') and (not section.is_reinforced_doorsnede):  # skip if the section is not reinforced
+            if (calc_type == 'doorsnede') and (
+            not section.is_reinforced_doorsnede):  # skip if the section is not reinforced
                 continue
-            if (calc_type == 'veiligheidsrendement') and (not section.is_reinforced_veiligheidsrendement):  # skip if the section is not reinforced
+            if (calc_type == 'veiligheidsrendement') and (
+            not section.is_reinforced_veiligheidsrendement):  # skip if the section is not reinforced
                 continue
 
             length_list.append(section.length)
@@ -239,7 +248,7 @@ def parse_optimal_measures_results(all_unzipped_files: dict, filename: str) -> d
     try:
         _measures_df['Section'] = _measures_df['Section'].str.replace('^DV', '',
                                                                       regex=True)  # remove DV from section names
-    except: #change type of Section column to string
+    except:  # change type of Section column to string
         _measures_df['Section'] = _measures_df['Section'].astype(str)
     _measures_df.set_index("Section", inplace=True)
     if not _measures_df.index.is_unique:
@@ -262,7 +271,7 @@ def determine_reinforcement_order(all_unzipped_files: dict, filename: str) -> li
     try:
         final_measures_df['Section'] = final_measures_df['Section'].str.replace('^DV', '', regex=True)
     except:
-        #if dtype if Section is float, convert to int
+        # if dtype if Section is float, convert to int
         if final_measures_df['Section'].dtype == float:
             final_measures_df['Section'] = final_measures_df['Section'].astype(int)
         final_measures_df['Section'] = final_measures_df['Section'].astype(str)
@@ -271,7 +280,7 @@ def determine_reinforcement_order(all_unzipped_files: dict, filename: str) -> li
 
 
 def get_traject_prob(beta_df: DataFrame, mechanisms: list) -> tuple[np.array, dict]:
-    # determines the probability of failure for a traject based on the standardized beta input
+    """Determines the probability of failure for a traject based on the standardized beta input"""
 
     beta_df = beta_df.reset_index().set_index('mechanism').drop(columns=['name'])
     beta_df = beta_df.drop(columns=['Length', "index"])

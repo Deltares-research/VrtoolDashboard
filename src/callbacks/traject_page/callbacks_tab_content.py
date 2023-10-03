@@ -8,6 +8,9 @@ from src.plotly_graphs.plotly_maps import plot_overview_map, plot_default_overvi
     plot_dike_traject_reliability_initial_assessment_map, plot_dike_traject_reliability_measures_assessment_map, \
     plot_dike_traject_urgency, dike_traject_pf_cost_helping_map
 from src.app import app
+from src.utils.utils import export_to_json
+
+
 @app.callback(Output('overview_map_div', 'children'),
               [Input('stored-data', 'data')])
 def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
@@ -17,6 +20,7 @@ def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
     :param dike_traject_data:
 
     """
+    export_to_json(dike_traject_data)
 
     if dike_traject_data is None:
         _fig = plot_default_overview_map_dummy()
