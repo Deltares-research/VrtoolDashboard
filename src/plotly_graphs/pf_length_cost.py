@@ -19,7 +19,7 @@ def plot_default_scatter_dummy() -> go.Figure:
 
 
 def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_type: str,
-                        cost_length_switch: str) -> go.Figure:
+                        cost_length_switch: str, ondergrens: float, signalering: float) -> go.Figure:
     """
 
     :param dike_traject:
@@ -30,6 +30,13 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
 
     :return:
     """
+
+    if not isinstance(ondergrens, float):
+        raise ValueError("Ondergrens is gemist")
+
+    if not isinstance(signalering, float):
+        raise ValueError("Signaleringswaarde is gemist")
+
 
     fig = go.Figure()
     _year_index = bisect_right(dike_traject.dike_sections[0].years, selected_year - REFERENCE_YEAR) - 1
@@ -54,15 +61,15 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
         y_vr = pf_to_beta(dike_traject.calc_traject_probability_array("vr")[:, _year_index])
         y_dsn = pf_to_beta(dike_traject.calc_traject_probability_array("dsn")[:, _year_index])
         title_y_axis = "Betrouwbaarheid"
-        y_ondergrens = pf_to_beta(ONDERGRENS)
-        y_signalering = pf_to_beta(SIGNALERING)
+        y_ondergrens = pf_to_beta(ondergrens)
+        y_signalering = pf_to_beta(signalering)
 
     elif result_type == ResultType.PROBABILITY.name:
         y_vr = dike_traject.calc_traject_probability_array("vr")[:, _year_index]
         y_dsn = dike_traject.calc_traject_probability_array("dsn")[:, _year_index]
         title_y_axis = "Trajectfaalkans per jaar"
-        y_ondergrens = ONDERGRENS
-        y_signalering = SIGNALERING
+        y_ondergrens = ondergrens
+        y_signalering = signalering
 
     else:
         raise ValueError("Wrong result_type value")
