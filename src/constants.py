@@ -6,8 +6,8 @@ ONDERGRENS = 1. / 10000
 SIGNALERING = 1. / 30000
 
 class CalcType(Enum):
-    DOORSNEDE_EISEN = "Doorsnede-eisen"
-    VEILIGHEIDRENDEMENT = "Veiligheidsrendement"
+    DOORSNEDE_EISEN = "Doorsnede-Eisen"
+    VEILIGHEIDSRENDEMENT = "Veiligheidsrendement"
 
 
 class ResultType(Enum):

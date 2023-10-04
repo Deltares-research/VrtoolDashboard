@@ -50,11 +50,11 @@ class DikeTraject(BaseLinearObject):
                                         )
 
             # Parse dike results csv and add the measure and its associated reliabilities
+            _dike_section.set_initial_assessment_from_csv(_all_unzipped_files["InitialAssessment_Betas"])
             _dike_section.set_measure_and_reliabilities_from_csv(_optimal_measure_dsn_dict, _all_unzipped_files,
                                                                  "doorsnede")
             _dike_section.set_measure_and_reliabilities_from_csv(_optimal_measure_vr_dict, _all_unzipped_files,
-                                                                 "veiligheidrendement")
-            _dike_section.set_initial_assessment_from_csv(_all_unzipped_files["InitialAssessment_Betas"])
+                                                                 "veiligheidsrendement")
 
             _dike_sections.append(_dike_section)
 
@@ -92,19 +92,27 @@ class DikeTraject(BaseLinearObject):
 
         if calc_type == "vr":
             _section_order = self.reinforcement_order_vr
-            _section_measure = "final_measure_veiligheidrendement"
+            _section_measure = "final_measure_veiligheidsrendement"
 
         elif calc_type == "dsn":
             _section_order = self.reinforcement_order_dsn
             _section_measure = "final_measure_doorsnede"
 
         else:
-            raise ValueError("calc_type should be either 'vr' or 'dsn'")
+            raise ValueError("calc_type should be either 'vr' or 'dsn' ")
 
         for section_name in _section_order:
             section = self.get_section(section_name)
 
-            if not (section.in_analyse):  # skip if the section is not reinforced
+            if not section.in_analyse:  # skip if the section is not reinforced
+                continue
+
+            if (calc_type == 'doorsnede') and (
+            not section.is_reinforced_doorsnede):  # skip if the section is not reinforced
+                continue
+
+            if (calc_type == 'veiligheidsrendement') and (
+            not section.is_reinforced_veiligheidsrendement):  # skip if the section is not reinforced
                 continue
 
             # add a row to the dataframe with the initial assessment of the section
@@ -114,11 +122,12 @@ class DikeTraject(BaseLinearObject):
                 d = {"name": section.name, "mechanism": mechanism, "Length": section.length
 
                      }
+
                 for year, beta in zip(years, getattr(section, _section_measure)[mechanism]):
                     d[year] = beta
                 _beta_df.loc[mask, years] = d
-
             _reinforced_traject_pf, _ = get_traject_prob(_beta_df, ['StabilityInner', 'Piping', 'Overflow'])
+
             _traject_pf = np.concatenate((_traject_pf, _reinforced_traject_pf), axis=0)
 
         return np.array(_traject_pf)
@@ -126,7 +135,7 @@ class DikeTraject(BaseLinearObject):
     def get_section(self, name: str) -> DikeSection:
         """Get the section object by name"""
         for section in self.dike_sections:
-            if section.name == name:
+            if (section.name == name):
                 return section
         raise ValueError(f"Section with name {name} not found")
 
@@ -137,13 +146,14 @@ class DikeTraject(BaseLinearObject):
         df = pd.DataFrame(columns=["name", "mechanism"] + years + ["Length"])
 
         for section in self.dike_sections:
-            if not section.is_reinforced:
+            if not section.in_analyse:
                 continue
             # add a row to the dataframe with the initial assessment of the section
             for mechanism in ["Overflow", "StabilityInner", "Piping"]:
                 d = {"name": section.name, "mechanism": mechanism, "Length": section.length
 
                      }
+
                 for year, beta in zip(years, section.initial_assessment[mechanism]):
                     d[year] = beta
                 s = pd.DataFrame(d, index=[0])
@@ -167,7 +177,7 @@ class DikeTraject(BaseLinearObject):
 
         if calc_type == "vr":
             _section_order = self.reinforcement_order_vr
-            _section_measure = "final_measure_veiligheidrendement"
+            _section_measure = "final_measure_veiligheidsrendement"
         elif calc_type == "dsn":
             _section_order = self.reinforcement_order_dsn
             _section_measure = "final_measure_doorsnede"
@@ -176,11 +186,20 @@ class DikeTraject(BaseLinearObject):
 
         for section_name in _section_order:
             section = self.get_section(section_name)
-
-            if not (section.in_analyse and section.is_reinforced):  # skip if the section is not reinforced
+            if not (section.in_analyse):
+                continue
+            if (calc_type == 'doorsnede') and (
+            not section.is_reinforced_doorsnede):  # skip if the section is not reinforced
+                continue
+            if (calc_type == 'veiligheidsrendement') and (
+            not section.is_reinforced_veiligheidsrendement):  # skip if the section is not reinforced
                 continue
 
-            cost_list.append(getattr(section, _section_measure)['LCC'])
+            try:
+                cost_list.append(getattr(section, _section_measure)['LCC'])
+            except:
+                # temporary print for debugging
+                print('Geen maatregel op dijkvak {} voor {}'.format(section.name, calc_type))
 
         return np.cumsum(cost_list) / 1e6
 
@@ -189,7 +208,7 @@ class DikeTraject(BaseLinearObject):
         length_list = [0]
         if calc_type == "vr":
             _section_order = self.reinforcement_order_vr
-            _section_measure = "final_measure_veiligheidrendement"
+            _section_measure = "final_measure_veiligheidsrendement"
         elif calc_type == "dsn":
             _section_order = self.reinforcement_order_dsn
             _section_measure = "final_measure_doorsnede"
@@ -199,8 +218,15 @@ class DikeTraject(BaseLinearObject):
         for section_name in _section_order:
             section = self.get_section(section_name)
 
-            if not (section.in_analyse and section.is_reinforced):  # skip if the section is not reinforced
+            if not (section.in_analyse):
                 continue
+            if (calc_type == 'doorsnede') and (
+            not section.is_reinforced_doorsnede):  # skip if the section is not reinforced
+                continue
+            if (calc_type == 'veiligheidsrendement') and (
+            not section.is_reinforced_veiligheidsrendement):  # skip if the section is not reinforced
+                continue
+
             length_list.append(section.length)
 
         return np.cumsum(length_list)
@@ -214,17 +240,19 @@ def parse_optimal_measures_results(all_unzipped_files: dict, filename: str) -> d
     :param filename: name of the csv file with the final measures results
     :return:
     """
+
     if filename not in all_unzipped_files.keys():
         raise ValueError(f'The zip file does not contain the required file: {filename}')
     _measures_df = all_unzipped_files[filename]
     _measures_df.dropna(subset=['Section'], inplace=True)  # drop nan in Section column
-    _measures_df['Section'] = _measures_df['Section'].str.replace('^DV', '',
-                                                                  regex=True)  # remove DV from section names
+    try:
+        _measures_df['Section'] = _measures_df['Section'].str.replace('^DV', '',
+                                                                      regex=True)  # remove DV from section names
+    except:  # change type of Section column to string
+        _measures_df['Section'] = _measures_df['Section'].astype(str)
     _measures_df.set_index("Section", inplace=True)
-
     if not _measures_df.index.is_unique:
         raise ValueError(f"Error: the file {filename} contains duplicate section names")
-
     _measure_dict = _measures_df[["LCC", 'name', "ID", "yes/no", "dberm", "dcrest"]].to_dict('index')
     return _measure_dict
 
@@ -239,12 +267,20 @@ def determine_reinforcement_order(all_unzipped_files: dict, filename: str) -> li
     if filename not in all_unzipped_files.keys():
         raise ValueError(f'The zip file does not contain the required file: {filename}')
     final_measures_df = all_unzipped_files[filename]
-    final_measures_df['Section'] = final_measures_df['Section'].str.replace('^DV', '', regex=True)
+    final_measures_df.dropna(subset=['Section'], inplace=True)  # drop nan in Section column
+    try:
+        final_measures_df['Section'] = final_measures_df['Section'].str.replace('^DV', '', regex=True)
+    except:
+        # if dtype if Section is float, convert to int
+        if final_measures_df['Section'].dtype == float:
+            final_measures_df['Section'] = final_measures_df['Section'].astype(int)
+        final_measures_df['Section'] = final_measures_df['Section'].astype(str)
+
     return final_measures_df['Section'].dropna().unique()
 
 
 def get_traject_prob(beta_df: DataFrame, mechanisms: list) -> tuple[np.array, dict]:
-    # determines the probability of failure for a traject based on the standardized beta input
+    """Determines the probability of failure for a traject based on the standardized beta input"""
 
     beta_df = beta_df.reset_index().set_index('mechanism').drop(columns=['name'])
     beta_df = beta_df.drop(columns=['Length', "index"])

@@ -5,7 +5,7 @@ from typing import Tuple
 import numpy as np
 import plotly.graph_objects as go
 from matplotlib import pyplot as plt, colors
-from shapely import LineString
+from shapely import Polygon, MultiPolygon
 
 from src.constants import REFERENCE_YEAR, ColorBarResultType, Mechanism, SubResultType, CalcType, ResultType, ONDERGRENS
 from src.linear_objects.dike_section import DikeSection
@@ -130,7 +130,7 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
     :param dike_traject:
     :param selected_year: selected year by the user for which results must be displayed
     :param result_type: one of "RELIABILITY" or "PROBABILITY"
-    :param calc_type: one of "VEILIGHEIDRENDEMENT" or "DOORSNEDE"
+    :param calc_type: one of "VEILIGHEIDSRENDEMENT" or "DOORSNEDE"
     :param colorbar_result_type: one of "RELIABILITY" or "COST" or "MEASURE"
     :param mechanism_type: Selected mechanism type by the user from the OptionField, one of "PIPING", "STABILITY",
     "OVERFLOW" or "SECTION".
@@ -152,7 +152,7 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
 
         _initial_results = section.initial_assessment
 
-        _measure_results = section.final_measure_veiligheidrendement if calc_type == CalcType.VEILIGHEIDRENDEMENT.name else section.final_measure_doorsnede
+        _measure_results = section.final_measure_veiligheidsrendement if calc_type == CalcType.VEILIGHEIDSRENDEMENT.name else section.final_measure_doorsnede
 
         if _measure_results is not None:
 
@@ -204,14 +204,14 @@ def plot_dike_traject_urgency(dike_traject: DikeTraject, selected_year: float, l
     :param dike_traject:
     :param selected_year: Selected year by the user for which results must be displayed
     :param length_urgency: Selected length of the urgency by the user
-    :param calc_type: one of "VEILIGHEIDRENDEMENT" or "DOORSNEDE"
+    :param calc_type: one of "VEILIGHEIDSRENDEMENT" or "DOORSNEDE"
     :return:
     """
     fig = go.Figure()
 
     _year_index = bisect_right(dike_traject.dike_sections[0].years, selected_year - REFERENCE_YEAR) - 1
 
-    if calc_type == CalcType.VEILIGHEIDRENDEMENT.name:
+    if calc_type == CalcType.VEILIGHEIDSRENDEMENT.name:
         _section_index = bisect_right(dike_traject.get_cum_length("vr"), length_urgency * 1e3)
         _ordered_sections = dike_traject.reinforcement_order_vr[:_section_index]
 
@@ -268,12 +268,10 @@ def plot_dike_traject_measures_map(dike_traject: DikeTraject, subresult_type: st
         if not section.in_analyse:
             continue
 
-        _measure_results = section.final_measure_veiligheidrendement if calc_type == CalcType.VEILIGHEIDRENDEMENT.name else section.final_measure_doorsnede
-
+        _measure_results = section.final_measure_veiligheidsrendement if calc_type == CalcType.VEILIGHEIDSRENDEMENT.name else section.final_measure_doorsnede
         if _measure_results is not None:
             if subresult_type == SubResultType.MEASURE_TYPE.name:
                 add_measure_type_trace(fig, section, _measure_results, _legend_display)
-
             elif subresult_type == SubResultType.CREST_HIGHTENING.name:
                 add_measure_crest_heightening_trace(fig, section, _measure_results)
 
@@ -294,11 +292,11 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
     :param measure_results:
     :param legend_display: dict to avoid double legend entries
     """
-    if "Grondversterking binnenwaarts" in measure_results['name']:
-        _trajectory_buffer = section.trajectory_rd.buffer(60, cap_style=2)
 
-        _coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
-                            _trajectory_buffer.exterior.coords]  # convert in GWS coordinates:
+    if "Grondversterking binnenwaarts" in measure_results['name']:
+        # convert in GWS coordinates:
+
+        _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(section.trajectory_rd, buffersize=60)
         if "2025" in measure_results['name']:
             _color = '#008000'  # Green
             _showlegend = legend_display.get("2025")
@@ -324,7 +322,7 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
             showlegend=_showlegend,
             hovertemplate=f'Vaknaam {section.name}<br>' \
                           f"Maatregel: {measure_results['name']} <br>" \
-                          f"Kruin verhoging: {measure_results['dcrest']}m <br>" \
+                          f"Kruinverhoging: {measure_results['dcrest']}m <br>" \
                           f"Bermverbreding: {measure_results['dberm']}m <br>"
 
         ))
@@ -364,10 +362,8 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
         legend_display["screen"] = False
 
     if "Zelfkerende constructie" in measure_results['name']:
-        _trajectory_buffer = section.trajectory_rd.buffer(40, cap_style=2)
+        _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(section.trajectory_rd, buffersize=60)
 
-        _coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
-                            _trajectory_buffer.exterior.coords]  # convert in GWS coordinates:
         fig.add_trace(go.Scattermapbox(
             name='Zelfkerende constructie',
             legendgroup='diaphram wall',
@@ -416,10 +412,7 @@ def add_measure_crest_heightening_trace(fig: go.Figure, section: DikeSection, me
 def add_measure_berm_widening_trace(fig: go.Figure, section: DikeSection, measure_results: dict):
     if "Grondversterking binnenwaarts" in measure_results['name']:
         if measure_results['dberm'] > 0:
-            _trajectory_buffer = section.trajectory_rd.buffer(60, cap_style=2)
-
-            _coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
-                                _trajectory_buffer.exterior.coords]  # convert in GWS coordinates:
+            _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(section.trajectory_rd, buffersize=60)
 
             _color = get_berm_widening_color(measure_results['dberm'])
 
@@ -711,6 +704,10 @@ def get_color(value: float, cmap, vmin: float, vmax: float) -> str:
     :param vmax: max value of the color scale
     :return: color as rbg string
     """
+    # if value > vmax:
+    #     value = vmax
+    # elif value < vmin:
+    #     value = vmin
     norm = colors.Normalize(vmin=vmin, vmax=vmax)  # Hardcoded boundaries
     rgb = cmap(norm(value))
     return f'rgb({rgb[0]}, {rgb[1]}, {rgb[2]})'
@@ -796,12 +793,12 @@ def get_beta(results: dict, year_index: int, mechanism: str) -> float:
 
 
 def get_color_hover_prob_ratio(section: DikeSection, year_index: int, mechanism_type: str) -> Tuple[str, str]:
-    if section.final_measure_veiligheidrendement is None or section.final_measure_doorsnede is None:
+    if section.final_measure_veiligheidsrendement is None or section.final_measure_doorsnede is None:
         _color = 'grey'
         _hovertemplate = f'Vaknaam {section.name}<br>' \
                          f'Beta: NO DATA<br>'
     else:
-        _beta_vr = get_beta(section.final_measure_veiligheidrendement, year_index, mechanism_type)
+        _beta_vr = get_beta(section.final_measure_veiligheidsrendement, year_index, mechanism_type)
         _beta_dsn = get_beta(section.final_measure_doorsnede, year_index, mechanism_type)
         _ratio_pf = beta_to_pf(_beta_vr) / beta_to_pf(_beta_dsn)
         _color = get_probability_ratio_color(_ratio_pf)
@@ -842,12 +839,12 @@ def get_color_hover_absolute_cost(section: DikeSection, beta_section: float, mea
 
 
 def get_color_hover_difference_cost(section: DikeSection) -> Tuple[str, str]:
-    if section.final_measure_veiligheidrendement is None or section.final_measure_doorsnede is None:
+    if section.final_measure_veiligheidsrendement is None or section.final_measure_doorsnede is None:
         _color = 'grey'
         _hovertemplate = f'Vaknaam {section.name}<br>' \
                          f'Beta: NO DATA<br>'
     else:
-        _cost_vr = section.final_measure_veiligheidrendement["LCC"]
+        _cost_vr = section.final_measure_veiligheidsrendement["LCC"]
         _cost_dsn = section.final_measure_doorsnede["LCC"]
         _diff = _cost_vr - _cost_dsn
         _diff_per_kilometer = to_million_euros(_diff / (section.length / 1e3))

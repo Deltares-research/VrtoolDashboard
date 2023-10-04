@@ -33,15 +33,15 @@ def parse_zip_content(contents, zipname: str) -> dict[str, DataFrame]:
                 if _path_name.suffix == '.csv':
                     df = pd.read_csv(StringIO(_file_content))
                     results[_path_name.stem] = df
+                    if "name" in results[_path_name.stem].columns:
+                        #convert to string
+                        results[_path_name.stem]["name"] = results[_path_name.stem]["name"].astype(str)
 
                 if _path_name.suffix == '.geojson':
                     # TODO: check if the geometry is expressed in RD coordinates
                     traject_gdf = gpd.read_file(_file_content)
                     traject_gdf["geometry"] = traject_gdf["geometry"].apply(
                         lambda x: list(x.coords))  # Serialize the geometry column to a list of coordinates
-
-                    # if vaknaam is a single digit, add a 0 in front of it
-                    traject_gdf["vaknaam"] = traject_gdf["vaknaam"].apply(lambda x: x.zfill(2))
 
                     results['traject_gdf'] = traject_gdf
 

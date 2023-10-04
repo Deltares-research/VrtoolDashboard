@@ -52,7 +52,7 @@ class TestPlotlyScatterMapBox():
         assert isinstance(_fig, Figure)
 
     @pytest.mark.parametrize("result_type", [ResultType.RELIABILITY, ResultType.PROBABILITY])
-    @pytest.mark.parametrize("calc_type", [CalcType.VEILIGHEIDRENDEMENT, CalcType.DOORSNEDE_EISEN])
+    @pytest.mark.parametrize("calc_type", [CalcType.VEILIGHEIDSRENDEMENT, CalcType.DOORSNEDE_EISEN])
     @pytest.mark.parametrize("sub_result_type", [SubResultType.ABSOLUTE, SubResultType.RATIO])
     def test_plot_dike_traject_reliability_measures_assessment_map_reliability(self, result_type: Enum, calc_type: Enum,
                                                                                sub_result_type: Enum):
@@ -74,7 +74,7 @@ class TestPlotlyScatterMapBox():
         assert isinstance(_fig, Figure)
 
     @pytest.mark.parametrize("result_type", [ResultType.RELIABILITY, ResultType.PROBABILITY])
-    @pytest.mark.parametrize("calc_type", [CalcType.VEILIGHEIDRENDEMENT, CalcType.DOORSNEDE_EISEN])
+    @pytest.mark.parametrize("calc_type", [CalcType.VEILIGHEIDSRENDEMENT, CalcType.DOORSNEDE_EISEN])
     @pytest.mark.parametrize("sub_result_type", [SubResultType.ABSOLUTE, SubResultType.DIFFERENCE])
     def test_plot_dike_traject_reliability_measures_assessment_map_cost(self, result_type: Enum, calc_type: Enum,
                                                                         sub_result_type: Enum):
@@ -95,7 +95,7 @@ class TestPlotlyScatterMapBox():
         # 3. Assert
         assert isinstance(_fig, Figure)
 
-    @pytest.mark.parametrize("calc_type", [CalcType.VEILIGHEIDRENDEMENT, CalcType.DOORSNEDE_EISEN])
+    @pytest.mark.parametrize("calc_type", [CalcType.VEILIGHEIDSRENDEMENT, CalcType.DOORSNEDE_EISEN])
     @pytest.mark.parametrize("sub_result_type", [SubResultType.MEASURE_TYPE, SubResultType.BERM_WIDENING, SubResultType.CREST_HIGHTENING])
     def test_plot_dike_traject_reliability_measures_assessment_map_measure(self,calc_type: Enum,
                                                                         sub_result_type: Enum):
@@ -116,7 +116,7 @@ class TestPlotlyScatterMapBox():
         # 3. Assert
         assert isinstance(_fig, Figure)
 
-    @pytest.mark.parametrize("calc_type", [CalcType.VEILIGHEIDRENDEMENT, CalcType.DOORSNEDE_EISEN])
+    @pytest.mark.parametrize("calc_type", [CalcType.VEILIGHEIDSRENDEMENT, CalcType.DOORSNEDE_EISEN])
     def test_plot_dike_traject_urgency(self, calc_type: Enum):
         # 1. Define data
         _dike_data = json.load(

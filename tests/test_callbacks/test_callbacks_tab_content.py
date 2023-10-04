@@ -61,7 +61,7 @@ class TestCallbackTabContent:
             return make_graph_map_measures(_dike_data,
                                            2025,
                                            ResultType.RELIABILITY.name,
-                                           CalcType.VEILIGHEIDRENDEMENT.name,
+                                           CalcType.VEILIGHEIDSRENDEMENT.name,
                                            ColorBarResultType.RELIABILITY.name,
                                            Mechanism.SECTION.name,
                                            SubResultType.ABSOLUTE.name)
@@ -100,7 +100,7 @@ class TestCallbackTabContent:
 
         # 2. Define callback
         def run_callback():
-            return make_graph_map_urgency(_dike_data, 2025, 10, CalcType.VEILIGHEIDRENDEMENT.name)
+            return make_graph_map_urgency(_dike_data, 2025, 10, CalcType.VEILIGHEIDSRENDEMENT.name)
 
         ctx = copy_context()
         output = ctx.run(run_callback)

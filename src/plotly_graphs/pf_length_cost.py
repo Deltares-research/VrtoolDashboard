@@ -68,6 +68,7 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
         raise ValueError("Wrong result_type value")
 
     # add traces for Veiligheidrendement and Doorsnede-eisen
+
     fig.add_trace(go.Scatter(x=x_dsn,
                              y=y_dsn,
                              customdata=section_order_dsn,

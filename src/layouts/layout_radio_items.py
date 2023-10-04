@@ -37,10 +37,10 @@ layout_radio_calc_type = dbc.RadioItems(
     id="select_calculation_type",
     options=[
         {"label": CalcType.DOORSNEDE_EISEN.value, "value": CalcType.DOORSNEDE_EISEN.name},
-        {"label": CalcType.VEILIGHEIDRENDEMENT.value,
-         "value": CalcType.VEILIGHEIDRENDEMENT.name},
+        {"label": CalcType.VEILIGHEIDSRENDEMENT.value,
+         "value": CalcType.VEILIGHEIDSRENDEMENT.name},
     ],
-    value=CalcType.VEILIGHEIDRENDEMENT.name,
+    value=CalcType.VEILIGHEIDSRENDEMENT.name,
     style={'width': '40vh', "height": "6vh", "margin-top": "2px"}
 )
 

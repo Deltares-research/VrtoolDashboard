@@ -8,6 +8,8 @@ from src.plotly_graphs.plotly_maps import plot_overview_map, plot_default_overvi
     plot_dike_traject_reliability_initial_assessment_map, plot_dike_traject_reliability_measures_assessment_map, \
     plot_dike_traject_urgency, dike_traject_pf_cost_helping_map
 from src.app import app
+
+
 @app.callback(Output('overview_map_div', 'children'),
               [Input('stored-data', 'data')])
 def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
@@ -69,7 +71,7 @@ def make_graph_map_measures(dike_traject_data: dict, selected_year: float, resul
     :param dike_traject_data:
     :param selected_year: Selected year by the user from the slider
     :param result_type: Selected result type by the user from the OptionField, one of "RELIABILITY" or "PROBABILITY"
-    :param calc_type: Selected calculation type by the user from the OptionField, one of "VEILIGHEIDRENDEMENT" or "DOORSNEDE"
+    :param calc_type: Selected calculation type by the user from the OptionField, one of "VEILIGHEIDSRENDEMENT" or "DOORSNEDE"
     :param color_bar_result_type: Select which type of colored result must be displayed on the map for the measures: either
     show the reliability, the cost of the type of measure. Must be one of "RELIABILITY" or "COST" or "MEASURE",
     :param mechanism_type: Selected mechanism type by the user from the OptionField, one of "PIPING", "STABILITY",
@@ -124,7 +126,7 @@ def make_graph_map_urgency(dike_traject_data: dict, selected_year: float, length
     :param dike_traject_data:
     :param selected_year: Selected year by the user from the slider
     :param length_urgency: Selected length of the urgency by the user from the slider
-    :param calc_type: Selected calculation type by the user from the OptionField, one of "VEILIGHEIDRENDEMENT" or "DOORSNEDE"
+    :param calc_type: Selected calculation type by the user from the OptionField, one of "VEILIGHEIDSRENDEMENT" or "DOORSNEDE"
 
     or "RATIO"
 
