@@ -704,6 +704,10 @@ def get_color(value: float, cmap, vmin: float, vmax: float) -> str:
     :param vmax: max value of the color scale
     :return: color as rbg string
     """
+    # if value > vmax:
+    #     value = vmax
+    # elif value < vmin:
+    #     value = vmin
     norm = colors.Normalize(vmin=vmin, vmax=vmax)  # Hardcoded boundaries
     rgb = cmap(norm(value))
     return f'rgb({rgb[0]}, {rgb[1]}, {rgb[2]})'
