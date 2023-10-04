@@ -95,9 +95,10 @@ def make_graph_map_measures(dike_traject_data: dict, selected_year: float, resul
 @app.callback(Output('dike_traject_pf_cost_graph', 'figure'),
               [Input('stored-data', 'data'), Input("slider_year_reliability_results", "value"),
                Input("select_result_type", 'value'), Input("select_length_cost_switch", "value"),
+               Input("tempo_signaleringswaarde", 'value'), Input("tempo_ondergrens", 'value'),
                ])
 def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_type: str,
-                          cost_length_switch: str):
+                          cost_length_switch: str, signaleringswaarde: str, ondergrens: str):
     """
     Call to display the graph of the plot of the probability of failure vs the cost of the measures.
 
@@ -105,13 +106,19 @@ def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_
     :param selected_year: Selected year by the user from the slider
     :param result_type: Selected result type by the user from the OptionField, one of "RELIABILITY" or "PROBABILITY"
     :param cost_length_switch: Selected cost length switch by the user from the OptionField, one of "COST" or "LENGTH"
+    :param signaleringswaarde: Selected signaleringswaarde by the userinput in format: '1/XXXX'
 
     """
+    signaleringswaarde = eval(signaleringswaarde)
+    ondergrens = eval(ondergrens)
+    print(signaleringswaarde, ondergrens, type(signaleringswaarde), type(ondergrens))
+
     if dike_traject_data is None:
         return plot_default_scatter_dummy()
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
-        _fig = plot_pf_length_cost(_dike_traject, selected_year, result_type, cost_length_switch)
+        _fig = plot_pf_length_cost(_dike_traject, selected_year, result_type, cost_length_switch,
+                                   signalering=signaleringswaarde, ondergrens=ondergrens)
     return _fig
 
 
