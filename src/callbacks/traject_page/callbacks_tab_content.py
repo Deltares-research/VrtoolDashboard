@@ -111,7 +111,6 @@ def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_
     """
     signaleringswaarde = eval(signaleringswaarde)
     ondergrens = eval(ondergrens)
-    print(signaleringswaarde, ondergrens, type(signaleringswaarde), type(ondergrens))
 
     if dike_traject_data is None:
         return plot_default_scatter_dummy()
