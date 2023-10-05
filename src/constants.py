@@ -5,6 +5,7 @@ REFERENCE_YEAR = 2025  # Reference year for the reliability analysis
 ONDERGRENS = 1. / 10000
 SIGNALERING = 1. / 30000
 
+
 class CalcType(Enum):
     DOORSNEDE_EISEN = "Doorsnede-Eisen"
     VEILIGHEIDSRENDEMENT = "Veiligheidsrendement"
@@ -25,11 +26,11 @@ class SubResultType(Enum):
     BERM_WIDENING = "Bermverbreding"
     CREST_HIGHTENING = "Kruinverhoging"
 
+
 class ColorBarResultType(Enum):
     RELIABILITY = "Betrouwbaarheid"
     COST = "Kosten"
     MEASURE = "Maatregel"
-
 
 
 class Mechanism(Enum):
@@ -37,6 +38,7 @@ class Mechanism(Enum):
     PIPING = "Piping"
     OVERFLOW = "Overslag"
     SECTION = "Sectie"
+
 
 def get_mapbox_token() -> str:
     with open(Path(__file__).parent / "assets" / "mapbox_token.txt") as f:
