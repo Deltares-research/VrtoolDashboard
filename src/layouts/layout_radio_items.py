@@ -10,12 +10,12 @@ Keep preferably RadioItems components from .dbc library as they can be styled ea
 layout_radio_color_bar_result_type = dbc.RadioItems(
     id="select_measure_map_result_type",
     options=[
+        {"label": ColorBarResultType.MEASURE.value, "value": ColorBarResultType.MEASURE.name},
         {"label": ColorBarResultType.RELIABILITY.value,
          "value": ColorBarResultType.RELIABILITY.name},
         {"label": ColorBarResultType.COST.value, "value": ColorBarResultType.COST.name},
-        {"label": ColorBarResultType.MEASURE.value, "value": ColorBarResultType.MEASURE.name},
     ],
-    value=ColorBarResultType.RELIABILITY.name,
+    value=ColorBarResultType.MEASURE.name,
     inline=True,
     className='my-radio-items',  # add a class name
     style={'width': '40vh', "height": "6vh", "margin-top": "2px"}
@@ -59,7 +59,7 @@ layout_radio_mechanism = dbc.RadioItems(
 layout_radio_sub_type_result = dbc.RadioItems(
     id='select_sub_result_type_measure_map',
     options=[],
-    value=SubResultType.ABSOLUTE.name,
+    value=SubResultType.MEASURE_TYPE.name,
 )
 
 layout_radio_length_switch = dbc.RadioItems(
