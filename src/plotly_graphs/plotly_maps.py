@@ -446,7 +446,7 @@ def add_measure_berm_widening_trace(fig: go.Figure, section: DikeSection, measur
 
 
 def add_section_trace(fig: go.Figure, section: DikeSection, name: str, color: str, hovertemplate: str,
-                      showlegend: bool = False, legendgroup: str = None):
+                      showlegend: bool = False, legendgroup: str = None, opacity: float = 1):
     """
     Add a trace of a section to the figure which the given specifications for color and hover, etc...
     """
@@ -460,13 +460,21 @@ def add_section_trace(fig: go.Figure, section: DikeSection, name: str, color: st
         marker={'size': 10, 'color': color},
         line={'width': 5, 'color': color},
         name=name,
+        opacity=opacity,
         legendgroup=legendgroup,
         hovertemplate=hovertemplate,
         showlegend=showlegend))
 
 
-def dike_traject_pf_cost_helping_map(dike_traject: DikeTraject, clicked_section_name: str,
-                                     curve_number: int) -> go.Figure:
+def dike_traject_pf_cost_helping_map(dike_traject: DikeTraject,
+                                     curve_number: int, reinforced_sections: list[str]) -> go.Figure:
+    """
+
+    :param dike_traject:
+    :param curve_number: number of the curve in the pf-cost curve. 0 is veiligheid, 1 is doorsnede
+    :param reinforced_sections: list of all the reinforced sections until the clicked section
+    :return:
+    """
     fig = go.Figure()
 
     for section in dike_traject.dike_sections:
@@ -475,13 +483,19 @@ def dike_traject_pf_cost_helping_map(dike_traject: DikeTraject, clicked_section_
         if not section.in_analyse:
             continue
 
-        if section.name == clicked_section_name:
-            _color = 'blue' if curve_number == 0 else 'gold'
+        if section.name == reinforced_sections[-1]:
+            _color = 'blue' if curve_number == 0 else "#cc8400"  # orange-ish
+            _opacity = 1
+        elif section.name in reinforced_sections and section.name != reinforced_sections[-1]:
+            _color = 'blue' if curve_number == 0 else "#cc8400"
+            _opacity = 0.4
         else:
             _color = 'grey'
-        _hovertemplate = f'Vaknaam {section.name}<br>'
+            _opacity = 1
+        _hovertemplate = f'Vaknaam {section.name}<br>' + '<extra></extra>'
 
-        add_section_trace(fig, section, name=dike_traject.name, color=_color, hovertemplate=_hovertemplate)
+        add_section_trace(fig, section, name=dike_traject.name, color=_color, hovertemplate=_hovertemplate,
+                          opacity=_opacity)
 
     # Update layout of the figure and add token for mapbox
     _middle_point = get_middle_point(dike_traject.dike_sections)
