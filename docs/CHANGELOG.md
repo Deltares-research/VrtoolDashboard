@@ -19,6 +19,23 @@ None.
 ### Fixed
 None.
 
+## v0.2.2 [04/10/2023]
+
+### Added
+- Added temporary fields for signaleringswaarde and ondergrens
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+- Fix import of 16_1 / 53_1 and 38_1
+
 ## v0.2.1 [04/08/2023]
 
 ### Added

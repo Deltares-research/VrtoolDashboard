@@ -70,7 +70,7 @@ def make_graph_map_measures(selection_traject_name: str, selected_year: float, r
     :param selection_traject_name: The name of the dike traject to be displayed.
     :param selected_year: Selected year by the user from the slider
     :param result_type: Selected result type by the user from the OptionField, one of "RELIABILITY" or "PROBABILITY"
-    :param calc_type: Selected calculation type by the user from the OptionField, one of "VEILIGHEIDRENDEMENT" or "DOORSNEDE"
+    :param calc_type: Selected calculation type by the user from the OptionField, one of "VEILIGHEIDSRENDEMENT" or "DOORSNEDE"
     :param color_bar_result_type: Select which type of colored result must be displayed on the map for the measures: either
     show the reliability, the cost of the type of measure. Must be one of "RELIABILITY" or "COST" or "MEASURE",
     :param mechanism_type: Selected mechanism type by the user from the OptionField, one of "PIPING", "STABILITY",
@@ -94,9 +94,10 @@ def make_graph_map_measures(selection_traject_name: str, selected_year: float, r
 @app.callback(Output('dike_traject_pf_cost_graph', 'figure'),
               [Input('selection_traject_name', 'value'), Input("slider_year_reliability_results", "value"),
                Input("select_result_type", 'value'), Input("select_length_cost_switch", "value"),
+               Input("tempo_signaleringswaarde", 'value'), Input("tempo_ondergrens", 'value'),
                ])
 def make_graph_pf_vs_cost(selection_traject_name: str, selected_year: float, result_type: str,
-                          cost_length_switch: str):
+                          cost_length_switch: str, signaleringswaarde: str, ondergrens: str):
     """
     Call to display the graph of the plot of the probability of failure vs the cost of the measures.
 
@@ -104,13 +105,18 @@ def make_graph_pf_vs_cost(selection_traject_name: str, selected_year: float, res
     :param selected_year: Selected year by the user from the slider
     :param result_type: Selected result type by the user from the OptionField, one of "RELIABILITY" or "PROBABILITY"
     :param cost_length_switch: Selected cost length switch by the user from the OptionField, one of "COST" or "LENGTH"
+    :param signaleringswaarde: Selected signaleringswaarde by the userinput in format: '1/XXXX'
 
     """
+    signaleringswaarde = eval(signaleringswaarde)
+    ondergrens = eval(ondergrens)
+
     if selection_traject_name is None:
         return plot_default_scatter_dummy()
     else:
         _traject_db = get_dike_traject_from_ORM(selection_traject_name)
-        _fig = plot_pf_length_cost(_traject_db, selected_year, result_type, cost_length_switch)
+        _fig = plot_pf_length_cost(_traject_db, selected_year, result_type, cost_length_switch, ondergrens=ondergrens,
+                                   signalering=signaleringswaarde)
     return _fig
 
 
@@ -125,7 +131,7 @@ def make_graph_map_urgency(selection_traject_name: str, selected_year: float, le
     :param selection_traject_name: The name of the dike traject to be displayed.
     :param selected_year: Selected year by the user from the slider
     :param length_urgency: Selected length of the urgency by the user from the slider
-    :param calc_type: Selected calculation type by the user from the OptionField, one of "VEILIGHEIDRENDEMENT" or "DOORSNEDE"
+    :param calc_type: Selected calculation type by the user from the OptionField, one of "VEILIGHEIDSRENDEMENT" or "DOORSNEDE"
 
     or "RATIO"
 

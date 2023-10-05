@@ -19,7 +19,7 @@ def plot_default_scatter_dummy() -> go.Figure:
 
 
 def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_type: str,
-                        cost_length_switch: str) -> go.Figure:
+                        cost_length_switch: str, ondergrens: float, signalering: float) -> go.Figure:
     """
 
     :param dike_traject:
@@ -30,6 +30,13 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
 
     :return:
     """
+
+    if not isinstance(ondergrens, float):
+        raise ValueError("Ondergrens is gemist")
+
+    if not isinstance(signalering, float):
+        raise ValueError("Signaleringswaarde is gemist")
+
 
     fig = go.Figure()
     _year_index = bisect_right(dike_traject.dike_sections[0].years, selected_year - REFERENCE_YEAR) - 1
@@ -68,6 +75,7 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
         raise ValueError("Wrong result_type value")
 
     # add traces for Veiligheidrendement and Doorsnede-eisen
+
     fig.add_trace(go.Scatter(x=x_dsn,
                              y=y_dsn,
                              customdata=section_order_dsn,

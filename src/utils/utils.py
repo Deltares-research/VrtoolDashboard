@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from scipy.stats import norm
 import json
 
@@ -22,7 +24,8 @@ def pf_to_beta(pf):
 def export_to_json(data):
     # convert dike_traject_data to json :
     # write to a json file:
-    with open(f'data.json', 'w') as outfile:
+    path = Path(__file__).parent / 'data.json'
+    with open(path, 'w') as outfile:
         json.dump(data, outfile)
 
 

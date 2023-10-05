@@ -1,5 +1,5 @@
 {
-  "name": "38_1_VZG2.zip",
+  "name": "traject_38_1.zip",
   "dike_sections": [
     {
       "coordinates_rd": [
@@ -192,10 +192,11 @@
           423749.2767901088
         ]
       ],
-      "name": "01A",
+      "name": "1A",
       "length": 359,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.259900000000001,
@@ -234,7 +235,7 @@
           2.4362853196787504
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 1701804.1612732029,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2045",
         "ID": "5+1",
@@ -419,10 +420,11 @@
           423808.85606638086
         ]
       ],
-      "name": "01B",
+      "name": "1B",
       "length": 226,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.678600000000001,
@@ -461,7 +463,7 @@
           2.5187226673332024
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 509767.4080000005,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -870,10 +872,11 @@
           424329.41632302955
         ]
       ],
-      "name": "02",
+      "name": "2",
       "length": 791,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.636900000000001,
@@ -912,7 +915,7 @@
           2.527894506860539
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 2200795.544,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -1137,10 +1140,11 @@
           424614.2996494915
         ]
       ],
-      "name": "03",
+      "name": "3",
       "length": 354,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.6462,
@@ -1179,7 +1183,7 @@
           2.5775462403025786
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 1282800.1999999995,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -1592,10 +1596,11 @@
           425251.81679756235
         ]
       ],
-      "name": "04",
+      "name": "4",
       "length": 766,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.3311,
@@ -1634,7 +1639,7 @@
           2.394339006460109
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 1854493.465303924,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2045",
         "ID": "5+1",
@@ -1815,10 +1820,11 @@
           425211.7571381016
         ]
       ],
-      "name": "05",
+      "name": "5",
       "length": 146,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.0259,
@@ -1857,7 +1863,7 @@
           2.2856472541414474
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 2730200,
         "name": "Zelfkerende constructie",
         "ID": "6",
@@ -2058,10 +2064,11 @@
           425240.0859090553
         ]
       ],
-      "name": "06",
+      "name": "6",
       "length": 165,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.3709,
@@ -2100,7 +2107,7 @@
           2.742736573716785
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 134168.1154233809,
         "name": "Grondversterking binnenwaarts 2045",
         "ID": "1",
@@ -2377,10 +2384,11 @@
           424971.50132301904
         ]
       ],
-      "name": "07",
+      "name": "7",
       "length": 397,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.4233,
@@ -2419,7 +2427,7 @@
           2.469803709797597
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 1431020.4723977677,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -2680,10 +2688,11 @@
           424827.10312344227
         ]
       ],
-      "name": "08",
+      "name": "8",
       "length": 286,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.1088,
@@ -2722,7 +2731,7 @@
           2.413589791182757
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 3504825.433302479,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -3387,10 +3396,11 @@
           423927.1331391269
         ]
       ],
-      "name": "09",
+      "name": "9",
       "length": 1367,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.360900000000001,
@@ -3429,7 +3439,7 @@
           2.628037042236788
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 9953303.287133556,
         "name": "Grondversterking met stabiliteitsscherm 2025",
         "ID": "4",
@@ -3897,7 +3907,8 @@
       "name": "10",
       "length": 884,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.3736,
@@ -3936,7 +3947,7 @@
           2.7420324283553046
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 3246579.206661575,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -4344,7 +4355,8 @@
       "name": "11",
       "length": 679,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.5993,
@@ -4383,7 +4395,7 @@
           2.642922175566872
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 2751310.749999998,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -4843,7 +4855,8 @@
       "name": "12",
       "length": 872,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.3362,
@@ -4882,7 +4895,7 @@
           2.6410355471594658
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 4255839.830552385,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -5162,7 +5175,8 @@
       "name": "13",
       "length": 328,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.463300000000001,
@@ -5201,7 +5215,7 @@
           2.884003717105547
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 1743648.114011517,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -5365,7 +5379,8 @@
       "name": "14",
       "length": 176,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.4945,
@@ -5404,7 +5419,7 @@
           2.9632666666663967
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 188658.73542288085,
         "name": "Grondversterking binnenwaarts 2045",
         "ID": "1",
@@ -5740,7 +5755,8 @@
       "name": "15",
       "length": 639,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.463500000000001,
@@ -5779,7 +5795,7 @@
           2.3829419548772144
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 3427855.842117304,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -5991,7 +6007,8 @@
       "name": "16",
       "length": 314,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.5966000000000005,
@@ -6030,7 +6047,7 @@
           3.0710353794531224
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 788089.7599999998,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -6262,7 +6279,8 @@
       "name": "17",
       "length": 298,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           6.530400000000001,
@@ -6301,7 +6319,7 @@
           4.2994054742950505
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 396340,
         "name": "Verticaal Zanddicht Geotextiel",
         "ID": "5",
@@ -6473,7 +6491,8 @@
       "name": "18",
       "length": 107,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.449800000000001,
@@ -6512,7 +6531,7 @@
           1.6792158268529065
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 579930.514058355,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -6848,7 +6867,8 @@
       "name": "19",
       "length": 292,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.2696,
@@ -6887,7 +6907,7 @@
           2.581506942744344
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 1030381.721123542,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -7175,7 +7195,8 @@
       "name": "20",
       "length": 387,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.2997,
@@ -7214,7 +7235,7 @@
           2.630447444983886
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 4237132.602118621,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -7374,7 +7395,8 @@
       "name": "21",
       "length": 81,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.0661,
@@ -7413,7 +7435,7 @@
           2.27655722267896
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 1514700,
         "name": "Zelfkerende constructie",
         "ID": "6",
@@ -7917,11 +7939,20 @@
       "name": "22A",
       "length": -999,
       "in_analyse": false,
-      "is_reinforced": false,
+      "is_reinforced_veiligheidsrendement": false,
+      "is_reinforced_doorsnede": false,
       "initial_assessment": null,
-      "final_measure_veiligheidrendement": null,
+      "final_measure_veiligheidsrendement": null,
       "final_measure_doorsnede": null,
-      "years": []
+      "years": [
+        0,
+        19,
+        20,
+        25,
+        50,
+        75,
+        100
+      ]
     },
     {
       "coordinates_rd": [
@@ -8001,7 +8032,8 @@
       "name": "22B",
       "length": 134,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           6.989,
@@ -8040,7 +8072,7 @@
           3.6171981399411193
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 178220,
         "name": "Verticaal Zanddicht Geotextiel",
         "ID": "5",
@@ -8208,7 +8240,8 @@
       "name": "23",
       "length": 150,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           6.989,
@@ -8247,7 +8280,7 @@
           3.771202926006469
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 143817.6000000001,
         "name": "Grondversterking binnenwaarts 2025",
         "ID": "2",
@@ -8499,7 +8532,8 @@
       "name": "24",
       "length": 274,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.3577,
@@ -8538,7 +8572,7 @@
           2.6011433068018985
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 1200214.0116510664,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -8726,7 +8760,8 @@
       "name": "25",
       "length": 247,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.341700000000001,
@@ -8765,7 +8800,7 @@
           2.6479747758081125
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 1284889.410056797,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -8933,7 +8968,8 @@
       "name": "26",
       "length": 169,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.466100000000001,
@@ -8972,7 +9008,7 @@
           2.7824606156307143
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 428401.5035674282,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2045",
         "ID": "5+1",
@@ -9184,7 +9220,8 @@
       "name": "27",
       "length": 202,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.494,
@@ -9223,7 +9260,7 @@
           2.446936295704315
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 1011908.9928614708,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -9503,7 +9540,8 @@
       "name": "28",
       "length": 517,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.4845,
@@ -9542,7 +9580,7 @@
           2.8587334849523947
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 2600560.5174850943,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -9846,7 +9884,8 @@
       "name": "29",
       "length": 656,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.3527,
@@ -9885,7 +9924,7 @@
           2.6425067013702046
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 2806525.8075936423,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -10253,7 +10292,8 @@
       "name": "30",
       "length": 703,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.3739,
@@ -10292,7 +10332,7 @@
           1.6028229036520742
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 3983464.018744515,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -10744,7 +10784,8 @@
       "name": "31",
       "length": 808,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.321600000000001,
@@ -10783,7 +10824,7 @@
           2.298340160216576
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 4475108.062225924,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -11611,7 +11652,8 @@
       "name": "32",
       "length": 1185,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.192,
@@ -11650,7 +11692,7 @@
           2.2930343526780166
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 10547119.060638685,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -11926,7 +11968,8 @@
       "name": "33A",
       "length": 323,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.460399999999999,
@@ -11965,7 +12008,7 @@
           2.834876927581321
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 1818815.5216412584,
         "name": "Grondversterking met stabiliteitsscherm 2025",
         "ID": "4",
@@ -12181,7 +12224,8 @@
       "name": "33B",
       "length": 305,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.3421,
@@ -12220,7 +12264,7 @@
           2.676001850864113
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 2335452.564590156,
         "name": "Grondversterking met stabiliteitsscherm 2025",
         "ID": "4",
@@ -12536,7 +12580,8 @@
       "name": "34",
       "length": 575,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.3348,
@@ -12575,7 +12620,7 @@
           2.6476006599290645
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 3567274.797332225,
         "name": "Grondversterking met stabiliteitsscherm 2025",
         "ID": "4",
@@ -12803,7 +12848,8 @@
       "name": "35A",
       "length": 286,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.4893,
@@ -12842,7 +12888,7 @@
           2.8070793991091234
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 1363647.6128333556,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -12978,7 +13024,8 @@
       "name": "35B",
       "length": 60,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.610000000000001,
@@ -13017,7 +13064,7 @@
           2.963932410316643
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 278946.6387762284,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -13577,7 +13624,8 @@
       "name": "35C",
       "length": 1052,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.347200000000001,
@@ -13616,7 +13664,7 @@
           2.68124228877715
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 4311507.176398713,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -14012,7 +14060,8 @@
       "name": "36",
       "length": 477,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.3126,
@@ -14051,7 +14100,7 @@
           2.210103740228048
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 6834771.9376840815,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -14203,7 +14252,8 @@
       "name": "37A",
       "length": 137,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.559000000000001,
@@ -14242,7 +14292,7 @@
           2.8775380066881224
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 1338754.4200000002,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -14522,7 +14572,8 @@
       "name": "37B",
       "length": 227,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.1545,
@@ -14561,7 +14612,7 @@
           2.576872996549755
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 3696922.117417672,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -14753,7 +14804,8 @@
       "name": "38",
       "length": 216,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.125,
@@ -14792,7 +14844,7 @@
           2.467864040239374
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 441139.6643940537,
         "name": "Grondversterking binnenwaarts 2025",
         "ID": "2",
@@ -15136,7 +15188,8 @@
       "name": "39",
       "length": 542,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.2252,
@@ -15175,7 +15228,7 @@
           2.2111916698904626
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 6807245.480279732,
         "name": "Grondversterking met stabiliteitsscherm 2025",
         "ID": "4",
@@ -15415,7 +15468,8 @@
       "name": "40",
       "length": 337,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.334,
@@ -15454,7 +15508,7 @@
           2.648440747455231
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 918680.0866172144,
         "name": "Grondversterking binnenwaarts 2025",
         "ID": "2",
@@ -15674,7 +15728,8 @@
       "name": "41",
       "length": 328,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.3085,
@@ -15713,7 +15768,7 @@
           2.594983811621996
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 1617397.2767936273,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -15917,7 +15972,8 @@
       "name": "42",
       "length": 252,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.4639,
@@ -15956,7 +16012,7 @@
           2.8044484484702106
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 972274.542791278,
         "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025",
         "ID": "5+2",
@@ -16320,7 +16376,8 @@
       "name": "43A",
       "length": 591,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.415700000000001,
@@ -16359,7 +16416,7 @@
           2.717636138691764
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 2678708.305199598,
         "name": "Grondversterking met stabiliteitsscherm 2025",
         "ID": "4",
@@ -16571,7 +16628,8 @@
       "name": "43B",
       "length": 236,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.4596,
@@ -16610,7 +16668,7 @@
           2.838327542576573
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 289009.3973906668,
         "name": "Grondversterking binnenwaarts 2045",
         "ID": "1",
@@ -16902,7 +16960,8 @@
       "name": "44",
       "length": 529,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.3376,
@@ -16941,7 +17000,7 @@
           2.7000582635479247
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 459805.1502393975,
         "name": "Grondversterking binnenwaarts 2045",
         "ID": "1",
@@ -17529,7 +17588,8 @@
       "name": "45",
       "length": 1135,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.3157,
@@ -17568,7 +17628,7 @@
           2.6601563250745235
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 1094526.5471246084,
         "name": "Grondversterking binnenwaarts 2045",
         "ID": "1",
@@ -18208,7 +18268,8 @@
       "name": "46",
       "length": 1412,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.328,
@@ -18247,7 +18308,7 @@
           2.520561575403719
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 5675239.199752072,
         "name": "Grondversterking binnenwaarts 2025",
         "ID": "2",
@@ -18547,7 +18608,8 @@
       "name": "47",
       "length": 356,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.4131,
@@ -18586,7 +18648,7 @@
           2.7349666159117665
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 1114751.3302381982,
         "name": "Grondversterking binnenwaarts 2025",
         "ID": "2",
@@ -18814,7 +18876,8 @@
       "name": "48",
       "length": 209,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.3363000000000005,
@@ -18853,7 +18916,7 @@
           2.275752748983765
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 698755.296732878,
         "name": "Grondversterking binnenwaarts 2025",
         "ID": "2",
@@ -19117,7 +19180,8 @@
       "name": "49",
       "length": 305,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.3241,
@@ -19156,7 +19220,7 @@
           2.5167260893956547
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 1215076.397287662,
         "name": "Grondversterking binnenwaarts 2025",
         "ID": "2",
@@ -19508,7 +19572,8 @@
       "name": "50",
       "length": 335,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.3199,
@@ -19547,7 +19612,7 @@
           2.697351666022102
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 349932.1215255184,
         "name": "Grondversterking binnenwaarts 2045",
         "ID": "1",
@@ -20287,7 +20352,8 @@
       "name": "51A",
       "length": 1298,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": false,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           5.5919,
@@ -20326,7 +20392,50 @@
           4.90004394018508
         ]
       },
-      "final_measure_veiligheidrendement": null,
+      "final_measure_veiligheidsrendement": {
+        "LCC": 0,
+        "name": "No measure",
+        "ID": "0",
+        "yes/no": "no",
+        "dberm": 0,
+        "dcrest": 0,
+        "Overflow": [
+          5.5919,
+          5.543200213333333,
+          5.539852000000001,
+          5.521933333333333,
+          5.4029,
+          5.22305,
+          4.9565
+        ],
+        "StabilityInner": [
+          7.334938961077777,
+          7.334938961077777,
+          7.334938961077777,
+          7.334938961077777,
+          7.334938961077777,
+          7.334938961077777,
+          7.334938961077777
+        ],
+        "Piping": [
+          5.740094338489934,
+          5.62081734076394,
+          5.614686340128929,
+          5.584242674800305,
+          5.4370581777668,
+          5.297588717568655,
+          5.165023790186563
+        ],
+        "Section": [
+          5.530552238978442,
+          5.455973964598583,
+          5.451435402051421,
+          5.427961691545374,
+          5.293892715232902,
+          5.127675195152298,
+          4.90004394018508
+        ]
+      },
       "final_measure_doorsnede": {
         "LCC": 240130.0000000033,
         "name": "Grondversterking binnenwaarts 2025",
@@ -20647,7 +20756,8 @@
       "name": "51B",
       "length": 515,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": false,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           6.1787,
@@ -20686,7 +20796,50 @@
           5.753539855481842
         ]
       },
-      "final_measure_veiligheidrendement": null,
+      "final_measure_veiligheidsrendement": {
+        "LCC": 0,
+        "name": "No measure",
+        "ID": "0",
+        "yes/no": "no",
+        "dberm": 0,
+        "dcrest": 0,
+        "Overflow": [
+          6.1787,
+          6.350447333333333,
+          6.357526666666668,
+          6.389983333333333,
+          6.478766666666667,
+          6.408150000000001,
+          6.223366666666668
+        ],
+        "StabilityInner": [
+          7.334938961077777,
+          7.334938961077777,
+          7.334938961077777,
+          7.334938961077777,
+          7.334938961077777,
+          7.334938961077777,
+          7.334938961077777
+        ],
+        "Piping": [
+          6.562009837988793,
+          6.390956944033386,
+          6.382247196748064,
+          6.339114557990286,
+          6.133209403181845,
+          5.9418867233253625,
+          5.763216891010342
+        ],
+        "Section": [
+          6.166173114327886,
+          6.262126637852419,
+          6.26212846595145,
+          6.255118170304632,
+          6.116933108805377,
+          5.933517774726188,
+          5.753539855481842
+        ]
+      },
       "final_measure_doorsnede": {
         "LCC": 95274.9999999987,
         "name": "Grondversterking binnenwaarts 2025",
@@ -21043,7 +21196,8 @@
       "name": "52",
       "length": 326,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.368200000000001,
@@ -21082,7 +21236,7 @@
           2.773433333333177
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 255631.1261831821,
         "name": "Grondversterking binnenwaarts 2045",
         "ID": "1",
@@ -21274,7 +21428,8 @@
       "name": "53A",
       "length": 205,
       "in_analyse": true,
-      "is_reinforced": true,
+      "is_reinforced_veiligheidsrendement": true,
+      "is_reinforced_doorsnede": true,
       "initial_assessment": {
         "Overflow": [
           4.335400000000001,
@@ -21313,7 +21468,7 @@
           2.7073604697920413
         ]
       },
-      "final_measure_veiligheidrendement": {
+      "final_measure_veiligheidsrendement": {
         "LCC": 461098.0513702136,
         "name": "Grondversterking binnenwaarts 2025",
         "ID": "2",
@@ -21913,11 +22068,20 @@
       "name": "53B",
       "length": -999,
       "in_analyse": false,
-      "is_reinforced": false,
+      "is_reinforced_veiligheidsrendement": false,
+      "is_reinforced_doorsnede": false,
       "initial_assessment": null,
-      "final_measure_veiligheidrendement": null,
+      "final_measure_veiligheidsrendement": null,
       "final_measure_doorsnede": null,
-      "years": []
+      "years": [
+        0,
+        19,
+        20,
+        25,
+        50,
+        75,
+        100
+      ]
     }
   ],
   "reinforcement_order_vr": [
@@ -21925,7 +22089,7 @@
     "30",
     "48",
     "27",
-    "07",
+    "7",
     "49",
     "31",
     "33B",
@@ -21933,16 +22097,16 @@
     "36",
     "46",
     "39",
-    "01B",
-    "03",
-    "08",
+    "1B",
+    "3",
+    "8",
     "15",
-    "01A",
-    "02",
-    "04",
+    "1A",
+    "2",
+    "4",
     "34",
     "23",
-    "05",
+    "5",
     "43A",
     "37A",
     "11",
@@ -21954,7 +22118,7 @@
     "28",
     "53A",
     "32",
-    "09",
+    "9",
     "25",
     "29",
     "13",
@@ -21972,7 +22136,7 @@
     "38",
     "10",
     "17",
-    "06",
+    "6",
     "14",
     "43B",
     "44",
@@ -21988,22 +22152,22 @@
     "39",
     "31",
     "46",
-    "07",
+    "7",
     "27",
     "49",
     "15",
-    "01B",
-    "04",
-    "02",
+    "1B",
+    "4",
+    "2",
     "32",
-    "03",
-    "08",
-    "01A",
+    "3",
+    "8",
+    "1A",
     "11",
     "33B",
     "47",
-    "05",
-    "09",
+    "5",
+    "9",
     "12",
     "21",
     "43A",
@@ -22029,7 +22193,7 @@
     "44",
     "50",
     "10",
-    "06",
+    "6",
     "52",
     "42",
     "16",
@@ -22041,7 +22205,5 @@
     "17",
     "51A",
     "51B"
-  ],
-  "signalering_value": 3.33e-5,
-  "lower_bound_value": 0.0001
+  ]
 }

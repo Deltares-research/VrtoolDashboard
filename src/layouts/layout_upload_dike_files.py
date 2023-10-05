@@ -1,4 +1,4 @@
-from dash import html
+from dash import html, dcc
 import dash_bootstrap_components as dbc
 
 layout_traject_select = html.Div([
@@ -15,6 +15,11 @@ layout_traject_select = html.Div([
         dismissable=True,
         is_open=False,
 
-    ),
-    html.Div(id='output-data-upload-zip'),
-])
+        ),
+        html.Div('Signaleringswaarde:', style={'margin': '10px'}),
+        dcc.Input(id='tempo_signaleringswaarde', type='text', placeholder="1/30000", name="tempo_signaalering_warde", value="1/30000"),
+        html.Div('Ondergrens:', style={'margin': '10px'}),
+        dcc.Input(id='tempo_ondergrens', type='text', placeholder="1/10000", value="1/10000"),
+
+        html.Div(id='output-data-upload-zip'),
+    ])
