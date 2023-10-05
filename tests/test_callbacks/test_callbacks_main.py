@@ -2,7 +2,6 @@ from contextvars import copy_context
 
 import pytest
 
-
 from src.callbacks.traject_page.callbacks_main_page import toggle_collapse, toggle_collapse2, toggle_collapse3, \
     update_radio_sub_result_type
 from src.constants import ColorBarResultType
@@ -52,4 +51,6 @@ class TestCallback:
         ctx = copy_context()
         output = ctx.run(run_callback)
 
-        assert isinstance(output, list)
+        assert isinstance(output, tuple)
+        assert isinstance(output[0], list)
+        assert isinstance(output[1], str)
