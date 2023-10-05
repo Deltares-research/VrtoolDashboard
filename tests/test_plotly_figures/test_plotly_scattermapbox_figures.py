@@ -136,8 +136,8 @@ class TestPlotlyScatterMapBox():
         _dike_traject = DikeTraject.deserialize(_dike_data)
 
         # 2. Call
-        _fig1 = dike_traject_pf_cost_helping_map(_dike_traject, "33", 0)
-        _fig2 = dike_traject_pf_cost_helping_map(_dike_traject, "93", 0)  # this one has a grey dijkvak
+        _fig1 = dike_traject_pf_cost_helping_map(_dike_traject, 0, ["33"])
+        _fig2 = dike_traject_pf_cost_helping_map(_dike_traject, 0, ["93"])  # this one has a grey dijkvak
 
         # 3. Assert
         assert isinstance(_fig1, Figure)

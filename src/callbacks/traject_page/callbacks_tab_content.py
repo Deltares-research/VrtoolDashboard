@@ -168,5 +168,9 @@ def update_click(dike_traject_data: dict, click_data: dict) -> Figure:
         return plot_default_overview_map_dummy()
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
-        return dike_traject_pf_cost_helping_map(_dike_traject, click_data["points"][0]["customdata"],
-                                                click_data["points"][0]["curveNumber"])
+        _order = _dike_traject.reinforcement_order_dsn if click_data["points"][0]["curveNumber"] == 0 else \
+            _dike_traject.reinforcement_order_vr
+        _reinforced_sections = _order[:int(click_data["points"][0]["pointNumber"])]
+
+        return dike_traject_pf_cost_helping_map(_dike_traject,
+                                                click_data["points"][0]["curveNumber"], _reinforced_sections)
