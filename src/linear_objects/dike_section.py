@@ -12,6 +12,7 @@ class DikeSection(BaseLinearObject):
     in_analyse: bool
     is_reinforced_veiligheidsrendement: bool
     is_reinforced_doorsnede: bool
+    revetment: bool
     initial_assessment: Optional[dict]
     final_measure_veiligheidsrendement: Optional[dict]
     final_measure_doorsnede: Optional[dict]  # replace dict with a Measure Object
@@ -34,6 +35,7 @@ class DikeSection(BaseLinearObject):
         self.final_measure_veiligheidsrendement = None
         self.final_measure_doorsnede = None
         self.years = []
+        self.revetment = False
 
     def serialize(self) -> dict:
         """Serialize the DikeSection object to a dict, in order to be saved in dcc.Store"""
@@ -42,6 +44,7 @@ class DikeSection(BaseLinearObject):
             'name': self.name,
             'length': self.length,
             'in_analyse': self.in_analyse,
+            'revetment': self.revetment,
             'is_reinforced_veiligheidsrendement': self.is_reinforced_veiligheidsrendement,
             'is_reinforced_doorsnede': self.is_reinforced_doorsnede,
             'initial_assessment': self.initial_assessment,
@@ -65,6 +68,7 @@ class DikeSection(BaseLinearObject):
         section.final_measure_veiligheidsrendement = data['final_measure_veiligheidsrendement']
         section.final_measure_doorsnede = data['final_measure_doorsnede']
         section.years = data['years']
+        section.revetment = data['revetment']
         return section
 
     def set_measure_and_reliabilities_from_csv(self, _measure_dict: dict,
@@ -81,6 +85,8 @@ class DikeSection(BaseLinearObject):
 
         if self.name in _measure_dict.keys():
             _mechanisms = ["Overflow", "StabilityInner", "Piping", "Section"]
+            if self.revetment:
+                _mechanisms.append("Revetment")
             # Parse csv of the (optimal) measure dataframe and add them to the DikeSection object
             _final_measure = _measure_dict[self.name]
 
@@ -99,6 +105,7 @@ class DikeSection(BaseLinearObject):
 
                 _option = "Doorsnede-eisen" if calc_type == "doorsnede" else "Veiligheidsrendement"
                 # Parse csv of the Section results and add them to the DikeSection object
+
                 _section_measure_betas = all_unzipped_files[f"{self.name}_Options_{_option}"]
 
                 # self.years = _section_measure_betas.iloc[
@@ -108,6 +115,8 @@ class DikeSection(BaseLinearObject):
                     & (_section_measure_betas["yes/no"] == _final_measure["yes/no"])
                     & (_section_measure_betas.dcrest == _final_measure["dcrest"])
                     & (_section_measure_betas.dberm == _final_measure["dberm"])
+                    & (_section_measure_betas.transition_level == _final_measure["transition_level"])
+                    & (_section_measure_betas.beta_target == _final_measure["beta_target"])
                     ].squeeze()
 
                 for mechanism in _mechanisms:
@@ -126,13 +135,17 @@ class DikeSection(BaseLinearObject):
         """
         initial_assessment_df['name'] = initial_assessment_df['name'].str.replace('^DV', '',
                                                                                   regex=True)  # remove DV from section names
-        self.years = [int(year) for year in initial_assessment_df.columns[2:-1].tolist()] # last column is Length and should be removed
+        self.years = [int(year) for year in
+                      initial_assessment_df.columns[2:-1].tolist()]  # last column is Length and should be removed
 
         _section_initial_betas_df = initial_assessment_df.loc[initial_assessment_df["name"] == f"{self.name}"].squeeze()
 
         if not _section_initial_betas_df.empty:  # if df is empty, then section is not reinforced and skipped.
             _initial_assessment_dict = {}
             _mechanisms = ["Overflow", "StabilityInner", "Piping", "Section"]
+            if "Revetment" in _section_initial_betas_df["mechanism"].tolist():
+                _mechanisms.append("Revetment")
+                self.revetment = True
             _years = _section_initial_betas_df.columns[2:-1].tolist()  # last column is Length and should be removed
             for mechanism in _mechanisms:
                 _initial_assessment_dict[mechanism] = \
