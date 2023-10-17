@@ -38,6 +38,7 @@ class Mechanism(Enum):
     PIPING = "Piping"
     OVERFLOW = "Overslag"
     SECTION = "Sectie"
+    REVETMENT = "Bekleding"
 
 
 def get_mapbox_token() -> str:
