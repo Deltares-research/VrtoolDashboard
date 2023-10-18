@@ -85,29 +85,32 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
         # if a section is not in analyse, skip it, and it turns blank on the map.
         if not section.in_analyse:
             continue
-        if mechanism_type == Mechanism.REVETMENT.name and not section.revetment:
-            continue
-
 
         _initial_results = section.initial_assessment
 
         if _initial_results is not None:
-            _year_index = bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
-            _beta_section = get_beta(_initial_results, _year_index, mechanism_type)
-            _beta_dict = {meca: beta[_year_index] for meca, beta in _initial_results.items() if meca != "Section"}
-            _color = get_reliability_color(_beta_section)
-
-            if result_type == ResultType.RELIABILITY.name:
-                _hover_res = f'Beta sectie: {_beta_section:.2}<br>'
+            #TODO: Refactor this when moving to database format and handling mechanism types
+            if mechanism_type == Mechanism.REVETMENT.name and not section.revetment:
+                _color = 'grey'
+                _hovertemplate = f'Vaknaam {section.name}<br>' \
+                                 f'Beta: NO DATA<br>' + "<extra></extra>"
             else:
-                _hover_res = f'Pf sectie: {beta_to_pf(_beta_section):.2e}<br>'
+                _year_index = bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
+                _beta_section = get_beta(_initial_results, _year_index, mechanism_type)
+                _beta_dict = {meca: beta[_year_index] for meca, beta in _initial_results.items() if meca != "Section"}
+                _color = get_reliability_color(_beta_section)
 
-            _hovertemplate = f'Vaknaam {section.name}<br>' + _hover_res + "<extra></extra>"
+                if result_type == ResultType.RELIABILITY.name:
+                    _hover_res = f'Beta sectie: {_beta_section:.2}<br>'
+                else:
+                    _hover_res = f'Pf sectie: {beta_to_pf(_beta_section):.2e}<br>'
 
-            if mechanism_type == Mechanism.SECTION.name:
-                _mechanism = min(_beta_dict, key=_beta_dict.get)  # mechanism with lowest beta
-                _hovertemplate = _hovertemplate[
-                                 :-15] + f"Laagste beta: {_mechanism}<br>" + "<extra></extra>"  # :-15 to remove <extra></extra> from string
+                _hovertemplate = f'Vaknaam {section.name}<br>' + _hover_res + "<extra></extra>"
+
+                if mechanism_type == Mechanism.SECTION.name:
+                    _mechanism = min(_beta_dict, key=_beta_dict.get)  # mechanism with lowest beta
+                    _hovertemplate = _hovertemplate[
+                                     :-15] + f"Laagste beta: {_mechanism}<br>" + "<extra></extra>"  # :-15 to remove <extra></extra> from string
 
         else:
             _color = 'grey'
@@ -160,28 +163,38 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
 
         if _measure_results is not None:
 
-            _year_index = bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
-            _beta_section = get_beta(_measure_results, _year_index, mechanism_type)
-            if colorbar_result_type == ColorBarResultType.RELIABILITY.name and sub_result_type == SubResultType.ABSOLUTE.name:
-                _color, _hovertemplate = get_color_hover_absolute_reliability(section, _beta_section, _measure_results)
-
-            elif colorbar_result_type == ColorBarResultType.RELIABILITY.name and sub_result_type == SubResultType.RATIO.name:
-                _color, _hovertemplate = get_color_hover_prob_ratio(section, _year_index, mechanism_type)
-
-            elif colorbar_result_type == ColorBarResultType.COST.name and sub_result_type == SubResultType.ABSOLUTE.name:
-                _color, _hovertemplate = get_color_hover_absolute_cost(section, _beta_section, _measure_results)
-
-            elif colorbar_result_type == ColorBarResultType.COST.name and sub_result_type == SubResultType.DIFFERENCE.name:
-                _color, _hovertemplate = get_color_hover_difference_cost(section)
-
+            #TODO: Refactor this when moving to database format and handling mechanism types
+            if mechanism_type == Mechanism.REVETMENT.name and not section.revetment:
+                _color = 'grey'
+                _hovertemplate = f'Vaknaam {section.name}<br>' \
+                                 f'Beta: NO DATA<br>' + "<extra></extra>"
             else:
-                raise ValueError("Wrong combination of settings? or not implemented yet")
 
-            if mechanism_type == Mechanism.SECTION.name and sub_result_type == SubResultType.ABSOLUTE.name:
-                _beta_dict = {key: value[_year_index] for key, value in _measure_results.items() if
-                              key in ["StabilityInner", "Piping", "Overflow"]}
-                _mechanism = min(_beta_dict, key=_beta_dict.get)  # mechanism with lowest beta
-                _hovertemplate = _hovertemplate[:-15] + f"Laagste beta: {_mechanism}<br>" + "<extra></extra>"
+                _year_index = bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
+                _beta_section = get_beta(_measure_results, _year_index, mechanism_type)
+                if _beta_section is None:
+                    _color, _hovertemplate = get_no_data_info(section)
+
+                elif colorbar_result_type == ColorBarResultType.RELIABILITY.name and sub_result_type == SubResultType.ABSOLUTE.name:
+                    _color, _hovertemplate = get_color_hover_absolute_reliability(section, _beta_section, _measure_results)
+
+                elif colorbar_result_type == ColorBarResultType.RELIABILITY.name and sub_result_type == SubResultType.RATIO.name:
+                    _color, _hovertemplate = get_color_hover_prob_ratio(section, _year_index, mechanism_type)
+
+                elif colorbar_result_type == ColorBarResultType.COST.name and sub_result_type == SubResultType.ABSOLUTE.name:
+                    _color, _hovertemplate = get_color_hover_absolute_cost(section, _beta_section, _measure_results)
+
+                elif colorbar_result_type == ColorBarResultType.COST.name and sub_result_type == SubResultType.DIFFERENCE.name:
+                    _color, _hovertemplate = get_color_hover_difference_cost(section)
+
+                else:
+                    raise ValueError("Wrong combination of settings? or not implemented yet")
+
+                if mechanism_type == Mechanism.SECTION.name and sub_result_type == SubResultType.ABSOLUTE.name:
+                    _beta_dict = {key: value[_year_index] for key, value in _measure_results.items() if
+                                  key in ["StabilityInner", "Piping", "Overflow"]}
+                    _mechanism = min(_beta_dict, key=_beta_dict.get)  # mechanism with lowest beta
+                    _hovertemplate = _hovertemplate[:-15] + f"Laagste beta: {_mechanism}<br>" + "<extra></extra>"
 
         # If no results are available for the dijkvak, return blank data.
         else:
@@ -891,4 +904,11 @@ def get_color_hover_difference_cost(section: DikeSection) -> Tuple[str, str]:
                          f'Kostenverschil per kilometer: {_diff_per_kilometer} M€/km<br>' \
                          f'<extra></extra>'
 
+    return _color, _hovertemplate
+
+
+def get_no_data_info(section: DikeSection) -> Tuple[str, str]:
+    _color = 'grey'
+    _hovertemplate = f'Vaknaam {section.name}<br>' \
+                     f'Beta: NO DATA<br>' + "<extra></extra>"
     return _color, _hovertemplate
