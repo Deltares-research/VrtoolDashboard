@@ -152,7 +152,11 @@ class DikeTraject(BaseLinearObject):
             if not section.is_reinforced_doorsnede and not section.is_reinforced_veiligheidsrendement:
                 continue
             # add a row to the dataframe with the initial assessment of the section
-            for mechanism in ["Overflow", "StabilityInner", "Piping", "Revetment"]:
+            mechanisms = ["Overflow", "StabilityInner", "Piping"]
+            if section.revetment:
+                mechanisms.append("Revetment")
+
+            for mechanism in mechanisms:
                 d = {"name": section.name, "mechanism": mechanism, "Length": section.length
 
                      }

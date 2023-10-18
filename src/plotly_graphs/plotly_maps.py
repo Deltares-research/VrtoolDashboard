@@ -85,6 +85,9 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
         # if a section is not in analyse, skip it, and it turns blank on the map.
         if not section.in_analyse:
             continue
+        if mechanism_type == Mechanism.REVETMENT.name and not section.revetment:
+            continue
+
 
         _initial_results = section.initial_assessment
 
