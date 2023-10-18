@@ -85,6 +85,9 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
         # if a section is not in analyse, skip it, and it turns blank on the map.
         if not section.in_analyse:
             continue
+        if mechanism_type == Mechanism.REVETMENT.name and not section.revetment:
+            continue
+
 
         _initial_results = section.initial_assessment
 
@@ -814,6 +817,8 @@ def get_beta(results: dict, year_index: int, mechanism: str) -> float:
         return results["Overflow"][year_index]
     elif mechanism == Mechanism.STABILITY.name:
         return results["StabilityInner"][year_index]
+    elif mechanism == Mechanism.REVETMENT.name:
+        return results["Revetment"][year_index]
 
 
 def get_color_hover_prob_ratio(section: DikeSection, year_index: int, mechanism_type: str) -> Tuple[str, str]:

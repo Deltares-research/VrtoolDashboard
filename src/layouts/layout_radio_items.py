@@ -50,6 +50,7 @@ layout_radio_mechanism = dbc.RadioItems(
         {"label": Mechanism.PIPING.value, "value": Mechanism.PIPING.name},
         {"label": Mechanism.STABILITY.value, "value": Mechanism.STABILITY.name},
         {"label": Mechanism.OVERFLOW.value, "value": Mechanism.OVERFLOW.name},
+        {"label": Mechanism.REVETMENT.value, "value": Mechanism.REVETMENT.name},
         {"label": Mechanism.SECTION.value, "value": Mechanism.SECTION.name},
     ],
     value=Mechanism.SECTION.name,
