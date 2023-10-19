@@ -19,6 +19,23 @@ None.
 ### Fixed
 None.
 
+## v0.2.3 [19/10/2023]
+
+### Added
+Revetment
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
 ## v0.2.2 [04/10/2023]
 
 ### Added
