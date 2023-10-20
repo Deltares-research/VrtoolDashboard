@@ -140,6 +140,8 @@ class DikeSectionImporter(OrmImporterProtocol):
         _section_name = section_data.section_name
         # check if the section name is in the traject_gdf
         if _section_name not in self.traject_gdf["section_name"].values:
+            print(_section_name, type(_section_name))
+            print(self.traject_gdf["section_name"].values)
             raise ValueError(
                 f"Section name {_section_name} not found in traject_gdf, try renaming the section 0{_section_name} in the database.")
 

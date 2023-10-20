@@ -39,9 +39,6 @@ class DikeTrajectImporter(OrmImporterProtocol):
         _traject_gdf["geometry"] = _traject_gdf["geometry"].apply(
             lambda x: list(x.coords))  # Serialize the geometry column to a list of coordinates
 
-        # if vaknaam is a single digit, add a 0 in front of it
-        _traject_gdf["vaknaam"] = _traject_gdf["vaknaam"].apply(lambda x: x.zfill(2))
-
         # rename vaknaam to section_name
         _traject_gdf.rename(columns={"vaknaam": "section_name"}, inplace=True)
 
