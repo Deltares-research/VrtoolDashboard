@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -118,11 +119,11 @@ class DikeTraject(BaseLinearObject):
                 continue
 
             if (calc_type == 'doorsnede') and (
-            not section.is_reinforced_doorsnede):  # skip if the section is not reinforced
+                    not section.is_reinforced_doorsnede):  # skip if the section is not reinforced
                 continue
 
             if (calc_type == 'veiligheidsrendement') and (
-            not section.is_reinforced_veiligheidsrendement):  # skip if the section is not reinforced
+                    not section.is_reinforced_veiligheidsrendement):  # skip if the section is not reinforced
                 continue
 
             # add a row to the dataframe with the initial assessment of the section
@@ -158,8 +159,14 @@ class DikeTraject(BaseLinearObject):
         for section in self.dike_sections:
             if not section.in_analyse:
                 continue
+            if not section.is_reinforced_doorsnede and not section.is_reinforced_veiligheidsrendement:
+                continue
             # add a row to the dataframe with the initial assessment of the section
-            for mechanism in ["Overflow", "StabilityInner", "Piping"]:
+            mechanisms = ["Overflow", "StabilityInner", "Piping"]
+            if section.revetment:
+                mechanisms.append("Revetment")
+
+            for mechanism in mechanisms:
                 d = {"name": section.name, "mechanism": mechanism, "Length": section.length
 
                      }
@@ -199,10 +206,10 @@ class DikeTraject(BaseLinearObject):
             if not (section.in_analyse):
                 continue
             if (calc_type == 'doorsnede') and (
-            not section.is_reinforced_doorsnede):  # skip if the section is not reinforced
+                    not section.is_reinforced_doorsnede):  # skip if the section is not reinforced
                 continue
             if (calc_type == 'veiligheidsrendement') and (
-            not section.is_reinforced_veiligheidsrendement):  # skip if the section is not reinforced
+                    not section.is_reinforced_veiligheidsrendement):  # skip if the section is not reinforced
                 continue
 
             try:
@@ -231,10 +238,10 @@ class DikeTraject(BaseLinearObject):
             if not (section.in_analyse):
                 continue
             if (calc_type == 'doorsnede') and (
-            not section.is_reinforced_doorsnede):  # skip if the section is not reinforced
+                    not section.is_reinforced_doorsnede):  # skip if the section is not reinforced
                 continue
             if (calc_type == 'veiligheidsrendement') and (
-            not section.is_reinforced_veiligheidsrendement):  # skip if the section is not reinforced
+                    not section.is_reinforced_veiligheidsrendement):  # skip if the section is not reinforced
                 continue
 
             length_list.append(section.length)
@@ -263,7 +270,8 @@ def parse_optimal_measures_results(all_unzipped_files: dict, filename: str) -> d
     _measures_df.set_index("Section", inplace=True)
     if not _measures_df.index.is_unique:
         raise ValueError(f"Error: the file {filename} contains duplicate section names")
-    _measure_dict = _measures_df[["LCC", 'name', "ID", "yes/no", "dberm", "dcrest"]].to_dict('index')
+    _measure_dict = _measures_df[
+        ["LCC", 'name', "ID", "yes/no", "dberm", "dcrest", "transition_level", "beta_target"]].to_dict('index')
     return _measure_dict
 
 

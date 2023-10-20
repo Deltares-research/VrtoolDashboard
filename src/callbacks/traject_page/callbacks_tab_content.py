@@ -8,6 +8,7 @@ from src.plotly_graphs.plotly_maps import plot_overview_map, plot_default_overvi
     plot_dike_traject_reliability_initial_assessment_map, plot_dike_traject_reliability_measures_assessment_map, \
     plot_dike_traject_urgency, dike_traject_pf_cost_helping_map
 from src.app import app
+from src.utils.utils import export_to_json
 
 
 @app.callback(Output('overview_map_div', 'children'),
@@ -19,6 +20,8 @@ def make_graph_overview_dike(selection_traject_name: str) -> dcc.Graph:
     :param selection_traject_name: The name of the dike traject to be displayed.
 
     """
+
+    # export_to_json(dike_traject_data)
 
     if selection_traject_name is None:
         _fig = plot_default_overview_map_dummy()
@@ -166,6 +169,12 @@ def update_click(selection_traject_name: str, click_data: dict) -> Figure:
     if selection_traject_name is None:
         return plot_default_overview_map_dummy()
     else:
-        _traject_db = get_dike_traject_from_ORM(selection_traject_name)
-        return dike_traject_pf_cost_helping_map(_traject_db, click_data["points"][0]["customdata"],
-                                                click_data["points"][0]["curveNumber"])
+        _dike_traject = get_dike_traject_from_ORM(selection_traject_name)
+
+        _order = _dike_traject.reinforcement_order_dsn if click_data["points"][0]["curveNumber"] == 0 else \
+            _dike_traject.reinforcement_order_vr
+        _reinforced_sections = _order[:int(click_data["points"][0]["pointNumber"])]
+
+        return dike_traject_pf_cost_helping_map(_dike_traject,
+                                                click_data["points"][0]["curveNumber"], _reinforced_sections)
+

@@ -87,7 +87,8 @@ def toggle_collapse3(n: int, is_open: bool) -> bool:
 
 
 @app.callback(
-    Output('select_sub_result_type_measure_map', 'options'),
+    [Output('select_sub_result_type_measure_map', 'options'),
+    Output('select_sub_result_type_measure_map', 'value')],
     Input('select_measure_map_result_type', 'value'),
 )
 def update_radio_sub_result_type(result_type: str) -> list:
@@ -104,21 +105,24 @@ def update_radio_sub_result_type(result_type: str) -> list:
             {'label': SubResultType.ABSOLUTE.value, 'value': SubResultType.ABSOLUTE.name},
             {'label': SubResultType.RATIO.value, 'value': SubResultType.RATIO.name},
         ]
+        value = SubResultType.ABSOLUTE.name
     elif result_type == ColorBarResultType.COST.name:
         options = [
             {'label': SubResultType.ABSOLUTE.value, 'value': SubResultType.ABSOLUTE.name},
             {'label': SubResultType.DIFFERENCE.value, 'value': SubResultType.DIFFERENCE.name},
         ]
+        value = SubResultType.ABSOLUTE.name
     elif result_type == ColorBarResultType.MEASURE.name:
         options = [
             {'label': SubResultType.MEASURE_TYPE.value, 'value': SubResultType.MEASURE_TYPE.name},
             {'label': SubResultType.BERM_WIDENING.value, 'value': SubResultType.BERM_WIDENING.name},
             {'label': SubResultType.CREST_HIGHTENING.value, 'value': SubResultType.CREST_HIGHTENING.name},
         ]
+        value = SubResultType.MEASURE_TYPE.name
     else:
-        options = []
+        options, value = [], None
 
-    return options
+    return options, value
 
 @app.callback(
     Output("editable_traject_table", "data"),

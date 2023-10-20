@@ -46,13 +46,13 @@ def plot_overview_map(dike_traject: DikeTraject) -> go.Figure:
     for index, section in enumerate(dike_traject.dike_sections):
 
         # if a section is not in analyse, skip it, and it turns blank on the map.
-        _hovertemplate = f'Vaknaam {section.name}<br>' + f'Lengte: {section.length}m'
+        _hovertemplate = f'Vaknaam {section.name}<br>' + f'Lengte: {section.length}m <extra></extra>'
 
         if not section.in_analyse:
             _color = 'black'
             _hovertemplate += f'<br>Niet in analyse'
         else:
-            _color = "rgb(136,204,238)" if index % 2 == 0 else "rgb(51,34,136)"
+            _color = "rgb(253, 216, 53)" if index % 2 == 0 else "rgb(0, 172, 193)"
 
         add_section_trace(fig, section, name=dike_traject.name, color=_color, hovertemplate=_hovertemplate)
 
@@ -88,26 +88,33 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
         _initial_results = section.initial_assessment
 
         if _initial_results is not None:
-            _year_index = bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
-            _beta_section = get_beta(_initial_results, _year_index, mechanism_type)
-            _beta_dict = {meca: beta[_year_index] for meca, beta in _initial_results.items() if meca != "Section"}
-            _color = get_reliability_color(_beta_section, dike_traject.lower_bound_value)
-
-            if result_type == ResultType.RELIABILITY.name:
-                _hover_res = f'Beta sectie: {_beta_section:.2}<br>'
+            #TODO: Refactor this when moving to database format and handling mechanism types
+            if mechanism_type == Mechanism.REVETMENT.name and not section.revetment:
+                _color = 'grey'
+                _hovertemplate = f'Vaknaam {section.name}<br>' \
+                                 f'Beta: NO DATA<br>' + "<extra></extra>"
             else:
-                _hover_res = f'Pf sectie: {beta_to_pf(_beta_section):.2e}<br>'
+                _year_index = bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
+                _beta_section = get_beta(_initial_results, _year_index, mechanism_type)
+                _beta_dict = {meca: beta[_year_index] for meca, beta in _initial_results.items() if meca != "Section"}
+                _color = get_reliability_color(_beta_section, dike_traject.lower_bound_value)
 
-            _hovertemplate = f'Vaknaam {section.name}<br>' + _hover_res
+                if result_type == ResultType.RELIABILITY.name:
+                    _hover_res = f'Beta sectie: {_beta_section:.2}<br>'
+                else:
+                    _hover_res = f'Pf sectie: {beta_to_pf(_beta_section):.2e}<br>'
 
-            if mechanism_type == Mechanism.SECTION.name:
-                _mechanism = min(_beta_dict, key=_beta_dict.get)  # mechanism with lowest beta
-                _hovertemplate += f"Laagste beta: {_mechanism}<br>"
+                _hovertemplate = f'Vaknaam {section.name}<br>' + _hover_res + "<extra></extra>"
+
+                if mechanism_type == Mechanism.SECTION.name:
+                    _mechanism = min(_beta_dict, key=_beta_dict.get)  # mechanism with lowest beta
+                    _hovertemplate = _hovertemplate[
+                                     :-15] + f"Laagste beta: {_mechanism}<br>" + "<extra></extra>"  # :-15 to remove <extra></extra> from string
 
         else:
             _color = 'grey'
             _hovertemplate = f'Vaknaam {section.name}<br>' \
-                             f'Beta: NO DATA<br>'
+                             f'Beta: NO DATA<br>' + "<extra></extra>"
 
         add_section_trace(fig, section, name=dike_traject.name, color=_color, hovertemplate=_hovertemplate)
 
@@ -155,34 +162,44 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
 
         if _measure_results is not None:
 
-            _year_index = bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
-            _beta_section = get_beta(_measure_results, _year_index, mechanism_type)
-            if colorbar_result_type == ColorBarResultType.RELIABILITY.name and sub_result_type == SubResultType.ABSOLUTE.name:
-                _color, _hovertemplate = get_color_hover_absolute_reliability(section, _beta_section, _measure_results, dike_traject.lower_bound_value)
-
-            elif colorbar_result_type == ColorBarResultType.RELIABILITY.name and sub_result_type == SubResultType.RATIO.name:
-                _color, _hovertemplate = get_color_hover_prob_ratio(section, _year_index, mechanism_type)
-
-            elif colorbar_result_type == ColorBarResultType.COST.name and sub_result_type == SubResultType.ABSOLUTE.name:
-                _color, _hovertemplate = get_color_hover_absolute_cost(section, _beta_section, _measure_results)
-
-            elif colorbar_result_type == ColorBarResultType.COST.name and sub_result_type == SubResultType.DIFFERENCE.name:
-                _color, _hovertemplate = get_color_hover_difference_cost(section)
-
+            #TODO: Refactor this when moving to database format and handling mechanism types
+            if mechanism_type == Mechanism.REVETMENT.name and not section.revetment:
+                _color = 'grey'
+                _hovertemplate = f'Vaknaam {section.name}<br>' \
+                                 f'Beta: NO DATA<br>' + "<extra></extra>"
             else:
-                raise ValueError("Wrong combination of settings? or not implemented yet")
 
-            if mechanism_type == Mechanism.SECTION.name and sub_result_type == SubResultType.ABSOLUTE.name:
-                _beta_dict = {key: value[_year_index] for key, value in _measure_results.items() if
-                              key in ["StabilityInner", "Piping", "Overflow"]}
-                _mechanism = min(_beta_dict, key=_beta_dict.get)  # mechanism with lowest beta
-                _hovertemplate += f"Laagste beta: {_mechanism}<br>"
+                _year_index = bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
+                _beta_section = get_beta(_measure_results, _year_index, mechanism_type)
+                if _beta_section is None:
+                    _color, _hovertemplate = get_no_data_info(section)
+
+                elif colorbar_result_type == ColorBarResultType.RELIABILITY.name and sub_result_type == SubResultType.ABSOLUTE.name:
+                    _color, _hovertemplate = get_color_hover_absolute_reliability(section, _beta_section, _measure_results, dike_traject.lower_bound_value)
+
+                elif colorbar_result_type == ColorBarResultType.RELIABILITY.name and sub_result_type == SubResultType.RATIO.name:
+                    _color, _hovertemplate = get_color_hover_prob_ratio(section, _year_index, mechanism_type)
+
+                elif colorbar_result_type == ColorBarResultType.COST.name and sub_result_type == SubResultType.ABSOLUTE.name:
+                    _color, _hovertemplate = get_color_hover_absolute_cost(section, _beta_section, _measure_results)
+
+                elif colorbar_result_type == ColorBarResultType.COST.name and sub_result_type == SubResultType.DIFFERENCE.name:
+                    _color, _hovertemplate = get_color_hover_difference_cost(section)
+
+                else:
+                    raise ValueError("Wrong combination of settings? or not implemented yet")
+
+                if mechanism_type == Mechanism.SECTION.name and sub_result_type == SubResultType.ABSOLUTE.name:
+                    _beta_dict = {key: value[_year_index] for key, value in _measure_results.items() if
+                                  key in ["StabilityInner", "Piping", "Overflow"]}
+                    _mechanism = min(_beta_dict, key=_beta_dict.get)  # mechanism with lowest beta
+                    _hovertemplate = _hovertemplate[:-15] + f"Laagste beta: {_mechanism}<br>" + "<extra></extra>"
 
         # If no results are available for the dijkvak, return blank data.
         else:
             _color = 'grey'
             _hovertemplate = f'Vaknaam {section.name}<br>' \
-                             f'Beta: NO DATA<br>'
+                             f'Beta: NO DATA<br>' + "<extra></extra>"
 
         add_section_trace(fig, section, name=dike_traject.name, color=_color, hovertemplate=_hovertemplate)
 
@@ -240,7 +257,7 @@ def plot_dike_traject_urgency(dike_traject: DikeTraject, selected_year: float, l
             _group = ">15km"
 
         _hovertemplate = f'Vaknaam {section.name}<br>' \
-                         f'Length: {section.length}m <br>'
+                         f'Length: {section.length}m <br>' + "<extra></extra>"
 
         showlegend = _group not in added_to_legend
 
@@ -322,7 +339,8 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
             hovertemplate=f'Vaknaam {section.name}<br>' \
                           f"Maatregel: {measure_results['name']} <br>" \
                           f"Kruinverhoging: {measure_results['dcrest']}m <br>" \
-                          f"Bermverbreding: {measure_results['dberm']}m <br>"
+                          f"Bermverbreding: {measure_results['dberm']}m <br>" \
+                          f"<extra></extra>"
 
         ))
 
@@ -339,7 +357,9 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
             line={'color': _color, 'width': 4},
             showlegend=legend_display.get("VZG"),
             hovertemplate=f'Vaknaam {section.name}<br>' \
-                          f"{measure_results['name']}",
+                          f"{measure_results['name']}" \
+                          f"<extra></extra>"
+            ,
         ))
         legend_display["VZG"] = False
 
@@ -356,7 +376,9 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
             line={'color': _color, 'width': 4},
             showlegend=legend_display.get("screen"),
             hovertemplate=f'Vaknaam {section.name}<br>' \
-                          f"{measure_results['name']}",
+                          f"{measure_results['name']}" \
+                          f"<extra></extra>"
+            ,
         ))
         legend_display["screen"] = False
 
@@ -374,7 +396,9 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
             fill="toself",
             showlegend=legend_display.get("diaphram wall"),
             hovertemplate=f'Vaknaam {section.name}<br>' \
-                          f"{measure_results['name']}",
+                          f"{measure_results['name']}" \
+                          f"<extra></extra>"
+            ,
         ))
         legend_display["diaphram wall"] = False
 
@@ -402,7 +426,8 @@ def add_measure_crest_heightening_trace(fig: go.Figure, section: DikeSection, me
                 hovertemplate=f'Vaknaam {section.name}<br>' \
                               f"Maatregel: {measure_results['name']} <br>" \
                               f"Kruin verhoging: {measure_results['dcrest']}m <br>" \
-                              f"Bermverbreding: {measure_results['dberm']}m <br>"
+                              f"Bermverbreding: {measure_results['dberm']}m <br>" \
+                              f"<extra></extra>"
 
             ))
             add_colorscale_bar_crest_heigtening(fig)
@@ -428,14 +453,15 @@ def add_measure_berm_widening_trace(fig: go.Figure, section: DikeSection, measur
                 hovertemplate=f'Vaknaam {section.name}<br>' \
                               f"Maatregel: {measure_results['name']} <br>" \
                               f"Kruin verhoging: {measure_results['dcrest']}m <br>" \
-                              f"Bermverbreding: {measure_results['dberm']}m <br>"
+                              f"Bermverbreding: {measure_results['dberm']}m <br>" \
+                              f"<extra></extra>"
 
             ))
             add_colorscale_bar_berm_widening(fig)
 
 
 def add_section_trace(fig: go.Figure, section: DikeSection, name: str, color: str, hovertemplate: str,
-                      showlegend: bool = False, legendgroup: str = None):
+                      showlegend: bool = False, legendgroup: str = None, opacity: float = 1):
     """
     Add a trace of a section to the figure which the given specifications for color and hover, etc...
     """
@@ -449,13 +475,21 @@ def add_section_trace(fig: go.Figure, section: DikeSection, name: str, color: st
         marker={'size': 10, 'color': color},
         line={'width': 5, 'color': color},
         name=name,
+        opacity=opacity,
         legendgroup=legendgroup,
         hovertemplate=hovertemplate,
         showlegend=showlegend))
 
 
-def dike_traject_pf_cost_helping_map(dike_traject: DikeTraject, clicked_section_name: str,
-                                     curve_number: int) -> go.Figure:
+def dike_traject_pf_cost_helping_map(dike_traject: DikeTraject,
+                                     curve_number: int, reinforced_sections: list[str]) -> go.Figure:
+    """
+
+    :param dike_traject:
+    :param curve_number: number of the curve in the pf-cost curve. 0 is veiligheid, 1 is doorsnede
+    :param reinforced_sections: list of all the reinforced sections until the clicked section
+    :return:
+    """
     fig = go.Figure()
 
     for section in dike_traject.dike_sections:
@@ -464,13 +498,19 @@ def dike_traject_pf_cost_helping_map(dike_traject: DikeTraject, clicked_section_
         if not section.in_analyse:
             continue
 
-        if section.name == clicked_section_name:
-            _color = 'blue' if curve_number == 0 else 'gold'
+        if section.name == reinforced_sections[-1]:
+            _color = 'blue' if curve_number == 0 else "#cc8400"  # orange-ish
+            _opacity = 1
+        elif section.name in reinforced_sections and section.name != reinforced_sections[-1]:
+            _color = 'blue' if curve_number == 0 else "#cc8400"
+            _opacity = 0.4
         else:
             _color = 'grey'
-        _hovertemplate = f'Vaknaam {section.name}<br>'
+            _opacity = 1
+        _hovertemplate = f'Vaknaam {section.name}<br>' + '<extra></extra>'
 
-        add_section_trace(fig, section, name=dike_traject.name, color=_color, hovertemplate=_hovertemplate)
+        add_section_trace(fig, section, name=dike_traject.name, color=_color, hovertemplate=_hovertemplate,
+                          opacity=_opacity)
 
     # Update layout of the figure and add token for mapbox
     _middle_point = get_middle_point(dike_traject.dike_sections)
@@ -790,6 +830,8 @@ def get_beta(results: dict, year_index: int, mechanism: str) -> float:
         return results["Overflow"][year_index]
     elif mechanism == Mechanism.STABILITY.name:
         return results["StabilityInner"][year_index]
+    elif mechanism == Mechanism.REVETMENT.name:
+        return results["Revetment"][year_index]
 
 
 def get_color_hover_prob_ratio(section: DikeSection, year_index: int, mechanism_type: str) -> Tuple[str, str]:
@@ -806,7 +848,8 @@ def get_color_hover_prob_ratio(section: DikeSection, year_index: int, mechanism_
         _hovertemplate = f'Vaknaam {section.name}<br>' \
                          f'Pf Veiligheidsrendement: {beta_to_pf(_beta_vr):.2e}<br>' \
                          f'Pf Doorsnede: {beta_to_pf(_beta_dsn):.2e}<br>' \
-                         f'Ratio Pf vr/dsn: {round(_ratio_pf, 1)}<br>'
+                         f'Ratio Pf vr/dsn: {round(_ratio_pf, 1)}<br>' \
+                         f'<extra></extra>'
 
     return _color, _hovertemplate
 
@@ -819,7 +862,8 @@ def get_color_hover_absolute_reliability(section: DikeSection, beta_section: flo
                      f'Maatregel: {measure_results["name"]}<br>' \
                      f'LCC: {to_million_euros(measure_results["LCC"])} M€<br>' \
                      f'Beta sectie: {beta_section:.2}<br>' \
-                     f'Pf sectie: {beta_to_pf(beta_section):.2e}<br>'
+                     f'Pf sectie: {beta_to_pf(beta_section):.2e}<br>' \
+                     f'<extra></extra>'
 
     return _color, _hovertemplate
 
@@ -833,7 +877,8 @@ def get_color_hover_absolute_cost(section: DikeSection, beta_section: float, mea
                      f'Kost sectie: {to_million_euros(measure_results["LCC"])} M€<br>' \
                      f'Kost per kilometers: {_cost_per_kilometer} M€/km<br>' \
                      f'Beta sectie: {beta_section:.2}<br>' \
-                     f'Pf sectie: {beta_to_pf(beta_section):.2e}<br>'
+                     f'Pf sectie: {beta_to_pf(beta_section):.2e}<br>' \
+                     f'<extra></extra>'
 
     return _color, _hovertemplate
 
@@ -842,7 +887,8 @@ def get_color_hover_difference_cost(section: DikeSection) -> Tuple[str, str]:
     if section.final_measure_veiligheidsrendement is None or section.final_measure_doorsnede is None:
         _color = 'grey'
         _hovertemplate = f'Vaknaam {section.name}<br>' \
-                         f'Beta: NO DATA<br>'
+                         f'Beta: NO DATA<br>' \
+                         f'<extra></extra>'
     else:
         _cost_vr = section.final_measure_veiligheidsrendement["LCC"]
         _cost_dsn = section.final_measure_doorsnede["LCC"]
@@ -855,6 +901,14 @@ def get_color_hover_difference_cost(section: DikeSection) -> Tuple[str, str]:
                          f'Kosten Veiligheidsrendement: {to_million_euros(_cost_vr)} M€<br>' \
                          f'Kosten Doorsnede: {to_million_euros(_cost_dsn)} M€<br>' \
                          f'Kostenverschil: {to_million_euros(_diff)} M€<br>' \
-                         f'Kostenverschil per kilometer: {_diff_per_kilometer} M€/km<br>'
+                         f'Kostenverschil per kilometer: {_diff_per_kilometer} M€/km<br>' \
+                         f'<extra></extra>'
 
+    return _color, _hovertemplate
+
+
+def get_no_data_info(section: DikeSection) -> Tuple[str, str]:
+    _color = 'grey'
+    _hovertemplate = f'Vaknaam {section.name}<br>' \
+                     f'Beta: NO DATA<br>' + "<extra></extra>"
     return _color, _hovertemplate
