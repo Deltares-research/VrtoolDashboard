@@ -31,9 +31,17 @@ class DikeTrajectImporter(OrmImporterProtocol):
         self.traject_name = traject_name
 
     def _import_dike_section_list(
-            self, orm_dike_section_list: list[SectionData], traject_gdf: GeoDataFrame
+            self, orm_dike_section_list: list[SectionData], traject_gdf: GeoDataFrame, run_id: int,
+            final_greedy_step_id: int
     ) -> list[DikeSection]:
-        _ds_importer = DikeSectionImporter(traject_gdf)
+        """Import the dike sections from the ORM to a list of DikeSection objects
+
+        :param orm_dike_section_list: list of ORM SectionData objects
+        :param traject_gdf: GeoDataFrame of the dike trajectory
+        :param run_id: id of the optimization run for veiligheidsrendement (default 1)
+        :param final_greedy_step_id: id of the final step of the greedy optimization
+        """
+        _ds_importer = DikeSectionImporter(traject_gdf, run_id=run_id, final_greedy_step_id=final_greedy_step_id)
 
         return list(map(_ds_importer.import_orm, orm_dike_section_list))
 
@@ -60,7 +68,6 @@ class DikeTrajectImporter(OrmImporterProtocol):
 
         _ordered_section_names = []
         for step in _optimization_steps:
-
             # Probably there is a much more compact way to retrieve the section name from the ORM
             optimization_selected_measure = OptimizationSelectedMeasure.get(
                 OptimizationSelectedMeasure.id == step.optimization_selected_measure_id)
@@ -69,11 +76,11 @@ class DikeTrajectImporter(OrmImporterProtocol):
             section = SectionData.get(SectionData.id == measure_per_section.section_id)
             _ordered_section_names.append(section.section_name)
 
-        print("Dsn ordered section names: ", _ordered_section_names)
         return _ordered_section_names
 
-    def _get_reinforcement_section_order_vr(self, run_id) -> list[str]:
-
+    def _get_reinforcement_section_order_vr(self, run_id) -> tuple[list[str], int]:
+        """Get the reinforcement order of the section names for Veiligheidsrendement and return the final step id of the
+         greedy optimization """
         _optimization_steps = get_optimization_steps(run_id)
 
         _ordered_section_names = []
@@ -93,8 +100,7 @@ class DikeTrajectImporter(OrmImporterProtocol):
             if section.section_name not in _ordered_section_names:
                 _ordered_section_names.append(section.section_name)
 
-        print("Vr ordered section names: ", _ordered_section_names)
-        return _ordered_section_names
+        return _ordered_section_names, _final_step_id
 
     @staticmethod
     def _get_final_step_vr(optimization_run_id: int) -> int:
@@ -168,9 +174,12 @@ class DikeTrajectImporter(OrmImporterProtocol):
         )
         _traject_gdf = self.parse_geo_dataframe(_traject_name)
 
-        _dike_traject.dike_sections = self._import_dike_section_list(_selected_sections, _traject_gdf)
         _dike_traject.reinforcement_order_vr = self._get_reinforcement_section_order_dsn(
             run_id=2)  # TODO retrieve run_id from run name of datestamp
-        _dike_traject.reinforcement_order_dsn = self._get_reinforcement_section_order_vr(run_id=1)
+        _dike_traject.reinforcement_order_dsn, final_greedy_step_id = self._get_reinforcement_section_order_vr(run_id=1)
+
+        _dike_traject.dike_sections = self._import_dike_section_list(_selected_sections, _traject_gdf, run_id=1,
+                                                                     # TODO handle run_id
+                                                                     final_greedy_step_id=final_greedy_step_id)
 
         return _dike_traject

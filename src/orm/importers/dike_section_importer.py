@@ -1,20 +1,33 @@
+from pathlib import Path
+
 from geopandas import GeoDataFrame
+from vrtool.common.enums import MechanismEnum
+from vrtool.defaults.vrtool_config import VrtoolConfig
+from vrtool.orm.io.importers.optimization.optimization_step_importer import OptimizationStepImporter
 
 from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol
-from vrtool.orm.models import Mechanism, MechanismPerSection, ComputationScenario, MeasurePerSection, Measure
+from vrtool.orm.models import Mechanism, MechanismPerSection, ComputationScenario, MeasurePerSection, Measure, \
+    OptimizationStep, OptimizationRun, OptimizationStepResultMechanism, OptimizationStepResultSection, \
+    OptimizationSelectedMeasure, OptimizationType, MeasureResult
 from vrtool.orm.models.section_data import SectionData
+from vrtool.orm.orm_controllers import get_optimization_steps
 
 from src.linear_objects.dike_section import DikeSection
 from src.orm.models import GreedyOptimizationOrder, ModifiedMeasure, MeasureCost, \
     MeasureReliability, TargetReliabilityBasedOrder, AssessmentMechanismResult, AssessmentSectionResult
+from src.orm.orm_controller_custom import get_optimization_step_with_lowest_total_cost_table_no_closing
 
 
 class DikeSectionImporter(OrmImporterProtocol):
     traject_gdf: GeoDataFrame
+    run_id: int  # run_id of the OptimizationRun for Veiligheidsrendement
+    final_greedy_step_id: int  # id of the final step of the greedy optimization
     assessment_time: list[int]
 
-    def __init__(self, traject_gdf: GeoDataFrame):
+    def __init__(self, traject_gdf: GeoDataFrame, run_id: int, final_greedy_step_id: int):
         self.traject_gdf = traject_gdf
+        self.run_id = run_id
+        self.final_greedy_step_id = final_greedy_step_id
 
     def _get_initial_assessment(self,
                                 section_data: SectionData,
@@ -91,11 +104,78 @@ class DikeSectionImporter(OrmImporterProtocol):
         _measure_name = Measure.get(Measure.id == _measure_id).name
         return _measure_name
 
-    def get_final_measure_doorsnede_eis(self, section_data: SectionData) -> dict:
+    @staticmethod
+    def _get_final_step_vr(optimization_run_id: int) -> int:
+        """Get the final step id of the optimization run.
+        The final step in this case is the step with the lowest total cost.
+
+        :param optimization_run_id: The id of the optimization run
+
+        :return: The id of the final step
+        """
+
+        # TODO Temporary hardcoded config. This will be improved in another PR
+        _vr_config = VrtoolConfig()
+        _vr_config.input_directory = Path(
+            r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\TestCase1_38-1_no_housing")
+        _vr_config.excluded_mechanisms = [MechanismEnum.REVETMENT, MechanismEnum.HYDRAULIC_STRUCTURES]
+        _vr_config.output_directory = _vr_config.input_directory / "results"
+        _vr_config.externals = (
+                Path(__file__).parent.parent / "externals/D-Stability 2022.01.2/bin"
+        )
+        _vr_config.traject = "38-1"
+
+        _vr_config.input_database_name = "vrtool_input.db"
+
+        _step_id, _, _ = get_optimization_step_with_lowest_total_cost_table_no_closing(_vr_config, optimization_run_id)
+
+        return _step_id
+
+    def get_final_measure_vr(self, section_data: SectionData) -> dict:
+
+        _final_measure = {}
+        _section_id = section_data.id
+
+        _final_step_number = OptimizationStep.get(OptimizationStep.id == self.final_greedy_step_id).step_number
+
+        _optimization_steps = get_optimization_steps(self.run_id)
+
+        # This is the last step_number (=highest) for the section of interest before the final_step_number
+        _optimum_section_step_number = None
+
+        for _optimization_step in _optimization_steps:
+
+            # Stop when the last step has been reached
+            if _optimization_step.step_number > _final_step_number:
+                break
+
+            optimization_selected_measure = OptimizationSelectedMeasure.get(
+                OptimizationSelectedMeasure.id == _optimization_step.optimization_selected_measure_id)
+            measure_result = MeasureResult.get(MeasureResult.id == optimization_selected_measure.measure_result_id)
+            measure_per_section = MeasurePerSection.get(MeasurePerSection.id == measure_result.measure_per_section_id)
+            section = SectionData.get(SectionData.id == measure_per_section.section_id)
+
+            if section.id == _section_id:
+                _optimum_section_step_number = _optimization_step.step_number
+
+        if _optimum_section_step_number is None:
+            raise ValueError(
+                f"Sectie {_section_id} niet gevonden in de optimalisatie")  # TODO: reassign the betas to those of the initial assessment.
+
+        _optimum_section_optimization_steps = (OptimizationStep.get(
+            OptimizationStep.step_number == _optimum_section_step_number)
+        )
+
+        print(_section_id, _optimum_section_step_number, _optimum_section_optimization_steps)
+
+        # _as_df = OptimizationStepImporter.import_optimization_step_results_df(
+        #     _optimum_section_step
+        # )
 
         # print(section_data, 10000)
-
+        # {"piping": [1,2,3,4], "section": [4,3,2,6]}
         return {}
+
     def _get_final_measure(self, section_data: SectionData, assessment_type: str) -> dict:
         """
         DEPRECATED
@@ -171,13 +251,14 @@ class DikeSectionImporter(OrmImporterProtocol):
         _dike_section.in_analyse = orm_model.in_analysis
         _dike_section.is_reinforced = True  # TODO remove this argument?
         _dike_section.revetment = False  # TODO
-        # _dike_section.final_measure_veiligheidrendement = self._get_final_measure(orm_model,
-        #                                                                           assessment_type="GreedyOptimizationBased")
-        _dike_section.final_measure_doorsnede = self.get_final_measure_doorsnede_eis(orm_model)
-        # _dike_section.final_measure_doorsnede = self._get_final_measure(orm_model,
-        #                                                                 assessment_type="TargetReliabilityBased")
 
         _dike_section.initial_assessment = self._get_initial_assessment(orm_model)
         _dike_section.years = self.assessment_time
+
+        # _dike_section.final_measure_veiligheidrendement = self._get_final_measure(orm_model,
+        #                                                                           assessment_type="GreedyOptimizationBased")
+        _dike_section.final_measure_doorsnede = self.get_final_measure_vr(orm_model)
+        # _dike_section.final_measure_doorsnede = self._get_final_measure(orm_model,
+        #                                                                 assessment_type="TargetReliabilityBased")
 
         return _dike_section
