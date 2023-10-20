@@ -4,8 +4,10 @@ from geopandas import GeoDataFrame
 from vrtool.api import get_optimization_step_with_lowest_total_cost_table
 from vrtool.common.enums import MechanismEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
+from vrtool.orm.io.importers.optimization.optimization_step_importer import OptimizationStepImporter
 from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol
 from vrtool.orm.models import SectionData, MeasurePerSection
+from vrtool.orm.orm_controllers import get_optimization_steps
 
 from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject
@@ -52,27 +54,13 @@ class DikeTrajectImporter(OrmImporterProtocol):
 
         return _traject_gdf[["geometry", "section_name"]]
 
-    @staticmethod
-    def _get_optimization_steps(run_id: int) -> list[OptimizationStep]:
-        """Return the optimization steps for the given assessment type
-
-        :param run_id: The id of the optimization run
-
-        :return: A list of optimization steps
-        """
-
-        _steps = OptimizationStep.select() \
-            .join(OptimizationSelectedMeasure) \
-            .where(OptimizationSelectedMeasure.optimization_run_id == run_id)
-
-        return _steps
-
     def _get_reinforcement_section_order_dsn(self, run_id: int) -> list[str]:
         """Get the reinforcement order of the section names for Doorsnede Eisen"""
-        _optimization_steps = self._get_optimization_steps(run_id=run_id)
+        _optimization_steps = get_optimization_steps(run_id)
 
         _ordered_section_names = []
         for step in _optimization_steps:
+
             # Probably there is a much more compact way to retrieve the section name from the ORM
             optimization_selected_measure = OptimizationSelectedMeasure.get(
                 OptimizationSelectedMeasure.id == step.optimization_selected_measure_id)
@@ -81,23 +69,32 @@ class DikeTrajectImporter(OrmImporterProtocol):
             section = SectionData.get(SectionData.id == measure_per_section.section_id)
             _ordered_section_names.append(section.section_name)
 
+        print("Dsn ordered section names: ", _ordered_section_names)
         return _ordered_section_names
 
     def _get_reinforcement_section_order_vr(self, run_id) -> list[str]:
 
-        _optimization_steps = self._get_optimization_steps(run_id=run_id)
+        _optimization_steps = get_optimization_steps(run_id)
 
-        _ordered_sections = []
+        _ordered_section_names = []
 
         _final_step_id = self._get_final_step_vr(run_id)
         _final_step_number = OptimizationStep.get(OptimizationStep.id == _final_step_id).step_number
-        print("final step", _final_step_id, _final_step_number)
         for step in _optimization_steps:
+
             if step.step_number > _final_step_number:
                 break
 
+            optimization_selected_measure = OptimizationSelectedMeasure.get(
+                OptimizationSelectedMeasure.id == step.optimization_selected_measure_id)
+            measure_result = MeasureResult.get(MeasureResult.id == optimization_selected_measure.measure_result_id)
+            measure_per_section = MeasurePerSection.get(MeasurePerSection.id == measure_result.measure_per_section_id)
+            section = SectionData.get(SectionData.id == measure_per_section.section_id)
+            if section.section_name not in _ordered_section_names:
+                _ordered_section_names.append(section.section_name)
 
-        return _ordered_sections
+        print("Vr ordered section names: ", _ordered_section_names)
+        return _ordered_section_names
 
     @staticmethod
     def _get_final_step_vr(optimization_run_id: int) -> int:
@@ -175,7 +172,5 @@ class DikeTrajectImporter(OrmImporterProtocol):
         _dike_traject.reinforcement_order_vr = self._get_reinforcement_section_order_dsn(
             run_id=2)  # TODO retrieve run_id from run name of datestamp
         _dike_traject.reinforcement_order_dsn = self._get_reinforcement_section_order_vr(run_id=1)
-
-        stop
 
         return _dike_traject
