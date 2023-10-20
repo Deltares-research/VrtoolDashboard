@@ -55,6 +55,7 @@ class DikeSectionImporter(OrmImporterProtocol):
 
     def _get_taken_measure_modified_measure_id(self, section_id: int, assessment_type: str) -> int:
         """
+        DEPRECATED
         Get the corresponding ModifiedMeasure id for the section_id in either the GreedyOptimizationOrder or
         TargetReliaiblityBasedOrder table
         :param section_id: id of the Section of interest, for this id there should be one matching row in the
@@ -79,6 +80,7 @@ class DikeSectionImporter(OrmImporterProtocol):
 
     def _get_measure_name(self, modified_measure_id: int) -> str:
         """
+        DEPRECATED
         Get the corresponding measure name from the ModifiedMeasure id
         :param modified_measure_id:
         :return:
@@ -89,9 +91,14 @@ class DikeSectionImporter(OrmImporterProtocol):
         _measure_name = Measure.get(Measure.id == _measure_id).name
         return _measure_name
 
+    def get_final_measure_doorsnede_eis(self, section_data: SectionData) -> dict:
+
+        # print(section_data, 10000)
+
+        return {}
     def _get_final_measure(self, section_data: SectionData, assessment_type: str) -> dict:
         """
-
+        DEPRECATED
         :param section_data:
         :param assessment_type: one of TargetReliabilityBased or GreedyOptimizationBased
         :return:
@@ -140,8 +147,6 @@ class DikeSectionImporter(OrmImporterProtocol):
         _section_name = section_data.section_name
         # check if the section name is in the traject_gdf
         if _section_name not in self.traject_gdf["section_name"].values:
-            print(_section_name, type(_section_name))
-            print(self.traject_gdf["section_name"].values)
             raise ValueError(
                 f"Section name {_section_name} not found in traject_gdf, try renaming the section 0{_section_name} in the database.")
 
@@ -165,8 +170,10 @@ class DikeSectionImporter(OrmImporterProtocol):
         _dike_section.coordinates_rd = self._get_coordinates(orm_model)
         _dike_section.in_analyse = orm_model.in_analysis
         _dike_section.is_reinforced = True  # TODO remove this argument?
+        _dike_section.revetment = False  # TODO
         # _dike_section.final_measure_veiligheidrendement = self._get_final_measure(orm_model,
         #                                                                           assessment_type="GreedyOptimizationBased")
+        _dike_section.final_measure_doorsnede = self.get_final_measure_doorsnede_eis(orm_model)
         # _dike_section.final_measure_doorsnede = self._get_final_measure(orm_model,
         #                                                                 assessment_type="TargetReliabilityBased")
 

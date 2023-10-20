@@ -29,3 +29,18 @@ from src.orm.models.measure_reliability import MeasureReliability
 from src.orm.models.modified_measure import ModifiedMeasure
 from src.orm.models.target_reliability_based_order import TargetReliabilityBasedOrder
 
+
+from vrtool.orm.models.optimization import OptimizationType
+from vrtool.orm.models.optimization import OptimizationStep
+from vrtool.orm.models.optimization import OptimizationSelectedMeasure
+from vrtool.orm.models.optimization import OptimizationRun
+from vrtool.orm.models.optimization import OptimizationStepResultMechanism
+from vrtool.orm.models.optimization import OptimizationStepResultSection
+
+from vrtool.orm.models.measure_result import MeasureResult
+from vrtool.orm.models.measure_result import MeasureResultMechanism
+from vrtool.orm.models.measure_result import MeasureResultSection
+from vrtool.orm.models.measure_result import MeasureResultParameter
+
+
+

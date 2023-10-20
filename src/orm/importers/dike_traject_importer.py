@@ -1,6 +1,9 @@
 from pathlib import Path
 
 from geopandas import GeoDataFrame
+from vrtool.api import get_optimization_step_with_lowest_total_cost_table
+from vrtool.common.enums import MechanismEnum
+from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol
 from vrtool.orm.models import SectionData, MeasurePerSection
 
@@ -8,7 +11,8 @@ from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject
 
 from src.orm.importers.dike_section_importer import DikeSectionImporter
-from src.orm.models import GreedyOptimizationOrder, TargetReliabilityBasedOrder, ModifiedMeasure
+from src.orm.models import GreedyOptimizationOrder, TargetReliabilityBasedOrder, ModifiedMeasure, OptimizationType, \
+    OptimizationSelectedMeasure, OptimizationStep, OptimizationRun, MeasureResult
 from src.orm.models.dike_traject_info import DikeTrajectInfo
 
 import geopandas as gpd
@@ -28,6 +32,7 @@ class DikeTrajectImporter(OrmImporterProtocol):
             self, orm_dike_section_list: list[SectionData], traject_gdf: GeoDataFrame
     ) -> list[DikeSection]:
         _ds_importer = DikeSectionImporter(traject_gdf)
+
         return list(map(_ds_importer.import_orm, orm_dike_section_list))
 
     def parse_geo_dataframe(self, traject_name: str) -> GeoDataFrame:
@@ -39,10 +44,87 @@ class DikeTrajectImporter(OrmImporterProtocol):
         _traject_gdf["geometry"] = _traject_gdf["geometry"].apply(
             lambda x: list(x.coords))  # Serialize the geometry column to a list of coordinates
 
+        if not "vaknaam" in _traject_gdf.columns:
+            raise ValueError("No column named <vaknaam> in the geojson file.")
+
         # rename vaknaam to section_name
         _traject_gdf.rename(columns={"vaknaam": "section_name"}, inplace=True)
 
         return _traject_gdf[["geometry", "section_name"]]
+
+    @staticmethod
+    def _get_optimization_steps(run_id: int) -> list[OptimizationStep]:
+        """Return the optimization steps for the given assessment type
+
+        :param run_id: The id of the optimization run
+
+        :return: A list of optimization steps
+        """
+
+        _steps = OptimizationStep.select() \
+            .join(OptimizationSelectedMeasure) \
+            .where(OptimizationSelectedMeasure.optimization_run_id == run_id)
+
+        return _steps
+
+    def _get_reinforcement_section_order_dsn(self, run_id: int) -> list[str]:
+        """Get the reinforcement order of the section names for Doorsnede Eisen"""
+        _optimization_steps = self._get_optimization_steps(run_id=run_id)
+
+        _ordered_section_names = []
+        for step in _optimization_steps:
+            # Probably there is a much more compact way to retrieve the section name from the ORM
+            optimization_selected_measure = OptimizationSelectedMeasure.get(
+                OptimizationSelectedMeasure.id == step.optimization_selected_measure_id)
+            measure_result = MeasureResult.get(MeasureResult.id == optimization_selected_measure.measure_result_id)
+            measure_per_section = MeasurePerSection.get(MeasurePerSection.id == measure_result.measure_per_section_id)
+            section = SectionData.get(SectionData.id == measure_per_section.section_id)
+            _ordered_section_names.append(section.section_name)
+
+        return _ordered_section_names
+
+    def _get_reinforcement_section_order_vr(self, run_id) -> list[str]:
+
+        _optimization_steps = self._get_optimization_steps(run_id=run_id)
+
+        _ordered_sections = []
+
+        _final_step_id = self._get_final_step_vr(run_id)
+        _final_step_number = OptimizationStep.get(OptimizationStep.id == _final_step_id).step_number
+        print("final step", _final_step_id, _final_step_number)
+        for step in _optimization_steps:
+            if step.step_number > _final_step_number:
+                break
+
+
+        return _ordered_sections
+
+    @staticmethod
+    def _get_final_step_vr(optimization_run_id: int) -> int:
+        """Get the final step id of the optimization run.
+        The final step in this case is the step with the lowest total cost.
+
+        :param optimization_run_id: The id of the optimization run
+
+        :return: The id of the final step
+        """
+
+        # TODO Temporary hardcoded config. This will be improved in another PR
+        _vr_config = VrtoolConfig()
+        _vr_config.input_directory = Path(
+            r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\TestCase1_38-1_no_housing")
+        _vr_config.excluded_mechanisms = [MechanismEnum.REVETMENT, MechanismEnum.HYDRAULIC_STRUCTURES]
+        _vr_config.output_directory = _vr_config.input_directory / "results"
+        _vr_config.externals = (
+                Path(__file__).parent.parent / "externals/D-Stability 2022.01.2/bin"
+        )
+        _vr_config.traject = "38-1"
+
+        _vr_config.input_database_name = "vrtool_input.db"
+
+        _step_id, _, _ = get_optimization_step_with_lowest_total_cost_table(_vr_config, optimization_run_id)
+
+        return _step_id
 
     def _get_reinforcement_order(self, assessment_type: str) -> list[str]:
         """
@@ -90,8 +172,10 @@ class DikeTrajectImporter(OrmImporterProtocol):
         _traject_gdf = self.parse_geo_dataframe(_traject_name)
 
         _dike_traject.dike_sections = self._import_dike_section_list(_selected_sections, _traject_gdf)
-        # _dike_traject.reinforcement_order_vr = self._get_reinforcement_order("GreedyOptimizationBased")
-        # _dike_traject.reinforcement_order_dsn = self._get_reinforcement_order("TargetReliabilityBased")
+        _dike_traject.reinforcement_order_vr = self._get_reinforcement_section_order_dsn(
+            run_id=2)  # TODO retrieve run_id from run name of datestamp
+        _dike_traject.reinforcement_order_dsn = self._get_reinforcement_section_order_vr(run_id=1)
+
+        stop
 
         return _dike_traject
-
