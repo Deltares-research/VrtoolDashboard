@@ -341,8 +341,8 @@ class DikeSectionImporter(OrmImporterProtocol):
         _dike_section.initial_assessment = self._get_initial_assessment(orm_model)
         _dike_section.years = self.assessment_time
 
-        _dike_section.final_measure_veiligheidrendement = self.get_final_measure_vr(orm_model)
+        _dike_section.final_measure_veiligheidsrendement = self.get_final_measure_vr(orm_model)
         _dike_section.final_measure_doorsnede = self.get_final_measure_vr(orm_model)
-        print(_dike_section.final_measure_veiligheidrendement)
+        print(_dike_section.final_measure_veiligheidsrendement)
 
         return _dike_section
