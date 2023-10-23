@@ -28,10 +28,13 @@ class DikeSectionImporter(OrmImporterProtocol):
     final_greedy_step_id: int  # id of the final step of the greedy optimization
     assessment_time: list[int]
 
+    total_cost_lcc: float
+
     def __init__(self, traject_gdf: GeoDataFrame, run_id: int, final_greedy_step_id: int):
         self.traject_gdf = traject_gdf
         self.run_id = run_id
         self.final_greedy_step_id = final_greedy_step_id
+        self.total_cost_lcc = 0
 
     def _get_initial_assessment(self,
                                 section_data: SectionData,
@@ -135,6 +138,23 @@ class DikeSectionImporter(OrmImporterProtocol):
 
         return _step_id
 
+    def _get_single_measure_name(self, optimization_step: OptimizationStep) -> str:
+        measure = (Measure
+                   .select()
+                   .join(MeasurePerSection)
+                   .join(MeasureResult)
+                   .join(OptimizationSelectedMeasure)
+                   .where(OptimizationSelectedMeasure.id == optimization_step.id)
+
+                   .get())
+        return measure.name
+
+    def _get_combined_measure_name(self, optimization_step: OptimizationStep) -> str:
+
+        name = self._get_single_measure_name(optimization_step[0]) + " + " + self._get_single_measure_name(
+            optimization_step[1])
+        return name
+
     def get_final_measure_vr(self, section_data: SectionData) -> dict:
 
         _final_measure = {}
@@ -144,7 +164,7 @@ class DikeSectionImporter(OrmImporterProtocol):
 
         _optimization_steps = get_optimization_steps(self.run_id)
 
-        # 2. Get the most optimal o
+        # 2. Get the most optimal optimization step number
         # This is the last step_number (=highest) for the section of interest before the final_step_number
         _optimum_section_step_number = None
 
@@ -154,11 +174,13 @@ class DikeSectionImporter(OrmImporterProtocol):
             if _optimization_step.step_number > _final_step_number:
                 break
 
-            optimization_selected_measure = OptimizationSelectedMeasure.get(
-                OptimizationSelectedMeasure.id == _optimization_step.optimization_selected_measure_id)
-            measure_result = MeasureResult.get(MeasureResult.id == optimization_selected_measure.measure_result_id)
-            measure_per_section = MeasurePerSection.get(MeasurePerSection.id == measure_result.measure_per_section_id)
-            section = SectionData.get(SectionData.id == measure_per_section.section_id)
+            section = (SectionData
+                       .select()
+                       .join(MeasurePerSection)
+                       .join(MeasureResult)
+                       .join(OptimizationSelectedMeasure)
+                       .where(OptimizationSelectedMeasure.id == _optimization_step.optimization_selected_measure_id)
+                       ).get()
 
             if section.id == _section_id:
                 _optimum_section_step_number = _optimization_step.step_number
@@ -171,9 +193,22 @@ class DikeSectionImporter(OrmImporterProtocol):
             OptimizationStep.step_number == _optimum_section_step_number)
         )
 
+        # 3. Get the betas for the measure:
+        _final_measure = self._get_final_measure_betas(_optimum_section_optimization_steps)
+        _final_measure["LCC"] = _optimum_section_optimization_steps[0].total_lcc - self.total_cost_lcc
+        self.total_cost_lcc = _optimum_section_optimization_steps[0].total_lcc
+
+        # 4. Get the extra information measure name and the corresponding parameter values for the most (combined or not) optimal step
+        if _optimum_section_optimization_steps.count() == 1:
+            _final_measure["name"] = self._get_single_measure_name(_optimum_section_optimization_steps[0])
+        elif _optimum_section_optimization_steps.count() == 2:
+            _final_measure["name"] = self._get_combined_measure_name(_optimum_section_optimization_steps)
+        else:
+            raise ValueError(f"Unexpected number of optimum steps: {_optimum_section_optimization_steps.count()}")
         info = []
         meas_str = ''
         for optimum_step in _optimum_section_optimization_steps:
+
             optimum_selected_measure = OptimizationSelectedMeasure.get(
                 OptimizationSelectedMeasure.id == optimum_step.optimization_selected_measure_id)
             measure_result = MeasureResult.get(MeasureResult.id == optimum_selected_measure.measure_result_id)
@@ -192,13 +227,12 @@ class DikeSectionImporter(OrmImporterProtocol):
 
         s = SectionData.get(SectionData.id == _section_id)
 
-        print(s.section_name, _optimum_section_step_number,
-              [s.optimization_selected_measure_id for s in _optimum_section_optimization_steps],
-              meas_str)
+        # print(s.section_name, _optimum_section_step_number,
+        # [s.optimization_selected_measure_id for s in _optimum_section_optimization_steps],
+        # meas_str)
+        # stop
 
-        _final_measure_betas = self._get_final_measure_betas(_optimum_section_optimization_steps)
-
-        return _final_measure_betas
+        return _final_measure
 
     def _get_mechanism_beta(self, optimization_step: OptimizationStep, mechanism: str) -> Iterator[
         orm.OptimizationStepResultMechanism]:
@@ -247,7 +281,6 @@ class DikeSectionImporter(OrmImporterProtocol):
 
 
         elif optimization_steps.count() == 2:
-            print("Combined step")
             # for mechanism_per_section in mechanisms_per_section:
             for mechanism in ["Piping", "StabilityInner", "Overflow"]:
                 _final_measure[mechanism] = [row.beta for row in
@@ -342,7 +375,6 @@ class DikeSectionImporter(OrmImporterProtocol):
         _dike_section.years = self.assessment_time
 
         _dike_section.final_measure_veiligheidsrendement = self.get_final_measure_vr(orm_model)
-        _dike_section.final_measure_doorsnede = self.get_final_measure_vr(orm_model)
-        print(_dike_section.final_measure_veiligheidsrendement)
+        # _dike_section.final_measure_doorsnede = self.get_final_measure_vr(orm_model)
 
         return _dike_section
