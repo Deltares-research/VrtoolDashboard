@@ -155,6 +155,28 @@ class DikeSectionImporter(OrmImporterProtocol):
             optimization_step[1])
         return name
 
+    def _get_measure_parameters(self, optimization_steps: OptimizationStep) -> dict:
+        _params = {}
+        for optimum_step in optimization_steps:
+
+            optimum_selected_measure = OptimizationSelectedMeasure.get(
+                OptimizationSelectedMeasure.id == optimum_step.optimization_selected_measure_id)
+            measure_result = MeasureResult.get(MeasureResult.id == optimum_selected_measure.measure_result_id)
+
+            names_to_search = ["DBERM", "DCREST"]
+            params = MeasureResultParameter.select().where(
+                (MeasureResultParameter.measure_result_id == measure_result.id) &
+                (MeasureResultParameter.name.in_(names_to_search))
+            )
+            if params.count() > 0:
+                _params['dberm'] = params[0].value
+                _params['dcrest'] = params[1].value
+
+            else:
+                _params['dberm'] = None
+                _params['dcrest'] = None
+        return _params
+
     def get_final_measure_vr(self, section_data: SectionData) -> dict:
 
         _final_measure = {}
@@ -195,42 +217,20 @@ class DikeSectionImporter(OrmImporterProtocol):
 
         # 3. Get the betas for the measure:
         _final_measure = self._get_final_measure_betas(_optimum_section_optimization_steps)
+
+        # 4. Get the extra information measure name and the corresponding parameter values for the most (combined or not) optimal step
         _final_measure["LCC"] = _optimum_section_optimization_steps[0].total_lcc - self.total_cost_lcc
         self.total_cost_lcc = _optimum_section_optimization_steps[0].total_lcc
 
-        # 4. Get the extra information measure name and the corresponding parameter values for the most (combined or not) optimal step
         if _optimum_section_optimization_steps.count() == 1:
             _final_measure["name"] = self._get_single_measure_name(_optimum_section_optimization_steps[0])
         elif _optimum_section_optimization_steps.count() == 2:
             _final_measure["name"] = self._get_combined_measure_name(_optimum_section_optimization_steps)
         else:
             raise ValueError(f"Unexpected number of optimum steps: {_optimum_section_optimization_steps.count()}")
-        info = []
-        meas_str = ''
-        for optimum_step in _optimum_section_optimization_steps:
 
-            optimum_selected_measure = OptimizationSelectedMeasure.get(
-                OptimizationSelectedMeasure.id == optimum_step.optimization_selected_measure_id)
-            measure_result = MeasureResult.get(MeasureResult.id == optimum_selected_measure.measure_result_id)
-            measure_per_section = MeasurePerSection.get(MeasurePerSection.id == measure_result.measure_per_section_id)
-            measure = Measure.get(Measure.id == measure_per_section.measure_id)
+        _final_measure.update(self._get_measure_parameters(_optimum_section_optimization_steps))
 
-            names_to_search = ["DBERM", "DCREST"]
-            params = MeasureResultParameter.select().where(
-                (MeasureResultParameter.measure_result_id == measure_result.id) &
-                (MeasureResultParameter.name.in_(names_to_search))
-            )
-            meas_str += measure.name
-            attribute_values = {}  # Create a dictionary to store attribute values
-            for param in params:
-                attribute_values[param.name] = param.value
-
-        s = SectionData.get(SectionData.id == _section_id)
-
-        # print(s.section_name, _optimum_section_step_number,
-        # [s.optimization_selected_measure_id for s in _optimum_section_optimization_steps],
-        # meas_str)
-        # stop
 
         return _final_measure
 
