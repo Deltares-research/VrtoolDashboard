@@ -11,7 +11,7 @@ from vrtool.orm.io.importers.optimization.optimization_step_importer import Opti
 from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol
 from vrtool.orm.models import Mechanism, MechanismPerSection, ComputationScenario, MeasurePerSection, Measure, \
     OptimizationStep, OptimizationRun, OptimizationStepResultMechanism, OptimizationStepResultSection, \
-    OptimizationSelectedMeasure, OptimizationType, MeasureResult, MeasureResultParameter
+    OptimizationSelectedMeasure, OptimizationType, MeasureResult, MeasureResultParameter, MeasureResultSection
 from vrtool.orm.models.section_data import SectionData
 from vrtool.orm.orm_controllers import get_optimization_steps
 
@@ -28,13 +28,10 @@ class DikeSectionImporter(OrmImporterProtocol):
     final_greedy_step_id: int  # id of the final step of the greedy optimization
     assessment_time: list[int]
 
-    total_cost_lcc: float
-
     def __init__(self, traject_gdf: GeoDataFrame, run_id: int, final_greedy_step_id: int):
         self.traject_gdf = traject_gdf
         self.run_id = run_id
         self.final_greedy_step_id = final_greedy_step_id
-        self.total_cost_lcc = 0
 
     def _get_initial_assessment(self,
                                 section_data: SectionData,
@@ -177,13 +174,60 @@ class DikeSectionImporter(OrmImporterProtocol):
                 _params['dcrest'] = None
         return _params
 
-    def get_final_measure_vr(self, section_data: SectionData) -> dict:
+    def get_final_measure_dsn(self, section_data: SectionData) -> dict:
+        print("===============================DSN======================================")
 
-        _final_measure = {}
-        _section_id = section_data.id
+        _optimization_steps = get_optimization_steps(optimization_run_id=2)
+
+        # 2. Get the most optimal optimization step number
+        # This is the last step_number (=highest) for the section of interest before the final_step_number
+        _optimum_section_step_number = None
+
+        for _optimization_step in _optimization_steps:
+
+            section = (SectionData
+                       .select()
+                       .join(MeasurePerSection)
+                       .join(MeasureResult)
+                       .join(OptimizationSelectedMeasure)
+                       .where(OptimizationSelectedMeasure.id == _optimization_step.optimization_selected_measure_id)
+                       ).get()
+
+            if section.id == section_data.id:
+                _optimum_section_step_number = _optimization_step.step_number
+
+        if _optimum_section_step_number is None:
+            raise ValueError(
+                f"Sectie {section_data.id} niet gevonden in de optimalisatie")  # TODO: reassign the betas to those of the initial assessment.
+
+        _optimum_section_optimization_steps = (OptimizationStep
+                                               .select()
+                                               .join(OptimizationSelectedMeasure, JOIN.INNER, on=(
+                    OptimizationStep.optimization_selected_measure_id == OptimizationSelectedMeasure.id))
+                                               .where((OptimizationSelectedMeasure.optimization_run == 2) & (
+                OptimizationStep.step_number == _optimum_section_step_number))
+                                               )
+
+        # _optimum_section_optimization_steps = (OptimizationStep
+        # .select()
+        # .join(OptimizationSelectedMeasure, JOIN.INNER, on=(OptimizationStep.optimization_selected_measure_id == OptimizationSelectedMeasure.id))
+        # .join(MeasureResult, JOIN.INNER, on=(OptimizationSelectedMeasure.measure_result_id == MeasureResult.id))
+        # .join(MeasurePerSection, JOIN.INNER, on=(MeasureResult.measure_per_section_id == MeasurePerSection.id))
+        # .join(SectionData, JOIN.INNER, on=(MeasurePerSection.section_id == SectionData.id))
+        # .where(
+        #     # (OptimizationStep.step_number == _optimum_section_step_number)
+        #     (OptimizationSelectedMeasure.optimization_run_id == 2)
+        #     & (SectionData.id == section_data.id)))
+        #
+        #
+        # for s in _optimum_section_optimization_steps:
+        #     print(s, s.step_number)
+        return self._get_final_measure(_optimum_section_optimization_steps)
+
+    def get_final_measure_vr(self, section_data: SectionData) -> dict:
+        print('====================VR======================')
 
         _final_step_number = OptimizationStep.get(OptimizationStep.id == self.final_greedy_step_id).step_number
-
         _optimization_steps = get_optimization_steps(self.run_id)
 
         # 2. Get the most optimal optimization step number
@@ -204,34 +248,37 @@ class DikeSectionImporter(OrmImporterProtocol):
                        .where(OptimizationSelectedMeasure.id == _optimization_step.optimization_selected_measure_id)
                        ).get()
 
-            if section.id == _section_id:
+            if section.id == section_data.id:
                 _optimum_section_step_number = _optimization_step.step_number
 
         if _optimum_section_step_number is None:
             raise ValueError(
-                f"Sectie {_section_id} niet gevonden in de optimalisatie")  # TODO: reassign the betas to those of the initial assessment.
+                f"Sectie {section_data.id} niet gevonden in de optimalisatie")  # TODO: reassign the betas to those of the initial assessment.
 
         _optimum_section_optimization_steps = (OptimizationStep.select().where(
             OptimizationStep.step_number == _optimum_section_step_number)
         )
 
-        # 3. Get the betas for the measure:
-        _final_measure = self._get_final_measure_betas(_optimum_section_optimization_steps)
+        return self._get_final_measure(_optimum_section_optimization_steps)
 
-        # 4. Get the extra information measure name and the corresponding parameter values for the most (combined or not) optimal step
-        _final_measure["LCC"] = _optimum_section_optimization_steps[0].total_lcc - self.total_cost_lcc
-        self.total_cost_lcc = _optimum_section_optimization_steps[0].total_lcc
+    def _get_final_measure(self, optimization_steps) -> dict:
 
-        if _optimum_section_optimization_steps.count() == 1:
-            _final_measure["name"] = self._get_single_measure_name(_optimum_section_optimization_steps[0])
-        elif _optimum_section_optimization_steps.count() == 2:
-            _final_measure["name"] = self._get_combined_measure_name(_optimum_section_optimization_steps)
+        # Get the betas for the measure:
+        _final_measure = self._get_final_measure_betas(optimization_steps)
+
+        # Get the extra information measure name and the corresponding parameter values for the most (combined or not) optimal step
+        _final_measure["LCC"] = self._get_section_lcc(optimization_steps[0])
+
+        if optimization_steps.count() == 1:
+            _final_measure["name"] = self._get_single_measure_name(optimization_steps[0])
+
+        elif optimization_steps.count() == 2:
+            _final_measure["name"] = self._get_combined_measure_name(optimization_steps)
+
         else:
-            raise ValueError(f"Unexpected number of optimum steps: {_optimum_section_optimization_steps.count()}")
+            raise ValueError(f"Unexpected number of optimum steps: {optimization_steps.count()}")
 
-        _final_measure.update(self._get_measure_parameters(_optimum_section_optimization_steps))
-
-
+        _final_measure.update(self._get_measure_parameters(optimization_steps))
         return _final_measure
 
     def _get_mechanism_beta(self, optimization_step: OptimizationStep, mechanism: str) -> Iterator[
@@ -257,7 +304,7 @@ class DikeSectionImporter(OrmImporterProtocol):
 
     def _get_section_betas(self, optimization_step: OptimizationStep) -> Iterator[orm.OptimizationStepResultSection]:
         """
-        Get the beta values for a mechanism for a given optimization step
+        Get the beta values for the section for a given optimization step
         :param optimization_step:  optimization step for which the betas are retrieved
         :return:
         """
@@ -265,6 +312,19 @@ class DikeSectionImporter(OrmImporterProtocol):
                   .select(OptimizationStepResultSection.beta)
                   .where(OptimizationStepResultSection.optimization_step_id == optimization_step.id))
         return _query
+
+    def _get_section_lcc(self, optimization_step: OptimizationStep) -> float:
+        """
+        Get the lcc of a section for a given optimization step
+        :param optimization_step:
+        :return:
+        """
+
+        _query = (OptimizationStepResultSection
+                  .select(OptimizationStepResultSection.lcc)
+                  .where(OptimizationStepResultSection.optimization_step_id == optimization_step.id)).first()
+
+        return _query.lcc
 
     def _get_final_measure_betas(self, optimization_steps: OptimizationStep) -> dict:
         _final_measure = {}
@@ -277,6 +337,7 @@ class DikeSectionImporter(OrmImporterProtocol):
                                              self._get_mechanism_beta(optimization_steps[0], mechanism)]
             # Add section betas as well:
             _final_measure["Section"] = [row.beta for row in self._get_section_betas(optimization_steps[0])]
+
             return _final_measure
 
 
@@ -288,50 +349,10 @@ class DikeSectionImporter(OrmImporterProtocol):
             # Add section betas as well:
             _final_measure["Section"] = [row.beta for row in self._get_section_betas(optimization_steps[0])]
             return _final_measure
-        elif optimization_steps.count > 2:
+        elif optimization_steps.count() > 2:
             raise ValueError("No more than 2 measure results is allowed")
         else:
             raise ValueError("No measure results found")
-
-    def _get_final_measure(self, section_data: SectionData, assessment_type: str) -> dict:
-        """
-        DEPRECATED
-        :param section_data:
-        :param assessment_type: one of TargetReliabilityBased or GreedyOptimizationBased
-        :return:
-        """
-
-        _final_measure = {}
-        _section_id = section_data.id
-
-        _modified_measure_id = self._get_taken_measure_modified_measure_id(_section_id, assessment_type)
-
-        _total_cost = MeasureCost.get(MeasureCost.modified_measure == _modified_measure_id).cost
-        _dberm = ModifiedMeasure.get(ModifiedMeasure.id == _modified_measure_id).dberm
-        _dcrest = ModifiedMeasure.get(ModifiedMeasure.id == _modified_measure_id).dcrest
-
-        _final_measure["LCC"] = _total_cost
-        _final_measure["name"] = self._get_measure_name(_modified_measure_id)
-        _final_measure["dberm"] = _dberm
-        _final_measure["dcrest"] = _dcrest
-
-        for mechanism in ["Overflow", "StabilityInner", "Piping", "Section"]:
-            # TODO: multiple mechanism_per_section for the same computation_type_id. commented to avoid crashes
-            # elif mechanism == "Piping":
-            #     # How to aggregate all the piping scenarios into a single beta?
-            #     # Should VRCore handle this and only write a single piping beta in the table ComputationScenarioResult?
-            #     continue
-            _query_betas = (MeasureReliability
-                            .select(MeasureReliability.time, MeasureReliability.beta, MeasureReliability.id)
-                            .where((MeasureReliability.modified_measure == _modified_measure_id) & (
-                    MeasureReliability.mechanism == mechanism))
-                            # .order_by(MeasureReliability.time)
-                            )
-
-            _final_measure[mechanism] = [row.beta for row in _query_betas]
-
-        self.__setattr__("assessment_time", [row.time for row in _query_betas])
-        return _final_measure
 
     def _get_coordinates(self, section_data: SectionData) -> list[tuple[float, float]]:
         """
@@ -375,6 +396,6 @@ class DikeSectionImporter(OrmImporterProtocol):
         _dike_section.years = self.assessment_time
 
         _dike_section.final_measure_veiligheidsrendement = self.get_final_measure_vr(orm_model)
-        # _dike_section.final_measure_doorsnede = self.get_final_measure_vr(orm_model)
+        _dike_section.final_measure_doorsnede = self.get_final_measure_dsn(orm_model)
 
         return _dike_section
