@@ -22267,5 +22267,7 @@
         "17",
         "51A",
         "51B"
-    ]
+    ],
+    "signalering_value" : 3.33e-05,
+    "lower_bound_value": 1.00e-4
 }

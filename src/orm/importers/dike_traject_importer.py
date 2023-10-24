@@ -66,15 +66,16 @@ class DikeTrajectImporter(OrmImporterProtocol):
         """Get the reinforcement order of the section names for Doorsnede Eisen"""
         _optimization_steps = get_optimization_steps(run_id)
 
-        _ordered_section_names = []
-        for step in _optimization_steps:
-            # Probably there is a much more compact way to retrieve the section name from the ORM
-            optimization_selected_measure = OptimizationSelectedMeasure.get(
-                OptimizationSelectedMeasure.id == step.optimization_selected_measure_id)
-            measure_result = MeasureResult.get(MeasureResult.id == optimization_selected_measure.measure_result_id)
-            measure_per_section = MeasurePerSection.get(MeasurePerSection.id == measure_result.measure_per_section_id)
-            section = SectionData.get(SectionData.id == measure_per_section.section_id)
-            _ordered_section_names.append(section.section_name)
+        _ordered_section_names = [
+            SectionData.select(SectionData.section_name)
+            .join(MeasurePerSection)
+            .join(MeasureResult)
+            .join(OptimizationSelectedMeasure)
+            .where(OptimizationSelectedMeasure.id == step.optimization_selected_measure_id)
+            .get()
+            .section_name
+            for step in _optimization_steps
+        ]
 
         return _ordered_section_names
 
@@ -174,9 +175,9 @@ class DikeTrajectImporter(OrmImporterProtocol):
         )
         _traject_gdf = self.parse_geo_dataframe(_traject_name)
 
-        _dike_traject.reinforcement_order_vr = self._get_reinforcement_section_order_dsn(
+        _dike_traject.reinforcement_order_dsn = self._get_reinforcement_section_order_dsn(
             run_id=2)  # TODO retrieve run_id from run name of datestamp
-        _dike_traject.reinforcement_order_dsn, final_greedy_step_id = self._get_reinforcement_section_order_vr(run_id=1)
+        _dike_traject.reinforcement_order_vr, final_greedy_step_id = self._get_reinforcement_section_order_vr(run_id=1)
 
         _dike_traject.dike_sections = self._import_dike_section_list(_selected_sections, _traject_gdf, run_id=1,
                                                                      # TODO handle run_id
