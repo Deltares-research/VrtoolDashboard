@@ -12,8 +12,8 @@ def get_dike_traject_from_ORM(traject_name: str) -> DikeTraject:
 
     :param traject_name: The name of the traject to be imported.
     """
-    _path_dir = Path(__file__).parent.parent.parent / "tests/data/Case_38_1_miniset"
-    _path_database = _path_dir.joinpath("vrtool_input.db")
+    _path_dir = Path(__file__).parent.parent.parent / "tests/data/TestCase1_38-1_no_housing"
+    _path_database = _path_dir.joinpath("vrtool_input_38_1.db")
 
     vrtool_db = open_database(_path_database)
 

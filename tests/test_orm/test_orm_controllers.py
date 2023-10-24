@@ -31,7 +31,7 @@ class TestOrmControllers:
             assert section_expected["initial_assessment"] == section_actual["initial_assessment"]
             assert section_expected["years"] == section_actual["years"]
 
-        # assert _expected_serialized_traject["reinforcement_order_vr"] == _serialized_traject["reinforcement_order_vr"]
-        # assert _expected_serialized_traject["reinforcement_order_dsn"] == _serialized_traject["reinforcement_order_dsn"]
+        assert _expected_serialized_traject["reinforcement_order_vr"] == _serialized_traject["reinforcement_order_vr"]
+        assert _expected_serialized_traject["reinforcement_order_dsn"] == _serialized_traject["reinforcement_order_dsn"]
         assert _expected_serialized_traject["signalering_value"] == _serialized_traject["signalering_value"]
         assert _expected_serialized_traject["lower_bound_value"] == _serialized_traject["lower_bound_value"]
