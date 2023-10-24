@@ -70,44 +70,6 @@ class DikeSectionImporter(OrmImporterProtocol):
 
         return _initial_assessment
 
-    def _get_taken_measure_modified_measure_id(self, section_id: int, assessment_type: str) -> int:
-        """
-        DEPRECATED
-        Get the corresponding ModifiedMeasure id for the section_id in either the GreedyOptimizationOrder or
-        TargetReliaiblityBasedOrder table
-        :param section_id: id of the Section of interest, for this id there should be one matching row in the
-        Order table
-        :param assessment_type: one of TargetReliabilityBased (doorsnede-eis) or
-         GreedyOptimizationBased (veiligheidrendement))
-        :return:
-        """
-
-        order_table = GreedyOptimizationOrder if assessment_type == "GreedyOptimizationBased" else TargetReliabilityBasedOrder
-
-        for row in order_table.select():
-            _modified_measure = ModifiedMeasure.get(ModifiedMeasure.id == row.modified_measure_id)
-
-            _measure_per_section = MeasurePerSection.get(
-                MeasurePerSection.id == _modified_measure.measure_per_section_id)
-
-            _section = SectionData.get(SectionData.id == _measure_per_section.section_id)
-            if _section.id == section_id:
-                return _modified_measure.id
-        raise ValueError(f"No match found for Section id={section_id} in {assessment_type} table")
-
-    def _get_measure_name(self, modified_measure_id: int) -> str:
-        """
-        DEPRECATED
-        Get the corresponding measure name from the ModifiedMeasure id
-        :param modified_measure_id:
-        :return:
-        """
-
-        _measure_per_section_id = ModifiedMeasure.get(ModifiedMeasure.id == modified_measure_id).measure_per_section_id
-        _measure_id = MeasurePerSection.get(MeasurePerSection.id == _measure_per_section_id).measure_id
-        _measure_name = Measure.get(Measure.id == _measure_id).name
-        return _measure_name
-
     @staticmethod
     def _get_final_step_vr(optimization_run_id: int) -> int:
         """Get the final step id of the optimization run.
@@ -175,12 +137,14 @@ class DikeSectionImporter(OrmImporterProtocol):
         return _params
 
     def get_final_measure_dsn(self, section_data: SectionData) -> dict:
-        print("===============================DSN======================================")
+        """
+        Get the dictionary containing the information about the final mesure of the section for Doorsnede-eisen.
 
+        :param section_data:
+        :return: dictionary with the followings keys: "name", "LCC", "Piping", "StabilityInner", "Overflow", "Section"
+        """
         _optimization_steps = get_optimization_steps(optimization_run_id=2)
 
-        # 2. Get the most optimal optimization step number
-        # This is the last step_number (=highest) for the section of interest before the final_step_number
         _optimum_section_step_number = None
 
         for _optimization_step in _optimization_steps:
@@ -203,30 +167,22 @@ class DikeSectionImporter(OrmImporterProtocol):
         _optimum_section_optimization_steps = (OptimizationStep
                                                .select()
                                                .join(OptimizationSelectedMeasure, JOIN.INNER, on=(
-                    OptimizationStep.optimization_selected_measure_id == OptimizationSelectedMeasure.id))
+                OptimizationStep.optimization_selected_measure_id == OptimizationSelectedMeasure.id))
                                                .where((OptimizationSelectedMeasure.optimization_run == 2) & (
                 OptimizationStep.step_number == _optimum_section_step_number))
                                                )
 
-        # _optimum_section_optimization_steps = (OptimizationStep
-        # .select()
-        # .join(OptimizationSelectedMeasure, JOIN.INNER, on=(OptimizationStep.optimization_selected_measure_id == OptimizationSelectedMeasure.id))
-        # .join(MeasureResult, JOIN.INNER, on=(OptimizationSelectedMeasure.measure_result_id == MeasureResult.id))
-        # .join(MeasurePerSection, JOIN.INNER, on=(MeasureResult.measure_per_section_id == MeasurePerSection.id))
-        # .join(SectionData, JOIN.INNER, on=(MeasurePerSection.section_id == SectionData.id))
-        # .where(
-        #     # (OptimizationStep.step_number == _optimum_section_step_number)
-        #     (OptimizationSelectedMeasure.optimization_run_id == 2)
-        #     & (SectionData.id == section_data.id)))
-        #
-        #
-        # for s in _optimum_section_optimization_steps:
-        #     print(s, s.step_number)
         return self._get_final_measure(_optimum_section_optimization_steps)
 
     def get_final_measure_vr(self, section_data: SectionData) -> dict:
-        print('====================VR======================')
+        """
+        Get the dictionary containing the information about the final mesure of the section for Veiligheidsrendement.
 
+        :param section_data: section fror which information should be retrieved.
+        :return: dictionary with the followings keys: "name", "LCC", "Piping", "StabilityInner", "Overflow", "Section"
+        """
+
+        # 1. Get the final step number, default is the one for which the Total Cost is minimal.
         _final_step_number = OptimizationStep.get(OptimizationStep.id == self.final_greedy_step_id).step_number
         _optimization_steps = get_optimization_steps(self.run_id)
 
@@ -259,9 +215,16 @@ class DikeSectionImporter(OrmImporterProtocol):
             OptimizationStep.step_number == _optimum_section_step_number)
         )
 
+        # 3. Get all information into a dict based on the optimum optimization steps.
         return self._get_final_measure(_optimum_section_optimization_steps)
 
     def _get_final_measure(self, optimization_steps) -> dict:
+        """
+        Retrieve from the database the information related to the selected optimization steps: betas, LCC, name, measure
+        paramaters.
+        :param optimization_steps:
+        :return: dictionary with the followings keys: "name", "LCC", "Piping", "StabilityInner", "Overflow", "Section"
+        """
 
         # Get the betas for the measure:
         _final_measure = self._get_final_measure_betas(optimization_steps)
@@ -342,7 +305,7 @@ class DikeSectionImporter(OrmImporterProtocol):
 
 
         elif optimization_steps.count() == 2:
-            # for mechanism_per_section in mechanisms_per_section:
+            # TODO for mechanism_per_section in mechanisms_per_section:
             for mechanism in ["Piping", "StabilityInner", "Overflow"]:
                 _final_measure[mechanism] = [row.beta for row in
                                              self._get_mechanism_beta(optimization_steps[0], mechanism)]

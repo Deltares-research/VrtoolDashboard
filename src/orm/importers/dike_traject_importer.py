@@ -130,31 +130,6 @@ class DikeTrajectImporter(OrmImporterProtocol):
 
         return _step_id
 
-    def _get_reinforcement_order(self, assessment_type: str) -> list[str]:
-        """
-        Get the reinforcement order for the given assessment type
-        :param assessment_type: one of "GreedyOptimizationBased" or "TargetReliabilityBased"
-        :return:
-        """
-
-        _order_table = GreedyOptimizationOrder if assessment_type == "GreedyOptimizationBased" else TargetReliabilityBasedOrder
-
-        _ordered_sections = []
-        for row in _order_table.select().order_by(_order_table.optimization_step):
-            _modified_measure = ModifiedMeasure.get(ModifiedMeasure.id == row.modified_measure_id)
-
-            _measure_per_section = MeasurePerSection.get(
-                MeasurePerSection.id == _modified_measure.measure_per_section_id)
-
-            _section = SectionData.get(SectionData.id == _measure_per_section.section_id)
-
-            _dike_traject_name = DikeTrajectInfo.get(DikeTrajectInfo.id == _section.dike_traject_id).traject_name
-
-            if _dike_traject_name == self.traject_name:
-                _ordered_sections.append(_section.section_name)
-
-        return _ordered_sections
-
     def import_orm(self, orm_model) -> DikeTraject:
         """Import a DikeTraject object from the ORM """
         _traject_name = orm_model.DikeTrajectInfo.get(

@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased] [dd/mm/yyyy]
 
 ### Added
-None.
+Integration databse to dashboard (Initial assessment + Optimization results)
 
 ### Changed
 None.
