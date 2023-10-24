@@ -70,33 +70,6 @@ class DikeSectionImporter(OrmImporterProtocol):
 
         return _initial_assessment
 
-    @staticmethod
-    def _get_final_step_vr(optimization_run_id: int) -> int:
-        """Get the final step id of the optimization run.
-        The final step in this case is the step with the lowest total cost.
-
-        :param optimization_run_id: The id of the optimization run
-
-        :return: The id of the final step
-        """
-
-        # TODO Temporary hardcoded config. This will be improved in another PR
-        _vr_config = VrtoolConfig()
-        _vr_config.input_directory = Path(
-            r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\TestCase1_38-1_no_housing")
-        _vr_config.excluded_mechanisms = [MechanismEnum.REVETMENT, MechanismEnum.HYDRAULIC_STRUCTURES]
-        _vr_config.output_directory = _vr_config.input_directory / "results"
-        _vr_config.externals = (
-                Path(__file__).parent.parent / "externals/D-Stability 2022.01.2/bin"
-        )
-        _vr_config.traject = "38-1"
-
-        _vr_config.input_database_name = "vrtool_input.db"
-
-        _step_id, _, _ = get_optimization_step_with_lowest_total_cost_table_no_closing(_vr_config, optimization_run_id)
-
-        return _step_id
-
     def _get_single_measure_name(self, optimization_step: OptimizationStep) -> str:
         measure = (Measure
                    .select()
