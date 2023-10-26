@@ -1,10 +1,21 @@
+import base64
+import json
+from pathlib import Path
+
 from dash import html, dcc, Output, Input, State
+from vrtool.defaults.vrtool_config import VrtoolConfig
+from vrtool.orm.orm_controllers import open_database
 
 from src.constants import ColorBarResultType, SubResultType, Measures
 from src.linear_objects.dike_traject import DikeTraject
 
 from src.app import app
 from src.orm.import_database import get_dike_traject_from_ORM
+
+import base64
+import json
+
+from src.orm.importers.dike_traject_importer import DikeTrajectImporter
 
 
 @app.callback([Output('output-data-upload-zip', 'children'),
@@ -25,14 +36,37 @@ def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tup
         - boolean indicating if the upload was successful.
     """
     if contents is not None:
+
+        content_type, content_string = contents.split(',')
+
+        decoded = base64.b64decode(content_string)
+        json_content = json.loads(decoded)
+
+        vr_config = VrtoolConfig()
+        vr_config.traject = json_content['traject']
+        vr_config.input_directory = json_content['input_directory']
+        vr_config.input_database_name = json_content['input_database_name']
+        vr_config.excluded_mechanisms = json_content['excluded_mechanisms']
+
+
+        _path_dir = Path(vr_config.input_directory)
+        _path_database = _path_dir.joinpath(vr_config.input_database_name)
+
+        open_database(_path_database)
+        from src.orm import models as orm_model
+
+        _dike_traject = DikeTrajectImporter(path_dir=_path_dir, traject_name=vr_config.traject).import_orm(orm_model)
+        print(_dike_traject)
+
+
         try:
-            _dike_traject = DikeTraject.from_uploaded_zip(contents, filename)
-            return html.Div(
-                dcc.Store(id='stored-data', data=_dike_traject.serialize())), True
+            return html.Div("Geen bestand geüpload"), False
         except:
-            return html.Div(children=["Something went wrong when uploading the file"]), False
+            return html.Div("Geen bestand geüpload"), False
     else:
         return html.Div("Geen bestand geüpload"), False
+
+
 
 
 @app.callback(

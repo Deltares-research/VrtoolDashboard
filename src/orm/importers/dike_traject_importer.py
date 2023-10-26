@@ -124,7 +124,7 @@ class DikeTrajectImporter(OrmImporterProtocol):
         )
         _vr_config.traject = "38-1"
 
-        _vr_config.input_database_name = "vrtool_input_38_1.db"
+        _vr_config.input_database_name = "vrtool_input.db"
 
         _step_id, _, _ = get_optimization_step_with_lowest_total_cost_table(_vr_config, optimization_run_id)
 
