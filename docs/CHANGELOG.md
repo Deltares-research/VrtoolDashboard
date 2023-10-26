@@ -8,13 +8,14 @@ All notable changes to this project will be documented in this file.
 Integration databse to dashboard (Initial assessment + Optimization results)
 
 ### Changed
-None.
+How data is initialized in the dashboard
 
 ### Deprecated
 None.
 
 ### Removed
-None.
+CSv related methods and importers
+Temporary signalering and ondergrens NumberFields
 
 ### Fixed
 None.
