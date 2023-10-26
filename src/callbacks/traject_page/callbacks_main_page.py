@@ -1,7 +1,6 @@
 import base64
 import json
 from pathlib import Path
-
 from dash import html, dcc, Output, Input, State
 from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.orm.orm_controllers import open_database
@@ -16,9 +15,10 @@ import base64
 import json
 
 from src.orm.importers.dike_traject_importer import DikeTrajectImporter
+from src.orm import models as orm_model
 
 
-@app.callback([Output('output-data-upload-zip', 'children'),
+@app.callback([Output('dummy_upload_id', 'children'),
                Output("upload-toast", "is_open"), ],
               [Input('upload-data-zip', 'contents')],
               [State('upload-data-zip', 'filename')])
@@ -37,36 +37,34 @@ def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tup
     """
     if contents is not None:
 
-        content_type, content_string = contents.split(',')
-
-        decoded = base64.b64decode(content_string)
-        json_content = json.loads(decoded)
-
-        vr_config = VrtoolConfig()
-        vr_config.traject = json_content['traject']
-        vr_config.input_directory = json_content['input_directory']
-        vr_config.input_database_name = json_content['input_database_name']
-        vr_config.excluded_mechanisms = json_content['excluded_mechanisms']
-
-
-        _path_dir = Path(vr_config.input_directory)
-        _path_database = _path_dir.joinpath(vr_config.input_database_name)
-
-        open_database(_path_database)
-        from src.orm import models as orm_model
-
-        _dike_traject = DikeTrajectImporter(path_dir=_path_dir, traject_name=vr_config.traject).import_orm(orm_model)
-        print(_dike_traject)
-
-
         try:
-            return html.Div("Geen bestand geüpload"), False
+
+            content_type, content_string = contents.split(',')
+
+            decoded = base64.b64decode(content_string)
+            json_content = json.loads(decoded)
+
+            vr_config = VrtoolConfig()
+            vr_config.traject = json_content['traject']
+            vr_config.input_directory = json_content['input_directory']
+            vr_config.input_database_name = json_content['input_database_name']
+            vr_config.excluded_mechanisms = json_content['excluded_mechanisms']
+
+            _path_dir = Path(vr_config.input_directory)
+            _path_database = _path_dir.joinpath(vr_config.input_database_name)
+
+            open_database(_path_database)
+
+            _dike_traject = DikeTrajectImporter(path_dir=_path_dir, traject_name=vr_config.traject).import_orm(
+                orm_model)
+            print(_dike_traject)
+
+            return html.Div(
+                dcc.Store(id='stored-data', data=_dike_traject.serialize())), True
         except:
             return html.Div("Geen bestand geüpload"), False
     else:
         return html.Div("Geen bestand geüpload"), False
-
-
 
 
 @app.callback(
@@ -122,7 +120,7 @@ def toggle_collapse3(n: int, is_open: bool) -> bool:
 
 @app.callback(
     [Output('select_sub_result_type_measure_map', 'options'),
-    Output('select_sub_result_type_measure_map', 'value')],
+     Output('select_sub_result_type_measure_map', 'value')],
     Input('select_measure_map_result_type', 'value'),
 )
 def update_radio_sub_result_type(result_type: str) -> list:
@@ -158,6 +156,7 @@ def update_radio_sub_result_type(result_type: str) -> list:
 
     return options, value
 
+
 @app.callback(
     Output("editable_traject_table", "data"),
     Input('selection_traject_name', 'value'),
@@ -179,5 +178,3 @@ def fill_traject_table_from_database(selection_traject_name: str) -> list[dict]:
                          'measure_col': Measures.GROUND_IMPROVEMENT.name, 'reference_year_col': '2045'})
 
         return data
-
-
