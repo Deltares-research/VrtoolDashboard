@@ -13,6 +13,7 @@ class TestOrmControllers:
     def test_initialization_get_dike_traject_from_ORM(self):
 
         _vr_config = VrtoolConfig().from_json(Path(__file__).parent.parent / "data/TestCase1_38-1_no_housing/vr_config.json")
+        _vr_config.input_directory = Path(__file__).parent.parent / "data/TestCase1_38-1_no_housing"
 
 
         _dike_traject = get_dike_traject_from_config_ORM(_vr_config)
@@ -25,6 +26,7 @@ class TestOrmControllers:
         with open(Path(__file__).parent.parent / "data/serialized_traject_38_1_mini.json", "r") as f:
             _expected_serialized_traject = json.load(f)
         _vr_config = VrtoolConfig().from_json(Path(__file__).parent.parent / "data/TestCase1_38-1_no_housing/vr_config.json")
+        _vr_config.input_directory = Path(__file__).parent.parent / "data/TestCase1_38-1_no_housing"
 
 
         # 2. Define test
