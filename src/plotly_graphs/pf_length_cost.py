@@ -19,7 +19,7 @@ def plot_default_scatter_dummy() -> go.Figure:
 
 
 def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_type: str,
-                        cost_length_switch: str, ondergrens: float, signalering: float) -> go.Figure:
+                        cost_length_switch: str) -> go.Figure:
     """
 
     :param dike_traject:
@@ -30,12 +30,6 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
 
     :return:
     """
-
-    if not isinstance(ondergrens, float):
-        raise ValueError("Ondergrens is gemist")
-
-    if not isinstance(signalering, float):
-        raise ValueError("Signaleringswaarde is gemist")
 
 
     fig = go.Figure()
