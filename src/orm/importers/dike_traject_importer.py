@@ -1,8 +1,6 @@
 from pathlib import Path
 
 from geopandas import GeoDataFrame
-from vrtool.api import get_optimization_step_with_lowest_total_cost_table
-from vrtool.common.enums import MechanismEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.orm.io.importers.optimization.optimization_step_importer import OptimizationStepImporter
 from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol

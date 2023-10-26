@@ -1,7 +1,5 @@
-from pathlib import Path
 from dash import html, dcc, Output, Input, State
 from vrtool.defaults.vrtool_config import VrtoolConfig
-from vrtool.orm.orm_controllers import open_database
 
 from src.constants import ColorBarResultType, SubResultType, Measures
 from src.linear_objects.dike_traject import DikeTraject
@@ -12,8 +10,6 @@ import base64
 import json
 
 from src.orm.import_database import get_dike_traject_from_config_ORM
-from src.orm.importers.dike_traject_importer import DikeTrajectImporter
-from src.orm import models as orm_model
 
 
 @app.callback([Output('dummy_upload_id', 'children'),

@@ -1,6 +1,5 @@
 from typing import Optional
 
-from pandas import DataFrame
 
 from src.linear_objects.base_linear import BaseLinearObject
 

@@ -1,11 +1,9 @@
 from dataclasses import dataclass
-from pathlib import Path
 
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
 
-from src.constants import SIGNALERING, ONDERGRENS
 from src.linear_objects.base_linear import BaseLinearObject
 from src.linear_objects.dike_section import DikeSection
 
