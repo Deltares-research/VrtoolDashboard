@@ -4,7 +4,7 @@ import dash_bootstrap_components as dbc
 layout_traject_select = html.Div([
 
     dcc.Upload(
-        id='upload-data-zip',
+        id='upload-data-config-json',
         children=html.Div([
             '',
             html.A('Selecteer een bestand config.json')

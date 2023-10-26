@@ -1,4 +1,6 @@
 from pathlib import Path
+
+from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.orm.orm_controllers import open_database
 
 from src.linear_objects.dike_traject import DikeTraject
@@ -6,17 +8,17 @@ from src.orm.importers.dike_traject_importer import DikeTrajectImporter
 from src.orm import models as orm_model
 
 
-def get_dike_traject_from_ORM(traject_name: str) -> DikeTraject:
+def get_dike_traject_from_config_ORM(vr_config: VrtoolConfig) -> DikeTraject:
     """
-    Returns a DikeTraject object with all the required data from the ORM for the specified traject.
-
-    :param traject_name: The name of the traject to be imported.
+    Returns a DikeTraject object with all the required data from the ORM for the specified traject via a provided
+    vr_config object
     """
-    _path_dir = Path(__file__).parent.parent.parent / "tests/data/TestCase1_38-1_no_housing"
-    _path_database = _path_dir.joinpath("vrtool_input_38_1.db")
+    _path_dir = Path(vr_config.input_directory)
+    _path_database = _path_dir.joinpath(vr_config.input_database_name)
 
-    vrtool_db = open_database(_path_database)
+    open_database(_path_database)
 
-    _dike_traject = DikeTrajectImporter(_path_dir, traject_name).import_orm(orm_model)
-    vrtool_db.close()
+    _dike_traject = DikeTrajectImporter(vr_config=vr_config).import_orm(
+        orm_model)
+
     return _dike_traject

@@ -13,8 +13,7 @@ from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject
 
 from src.orm.importers.dike_section_importer import DikeSectionImporter
-from src.orm.models import GreedyOptimizationOrder, TargetReliabilityBasedOrder, ModifiedMeasure, OptimizationType, \
-    OptimizationSelectedMeasure, OptimizationStep, OptimizationRun, MeasureResult
+from src.orm.models import OptimizationSelectedMeasure, OptimizationStep, MeasureResult
 from src.orm.models.dike_traject_info import DikeTrajectInfo
 
 import geopandas as gpd
@@ -23,12 +22,14 @@ from src.utils.utils import get_signal_value
 
 
 class DikeTrajectImporter(OrmImporterProtocol):
+    vr_config: VrtoolConfig
     path_dir: Path
     traject_name: str
 
-    def __init__(self, path_dir: Path, traject_name: str) -> None:
-        self.path_dir = path_dir
-        self.traject_name = traject_name
+    def __init__(self, vr_config: VrtoolConfig) -> None:
+        self.vr_config = vr_config
+        self.path_dir = Path(vr_config.input_directory)
+        self.traject_name = vr_config.traject
 
     def _import_dike_section_list(
             self, orm_dike_section_list: list[SectionData], traject_gdf: GeoDataFrame, run_id: int,
@@ -103,8 +104,7 @@ class DikeTrajectImporter(OrmImporterProtocol):
 
         return _ordered_section_names, _final_step_id
 
-    @staticmethod
-    def _get_final_step_vr(optimization_run_id: int) -> int:
+    def _get_final_step_vr(self, optimization_run_id: int) -> int:
         """Get the final step id of the optimization run.
         The final step in this case is the step with the lowest total cost.
 
@@ -113,20 +113,15 @@ class DikeTrajectImporter(OrmImporterProtocol):
         :return: The id of the final step
         """
 
-        # TODO Temporary hardcoded config. This will be improved in another PR
-        _vr_config = VrtoolConfig()
-        _vr_config.input_directory = Path(
-            r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\TestCase1_38-1_no_housing")
-        _vr_config.excluded_mechanisms = [MechanismEnum.REVETMENT, MechanismEnum.HYDRAULIC_STRUCTURES]
-        _vr_config.output_directory = _vr_config.input_directory / "results"
-        _vr_config.externals = (
-                Path(__file__).parent.parent / "externals/D-Stability 2022.01.2/bin"
-        )
-        _vr_config.traject = "38-1"
+        _results = []
+        for _optimization_step in get_optimization_steps(optimization_run_id):
+            _as_df = OptimizationStepImporter.import_optimization_step_results_df(
+                _optimization_step
+            )
+            _cost = _optimization_step.total_lcc + _optimization_step.total_risk
+            _results.append((_optimization_step, _as_df, _cost))
 
-        _vr_config.input_database_name = "vrtool_input.db"
-
-        _step_id, _, _ = get_optimization_step_with_lowest_total_cost_table(_vr_config, optimization_run_id)
+        _step_id, _, _ = min(_results, key=lambda results_tuple: results_tuple[2])
 
         return _step_id
 
