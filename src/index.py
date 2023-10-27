@@ -16,7 +16,7 @@ app.layout = dbc.Container(
     children=
     [
         dcc.Location(id='url', pathname='welcome', refresh=False),
-        dcc.Store(id='stored-data', data=None),
+        dcc.Store(id='stored-data-dike-traject', data=None),
         nav_bar_layout,
         make_layout_main_page(),
     ],

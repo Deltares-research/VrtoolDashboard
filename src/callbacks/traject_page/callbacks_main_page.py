@@ -1,22 +1,29 @@
 from dash import html, dcc, Output, Input, State
+from vrtool.defaults.vrtool_config import VrtoolConfig
 
 from src.constants import ColorBarResultType, SubResultType, Measures
 from src.linear_objects.dike_traject import DikeTraject
 
 from src.app import app
-from src.orm.import_database import get_dike_traject_from_ORM
+
+import base64
+import json
+
+from src.orm.import_database import get_dike_traject_from_config_ORM
 
 
-@app.callback([Output('output-data-upload-zip', 'children'),
+@app.callback([Output('dummy_upload_id', 'children'),
                Output("upload-toast", "is_open"), ],
-              [Input('upload-data-zip', 'contents')],
-              [State('upload-data-zip', 'filename')])
+              [Input('upload-data-config-json', 'contents')],
+              [State('upload-data-config-json', 'filename')])
 def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tuple:
-    """This is the callback for the upload of the zip files of the traject data.
+    """This is the callback for the upload of the config.json file.
 
-    :param contents: string content of the uploaded zip file. The zip should content at least:
-        - a geojson file with the dike data
-        - a csv file with the results of the Veiligheidrendement method.
+    :param contents: string content of the uploaded json. The file should content at least:
+        - traject: name of the traject
+        - input_directory: directory where the input database is located.
+        - input_database_name: name of the input database.
+        - excluded_mechanisms: list of mechanisms to be excluded from the analysis.
 
     :param filename: name of the uploaded zip file.
 
@@ -25,12 +32,26 @@ def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tup
         - boolean indicating if the upload was successful.
     """
     if contents is not None:
+
         try:
-            _dike_traject = DikeTraject.from_uploaded_zip(contents, filename)
+
+            content_type, content_string = contents.split(',')
+
+            decoded = base64.b64decode(content_string)
+            json_content = json.loads(decoded)
+
+            vr_config = VrtoolConfig()
+            vr_config.traject = json_content['traject']
+            vr_config.input_directory = json_content['input_directory']
+            vr_config.input_database_name = json_content['input_database_name']
+            vr_config.excluded_mechanisms = json_content['excluded_mechanisms']
+
+            _dike_traject = get_dike_traject_from_config_ORM(vr_config)
+
             return html.Div(
                 dcc.Store(id='stored-data', data=_dike_traject.serialize())), True
         except:
-            return html.Div(children=["Something went wrong when uploading the file"]), False
+            return html.Div("Geen bestand geüpload"), False
     else:
         return html.Div("Geen bestand geüpload"), False
 
@@ -88,7 +109,7 @@ def toggle_collapse3(n: int, is_open: bool) -> bool:
 
 @app.callback(
     [Output('select_sub_result_type_measure_map', 'options'),
-    Output('select_sub_result_type_measure_map', 'value')],
+     Output('select_sub_result_type_measure_map', 'value')],
     Input('select_measure_map_result_type', 'value'),
 )
 def update_radio_sub_result_type(result_type: str) -> list:
@@ -124,26 +145,24 @@ def update_radio_sub_result_type(result_type: str) -> list:
 
     return options, value
 
+
 @app.callback(
     Output("editable_traject_table", "data"),
-    Input('selection_traject_name', 'value'),
+    Input('stored-data', 'data'),
 )
-def fill_traject_table_from_database(selection_traject_name: str) -> list[dict]:
+def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
     """
     This is a callback to fill the editable table with the data from the database for the selected database.
 
     :param selection_traject_name:
     :return:
     """
-
-    if selection_traject_name is not None:
-        _traject_db = get_dike_traject_from_ORM(selection_traject_name)
+    if dike_traject_data is not None:
+        _dike_traject = DikeTraject.deserialize(dike_traject_data)
 
         data = []
-        for section in _traject_db.dike_sections:
+        for section in _dike_traject.dike_sections:
             data.append({"section_col": section.name, "reinforcement_col": "yes",
                          'measure_col': Measures.GROUND_IMPROVEMENT.name, 'reference_year_col': '2045'})
 
         return data
-
-

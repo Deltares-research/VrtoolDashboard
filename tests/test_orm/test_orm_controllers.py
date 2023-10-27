@@ -1,15 +1,22 @@
 import json
 from pathlib import Path
 
+from vrtool.defaults.vrtool_config import VrtoolConfig
+
 from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject
-from src.orm.import_database import get_dike_traject_from_ORM
+from src.orm.import_database import get_dike_traject_from_config_ORM
 
 
 class TestOrmControllers:
 
     def test_initialization_get_dike_traject_from_ORM(self):
-        _dike_traject = get_dike_traject_from_ORM("38-1")
+
+        _vr_config = VrtoolConfig().from_json(Path(__file__).parent.parent / "data/TestCase1_38-1_no_housing/vr_config.json")
+        _vr_config.input_directory = Path(__file__).parent.parent / "data/TestCase1_38-1_no_housing"
+
+
+        _dike_traject = get_dike_traject_from_config_ORM(_vr_config)
 
         assert isinstance(_dike_traject, DikeTraject)
         assert isinstance(_dike_traject.dike_sections[0], DikeSection)
@@ -18,9 +25,12 @@ class TestOrmControllers:
         # 1. Define data
         with open(Path(__file__).parent.parent / "data/serialized_traject_38_1_mini.json", "r") as f:
             _expected_serialized_traject = json.load(f)
+        _vr_config = VrtoolConfig().from_json(Path(__file__).parent.parent / "data/TestCase1_38-1_no_housing/vr_config.json")
+        _vr_config.input_directory = Path(__file__).parent.parent / "data/TestCase1_38-1_no_housing"
+
 
         # 2. Define test
-        _dike_traject = get_dike_traject_from_ORM("38-1")
+        _dike_traject = get_dike_traject_from_config_ORM(_vr_config)
         _serialized_traject = _dike_traject.serialize()
 
         # 3. Assert

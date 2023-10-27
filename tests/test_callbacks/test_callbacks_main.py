@@ -1,6 +1,8 @@
 from contextvars import copy_context
+from pathlib import Path
 
 import pytest
+import json
 
 from src.callbacks.traject_page.callbacks_main_page import toggle_collapse, toggle_collapse2, toggle_collapse3, \
     update_radio_sub_result_type, fill_traject_table_from_database
@@ -55,14 +57,16 @@ class TestCallback:
         assert isinstance(output[0], list)
         assert isinstance(output[1], str)
 
-
     def test_fill_traject_table_from_database(self):
         """
         Test if the callback filling the DataTable with the selected traject from the database returns a list.
         :return:
         """
+        _dike_data = json.load(
+            open(Path(__file__).parent.parent / 'data/Case_38_1_sterker_VZG2/reference' / 'dike_data.json'))
+
         def run_callback():
-            return fill_traject_table_from_database("38-1")
+            return fill_traject_table_from_database(_dike_data)
 
         ctx = copy_context()
         output = ctx.run(run_callback)

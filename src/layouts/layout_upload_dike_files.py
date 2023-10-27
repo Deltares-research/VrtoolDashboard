@@ -2,8 +2,28 @@ from dash import html, dcc
 import dash_bootstrap_components as dbc
 
 layout_traject_select = html.Div([
-    dbc.Select(id='selection_traject_name', options=[{"label": "38-1", "value": "38-1"},
-                                                     {"label": "38-1 dummy", "value": "38-1 bis"}]),
+
+    dcc.Upload(
+        id='upload-data-config-json',
+        children=html.Div([
+            '',
+            html.A('Selecteer een bestand config.json')
+        ]),
+        style={
+            'width': '100%',
+            'height': '60px',
+            'lineHeight': '60px',
+            'borderWidth': '1px',
+            'borderStyle': 'dashed',
+            'borderRadius': '5px',
+            'textAlign': 'center',
+            'margin': '10px'
+        },
+        # Allow multiple files to be uploaded
+        multiple=False,
+        accept='.json'
+    ),
+    html.Div(id="dummy_upload_id"),
 
     dbc.Toast(
 
@@ -15,11 +35,6 @@ layout_traject_select = html.Div([
         dismissable=True,
         is_open=False,
 
-        ),
-        html.Div('Signaleringswaarde:', style={'margin': '10px'}),
-        dcc.Input(id='tempo_signaleringswaarde', type='text', placeholder="1/30000", name="tempo_signaalering_warde", value="1/30000"),
-        html.Div('Ondergrens:', style={'margin': '10px'}),
-        dcc.Input(id='tempo_ondergrens', type='text', placeholder="1/10000", value="1/10000"),
+    ),
 
-        html.Div(id='output-data-upload-zip'),
-    ])
+])
