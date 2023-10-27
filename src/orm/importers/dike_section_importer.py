@@ -1,24 +1,25 @@
 from pathlib import Path
 from typing import Iterator
 
+import numpy as np
 from geopandas import GeoDataFrame
 from peewee import JOIN
 
-from vrtool.common.enums import MechanismEnum
-from vrtool.defaults.vrtool_config import VrtoolConfig
-from vrtool.orm.io.importers.optimization.optimization_step_importer import OptimizationStepImporter
+
 
 from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol
 from vrtool.orm.models import Mechanism, MechanismPerSection, ComputationScenario, MeasurePerSection, Measure, \
     OptimizationStep, OptimizationRun, OptimizationStepResultMechanism, OptimizationStepResultSection, \
-    OptimizationSelectedMeasure, OptimizationType, MeasureResult, MeasureResultParameter, MeasureResultSection
+    OptimizationSelectedMeasure, OptimizationType, MeasureResult, MeasureResultParameter, MeasureResultSection, \
+    StandardMeasure, MeasureType
 from vrtool.orm.models.section_data import SectionData
 from vrtool.orm.orm_controllers import get_optimization_steps
+from vrtool.probabilistic_tools.combin_functions import CombinFunctions
+from vrtool.probabilistic_tools.probabilistic_functions import beta_to_pf, pf_to_beta
 
 from src.linear_objects.dike_section import DikeSection
 from src.orm import models as orm
-from src.orm.models import GreedyOptimizationOrder, ModifiedMeasure, MeasureCost, \
-    MeasureReliability, TargetReliabilityBasedOrder, AssessmentMechanismResult, AssessmentSectionResult
+from src.orm.models import AssessmentMechanismResult, AssessmentSectionResult
 from src.orm.orm_controller_custom import get_optimization_step_with_lowest_total_cost_table_no_closing
 
 
@@ -107,7 +108,22 @@ class DikeSectionImporter(OrmImporterProtocol):
             else:
                 _params['dberm'] = None
                 _params['dcrest'] = None
+
         return _params
+
+    def _get_vzg_parameters(self) -> tuple[float, float]:
+        _vzg_params = (StandardMeasure.select(StandardMeasure.prob_of_solution_failure,
+                                              StandardMeasure.failure_probability_with_solution)
+        .join(Measure)
+        .join(MeasureType)
+        .where(
+            (Measure.combinable_type_id == 3) &
+            (MeasureType.name == "Vertical Geotextile")
+
+        )
+        ).get()
+
+        return _vzg_params.prob_of_solution_failure, _vzg_params.failure_probability_with_solution
 
     def get_final_measure_dsn(self, section_data: SectionData) -> dict:
         """
@@ -264,6 +280,7 @@ class DikeSectionImporter(OrmImporterProtocol):
 
     def _get_final_measure_betas(self, optimization_steps: OptimizationStep) -> dict:
         _final_measure = {}
+        _dict_probabilities = {}
 
         if optimization_steps.count() == 1:
 
@@ -278,17 +295,64 @@ class DikeSectionImporter(OrmImporterProtocol):
 
 
         elif optimization_steps.count() == 2:
-            # TODO for mechanism_per_section in mechanisms_per_section:
-            for mechanism in ["Piping", "StabilityInner", "Overflow"]:
-                _final_measure[mechanism] = [row.beta for row in
-                                             self._get_mechanism_beta(optimization_steps[0], mechanism)]
-            # Add section betas as well:
-            _final_measure["Section"] = [row.beta for row in self._get_section_betas(optimization_steps[0])]
+            _final_measure = self._get_final_measure_combined_betas(optimization_steps)
+
             return _final_measure
         elif optimization_steps.count() > 2:
             raise ValueError("No more than 2 measure results is allowed")
         else:
             raise ValueError("No measure results found")
+
+    def _get_final_measure_combined_betas(self, optimization_steps: OptimizationStep) -> dict:
+        """
+        Combine the mechanism probabilities from a Combinable+Partial measure set. And compute the section betas.
+        :param optimization_steps:
+        :return:
+        """
+        _final_measure = {}
+        _dict_probabilities = {}
+
+        section = (SectionData
+        .select()
+        .join(MeasurePerSection)
+        .join(MeasureResult)
+        .join(OptimizationSelectedMeasure)
+        .where(
+            OptimizationSelectedMeasure.id == optimization_steps[0].optimization_selected_measure_id)
+        ).get()
+
+        for mechanism in ["Piping", "StabilityInner", "Overflow"]:
+            _mechanism_id = Mechanism.get(Mechanism.name == mechanism).id
+            _mechanism_per_section_id = MechanismPerSection.get(
+                (MechanismPerSection.section == section.id) & (
+                        MechanismPerSection.mechanism == _mechanism_id)).id
+
+            _query_initial_betas = (AssessmentMechanismResult
+                                    .select(AssessmentMechanismResult.time, AssessmentMechanismResult.beta)
+                                    .where(
+                AssessmentMechanismResult.mechanism_per_section == _mechanism_per_section_id)
+                                    .order_by(AssessmentMechanismResult.time))
+            # It doesnt matter which one is which because we multiply their pf anyway
+            _measure_1_pf = np.array([beta_to_pf(row.beta) for row in
+                                      self._get_mechanism_beta(optimization_steps[0], mechanism)])
+            _measure_2_pf = np.array([beta_to_pf(row.beta) for row in
+                                      self._get_mechanism_beta(optimization_steps[1], mechanism)])
+
+            _initial_pf = np.array([beta_to_pf(row.beta) for row in _query_initial_betas])
+            pf_solution_failure, pf_with_solution = self._get_vzg_parameters()
+
+            pf_vzg = pf_solution_failure * _initial_pf + (1 - pf_solution_failure) * pf_with_solution
+            pf_combined_solutions = _measure_1_pf * _measure_2_pf + (1 - pf_solution_failure) * pf_vzg
+            _final_measure[mechanism] = pf_to_beta(pf_combined_solutions)
+            _dict_probabilities[mechanism] = pf_combined_solutions
+
+        section = CombinFunctions.combine_probabilities(_dict_probabilities, tuple(_dict_probabilities.keys()))
+
+        # Add section betas as well: You need to redo product of betas here:
+
+        _final_measure["Section"] = [pf_to_beta(pf_section) for pf_section in section]
+
+        return _final_measure
 
     def _get_coordinates(self, section_data: SectionData) -> list[tuple[float, float]]:
         """
