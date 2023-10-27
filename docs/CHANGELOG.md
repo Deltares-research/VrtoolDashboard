@@ -9,6 +9,7 @@ Integration databse to dashboard (Initial assessment + Optimization results)
 
 ### Changed
 How data is initialized in the dashboard
+Wheels of VRCrool v0.1.0
 
 ### Deprecated
 None.
