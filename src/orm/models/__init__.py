@@ -23,11 +23,6 @@ from vrtool.orm.models.slope_part import SlopePart
 from vrtool.orm.models.standard_measure import StandardMeasure
 from vrtool.orm.models.supporting_file import SupportingFile
 from vrtool.orm.models.water_level_data import WaterlevelData
-from src.orm.models.greedy_optimization_order import GreedyOptimizationOrder
-from src.orm.models.measure_cost import MeasureCost
-from src.orm.models.measure_reliability import MeasureReliability
-from src.orm.models.modified_measure import ModifiedMeasure
-from src.orm.models.target_reliability_based_order import TargetReliabilityBasedOrder
 
 
 from vrtool.orm.models.optimization import OptimizationType
