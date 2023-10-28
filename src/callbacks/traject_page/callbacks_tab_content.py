@@ -12,7 +12,7 @@ from src.utils.utils import export_to_json
 
 
 @app.callback(Output('overview_map_div', 'children'),
-              [Input('stored-data', 'data')])
+              [Input('stored-data-dike-traject', 'data')])
 def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
@@ -32,7 +32,7 @@ def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
 
 
 @app.callback(Output('dike_traject_reliability_map_initial', 'children'),
-              [Input('stored-data', 'data'), Input("slider_year_reliability_results", "value"),
+              [Input('stored-data-dike-traject', 'data'), Input("slider_year_reliability_results", "value"),
                Input("select_result_type", 'value'), Input("select_mechanism_type", 'value')])
 def make_graph_map_initial_assessment(dike_traject_data: dict, selected_year: float, result_type: str,
                                       mechanism_type: str) -> dcc.Graph:
@@ -59,7 +59,7 @@ def make_graph_map_initial_assessment(dike_traject_data: dict, selected_year: fl
 
 
 @app.callback(Output('dike_traject_reliability_map_measures', 'children'),
-              [Input('stored-data', 'data'), Input("slider_year_reliability_results", "value"),
+              [Input('stored-data-dike-traject', 'data'), Input("slider_year_reliability_results", "value"),
                Input("select_result_type", 'value'), Input("select_calculation_type", "value"),
                Input("select_measure_map_result_type", "value"), Input("select_mechanism_type", 'value'),
                Input("select_sub_result_type_measure_map", "value")])
@@ -94,7 +94,7 @@ def make_graph_map_measures(dike_traject_data: dict, selected_year: float, resul
 
 
 @app.callback(Output('dike_traject_pf_cost_graph', 'figure'),
-              [Input('stored-data', 'data'), Input("slider_year_reliability_results", "value"),
+              [Input('stored-data-dike-traject', 'data'), Input("slider_year_reliability_results", "value"),
                Input("select_result_type", 'value'), Input("select_length_cost_switch", "value"),
                ])
 def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_type: str,
@@ -119,7 +119,7 @@ def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_
 
 
 @app.callback(Output('dike_traject_urgency_map', 'children'),
-              [Input('stored-data', 'data'), Input("slider_year_reliability_results", "value"),
+              [Input('stored-data-dike-traject', 'data'), Input("slider_year_reliability_results", "value"),
                Input("slider_urgency_length", "value"), Input("select_calculation_type", "value")])
 def make_graph_map_urgency(dike_traject_data: dict, selected_year: float, length_urgency: float,
                            calc_type: str) -> dcc.Graph:
@@ -144,7 +144,7 @@ def make_graph_map_urgency(dike_traject_data: dict, selected_year: float, length
                      config={'mapboxAccessToken': get_mapbox_token()})
 
 
-@app.callback(Output("dike_traject_pf_cost_helping_map", "figure"), Input('stored-data', 'data'),
+@app.callback(Output("dike_traject_pf_cost_helping_map", "figure"), Input('stored-data-dike-traject', 'data'),
               Input("dike_traject_pf_cost_graph", "clickData"),
               )
 def update_click(dike_traject_data: dict, click_data: dict) -> Figure:

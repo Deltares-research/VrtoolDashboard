@@ -47,7 +47,6 @@ def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tup
             vr_config.excluded_mechanisms = json_content['excluded_mechanisms']
 
             _dike_traject = get_dike_traject_from_config_ORM(vr_config)
-
             return html.Div(
                 dcc.Store(id='stored-data', data=_dike_traject.serialize())), True
         except:
@@ -146,23 +145,28 @@ def update_radio_sub_result_type(result_type: str) -> list:
     return options, value
 
 
-@app.callback(
-    Output("editable_traject_table", "data"),
-    Input('stored-data', 'data'),
-)
-def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
-    """
-    This is a callback to fill the editable table with the data from the database for the selected database.
+# @app.callback(
+#     Output("editable_traject_table", "data"),
+#     Input('stored-data', 'data'),
+# )
+# def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
+#     """
+#     This is a callback to fill the editable table with the data from the database for the selected database.
+#
+#     :param selection_traject_name:
+#     :return:
+#     """
+#     if dike_traject_data is not None:
+#         _dike_traject = DikeTraject.deserialize(dike_traject_data)
+#         print(_dike_traject)
+#
+#         data = []
+#         for section in _dike_traject.dike_sections:
+#             data.append({"section_col": section.name, "reinforcement_col": "yes",
+#                          'measure_col': Measures.GROUND_IMPROVEMENT.name, 'reference_year_col': '2045'})
+#         print(data)
+#         return data
 
-    :param selection_traject_name:
-    :return:
-    """
-    if dike_traject_data is not None:
-        _dike_traject = DikeTraject.deserialize(dike_traject_data)
 
-        data = []
-        for section in _dike_traject.dike_sections:
-            data.append({"section_col": section.name, "reinforcement_col": "yes",
-                         'measure_col': Measures.GROUND_IMPROVEMENT.name, 'reference_year_col': '2045'})
 
-        return data
+
