@@ -48,7 +48,7 @@ def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tup
 
             _dike_traject = get_dike_traject_from_config_ORM(vr_config)
             return html.Div(
-                dcc.Store(id='stored-data', data=_dike_traject.serialize())), True
+                dcc.Store(id='stored-data-dike-traject', data=_dike_traject.serialize())), True
         except:
             return html.Div("Geen bestand geüpload"), False
     else:

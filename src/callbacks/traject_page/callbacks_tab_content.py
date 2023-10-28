@@ -21,7 +21,6 @@ def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
     """
 
     # export_to_json(dike_traject_data)
-
     if dike_traject_data is None:
         _fig = plot_default_overview_map_dummy()
     else:
