@@ -43,13 +43,10 @@ layout_traject_select = html.Div([
             dcc.Dropdown(
                 id='my_dropdown',
                 options=[
-                    {'label': 'Database 1', 'value': 'db_1'},
-                    {'label': 'Database 2', 'value': 'db_2'},
-                    {'label': 'Database 3 (sensitivity)', 'value': 'db_3'},
-
+                    {'label': 'default run', 'value': 'run_1'},
                 ],
                 optionHeight=35,  # height/space between dropdown options
-                value='db_1',  # dropdown value selected automatically when page loads
+                value='default run',  # dropdown value selected automatically when page loads
                 disabled=False,  # disable dropdown value selection
                 multi=False,  # allow multiple dropdown values to be selected
                 searchable=True,  # allow user-searching of dropdown values
