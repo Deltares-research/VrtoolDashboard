@@ -36,5 +36,32 @@ layout_traject_select = html.Div([
         is_open=False,
 
     ),
+    dbc.Row([
+
+        # Column 1
+        dbc.Col([
+            dcc.Dropdown(
+                id='my_dropdown',
+                options=[
+                    {'label': 'Database 1', 'value': 'db_1'},
+                    {'label': 'Database 2', 'value': 'db_2'},
+                    {'label': 'Database 3 (sensitivity)', 'value': 'db_3'},
+
+                ],
+                optionHeight=35,  # height/space between dropdown options
+                value='db_1',  # dropdown value selected automatically when page loads
+                disabled=False,  # disable dropdown value selection
+                multi=False,  # allow multiple dropdown values to be selected
+                searchable=True,  # allow user-searching of dropdown values
+                search_value='',  # remembers the value searched in dropdown
+                clearable=True,  # allow user to removes the selected value
+                style={'width': "100%"},
+            ),
+            # html.Div(id='dd-output_container'),
+
+        ],
+            md=5),
+
+    ]),
 
 ])
