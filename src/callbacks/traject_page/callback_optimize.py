@@ -12,13 +12,13 @@ from src.component_ids import OPTIMIZE_BUTTON_ID, STORE_CONFIG, DUMMY_OPTIMIZE_B
 
 
 @app.callback(
-    Output(DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID, 'children'),
-    [
+    output=Output(DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID, 'children'),
+    inputs=[
         Input(OPTIMIZE_BUTTON_ID, "n_clicks"),
         Input("stored-data", "data"),
         Input(STORE_CONFIG, "data")
     ],
-    prevent_initial_call=True
+    prevent_initial_call=True,
 )
 def run_optimize_algorithm(n_clicks: int, stored_data: dict, vr_config: dict) -> dict:
     """
