@@ -49,7 +49,7 @@ def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tup
             vr_config.input_database_name = json_content['input_database_name']
             vr_config.excluded_mechanisms = json_content['excluded_mechanisms']
 
-            _dike_traject = get_dike_traject_from_config_ORM(vr_config)
+            _dike_traject = get_dike_traject_from_config_ORM(vr_config, run_id_dsn=2, run_is_vr=1)
 
             return html.Div(
                 dcc.Store(id='stored-data', data=_dike_traject.serialize())), True, json_content

@@ -16,7 +16,7 @@ class TestOrmControllers:
         _vr_config.input_directory = Path(__file__).parent.parent / "data/TestCase1_38-1_no_housing"
 
 
-        _dike_traject = get_dike_traject_from_config_ORM(_vr_config)
+        _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=2, run_is_vr=1)
 
         assert isinstance(_dike_traject, DikeTraject)
         assert isinstance(_dike_traject.dike_sections[0], DikeSection)
@@ -30,7 +30,7 @@ class TestOrmControllers:
 
 
         # 2. Define test
-        _dike_traject = get_dike_traject_from_config_ORM(_vr_config)
+        _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=2, run_is_vr=1)
         _serialized_traject = _dike_traject.serialize()
 
         # 3. Assert
