@@ -1,6 +1,7 @@
 from dash import html, dcc, Output, Input, State
 from vrtool.defaults.vrtool_config import VrtoolConfig
 
+from src.component_ids import STORE_CONFIG
 from src.constants import ColorBarResultType, SubResultType, Measures
 from src.linear_objects.dike_traject import DikeTraject
 
@@ -13,7 +14,8 @@ from src.orm.import_database import get_dike_traject_from_config_ORM
 
 
 @app.callback([Output('dummy_upload_id', 'children'),
-               Output("upload-toast", "is_open"), ],
+               Output("upload-toast", "is_open"),
+               Output(STORE_CONFIG, "data")],
               [Input('upload-data-config-json', 'contents')],
               [State('upload-data-config-json', 'filename')])
 def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tuple:
@@ -29,6 +31,7 @@ def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tup
 
     :return: Return a tuple with:
         - html.Div with the serialized dike traject data.
+        - html.Div with the toast message.
         - boolean indicating if the upload was successful.
     """
     if contents is not None:
@@ -49,11 +52,11 @@ def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tup
             _dike_traject = get_dike_traject_from_config_ORM(vr_config)
 
             return html.Div(
-                dcc.Store(id='stored-data', data=_dike_traject.serialize())), True
+                dcc.Store(id='stored-data', data=_dike_traject.serialize())), True, json_content
         except:
-            return html.Div("Geen bestand geüpload"), False
+            return html.Div("Geen bestand geüpload"), False, {}
     else:
-        return html.Div("Geen bestand geüpload"), False
+        return html.Div("Geen bestand geüpload"), False, {}
 
 
 @app.callback(

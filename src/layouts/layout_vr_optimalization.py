@@ -2,6 +2,7 @@ from dash import html, dcc
 import dash_bootstrap_components as dbc
 from dash.dash_table import DataTable
 
+from src.component_ids import OPTIMIZE_BUTTON_ID
 from src.constants import Measures
 
 row1 = html.Tr([html.Td("01A"), html.Td("Aan"), html.Td("Bermverbreding"), html.Td("2025")])
@@ -39,9 +40,9 @@ dike_vr_optimization_layout = html.Div([
     html.Div(
         [
             dbc.Input(id="name_new_optimization_run", placeholder="Optimization run naam", type="text"),
-            dbc.Button("Optimize", id="button_optimize", color="primary", className="mr-1"),
+            dbc.Button("Optimize", id=OPTIMIZE_BUTTON_ID, color="primary", className="mr-1"),
             dbc.Tooltip("Click to call VRCore optimization routine via the new calculation constraints.",
-                        target="button_optimize")
+                        target=OPTIMIZE_BUTTON_ID)
         ])
 
 ])
