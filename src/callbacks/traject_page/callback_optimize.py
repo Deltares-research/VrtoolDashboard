@@ -8,11 +8,11 @@ from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.orm.orm_controllers import export_results_optimization
 
 from src.app import app
-from src.component_ids import OPTIMIZE_BUTTON_ID, STORE_CONFIG
+from src.component_ids import OPTIMIZE_BUTTON_ID, STORE_CONFIG, DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID
 
 
 @app.callback(
-    Output('dummy_upload_idd', 'children'),
+    Output(DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID, 'children'),
     [
         Input(OPTIMIZE_BUTTON_ID, "n_clicks"),
         Input("stored-data", "data"),
@@ -30,10 +30,17 @@ def run_optimize_algorithm(n_clicks: int, stored_data: dict, vr_config: dict) ->
 
     :return:
     """
+    print(n_clicks)
+
     if stored_data is None:
         return dash.no_update
-    else:
 
+    elif n_clicks is None:
+        return dash.no_update
+    elif n_clicks == 0:
+        return dash.no_update
+
+    else:
         # 1. Get VrConfig from stored_config
         _vr_config = VrtoolConfig()
         _vr_config.traject = vr_config['traject']
@@ -43,16 +50,26 @@ def run_optimize_algorithm(n_clicks: int, stored_data: dict, vr_config: dict) ->
         _vr_config.excluded_mechanisms = [MechanismEnum.REVETMENT, MechanismEnum.HYDRAULIC_STRUCTURES]
 
         # 2. Get all selected measures ids from optimization table in the dashboard
-        selected_measures = [(i, 0) for i in range(1, 1631)]
+        selected_measures = get_selected_measure(None)
 
         # 3. Run optimization
         api = ApiRunWorkflows(_vr_config)
         # clear_optimization_results(_vr_config)
+        print('Lets-gooooo')
 
         results_optimization = api.run_optimization(selected_measures)
-        export_results_optimization(results_optimization, [1*n_clicks, 2*n_clicks])
+        export_results_optimization(results_optimization, [1 * n_clicks, 2 * n_clicks])
+        print("finitooooo")
 
         # # 4. Parse the modified db and replace stored-data
         # _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=2*n_clicks, run_is_vr=1*n_clicks)
         #
         # return _dike_traject.serialize()
+
+
+def get_selected_measure(dike_traject_table: list) -> list[tuple[int, int]]:
+    if dike_traject_table is None:
+        selected_measure_ids = [(i, 0) for i in range(1, 1631)]
+        return selected_measure_ids
+    else:
+        return []
