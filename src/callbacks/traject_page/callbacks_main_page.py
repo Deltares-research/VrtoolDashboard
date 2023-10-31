@@ -1,7 +1,11 @@
+from pathlib import Path
+
+import dash
 from dash import html, dcc, Output, Input, State
+from vrtool.common.enums import MechanismEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
 
-from src.component_ids import STORE_CONFIG
+from src.component_ids import STORE_CONFIG, DROPDOWN_SELECTION_RUN_ID, EDITABLE_TRAJECT_TABLE_ID
 from src.constants import ColorBarResultType, SubResultType, Measures
 from src.linear_objects.dike_traject import DikeTraject
 
@@ -10,12 +14,16 @@ from src.app import app
 import base64
 import json
 
-from src.orm.import_database import get_dike_traject_from_config_ORM
+from src.orm.import_database import get_dike_traject_from_config_ORM, get_name_optimization_runs, \
+    get_run_optimization_ids
 
 
 @app.callback([Output('dummy_upload_id', 'children'),
                Output("upload-toast", "is_open"),
-               Output(STORE_CONFIG, "data")],
+               Output(STORE_CONFIG, "data"),
+               Output(DROPDOWN_SELECTION_RUN_ID, "value"),
+               Output(DROPDOWN_SELECTION_RUN_ID, "options")
+               ],
               [Input('upload-data-config-json', 'contents')],
               [State('upload-data-config-json', 'filename')])
 def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tuple:
@@ -33,6 +41,7 @@ def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tup
         - html.Div with the serialized dike traject data.
         - html.Div with the toast message.
         - boolean indicating if the upload was successful.
+        - value of the dropdown selection run id.
     """
     if contents is not None:
 
@@ -49,14 +58,56 @@ def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tup
             vr_config.input_database_name = json_content['input_database_name']
             vr_config.excluded_mechanisms = json_content['excluded_mechanisms']
 
-            _dike_traject = get_dike_traject_from_config_ORM(vr_config, run_id_dsn=2, run_is_vr=1)
+            # _dike_traject = get_dike_traject_from_config_ORM(vr_config, run_id_dsn=2, run_is_vr=1)
+            _value_selection_run_dropwdown = "default_run"
+
+            # Update the selection Dropwdown with all the names of the optimization runs
+            _names_optimization_run = get_name_optimization_runs(vr_config)
+            _options = [{"label": "Default", "value": "default_run"}, ] + [{"label": name, "value": name} for name in
+                                                                           _names_optimization_run]
 
             return html.Div(
-                dcc.Store(id='stored-data', data=_dike_traject.serialize())), True, json_content
+                dcc.Store(id='stored-data',
+                          data={})), True, json_content, _value_selection_run_dropwdown, _options
         except:
-            return html.Div("Geen bestand geüpload"), False, {}
+            return html.Div("Geen bestand geüpload"), False, {}, "", []
     else:
-        return html.Div("Geen bestand geüpload"), False, {}
+        return html.Div("Geen bestand geüpload"), False, {}, "", []
+
+
+@app.callback(
+    Output('stored-data', 'data'),
+    [Input(DROPDOWN_SELECTION_RUN_ID, "value")],
+    State(STORE_CONFIG, "data"),
+    prevent_initial_call=True
+)
+def selection_traject_run(name: str, vr_config) -> dict:
+    """
+    Callback to select the run id for the traject.
+
+    :param name: name of the traject
+    :return: DikeTraject object
+    """
+
+    if vr_config is None or vr_config == {}:
+        return dash.no_update
+
+    _vr_config = VrtoolConfig()
+    _vr_config.traject = vr_config['traject']
+    _vr_config.input_directory = Path(vr_config['input_directory'])
+    _vr_config.output_directory = Path(vr_config['output_directory'])
+    _vr_config.input_database_name = vr_config['input_database_name']
+    _vr_config.excluded_mechanisms = [MechanismEnum.REVETMENT, MechanismEnum.HYDRAULIC_STRUCTURES]
+
+    if name == "default_run":
+        _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=2, run_is_vr=1)
+
+    elif name in get_name_optimization_runs(_vr_config):
+        run_id_vr, run_id_dsn = get_run_optimization_ids(_vr_config, name)
+        _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=run_id_dsn, run_is_vr=run_id_vr)
+    else:
+        raise ValueError("Name of the Optimization run is not correct.")
+    return _dike_traject.serialize()
 
 
 @app.callback(
@@ -150,7 +201,7 @@ def update_radio_sub_result_type(result_type: str) -> list:
 
 
 @app.callback(
-    Output("editable_traject_table", "data"),
+    Output(EDITABLE_TRAJECT_TABLE_ID, "data"),
     Input('stored-data', 'data'),
 )
 def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:

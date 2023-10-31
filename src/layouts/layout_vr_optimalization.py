@@ -2,7 +2,7 @@ from dash import html, dcc
 import dash_bootstrap_components as dbc
 from dash.dash_table import DataTable
 
-from src.component_ids import OPTIMIZE_BUTTON_ID, DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID
+from src.component_ids import OPTIMIZE_BUTTON_ID, DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID, EDITABLE_TRAJECT_TABLE_ID
 from src.constants import Measures
 
 row1 = html.Tr([html.Td("01A"), html.Td("Aan"), html.Td("Bermverbreding"), html.Td("2025")])
@@ -14,7 +14,7 @@ table_body = [html.Tbody([row1, row2, row3, row4])]
 
 dike_vr_optimization_layout = html.Div([
 
-    DataTable(id='editable_traject_table',
+    DataTable(id=EDITABLE_TRAJECT_TABLE_ID,
               columns=(
                   [{'id': 'section_col', 'name': 'Dijkvak'},
                    {'id': 'reinforcement_col', 'name': 'Versterking', 'presentation': 'dropdown'},

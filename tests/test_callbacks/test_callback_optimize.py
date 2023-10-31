@@ -11,6 +11,48 @@ from src.callbacks.traject_page.callbacks_main_page import toggle_collapse, togg
     update_radio_sub_result_type, fill_traject_table_from_database
 from src.constants import ColorBarResultType
 
+optimization_table_1 = [{'section_col': '1A', 'reinforcement_col': 'yes', 'measure_col': 'GROUND_IMPROVEMENT',
+                         'reference_year_col': '2045'},
+                        {'section_col': '1B', 'reinforcement_col': 'yes', 'measure_col': 'GROUND_IMPROVEMENT',
+                         'reference_year_col': '2045'},
+                        {'section_col': '4', 'reinforcement_col': 'yes', 'measure_col': 'GROUND_IMPROVEMENT',
+                         'reference_year_col': '2045'},
+                        {'section_col': '12', 'reinforcement_col': 'yes', 'measure_col': 'GROUND_IMPROVEMENT',
+                         'reference_year_col': '2045'},
+                        {'section_col': '15', 'reinforcement_col': 'yes', 'measure_col': 'GROUND_IMPROVEMENT',
+                         'reference_year_col': '2045'},
+                        {'section_col': '33A', 'reinforcement_col': 'yes', 'measure_col': 'GROUND_IMPROVEMENT',
+                         'reference_year_col': '2045'},
+                        {'section_col': '34', 'reinforcement_col': 'yes', 'measure_col': 'GROUND_IMPROVEMENT',
+                         'reference_year_col': '2045'},
+                        {'section_col': '37B', 'reinforcement_col': 'yes', 'measure_col': 'GROUND_IMPROVEMENT',
+                         'reference_year_col': '2045'},
+                        {'section_col': '40', 'reinforcement_col': 'yes', 'measure_col': 'GROUND_IMPROVEMENT',
+                         'reference_year_col': '2045'},
+                        {'section_col': '50', 'reinforcement_col': 'yes', 'measure_col': 'GROUND_IMPROVEMENT',
+                         'reference_year_col': '2045'}]
+
+optimization_table_2 = [{'section_col': '1A', 'reinforcement_col': 'yes', 'measure_col': 'GROUND_IMPROVEMENT',
+                         'reference_year_col': '2045'},
+                        {'section_col': '1B', 'reinforcement_col': 'yes', 'measure_col': 'GROUND_IMPROVEMENT',
+                         'reference_year_col': '2045'},
+                        {'section_col': '4', 'reinforcement_col': 'yes', 'measure_col': 'GROUND_IMPROVEMENT',
+                         'reference_year_col': '2045'},
+                        {'section_col': '12', 'reinforcement_col': 'yes', 'measure_col': 'GROUND_IMPROVEMENT',
+                         'reference_year_col': '2045'},
+                        {'section_col': '15', 'reinforcement_col': 'yes', 'measure_col': 'GROUND_IMPROVEMENT',
+                         'reference_year_col': '2045'},
+                        {'section_col': '33A', 'reinforcement_col': 'yes', 'measure_col': 'GROUND_IMPROVEMENT',
+                         'reference_year_col': '2045'},
+                        {'section_col': '34', 'reinforcement_col': 'no', 'measure_col': 'GROUND_IMPROVEMENT',
+                         'reference_year_col': '2045'},
+                        {'section_col': '37B', 'reinforcement_col': 'no', 'measure_col': 'GROUND_IMPROVEMENT',
+                         'reference_year_col': '2045'},
+                        {'section_col': '40', 'reinforcement_col': 'no', 'measure_col': 'GROUND_IMPROVEMENT',
+                         'reference_year_col': '2045'},
+                        {'section_col': '50', 'reinforcement_col': 'no', 'measure_col': 'GROUND_IMPROVEMENT',
+                         'reference_year_col': '2045'}]
+
 
 class TestCallbackOptimize:
 
@@ -30,8 +72,11 @@ class TestCallbackOptimize:
             _vr_config = json.loads(decoded)
 
         def run_callback():
-            return run_optimize_algorithm(n_clicks=1, stored_data=_dike_data, vr_config=_vr_config)
+            return run_optimize_algorithm(n_clicks=1,
+                                          stored_data=_dike_data,
+                                          vr_config=_vr_config,
+                                          traject_optimization_table=optimization_table_1,
+                                          )
 
         ctx = copy_context()
         output = ctx.run(run_callback)
-

@@ -1,6 +1,8 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 
+from src.component_ids import DROPDOWN_SELECTION_RUN_ID
+
 layout_traject_select = html.Div([
 
     dcc.Upload(
@@ -41,12 +43,12 @@ layout_traject_select = html.Div([
         # Column 1
         dbc.Col([
             dcc.Dropdown(
-                id='my_dropdown',
+                id=DROPDOWN_SELECTION_RUN_ID,
                 options=[
-                    {'label': 'default run', 'value': 'run_1'},
+                    {'label': 'default run', 'value': 'default_run'},
                 ],
                 optionHeight=35,  # height/space between dropdown options
-                value='default run',  # dropdown value selected automatically when page loads
+                value='default_run',  # dropdown value selected automatically when page loads
                 disabled=False,  # disable dropdown value selection
                 multi=False,  # allow multiple dropdown values to be selected
                 searchable=True,  # allow user-searching of dropdown values

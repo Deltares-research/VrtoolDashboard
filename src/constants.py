@@ -41,7 +41,6 @@ class Mechanism(Enum):
     REVETMENT = "Bekleding"
 
 
-
 class Measures(Enum):
     GROUND_IMPROVEMENT = "Grondversterking"
     GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN = "Grondversterking met stabiliteitsscherm"
@@ -53,3 +52,11 @@ class Measures(Enum):
 def get_mapbox_token() -> str:
     with open(Path(__file__).parent / "assets" / "mapbox_token.txt") as f:
         return f.read()
+
+
+conversion_dict_measure_names = {"GROUND_IMPROVEMENT": "Soil reinforcement",
+                                 "GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN": "Soil reinforcement with stability screen",
+                                 "GEOTEXTILE": "Vertical Geotextile",
+                                 "DIAPHRAGM_WALL": "Diaphragm wall",
+                                 "STABILITY_SCREEN": "Stability screen"}
+
