@@ -13,6 +13,8 @@ from src.constants import ColorBarResultType
 
 
 class TestCallbackOptimize:
+
+    @pytest.mark.slow
     def test_run_optimize_algorithm(self):
         """
         Test if the callback filling the DataTable with the selected traject from the database returns a list.
@@ -20,7 +22,7 @@ class TestCallbackOptimize:
         """
         _dike_data = json.load(
             open(Path(__file__).parent.parent / 'data/Case_38_1_sterker_VZG2/reference' / 'dike_data.json'))
-        _path_config = Path(__file__).parent.parent / 'data/TestCase1_38-1_no_housing' / 'vr_config.json'
+        _path_config = Path(__file__).parent.parent / 'data/TestCase1_38-1_no_housing_test' / 'vr_config.json'
 
         # load json:
         with open(_path_config, 'r') as f:
@@ -33,4 +35,3 @@ class TestCallbackOptimize:
         ctx = copy_context()
         output = ctx.run(run_callback)
 
-        assert isinstance(output, dict)

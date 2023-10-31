@@ -5,10 +5,11 @@ from dash import Output, Input, State
 from vrtool.api import ApiRunWorkflows
 from vrtool.common.enums import MechanismEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
-from vrtool.orm.orm_controllers import export_results_optimization
+from vrtool.orm.orm_controllers import export_results_optimization, clear_optimization_results
 
 from src.app import app
 from src.component_ids import OPTIMIZE_BUTTON_ID, STORE_CONFIG, DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID
+from src.orm.import_database import get_dike_traject_from_config_ORM
 
 
 @app.callback(
@@ -51,20 +52,11 @@ def run_optimize_algorithm(n_clicks: int, stored_data: dict, vr_config: dict) ->
 
         # 2. Get all selected measures ids from optimization table in the dashboard
         selected_measures = get_selected_measure(None)
+        print(selected_measures)
 
         # 3. Run optimization
-        api = ApiRunWorkflows(_vr_config)
-        # clear_optimization_results(_vr_config)
-        print('Lets-gooooo')
-
-        results_optimization = api.run_optimization(selected_measures)
-        export_results_optimization(results_optimization, [1 * n_clicks, 2 * n_clicks])
-        print("finitooooo")
-
-        # # 4. Parse the modified db and replace stored-data
-        # _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=2*n_clicks, run_is_vr=1*n_clicks)
-        #
-        # return _dike_traject.serialize()
+        # api = ApiRunWorkflows(_vr_config)
+        # api.run_optimization(selected_measures)
 
 
 def get_selected_measure(dike_traject_table: list) -> list[tuple[int, int]]:
