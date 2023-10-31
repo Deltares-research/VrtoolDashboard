@@ -25,7 +25,10 @@ from src.orm.import_database import get_dike_traject_from_config_ORM, get_name_o
                Output(DROPDOWN_SELECTION_RUN_ID, "options")
                ],
               [Input('upload-data-config-json', 'contents')],
-              [State('upload-data-config-json', 'filename')])
+              [State('upload-data-config-json', 'filename')],
+              allow_duplicate=True,
+              prevent_initial_call=True,
+              )
 def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tuple:
     """This is the callback for the upload of the config.json file.
 

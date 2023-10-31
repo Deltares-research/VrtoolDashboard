@@ -9,13 +9,16 @@ from vrtool.orm.orm_controllers import export_results_optimization, clear_optimi
 
 from src.app import app
 from src.component_ids import OPTIMIZE_BUTTON_ID, STORE_CONFIG, DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID, \
-    EDITABLE_TRAJECT_TABLE_ID
+    EDITABLE_TRAJECT_TABLE_ID, DROPDOWN_SELECTION_RUN_ID
 from src.constants import REFERENCE_YEAR
-from src.orm.import_database import get_dike_traject_from_config_ORM, get_measure_result_ids_per_section
+from src.orm.import_database import get_dike_traject_from_config_ORM, get_measure_result_ids_per_section, \
+    get_name_optimization_runs
 
 
 @app.callback(
-    output=Output(DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID, 'children'),
+    output=[Output(DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID, 'children'),
+            Output(DROPDOWN_SELECTION_RUN_ID, "options", allow_duplicate=True)
+            ],
     inputs=[
         Input(OPTIMIZE_BUTTON_ID, "n_clicks"),
         Input("stored-data", "data"),
@@ -23,9 +26,10 @@ from src.orm.import_database import get_dike_traject_from_config_ORM, get_measur
         Input(EDITABLE_TRAJECT_TABLE_ID, "data"),
     ],
     prevent_initial_call=True,
+
 )
 def run_optimize_algorithm(n_clicks: int, stored_data: dict, vr_config: dict,
-                           traject_optimization_table: list[dict]) -> dict:
+                           traject_optimization_table: list[dict]) -> tuple:
     """
     This is a callback to run the optimization algorithm when the user clicks on the "Optimaliseer" button.
 
@@ -62,6 +66,13 @@ def run_optimize_algorithm(n_clicks: int, stored_data: dict, vr_config: dict,
         # 3. Run optimization
         api = ApiRunWorkflows(_vr_config)
         api.run_optimization(selected_measures)
+
+        # 4. Update the selection Dropwdown with all the names of the optimization runs
+        _names_optimization_run = get_name_optimization_runs(_vr_config)
+        _options = [{"label": "Default", "value": "default_run"}, ] + [{"label": name, "value": name} for name in
+                                                                       _names_optimization_run]
+
+        return [], _options
 
 
 def get_selected_measure(vr_config: VrtoolConfig, dike_traject_table: list) -> list[tuple[int, int]]:
