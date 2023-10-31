@@ -24,7 +24,7 @@ def get_dike_traject_from_config_ORM(vr_config: VrtoolConfig, run_id_dsn: int, r
     _path_database = _path_dir.joinpath(vr_config.input_database_name)
 
     open_database(_path_database)
-
+    print(vr_config, run_id_dsn, run_is_vr)
     _dike_traject = DikeTrajectImporter(vr_config=vr_config,
                                         run_id_dsn=run_id_dsn,
                                         run_id_vr=run_is_vr

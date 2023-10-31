@@ -41,7 +41,7 @@ class DikeTrajectImporter(OrmImporterProtocol):
         self.run_id_dsn = run_id_dsn
 
     def _import_dike_section_list(
-            self, orm_dike_section_list: list[SectionData], traject_gdf: GeoDataFrame, run_id: int,
+            self, orm_dike_section_list: list[SectionData], traject_gdf: GeoDataFrame,
             final_greedy_step_id: int
     ) -> list[DikeSection]:
         """Import the dike sections from the ORM to a list of DikeSection objects
@@ -51,7 +51,10 @@ class DikeTrajectImporter(OrmImporterProtocol):
         :param run_id: id of the optimization run for veiligheidsrendement (default 1)
         :param final_greedy_step_id: id of the final step of the greedy optimization
         """
-        _ds_importer = DikeSectionImporter(traject_gdf, run_id=run_id, final_greedy_step_id=final_greedy_step_id)
+        _ds_importer = DikeSectionImporter(traject_gdf,
+                                           run_id_dsn=self.run_id_dsn,
+                                           run_id_vr=self.run_id_vr,
+                                           final_greedy_step_id=final_greedy_step_id)
 
         return list(map(_ds_importer.import_orm, orm_dike_section_list))
 
@@ -160,8 +163,6 @@ class DikeTrajectImporter(OrmImporterProtocol):
             run_id=self.run_id_vr)
 
         _dike_traject.dike_sections = self._import_dike_section_list(_selected_sections, _traject_gdf,
-                                                                     run_id=self.run_id_vr,
-                                                                     # TODO handle run_id
                                                                      final_greedy_step_id=final_greedy_step_id)
 
         return _dike_traject
