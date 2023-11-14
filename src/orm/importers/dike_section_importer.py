@@ -5,8 +5,6 @@ import numpy as np
 from geopandas import GeoDataFrame
 from peewee import JOIN
 
-
-
 from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol
 from vrtool.orm.models import Mechanism, MechanismPerSection, ComputationScenario, MeasurePerSection, Measure, \
     OptimizationStep, OptimizationRun, OptimizationStepResultMechanism, OptimizationStepResultSection, \
@@ -25,13 +23,15 @@ from src.orm.orm_controller_custom import get_optimization_step_with_lowest_tota
 
 class DikeSectionImporter(OrmImporterProtocol):
     traject_gdf: GeoDataFrame
-    run_id: int  # run_id of the OptimizationRun for Veiligheidsrendement
+    run_id_dsn: int  # run_id of the OptimizationRun for Doorsnede Eisen
+    run_id_vr: int  # run_id of the OptimizationRun for Veiligheidsrendement
     final_greedy_step_id: int  # id of the final step of the greedy optimization
     assessment_time: list[int]
 
-    def __init__(self, traject_gdf: GeoDataFrame, run_id: int, final_greedy_step_id: int):
+    def __init__(self, traject_gdf: GeoDataFrame, run_id_vr: int, run_id_dsn: int, final_greedy_step_id: int):
         self.traject_gdf = traject_gdf
-        self.run_id = run_id
+        self.run_id_dsn = run_id_dsn
+        self.run_id_vr = run_id_vr
         self.final_greedy_step_id = final_greedy_step_id
 
     def _get_initial_assessment(self,
@@ -132,7 +132,7 @@ class DikeSectionImporter(OrmImporterProtocol):
         :param section_data:
         :return: dictionary with the followings keys: "name", "LCC", "Piping", "StabilityInner", "Overflow", "Section"
         """
-        _optimization_steps = get_optimization_steps(optimization_run_id=2)
+        _optimization_steps = get_optimization_steps(optimization_run_id=self.run_id_dsn)
 
         _optimum_section_step_number = None
 
@@ -157,7 +157,7 @@ class DikeSectionImporter(OrmImporterProtocol):
                                                .select()
                                                .join(OptimizationSelectedMeasure, JOIN.INNER, on=(
                 OptimizationStep.optimization_selected_measure_id == OptimizationSelectedMeasure.id))
-                                               .where((OptimizationSelectedMeasure.optimization_run == 2) & (
+                                               .where((OptimizationSelectedMeasure.optimization_run == self.run_id_dsn) & (
                 OptimizationStep.step_number == _optimum_section_step_number))
                                                )
 
@@ -173,7 +173,7 @@ class DikeSectionImporter(OrmImporterProtocol):
 
         # 1. Get the final step number, default is the one for which the Total Cost is minimal.
         _final_step_number = OptimizationStep.get(OptimizationStep.id == self.final_greedy_step_id).step_number
-        _optimization_steps = get_optimization_steps(self.run_id)
+        _optimization_steps = get_optimization_steps(self.run_id_vr)
 
         # 2. Get the most optimal optimization step number
         # This is the last step_number (=highest) for the section of interest before the final_step_number
@@ -200,8 +200,13 @@ class DikeSectionImporter(OrmImporterProtocol):
             raise ValueError(
                 f"Sectie {section_data.id} niet gevonden in de optimalisatie")  # TODO: reassign the betas to those of the initial assessment.
 
-        _optimum_section_optimization_steps = (OptimizationStep.select().where(
-            OptimizationStep.step_number == _optimum_section_step_number)
+        _optimum_section_optimization_steps = (OptimizationStep
+        .select()
+        .join(OptimizationSelectedMeasure)
+        .where(
+            (OptimizationSelectedMeasure.optimization_run == self.run_id_vr)
+            & (OptimizationStep.step_number == _optimum_section_step_number)
+        )
         )
 
         # 3. Get all information into a dict based on the optimum optimization steps.

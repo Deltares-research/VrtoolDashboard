@@ -2,6 +2,7 @@ from dash import html, dcc
 import dash_bootstrap_components as dbc
 from dash.dash_table import DataTable
 
+from src.component_ids import OPTIMIZE_BUTTON_ID, DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID, EDITABLE_TRAJECT_TABLE_ID
 from src.constants import Measures
 
 row1 = html.Tr([html.Td("01A"), html.Td("Aan"), html.Td("Bermverbreding"), html.Td("2025")])
@@ -13,34 +14,7 @@ table_body = [html.Tbody([row1, row2, row3, row4])]
 
 dike_vr_optimization_layout = html.Div([
 
-    dbc.Row([
-
-        # Column 1
-        dbc.Col([
-            dcc.Dropdown(
-                id='my_dropdown',
-                options=[
-                    {'label': 'Database 1', 'value': 'db_1'},
-                    {'label': 'Database 2', 'value': 'db_2'},
-                    {'label': 'Database 3 (sensitivity)', 'value': 'db_3'},
-
-                ],
-                optionHeight=35,  # height/space between dropdown options
-                value='db_1',  # dropdown value selected automatically when page loads
-                disabled=False,  # disable dropdown value selection
-                multi=False,  # allow multiple dropdown values to be selected
-                searchable=True,  # allow user-searching of dropdown values
-                search_value='',  # remembers the value searched in dropdown
-                clearable=True,  # allow user to removes the selected value
-                style={'width': "100%"},
-            ),
-            # html.Div(id='dd-output_container'),
-
-        ],
-            md=5),
-
-    ]),
-    DataTable(id='editable_traject_table',
+    DataTable(id=EDITABLE_TRAJECT_TABLE_ID,
               columns=(
                   [{'id': 'section_col', 'name': 'Dijkvak'},
                    {'id': 'reinforcement_col', 'name': 'Versterking', 'presentation': 'dropdown'},
@@ -64,9 +38,12 @@ dike_vr_optimization_layout = html.Div([
               ),
 
     html.Div(
-        [dbc.Button("Optimize", id="button_optimize", color="primary", className="mr-1"),
-         dbc.Tooltip("Click to call VRCore optimization routine via the new calculation constraints.",
-                     target="button_optimize")
-         ])
+        [
+            dbc.Input(id="name_new_optimization_run", placeholder="Optimization run naam", type="text"),
+            dbc.Button("Optimize", id=OPTIMIZE_BUTTON_ID, color="primary", className="mr-1"),
+            dbc.Tooltip("Click to call VRCore optimization routine via the new calculation constraints.",
+                        target=OPTIMIZE_BUTTON_ID),
+            html.Div(id=DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID)
+        ])
 
 ])

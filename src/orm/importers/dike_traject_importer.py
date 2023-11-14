@@ -23,14 +23,25 @@ class DikeTrajectImporter(OrmImporterProtocol):
     vr_config: VrtoolConfig
     path_dir: Path
     traject_name: str
+    run_id_vr: int
+    run_id_dsn: int
 
-    def __init__(self, vr_config: VrtoolConfig) -> None:
+    def __init__(self, vr_config: VrtoolConfig, run_id_vr: int, run_id_dsn: int) -> None:
+        """
+
+        :param vr_config: VrtoolConfig object
+        :param run_id_vr: run id in the database for which the veiligheidsrendement optimization results must be
+         imported
+        :param run_id_dsn: run id in the database for which the doorsnede eisen optimization results must be imported.
+        """
         self.vr_config = vr_config
         self.path_dir = Path(vr_config.input_directory)
         self.traject_name = vr_config.traject
+        self.run_id_vr = run_id_vr
+        self.run_id_dsn = run_id_dsn
 
     def _import_dike_section_list(
-            self, orm_dike_section_list: list[SectionData], traject_gdf: GeoDataFrame, run_id: int,
+            self, orm_dike_section_list: list[SectionData], traject_gdf: GeoDataFrame,
             final_greedy_step_id: int
     ) -> list[DikeSection]:
         """Import the dike sections from the ORM to a list of DikeSection objects
@@ -40,7 +51,10 @@ class DikeTrajectImporter(OrmImporterProtocol):
         :param run_id: id of the optimization run for veiligheidsrendement (default 1)
         :param final_greedy_step_id: id of the final step of the greedy optimization
         """
-        _ds_importer = DikeSectionImporter(traject_gdf, run_id=run_id, final_greedy_step_id=final_greedy_step_id)
+        _ds_importer = DikeSectionImporter(traject_gdf,
+                                           run_id_dsn=self.run_id_dsn,
+                                           run_id_vr=self.run_id_vr,
+                                           final_greedy_step_id=final_greedy_step_id)
 
         return list(map(_ds_importer.import_orm, orm_dike_section_list))
 
@@ -75,6 +89,9 @@ class DikeTrajectImporter(OrmImporterProtocol):
             .section_name
             for step in _optimization_steps
         ]
+
+        # get rid of duplicates section names (for combined measures)
+        _ordered_section_names = list(dict.fromkeys(_ordered_section_names))
 
         return _ordered_section_names
 
@@ -144,11 +161,11 @@ class DikeTrajectImporter(OrmImporterProtocol):
         _traject_gdf = self.parse_geo_dataframe(_traject_name)
 
         _dike_traject.reinforcement_order_dsn = self._get_reinforcement_section_order_dsn(
-            run_id=2)  # TODO retrieve run_id from run name of datestamp
-        _dike_traject.reinforcement_order_vr, final_greedy_step_id = self._get_reinforcement_section_order_vr(run_id=1)
+            run_id=self.run_id_dsn)  # TODO retrieve run_id from run name of datestamp
+        _dike_traject.reinforcement_order_vr, final_greedy_step_id = self._get_reinforcement_section_order_vr(
+            run_id=self.run_id_vr)
 
-        _dike_traject.dike_sections = self._import_dike_section_list(_selected_sections, _traject_gdf, run_id=1,
-                                                                     # TODO handle run_id
+        _dike_traject.dike_sections = self._import_dike_section_list(_selected_sections, _traject_gdf,
                                                                      final_greedy_step_id=final_greedy_step_id)
 
         return _dike_traject
