@@ -30,8 +30,7 @@ def get_dike_traject_from_config_ORM(vr_config: VrtoolConfig, run_id_dsn: int, r
     _dike_traject = DikeTrajectImporter(vr_config=vr_config,
                                         run_id_dsn=run_id_dsn,
                                         run_id_vr=run_is_vr
-                                        ).import_orm(
-        orm_model)
+                                        ).import_orm(orm_model)
 
     return _dike_traject
 
