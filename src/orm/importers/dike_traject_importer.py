@@ -90,6 +90,9 @@ class DikeTrajectImporter(OrmImporterProtocol):
             for step in _optimization_steps
         ]
 
+        # get rid of duplicates section names (for combined measures)
+        _ordered_section_names = list(dict.fromkeys(_ordered_section_names))
+
         return _ordered_section_names
 
     def _get_reinforcement_section_order_vr(self, run_id) -> tuple[list[str], int]:

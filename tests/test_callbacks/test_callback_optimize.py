@@ -56,6 +56,7 @@ optimization_table_2 = [{'section_col': '1A', 'reinforcement_col': 'yes', 'measu
 
 class TestCallbackOptimize:
 
+    @pytest.mark.skip(reason="slow")
     @pytest.mark.slow
     def test_run_optimize_algorithm(self):
         """

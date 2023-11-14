@@ -14,7 +14,7 @@ class TestOrmControllers:
     def test_initialization_get_dike_traject_from_ORM(self):
         _vr_config = VrtoolConfig().from_json(
             Path(__file__).parent.parent / "data/TestCase1_38-1_no_housing/vr_config.json")
-        _vr_config.input_directory = Path(__file__).parent.parent / "data/TestCase1_38-1_no_housing_test"
+        _vr_config.input_directory = Path(__file__).parent.parent / "data/TestCase1_38-1_no_housing"
 
         _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=2, run_is_vr=1)
 
@@ -27,7 +27,7 @@ class TestOrmControllers:
             _expected_serialized_traject = json.load(f)
         _vr_config = VrtoolConfig().from_json(
             Path(__file__).parent.parent / "data/TestCase1_38-1_no_housing/vr_config.json")
-        _vr_config.input_directory = Path(__file__).parent.parent / "data/TestCase1_38-1_no_housing_test"
+        _vr_config.input_directory = Path(__file__).parent.parent / "data/TestCase1_38-1_no_housing"
 
         # 2. Define test
         _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=2, run_is_vr=1)
@@ -51,7 +51,7 @@ class TestOrmControllers:
         # 1. Define data
         vr_config = VrtoolConfig().from_json(
             Path(__file__).parent.parent / "data/TestCase1_38-1_no_housing/vr_config.json")
-        vr_config.input_directory = Path(__file__).parent.parent / "data/TestCase1_38-1_no_housing_test"
+        vr_config.input_directory = Path(__file__).parent.parent / "data/TestCase1_38-1_no_housing"
 
         # 2. Define test
         names = get_name_optimization_runs(vr_config)
@@ -64,7 +64,7 @@ class TestOrmControllers:
         # 1. Define data
         vr_config = VrtoolConfig().from_json(
             Path(__file__).parent.parent / "data/TestCase1_38-1_no_housing/vr_config.json")
-        vr_config.input_directory = Path(__file__).parent.parent / "data/TestCase1_38-1_no_housing_test"
+        vr_config.input_directory = Path(__file__).parent.parent / "data/TestCase1_38-1_no_housing"
 
         # 2. Define test
         id_vr, id_dsn = get_run_optimization_ids(vr_config, optimization_run_name="Single opt. at: 2023-10-31 09:34:05")

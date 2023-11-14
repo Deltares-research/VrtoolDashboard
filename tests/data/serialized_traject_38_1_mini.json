@@ -2688,7 +2688,7 @@
       ]
     }
   ],
-  "reinforcement_order_vr": ["1B", "1A", "15", "4", "34", "33A", "12", "37B", "40", "50"],
+  "reinforcement_order_vr": ["1B", "15", "1A", "4", "34", "33A", "12", "37B", "40", "50"],
   "reinforcement_order_dsn": ["15", "1B", "4", "1A", "12", "34", "37B", "40", "33A", "50"],
   "signalering_value": 1.11e-05,
   "lower_bound_value": 3.33e-05
