@@ -5,11 +5,11 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased] [dd/mm/yyyy]
 
 ### Added
-Integration databse to dashboard (Initial assessment + Optimization results)
+Integration database to dashboard (Initial assessment + Optimization results)
 
 ### Changed
 How data is initialized in the dashboard
-Wheels of VRCrool v0.1.0
+Wheels of VRCrool v0.1.1
 
 ### Deprecated
 None.
