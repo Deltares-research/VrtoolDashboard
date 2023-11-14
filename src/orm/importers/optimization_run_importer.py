@@ -5,7 +5,11 @@ def import_optimization_runs_name(orm_model) -> list[str]:
 
     :return: list of names of the optimization runs in the database
     """
-    _optimization_runs = orm_model.OptimizationRun.select()
-    _names = [run.name for run in _optimization_runs]
 
-    return _names
+    if orm_model.OptimizationRun.select().exists():
+        _optimization_runs = orm_model.OptimizationRun.select()
+        _names = [run.name for run in _optimization_runs]
+
+        return _names
+    else:
+        return []

@@ -160,10 +160,17 @@ class DikeTrajectImporter(OrmImporterProtocol):
         )
         _traject_gdf = self.parse_geo_dataframe(_traject_name)
 
-        _dike_traject.reinforcement_order_dsn = self._get_reinforcement_section_order_dsn(
-            run_id=self.run_id_dsn)  # TODO retrieve run_id from run name of datestamp
-        _dike_traject.reinforcement_order_vr, final_greedy_step_id = self._get_reinforcement_section_order_vr(
-            run_id=self.run_id_vr)
+        # check if the table OptimizationRun is empty:
+        if orm_model.OptimizationRun.select().exists():
+            _dike_traject.reinforcement_order_dsn = self._get_reinforcement_section_order_dsn(
+                run_id=self.run_id_dsn)
+            _dike_traject.reinforcement_order_vr, final_greedy_step_id = self._get_reinforcement_section_order_vr(
+                run_id=self.run_id_vr)
+        else:
+            _dike_traject.reinforcement_order_dsn = []
+            _dike_traject.reinforcement_order_vr = []
+            final_greedy_step_id = None
+
 
         _dike_traject.dike_sections = self._import_dike_section_list(_selected_sections, _traject_gdf,
                                                                      final_greedy_step_id=final_greedy_step_id)

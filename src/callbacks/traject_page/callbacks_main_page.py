@@ -46,28 +46,41 @@ def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tup
         - boolean indicating if the upload was successful.
         - value of the dropdown selection run id.
     """
-    if contents is not None:
 
+    if contents is not None:
         try:
+            print(1)
 
             content_type, content_string = contents.split(',')
+            print(2)
 
             decoded = base64.b64decode(content_string)
             json_content = json.loads(decoded)
+            print(3)
 
             vr_config = VrtoolConfig()
             vr_config.traject = json_content['traject']
             vr_config.input_directory = json_content['input_directory']
             vr_config.input_database_name = json_content['input_database_name']
             vr_config.excluded_mechanisms = json_content['excluded_mechanisms']
+            # check is key is in the json:
+            if 'output_directory' in json_content.keys():
+                print(9999)
+            if 'output_directoryyyy' in json_content.keys():
+                print(88888)
+
+            print(4)
 
             # _dike_traject = get_dike_traject_from_config_ORM(vr_config, run_id_dsn=2, run_is_vr=1)
             _value_selection_run_dropwdown = "default_run"
 
             # Update the selection Dropwdown with all the names of the optimization runs
+            print("ici")
             _names_optimization_run = get_name_optimization_runs(vr_config)
+            print(_names_optimization_run)
             _options = [{"label": "Default", "value": "default_run"}, ] + [{"label": name, "value": name} for name in
                                                                            _names_optimization_run]
+            print(_options)
 
             return html.Div(
                 dcc.Store(id='stored-data',
