@@ -2,6 +2,7 @@ from pathlib import Path
 
 import dash
 from dash import html, dcc, Output, Input, State
+import dash_bootstrap_components as dbc
 from vrtool.common.enums import MechanismEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
 
@@ -29,7 +30,7 @@ from src.orm.import_database import get_dike_traject_from_config_ORM, get_name_o
               allow_duplicate=True,
               prevent_initial_call=True,
               )
-def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tuple:
+def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
     """This is the callback for the upload of the config.json file.
 
     :param contents: string content of the uploaded json. The file should content at least:
@@ -49,38 +50,31 @@ def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tup
 
     if contents is not None:
         try:
-            print(1)
 
             content_type, content_string = contents.split(',')
-            print(2)
 
             decoded = base64.b64decode(content_string)
             json_content = json.loads(decoded)
-            print(3)
+            _mandatory_config_args = ['traject', 'input_directory', 'input_database_name', 'excluded_mechanisms']
+            for _arg in _mandatory_config_args:
+                if _arg not in json_content.keys():
+                    _alert = dbc.Alert(f"Config.json file is missing argument <{_arg}>", dismissable=True, id='123456', color="danger")
+
+                    return _alert, False, {}, "", []
 
             vr_config = VrtoolConfig()
             vr_config.traject = json_content['traject']
             vr_config.input_directory = json_content['input_directory']
             vr_config.input_database_name = json_content['input_database_name']
             vr_config.excluded_mechanisms = json_content['excluded_mechanisms']
-            # check is key is in the json:
-            if 'output_directory' in json_content.keys():
-                print(9999)
-            if 'output_directoryyyy' in json_content.keys():
-                print(88888)
-
-            print(4)
 
             # _dike_traject = get_dike_traject_from_config_ORM(vr_config, run_id_dsn=2, run_is_vr=1)
             _value_selection_run_dropwdown = "default_run"
 
             # Update the selection Dropwdown with all the names of the optimization runs
-            print("ici")
             _names_optimization_run = get_name_optimization_runs(vr_config)
-            print(_names_optimization_run)
             _options = [{"label": "Default", "value": "default_run"}, ] + [{"label": name, "value": name} for name in
                                                                            _names_optimization_run]
-            print(_options)
 
             return html.Div(
                 dcc.Store(id='stored-data',
