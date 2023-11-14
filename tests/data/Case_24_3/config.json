@@ -1,0 +1,7 @@
+{
+  "traject": "24-3",
+  "input_database_name": "24-3_results_vrtool_0_1_1.db",
+  "input_directory": "C:/Users/hauth/bitbucket/VRtoolDashboard/tests/data/Case_24_3",
+  "output_directory": "C:/Users/hauth/bitbucket/VRtoolDashboard/tests/data/Case_24_3/results",
+  "excluded_mechanisms": []
+}

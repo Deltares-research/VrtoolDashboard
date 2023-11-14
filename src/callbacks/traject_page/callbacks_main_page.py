@@ -2,6 +2,7 @@ from pathlib import Path
 
 import dash
 from dash import html, dcc, Output, Input, State
+import dash_bootstrap_components as dbc
 from vrtool.common.enums import MechanismEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
 
@@ -29,7 +30,7 @@ from src.orm.import_database import get_dike_traject_from_config_ORM, get_name_o
               allow_duplicate=True,
               prevent_initial_call=True,
               )
-def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tuple:
+def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
     """This is the callback for the upload of the config.json file.
 
     :param contents: string content of the uploaded json. The file should content at least:
@@ -46,14 +47,20 @@ def upload_and_save_traject_input(contents: str, filename: str, dbc=None) -> tup
         - boolean indicating if the upload was successful.
         - value of the dropdown selection run id.
     """
-    if contents is not None:
 
+    if contents is not None:
         try:
 
             content_type, content_string = contents.split(',')
 
             decoded = base64.b64decode(content_string)
             json_content = json.loads(decoded)
+            _mandatory_config_args = ['traject', 'input_directory', 'input_database_name', 'excluded_mechanisms']
+            for _arg in _mandatory_config_args:
+                if _arg not in json_content.keys():
+                    _alert = dbc.Alert(f"Config.json file is missing argument <{_arg}>", dismissable=True, id='123456', color="danger")
+
+                    return _alert, False, {}, "", []
 
             vr_config = VrtoolConfig()
             vr_config.traject = json_content['traject']

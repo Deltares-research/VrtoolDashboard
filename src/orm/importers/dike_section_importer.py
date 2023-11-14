@@ -157,8 +157,9 @@ class DikeSectionImporter(OrmImporterProtocol):
                                                .select()
                                                .join(OptimizationSelectedMeasure, JOIN.INNER, on=(
                 OptimizationStep.optimization_selected_measure_id == OptimizationSelectedMeasure.id))
-                                               .where((OptimizationSelectedMeasure.optimization_run == self.run_id_dsn) & (
-                OptimizationStep.step_number == _optimum_section_step_number))
+                                               .where(
+            (OptimizationSelectedMeasure.optimization_run == self.run_id_dsn) & (
+                    OptimizationStep.step_number == _optimum_section_step_number))
                                                )
 
         return self._get_final_measure(_optimum_section_optimization_steps)
@@ -400,7 +401,11 @@ class DikeSectionImporter(OrmImporterProtocol):
         _dike_section.initial_assessment = self._get_initial_assessment(orm_model)
         _dike_section.years = self.assessment_time
 
-        _dike_section.final_measure_veiligheidsrendement = self.get_final_measure_vr(orm_model)
-        _dike_section.final_measure_doorsnede = self.get_final_measure_dsn(orm_model)
+        if self.final_greedy_step_id is not None:
+            _dike_section.final_measure_veiligheidsrendement = self.get_final_measure_vr(orm_model)
+            _dike_section.final_measure_doorsnede = self.get_final_measure_dsn(orm_model)
+        else:
+            _dike_section.final_measure_veiligheidsrendement = None
+            _dike_section.final_measure_doorsnede = None
 
         return _dike_section
