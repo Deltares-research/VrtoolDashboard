@@ -2,17 +2,20 @@ from pathlib import Path
 
 import dash
 from dash import Output, Input, State
+from dash.long_callback import DiskcacheLongCallbackManager
 from vrtool.api import ApiRunWorkflows
 from vrtool.common.enums import MechanismEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.orm.orm_controllers import export_results_optimization, clear_optimization_results
 
-from src.app import app
+from src.app import app, background_callback_manager
 from src.component_ids import OPTIMIZE_BUTTON_ID, STORE_CONFIG, DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID, \
-    EDITABLE_TRAJECT_TABLE_ID, DROPDOWN_SELECTION_RUN_ID
+    EDITABLE_TRAJECT_TABLE_ID, DROPDOWN_SELECTION_RUN_ID, OPTIMIZATION_NEW_RUN_NAME_ID
 from src.constants import REFERENCE_YEAR
 from src.orm.import_database import get_dike_traject_from_config_ORM, get_measure_result_ids_per_section, \
     get_name_optimization_runs
+
+
 
 
 @app.callback(
@@ -24,18 +27,26 @@ from src.orm.import_database import get_dike_traject_from_config_ORM, get_measur
         Input("stored-data", "data"),
         Input(STORE_CONFIG, "data"),
         Input(EDITABLE_TRAJECT_TABLE_ID, "data"),
+        Input(OPTIMIZATION_NEW_RUN_NAME_ID, "value")
     ],
     prevent_initial_call=True,
+    background=True,
+    manager=background_callback_manager,
+    running=[
+        (Output(OPTIMIZE_BUTTON_ID, 'disabled'), True, False),
+    ],
 
 )
 def run_optimize_algorithm(n_clicks: int, stored_data: dict, vr_config: dict,
-                           traject_optimization_table: list[dict]) -> tuple:
+                           traject_optimization_table: list[dict], run_name: str) -> tuple:
     """
     This is a callback to run the optimization algorithm when the user clicks on the "Optimaliseer" button.
 
     :param n_clicks: dummy input to trigger the callback upon clicking.
     :param stored_data: data from the database.
     :param vr_config: serialized VrConfig object.
+    :param traject_optimization_table: data from the optimization table on the dashboard.
+    :param run_name: name of the new optimization run.
 
     :return:
     """
@@ -65,7 +76,7 @@ def run_optimize_algorithm(n_clicks: int, stored_data: dict, vr_config: dict,
 
         # 3. Run optimization
         api = ApiRunWorkflows(_vr_config)
-        api.run_optimization(selected_measures)
+        api.run_optimization(run_name, selected_measures)
 
         # 4. Update the selection Dropwdown with all the names of the optimization runs
         _names_optimization_run = get_name_optimization_runs(_vr_config)

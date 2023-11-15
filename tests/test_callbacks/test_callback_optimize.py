@@ -56,7 +56,7 @@ optimization_table_2 = [{'section_col': '1A', 'reinforcement_col': 'yes', 'measu
 
 class TestCallbackOptimize:
 
-    @pytest.mark.skip(reason="slow")
+    # @pytest.mark.skip(reason="slow")
     @pytest.mark.slow
     def test_run_optimize_algorithm(self):
         """
@@ -65,7 +65,9 @@ class TestCallbackOptimize:
         """
         _dike_data = json.load(
             open(Path(__file__).parent.parent / 'data/Case_38_1_sterker_VZG2/reference' / 'dike_data.json'))
-        _path_config = Path(__file__).parent.parent / 'data/TestCase1_38-1_no_housing_test' / 'vr_config.json'
+        # _path_config = Path(__file__).parent.parent / 'data/TestCase1_38-1_no_housing_test' / 'vr_config.json'
+        _path_config = Path(
+            r'C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\vr_run_optimize\vr_config.json')
 
         # load json:
         with open(_path_config, 'r') as f:
@@ -77,6 +79,7 @@ class TestCallbackOptimize:
                                           stored_data=_dike_data,
                                           vr_config=_vr_config,
                                           traject_optimization_table=optimization_table_1,
+                                          run_name='test_run',
                                           )
 
         ctx = copy_context()
