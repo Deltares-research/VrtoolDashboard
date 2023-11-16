@@ -154,13 +154,13 @@ class DikeSectionImporter(OrmImporterProtocol):
                 f"Sectie {section_data.id} niet gevonden in de optimalisatie")  # TODO: reassign the betas to those of the initial assessment.
 
         _optimum_section_optimization_steps = (OptimizationStep
-                                               .select()
-                                               .join(OptimizationSelectedMeasure, JOIN.INNER, on=(
+        .select()
+        .join(OptimizationSelectedMeasure, JOIN.INNER, on=(
                 OptimizationStep.optimization_selected_measure_id == OptimizationSelectedMeasure.id))
-                                               .where(
+        .where(
             (OptimizationSelectedMeasure.optimization_run == self.run_id_dsn) & (
                     OptimizationStep.step_number == _optimum_section_step_number))
-                                               )
+        )
 
         return self._get_final_measure(_optimum_section_optimization_steps)
 
@@ -175,9 +175,14 @@ class DikeSectionImporter(OrmImporterProtocol):
         # 1. Get the final step number, default is the one for which the Total Cost is minimal.
         _final_step_number = OptimizationStep.get(OptimizationStep.id == self.final_greedy_step_id).step_number
         _optimization_steps = get_optimization_steps(self.run_id_vr)
+        _optimization_steps = sorted(
+            get_optimization_steps(self.run_id_vr),
+            key=lambda step: step.step_number
+        )
 
         # 2. Get the most optimal optimization step number
         # This is the last step_number (=highest) for the section of interest before the final_step_number
+        # this implies that the _optimum_section_steps are ordered in ascending order of step_number
         _optimum_section_step_number = None
 
         for _optimization_step in _optimization_steps:
@@ -198,8 +203,8 @@ class DikeSectionImporter(OrmImporterProtocol):
                 _optimum_section_step_number = _optimization_step.step_number
 
         if _optimum_section_step_number is None:
-            raise ValueError(
-                f"Sectie {section_data.id} niet gevonden in de optimalisatie")  # TODO: reassign the betas to those of the initial assessment.
+            # In this case, the section has not been reinforced, so the initial assessment is the final measure.
+            return self._get_no_measure_case(section_data)
 
         _optimum_section_optimization_steps = (OptimizationStep
         .select()
@@ -212,6 +217,15 @@ class DikeSectionImporter(OrmImporterProtocol):
 
         # 3. Get all information into a dict based on the optimum optimization steps.
         return self._get_final_measure(_optimum_section_optimization_steps)
+
+    def _get_no_measure_case(self, section_data: SectionData) -> dict:
+
+        _final_measure = self._get_initial_assessment(section_data)
+
+        _final_measure["LCC"] = 0
+        _final_measure["name"] = "Geen maatregel"
+
+        return _final_measure
 
     def _get_final_measure(self, optimization_steps) -> dict:
         """
@@ -389,6 +403,7 @@ class DikeSectionImporter(OrmImporterProtocol):
                                     )
 
         # years: list[int]  # Years for which a reliability result is available (both for initial and measures)
+        print(f"IMPORTING SECTION: {orm_model.section_name}")
         _dike_section.name = orm_model.section_name
         _dike_section.length = orm_model.section_length
         _dike_section.coordinates_rd = self._get_coordinates(orm_model)
