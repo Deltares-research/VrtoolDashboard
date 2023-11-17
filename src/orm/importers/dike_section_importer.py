@@ -352,8 +352,8 @@ class DikeSectionImporter(OrmImporterProtocol):
                 _betas_soil_reinforcement = np.array(
                     [row.beta for row in self._get_mechanism_beta(soil_reinforcement_step, mechanism)])
                 _pf_soil_reinforcement = beta_to_pf(_betas_soil_reinforcement)
-                _pf_combined_solutions = _pf_solution_failure * _pf_with_solution + (
-                        1 - _pf_solution_failure) * _pf_soil_reinforcement
+                _pf_combined_solutions = _pf_solution_failure * _pf_soil_reinforcement + (
+                        1 - _pf_solution_failure) * _pf_with_solution
                 _beta_combined_solutions = pf_to_beta(_pf_combined_solutions)
 
             else:
