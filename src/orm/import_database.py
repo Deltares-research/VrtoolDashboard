@@ -43,9 +43,17 @@ def get_name_optimization_runs(vr_config: VrtoolConfig) -> list[str]:
     open_database(_path_database)
 
     _names = import_optimization_runs_name(orm_model)
+    # Define substrings to remove
+    _substrings_to_remove = ["Veiligheidsrendement", "Doorsnede-eisen"]
 
-    # remove duplicates
-    return list(set(_names))
+    # Remove specified substrings from each element and keep unique prefixes
+    _unique_prefixes = {name.replace(_substrings_to_remove[0], '').replace(_substrings_to_remove[1], '').strip() for
+                        name in _names}
+
+    # Remove empty strings
+    _unique_prefixes = [prefix for prefix in _unique_prefixes if prefix]
+
+    return _unique_prefixes
 
 
 def get_run_optimization_ids(vr_config, optimization_run_name: str) -> tuple[int, int]:
@@ -64,12 +72,16 @@ def get_run_optimization_ids(vr_config, optimization_run_name: str) -> tuple[int
 
     open_database(_path_database)
 
-    _run = orm_model.OptimizationRun.select().where(
-        orm_model.OptimizationRun.name == optimization_run_name,
-    )
+    _vr_run_name = optimization_run_name + ' Veiligheidsrendement'
+    _dsn_run_name = optimization_run_name + ' Doorsnede-eisen'
 
-    _run_id_vr = _run[0].id
-    _run_id_dsn = _run[1].id
+    _run_id_vr = orm_model.OptimizationRun.select().where(
+        orm_model.OptimizationRun.name == _vr_run_name,
+    )[0].id
+
+    _run_id_dsn = orm_model.OptimizationRun.select().where(
+        orm_model.OptimizationRun.name == _dsn_run_name,
+    )[0].id
 
     return _run_id_vr, _run_id_dsn
 

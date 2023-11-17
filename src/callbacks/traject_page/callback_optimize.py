@@ -69,8 +69,7 @@ def run_optimize_algorithm(n_clicks: int, stored_data: dict, vr_config: dict,
 
         # 4. Update the selection Dropwdown with all the names of the optimization runs
         _names_optimization_run = get_name_optimization_runs(_vr_config)
-        _options = [{"label": "Default", "value": "default_run"}, ] + [{"label": name, "value": name} for name in
-                                                                       _names_optimization_run]
+        _options = [{"label": name, "value": name} for name in _names_optimization_run]
 
         return [], _options
 
