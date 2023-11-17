@@ -11,14 +11,14 @@ from vrtool.orm.models import Mechanism, MechanismPerSection, ComputationScenari
     OptimizationSelectedMeasure, OptimizationType, MeasureResult, MeasureResultParameter, MeasureResultSection, \
     StandardMeasure, MeasureType
 from vrtool.orm.models.section_data import SectionData
-from vrtool.orm.orm_controllers import get_optimization_steps
 from vrtool.probabilistic_tools.combin_functions import CombinFunctions
 from vrtool.probabilistic_tools.probabilistic_functions import beta_to_pf, pf_to_beta
 
 from src.linear_objects.dike_section import DikeSection
 from src.orm import models as orm
 from src.orm.models import AssessmentMechanismResult, AssessmentSectionResult
-from src.orm.orm_controller_custom import get_optimization_step_with_lowest_total_cost_table_no_closing
+from src.orm.orm_controller_custom import get_optimization_step_with_lowest_total_cost_table_no_closing, \
+    get_optimization_steps_ordered
 
 
 class DikeSectionImporter(OrmImporterProtocol):
@@ -134,7 +134,7 @@ class DikeSectionImporter(OrmImporterProtocol):
         :param section_data:
         :return: dictionary with the followings keys: "name", "LCC", "Piping", "StabilityInner", "Overflow", "Section"
         """
-        _optimization_steps = get_optimization_steps(optimization_run_id=self.run_id_dsn)
+        _optimization_steps = get_optimization_steps_ordered(self.run_id_dsn)
 
         _optimum_section_step_number = None
 
@@ -176,10 +176,12 @@ class DikeSectionImporter(OrmImporterProtocol):
 
         # 1. Get the final step number, default is the one for which the Total Cost is minimal.
         _final_step_number = OptimizationStep.get(OptimizationStep.id == self.final_greedy_step_id).step_number
-        _optimization_steps = get_optimization_steps(self.run_id_vr)
+
+        _optimization_steps = get_optimization_steps_ordered(self.run_id_vr)
 
         # 2. Get the most optimal optimization step number
         # This is the last step_number (=highest) for the section of interest before the final_step_number
+        # this implies that the _optimum_section_steps are ordered in ascending order of step_number
         _optimum_section_step_number = None
 
         for _optimization_step in _optimization_steps:
@@ -200,8 +202,8 @@ class DikeSectionImporter(OrmImporterProtocol):
                 _optimum_section_step_number = _optimization_step.step_number
 
         if _optimum_section_step_number is None:
-            raise ValueError(
-                f"Sectie {section_data.id} niet gevonden in de optimalisatie")  # TODO: reassign the betas to those of the initial assessment.
+            # In this case, the section has not been reinforced, so the initial assessment is the final measure.
+            return self._get_no_measure_case(section_data)
 
         _optimum_section_optimization_steps = (OptimizationStep
         .select()
@@ -214,6 +216,15 @@ class DikeSectionImporter(OrmImporterProtocol):
 
         # 3. Get all information into a dict based on the optimum optimization steps.
         return self._get_final_measure(_optimum_section_optimization_steps)
+
+    def _get_no_measure_case(self, section_data: SectionData) -> dict:
+
+        _final_measure = self._get_initial_assessment(section_data)
+
+        _final_measure["LCC"] = 0
+        _final_measure["name"] = "Geen maatregel"
+
+        return _final_measure
 
     def _get_final_measure(self, optimization_steps) -> dict:
         """
