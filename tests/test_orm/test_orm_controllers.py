@@ -67,7 +67,7 @@ class TestOrmControllers:
         vr_config.input_directory = Path(__file__).parent.parent / "data/TestCase1_38-1_no_housing"
 
         # 2. Define test
-        id_vr, id_dsn = get_run_optimization_ids(vr_config, optimization_run_name="Single opt. at: 2023-10-31 09:34:05")
+        id_vr, id_dsn = get_run_optimization_ids(vr_config, optimization_run_name="Basisberekening Veiligheidsrendement")
 
         # 3. Assert
         assert isinstance(id_vr, int)
