@@ -88,7 +88,7 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
         _initial_results = section.initial_assessment
 
         if _initial_results is not None:
-            #TODO: Refactor this when moving to database format and handling mechanism types
+            # TODO: Refactor this when moving to database format and handling mechanism types
             if mechanism_type == Mechanism.REVETMENT.name and not section.revetment:
                 _color = 'grey'
                 _hovertemplate = f'Vaknaam {section.name}<br>' \
@@ -118,7 +118,8 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
 
         add_section_trace(fig, section, name=dike_traject.name, color=_color, hovertemplate=_hovertemplate)
 
-    add_colorscale_bar(fig, result_type, ColorBarResultType.RELIABILITY.name, SubResultType.ABSOLUTE.name, dike_traject.lower_bound_value)
+    add_colorscale_bar(fig, result_type, ColorBarResultType.RELIABILITY.name, SubResultType.ABSOLUTE.name,
+                       dike_traject.lower_bound_value)
 
     # Update layout of the figure and add token for mapbox
     _middle_point = get_middle_point(dike_traject.dike_sections)
@@ -162,7 +163,7 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
 
         if _measure_results is not None:
 
-            #TODO: Refactor this when moving to database format and handling mechanism types
+            # TODO: Refactor this when moving to database format and handling mechanism types
             if mechanism_type == Mechanism.REVETMENT.name and not section.revetment:
                 _color = 'grey'
                 _hovertemplate = f'Vaknaam {section.name}<br>' \
@@ -175,7 +176,9 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
                     _color, _hovertemplate = get_no_data_info(section)
 
                 elif colorbar_result_type == ColorBarResultType.RELIABILITY.name and sub_result_type == SubResultType.ABSOLUTE.name:
-                    _color, _hovertemplate = get_color_hover_absolute_reliability(section, _beta_section, _measure_results, dike_traject.lower_bound_value)
+                    _color, _hovertemplate = get_color_hover_absolute_reliability(section, _beta_section,
+                                                                                  _measure_results,
+                                                                                  dike_traject.lower_bound_value)
 
                 elif colorbar_result_type == ColorBarResultType.RELIABILITY.name and sub_result_type == SubResultType.RATIO.name:
                     _color, _hovertemplate = get_color_hover_prob_ratio(section, _year_index, mechanism_type)
@@ -313,18 +316,18 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
         # convert in GWS coordinates:
 
         _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(section.trajectory_rd, buffersize=60)
-        if "2025" in measure_results['name']:
+        if measure_results['investment_year'] == 0:
             _color = '#008000'  # Green
             _showlegend = legend_display.get("2025")
             legend_display["2025"] = False
             _name = "Grondversterking binnenwaarts 2025"
-        elif "2045" in measure_results['name']:
+        elif measure_results['investment_year'] == 20:
             _color = '#bfdbbf'  # Lighter green
             _showlegend = legend_display.get("2045")
             legend_display["2045"] = False
             _name = "Grondversterking binnenwaarts 2045"
         else:
-            raise ValueError("2025 or 2045 must be in the name of the measure")
+            raise NotImplementedError("Only Investment year 2025 or 2045 are supported for now")
 
         fig.add_trace(go.Scattermapbox(
             name=_name,
@@ -553,7 +556,8 @@ def update_layout_map_box(fig: go.Figure, center: tuple[float, float], zoom: int
         ))
 
 
-def add_colorscale_bar(fig: go.Figure, result_type: str, colorbar_result_type: str, sub_result_type: str, lower_bound_pf: float):
+def add_colorscale_bar(fig: go.Figure, result_type: str, colorbar_result_type: str, sub_result_type: str,
+                       lower_bound_pf: float):
     """Add a dummy scatter trace to the figure to show the colorscale bar
 
     :param fig: go.Figure object.
@@ -706,7 +710,7 @@ def add_colorscale_bar_berm_widening(fig: go.Figure):
     marker = dict(
         colorscale='Greens',
         colorbar=dict(
-            title="Kruinverhoging (m)",
+            title="Bermverbreding (m)",
             titleside='right',
             tickmode='array',
             tickvals=[0, 10, 20, 30],
@@ -854,7 +858,8 @@ def get_color_hover_prob_ratio(section: DikeSection, year_index: int, mechanism_
     return _color, _hovertemplate
 
 
-def get_color_hover_absolute_reliability(section: DikeSection, beta_section: float, measure_results: dict, pf_lower_bound: float) -> Tuple[
+def get_color_hover_absolute_reliability(section: DikeSection, beta_section: float, measure_results: dict,
+                                         pf_lower_bound: float) -> Tuple[
     str, str]:
     _color = get_reliability_color(beta_section, pf_lower_bound)
 

@@ -103,15 +103,25 @@ class DikeSectionImporter(OrmImporterProtocol):
                 (MeasureResultParameter.measure_result_id == measure_result.id) &
                 (MeasureResultParameter.name.in_(names_to_search))
             )
+
+            params_dberm = MeasureResultParameter.select().where(
+                (MeasureResultParameter.measure_result_id == measure_result.id) &
+                (MeasureResultParameter.name == "DBERM")
+            )
+            params_dcrest = MeasureResultParameter.select().where(
+                (MeasureResultParameter.measure_result_id == measure_result.id) &
+                (MeasureResultParameter.name == "DCREST")
+            )
+
             if params.count() > 0:
-                _params['dberm'] = params[0].value
-                _params['dcrest'] = params[1].value
+                _params['dberm'] = params_dberm[0].value
+                _params['dcrest'] = params_dcrest[0].value
+                return _params
 
             else:
                 _params['dberm'] = None
                 _params['dcrest'] = None
-
-        return _params
+                return _params
 
     def _get_vzg_parameters(self) -> tuple[float, float]:
         _vzg_params = (StandardMeasure.select(StandardMeasure.prob_of_solution_failure,
@@ -242,15 +252,30 @@ class DikeSectionImporter(OrmImporterProtocol):
 
         if optimization_steps.count() == 1:
             _final_measure["name"] = self._get_single_measure(optimization_steps[0]).name
+            _final_measure['investment_year'] = self._get_investment_year(optimization_steps[0])
 
         elif optimization_steps.count() == 2:
             _final_measure["name"] = self._get_combined_measure_name(optimization_steps)
+            _year_1 = self._get_investment_year(optimization_steps[0])
+            _year_2 = self._get_investment_year(optimization_steps[1])
+            _final_measure['investment_year'] = min([_year_1, _year_2])
 
         else:
             raise ValueError(f"Unexpected number of optimum steps: {optimization_steps.count()}")
 
         _final_measure.update(self._get_measure_parameters(optimization_steps))
         return _final_measure
+
+    def _get_investment_year(self, optimization_step: OptimizationStep) -> int:
+        """
+        Get the investment year of the optimization step.
+        :param optimization_step: optimization step for which the investment year is retrieved.
+        :return: investment year
+        """
+        _selected_optimization_measure = OptimizationSelectedMeasure.select().where(
+            OptimizationSelectedMeasure.id == optimization_step.optimization_selected_measure_id).get()
+
+        return _selected_optimization_measure.investment_year
 
     def _get_mechanism_beta(self, optimization_step: OptimizationStep, mechanism: str) -> Iterator[
         orm.OptimizationStepResultMechanism]:

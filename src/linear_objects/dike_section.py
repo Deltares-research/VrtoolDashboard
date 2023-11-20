@@ -49,7 +49,7 @@ class DikeSection(BaseLinearObject):
             'initial_assessment': self.initial_assessment,
             'final_measure_veiligheidsrendement': self.final_measure_veiligheidsrendement,
             'final_measure_doorsnede': self.final_measure_doorsnede,
-            'years': self.years
+            'years': self.years,
         }
 
     @staticmethod
