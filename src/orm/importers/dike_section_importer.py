@@ -103,15 +103,25 @@ class DikeSectionImporter(OrmImporterProtocol):
                 (MeasureResultParameter.measure_result_id == measure_result.id) &
                 (MeasureResultParameter.name.in_(names_to_search))
             )
+
+            params_dberm = MeasureResultParameter.select().where(
+                (MeasureResultParameter.measure_result_id == measure_result.id) &
+                (MeasureResultParameter.name == "DBERM")
+            )
+            params_dcrest = MeasureResultParameter.select().where(
+                (MeasureResultParameter.measure_result_id == measure_result.id) &
+                (MeasureResultParameter.name == "DCREST")
+            )
+
             if params.count() > 0:
-                _params['dberm'] = params[0].value
-                _params['dcrest'] = params[1].value
+                _params['dberm'] = params_dberm[0].value
+                _params['dcrest'] = params_dcrest[0].value
+                return _params
 
             else:
                 _params['dberm'] = None
                 _params['dcrest'] = None
-
-        return _params
+                return _params
 
     def _get_vzg_parameters(self) -> tuple[float, float]:
         _vzg_params = (StandardMeasure.select(StandardMeasure.prob_of_solution_failure,
