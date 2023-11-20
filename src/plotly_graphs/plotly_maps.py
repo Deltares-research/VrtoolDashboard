@@ -316,18 +316,18 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
         # convert in GWS coordinates:
 
         _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(section.trajectory_rd, buffersize=60)
-        if "2025" in measure_results['name']:
+        if measure_results['investment_year'] == 0:
             _color = '#008000'  # Green
             _showlegend = legend_display.get("2025")
             legend_display["2025"] = False
             _name = "Grondversterking binnenwaarts 2025"
-        elif "2045" in measure_results['name']:
+        elif measure_results['investment_year'] == 20:
             _color = '#bfdbbf'  # Lighter green
             _showlegend = legend_display.get("2045")
             legend_display["2045"] = False
             _name = "Grondversterking binnenwaarts 2045"
         else:
-            raise ValueError("2025 or 2045 must be in the name of the measure")
+            raise NotImplementedError("Only Investment year 2025 or 2045 are supported for now")
 
         fig.add_trace(go.Scattermapbox(
             name=_name,
