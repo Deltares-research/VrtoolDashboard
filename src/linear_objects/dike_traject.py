@@ -18,6 +18,7 @@ class DikeTraject(BaseLinearObject):
     dike_sections: list[DikeSection]
     reinforcement_order_vr: list[str]
     reinforcement_order_dsn: list[str]
+    run_name: str = None
 
     def serialize(self) -> dict:
         """Serialize the DikeTraject object to a dict, in order to be saved in dcc.Store"""
@@ -28,6 +29,7 @@ class DikeTraject(BaseLinearObject):
             'reinforcement_order_dsn': self.reinforcement_order_dsn,
             'signalering_value': self.signalering_value,
             'lower_bound_value': self.lower_bound_value,
+            'run_name': self.run_name
         }
 
     @staticmethod
@@ -42,7 +44,9 @@ class DikeTraject(BaseLinearObject):
                            reinforcement_order_vr=data['reinforcement_order_vr'],
                            reinforcement_order_dsn=data['reinforcement_order_dsn'],
                            signalering_value=data["signalering_value"],
-                           lower_bound_value=data["lower_bound_value"])
+                           lower_bound_value=data["lower_bound_value"],
+                           run_name=data["run_name"]
+                           )
 
     def calc_traject_probability_array(self, calc_type: str):
 

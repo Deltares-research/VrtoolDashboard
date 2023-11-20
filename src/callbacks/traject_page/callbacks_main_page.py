@@ -58,7 +58,8 @@ def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
             _mandatory_config_args = ['traject', 'input_directory', 'input_database_name', 'excluded_mechanisms']
             for _arg in _mandatory_config_args:
                 if _arg not in json_content.keys():
-                    _alert = dbc.Alert(f"Config.json file is missing argument <{_arg}>", dismissable=True, id='123456', color="danger")
+                    _alert = dbc.Alert(f"Config.json file is missing argument <{_arg}>", dismissable=True, id='123456',
+                                       color="danger")
 
                     return _alert, False, {}, "", []
 
@@ -69,12 +70,11 @@ def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
             vr_config.excluded_mechanisms = json_content['excluded_mechanisms']
 
             # _dike_traject = get_dike_traject_from_config_ORM(vr_config, run_id_dsn=2, run_is_vr=1)
-            _value_selection_run_dropwdown = "default_run"
+            _value_selection_run_dropwdown = "Basisberekening"
 
             # Update the selection Dropwdown with all the names of the optimization runs
             _names_optimization_run = get_name_optimization_runs(vr_config)
-            _options = [{"label": "Default", "value": "default_run"}, ] + [{"label": name, "value": name} for name in
-                                                                           _names_optimization_run]
+            _options = [{"label": name, "value": name} for name in _names_optimization_run]
 
             return html.Div(
                 dcc.Store(id='stored-data',
@@ -109,7 +109,7 @@ def selection_traject_run(name: str, vr_config) -> dict:
     _vr_config.input_database_name = vr_config['input_database_name']
     _vr_config.excluded_mechanisms = [MechanismEnum.REVETMENT, MechanismEnum.HYDRAULIC_STRUCTURES]
 
-    if name == "default_run":
+    if name == "Basisberekening":
         _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=2, run_is_vr=1)
 
     elif name in get_name_optimization_runs(_vr_config):
@@ -117,6 +117,8 @@ def selection_traject_run(name: str, vr_config) -> dict:
         _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=run_id_dsn, run_is_vr=run_id_vr)
     else:
         raise ValueError("Name of the Optimization run is not correct.")
+
+    _dike_traject.run_name = name
     return _dike_traject.serialize()
 
 
