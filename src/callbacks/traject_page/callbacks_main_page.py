@@ -117,6 +117,8 @@ def selection_traject_run(name: str, vr_config) -> dict:
         _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=run_id_dsn, run_is_vr=run_id_vr)
     else:
         raise ValueError("Name of the Optimization run is not correct.")
+
+    _dike_traject.run_name = name
     return _dike_traject.serialize()
 
 

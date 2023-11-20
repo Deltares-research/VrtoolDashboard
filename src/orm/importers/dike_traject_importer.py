@@ -170,6 +170,7 @@ class DikeTrajectImporter(OrmImporterProtocol):
             _dike_traject.reinforcement_order_dsn = []
             _dike_traject.reinforcement_order_vr = []
             final_greedy_step_id = None
+            _dike_traject.run_name_dsn = None
 
         _dike_traject.dike_sections = self._import_dike_section_list(_selected_sections, _traject_gdf,
                                                                      final_greedy_step_id=final_greedy_step_id)
