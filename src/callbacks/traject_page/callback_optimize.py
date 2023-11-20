@@ -5,14 +5,14 @@ from dash import Output, Input, State
 from vrtool.api import ApiRunWorkflows
 from vrtool.common.enums import MechanismEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
-from vrtool.orm.orm_controllers import export_results_optimization, clear_optimization_results
+from vrtool.orm.orm_controllers import export_results_optimization, clear_optimization_results, open_database
 
 from src.app import app
 from src.component_ids import OPTIMIZE_BUTTON_ID, STORE_CONFIG, DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID, \
     EDITABLE_TRAJECT_TABLE_ID, DROPDOWN_SELECTION_RUN_ID, NAME_NEW_OPTIMIZATION_RUN_ID
 from src.constants import REFERENCE_YEAR
 from src.orm.import_database import get_dike_traject_from_config_ORM, get_measure_result_ids_per_section, \
-    get_name_optimization_runs
+    get_name_optimization_runs, get_all_default_selected_measure
 
 
 @app.callback(
@@ -64,6 +64,7 @@ def run_optimize_algorithm(n_clicks: int, optimization_run_name: str, stored_dat
 
         # 2. Get all selected measures ids from optimization table in the dashboard
         selected_measures = get_selected_measure(_vr_config, traject_optimization_table)
+        selected_measures = get_all_default_selected_measure(_vr_config)
 
         # 3. Run optimization
         api = ApiRunWorkflows(_vr_config)
@@ -106,3 +107,4 @@ def get_selected_measure(vr_config: VrtoolConfig, dike_traject_table: list) -> l
                 list_selected_measures.append((measure_result_id, _investment_year))
 
         return list_selected_measures
+
