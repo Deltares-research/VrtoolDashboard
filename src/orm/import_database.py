@@ -116,3 +116,25 @@ def get_measure_result_ids_per_section(vr_config: VrtoolConfig, section_name: st
     ))
 
     return [measure_resutl.id for measure_resutl in _measure_results]
+
+
+
+def get_all_default_selected_measure(_vr_config: VrtoolConfig) -> list[tuple]:
+    """
+    Returns a list of tuple (measure_result_id, investment_year) for all the default selected measures in the ORM, that
+    is to say the measures for optimization run id = 1.
+    :param _vr_config:
+    :return:
+    """
+    _path_dir = Path(_vr_config.input_directory)
+    _path_database = _path_dir.joinpath(_vr_config.input_database_name)
+
+    open_database(_path_database)
+
+    _selected_optimization_measure = orm_model.OptimizationSelectedMeasure.select()
+    _meas_list = []
+    for meas in _selected_optimization_measure:
+        if meas.optimization_run_id == 1:
+            _meas_list.append((meas.measure_result_id, meas.investment_year))
+
+    return _meas_list
