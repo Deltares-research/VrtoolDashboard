@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import dash
-from dash import Output, Input
+from dash import Output, Input, State
 from dash.long_callback import DiskcacheLongCallbackManager
 from vrtool.api import ApiRunWorkflows
 from vrtool.common.enums import MechanismEnum
@@ -9,7 +9,7 @@ from vrtool.defaults.vrtool_config import VrtoolConfig
 
 from src.app import app, background_callback_manager
 from src.component_ids import OPTIMIZE_BUTTON_ID, STORE_CONFIG, DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID, \
-    NAME_NEW_OPTIMIZATION_RUN_ID, EDITABLE_TRAJECT_TABLE_ID, DROPDOWN_SELECTION_RUN_ID
+    NAME_NEW_OPTIMIZATION_RUN_ID, EDITABLE_TRAJECT_TABLE_ID, DROPDOWN_SELECTION_RUN_ID, OPTIMIZE_MODAL_ID
 from src.constants import REFERENCE_YEAR
 from src.orm.import_database import get_measure_result_ids_per_section, \
     get_name_optimization_runs, get_all_default_selected_measure
@@ -17,7 +17,8 @@ from src.orm.import_database import get_measure_result_ids_per_section, \
 
 @app.callback(
     output=[Output(DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID, 'children'),
-            Output(DROPDOWN_SELECTION_RUN_ID, "options", allow_duplicate=True)
+            Output(DROPDOWN_SELECTION_RUN_ID, "options", allow_duplicate=True),
+            Output(OPTIMIZE_MODAL_ID, "is_open"),
             ],
     inputs=[
         Input(OPTIMIZE_BUTTON_ID, "n_clicks"),
@@ -26,12 +27,13 @@ from src.orm.import_database import get_measure_result_ids_per_section, \
         Input(STORE_CONFIG, "data"),
         Input(EDITABLE_TRAJECT_TABLE_ID, "data"),
     ],
+    # state=[State(OPTIMIZE_MODAL_ID, "is_open")],
     prevent_initial_call=True,
-    background=True,
-    manager=background_callback_manager,
-    running=[
-        (Output(OPTIMIZE_BUTTON_ID, 'disabled'), True, False),
-    ],
+    # background=True,
+    # manager=background_callback_manager,
+    # running=[
+    #     (Output(OPTIMIZE_BUTTON_ID, 'disabled'), True, False),
+    # ],
 
 )
 def run_optimize_algorithm(n_clicks: int, optimization_run_name: str, stored_data: dict, vr_config: dict,
@@ -74,13 +76,13 @@ def run_optimize_algorithm(n_clicks: int, optimization_run_name: str, stored_dat
 
         # 3. Run optimization
         api = ApiRunWorkflows(_vr_config)
-        api.run_optimization(optimization_run_name, selected_measures)
+        # api.run_optimization(optimization_run_name, selected_measures)
 
         # 4. Update the selection Dropwdown with all the names of the optimization runs
         _names_optimization_run = get_name_optimization_runs(_vr_config)
         _options = [{"label": name, "value": name} for name in _names_optimization_run]
 
-        return [], _options
+        return [], _options, True
 
 
 def get_selected_measure(vr_config: VrtoolConfig, dike_traject_table: list) -> list[tuple[int, int]]:
