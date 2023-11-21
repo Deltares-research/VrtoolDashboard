@@ -11,14 +11,14 @@ from vrtool.orm.models import Mechanism, MechanismPerSection, ComputationScenari
     OptimizationSelectedMeasure, OptimizationType, MeasureResult, MeasureResultParameter, MeasureResultSection, \
     StandardMeasure, MeasureType
 from vrtool.orm.models.section_data import SectionData
-from vrtool.orm.orm_controllers import get_optimization_steps
 from vrtool.probabilistic_tools.combin_functions import CombinFunctions
 from vrtool.probabilistic_tools.probabilistic_functions import beta_to_pf, pf_to_beta
 
 from src.linear_objects.dike_section import DikeSection
 from src.orm import models as orm
 from src.orm.models import AssessmentMechanismResult, AssessmentSectionResult
-from src.orm.orm_controller_custom import get_optimization_step_with_lowest_total_cost_table_no_closing
+from src.orm.orm_controller_custom import get_optimization_step_with_lowest_total_cost_table_no_closing, \
+    get_optimization_steps_ordered
 
 
 class DikeSectionImporter(OrmImporterProtocol):
@@ -71,21 +71,23 @@ class DikeSectionImporter(OrmImporterProtocol):
 
         return _initial_assessment
 
-    def _get_single_measure_name(self, optimization_step: OptimizationStep) -> str:
+    def _get_single_measure(self, optimization_step: OptimizationStep) -> Measure:
+        """Return the measure associated with a given single optimization step"""
+
         measure = (Measure
                    .select()
                    .join(MeasurePerSection)
                    .join(MeasureResult)
                    .join(OptimizationSelectedMeasure)
-                   .where(OptimizationSelectedMeasure.id == optimization_step.id)
-
+                   .where(OptimizationSelectedMeasure.id == optimization_step.optimization_selected_measure_id)
                    .get())
-        return measure.name
+
+        return measure
 
     def _get_combined_measure_name(self, optimization_step: OptimizationStep) -> str:
 
-        name = self._get_single_measure_name(optimization_step[0]) + " + " + self._get_single_measure_name(
-            optimization_step[1])
+        name = self._get_single_measure(optimization_step[0]).name + " + " + self._get_single_measure(
+            optimization_step[1]).name
         return name
 
     def _get_measure_parameters(self, optimization_steps: OptimizationStep) -> dict:
@@ -101,15 +103,25 @@ class DikeSectionImporter(OrmImporterProtocol):
                 (MeasureResultParameter.measure_result_id == measure_result.id) &
                 (MeasureResultParameter.name.in_(names_to_search))
             )
+
+            params_dberm = MeasureResultParameter.select().where(
+                (MeasureResultParameter.measure_result_id == measure_result.id) &
+                (MeasureResultParameter.name == "DBERM")
+            )
+            params_dcrest = MeasureResultParameter.select().where(
+                (MeasureResultParameter.measure_result_id == measure_result.id) &
+                (MeasureResultParameter.name == "DCREST")
+            )
+
             if params.count() > 0:
-                _params['dberm'] = params[0].value
-                _params['dcrest'] = params[1].value
+                _params['dberm'] = params_dberm[0].value
+                _params['dcrest'] = params_dcrest[0].value
+                return _params
 
             else:
                 _params['dberm'] = None
                 _params['dcrest'] = None
-
-        return _params
+                return _params
 
     def _get_vzg_parameters(self) -> tuple[float, float]:
         _vzg_params = (StandardMeasure.select(StandardMeasure.prob_of_solution_failure,
@@ -132,7 +144,7 @@ class DikeSectionImporter(OrmImporterProtocol):
         :param section_data:
         :return: dictionary with the followings keys: "name", "LCC", "Piping", "StabilityInner", "Overflow", "Section"
         """
-        _optimization_steps = get_optimization_steps(optimization_run_id=self.run_id_dsn)
+        _optimization_steps = get_optimization_steps_ordered(self.run_id_dsn)
 
         _optimum_section_step_number = None
 
@@ -150,17 +162,16 @@ class DikeSectionImporter(OrmImporterProtocol):
                 _optimum_section_step_number = _optimization_step.step_number
 
         if _optimum_section_step_number is None:
-            raise ValueError(
-                f"Sectie {section_data.id} niet gevonden in de optimalisatie")  # TODO: reassign the betas to those of the initial assessment.
+            return self._get_no_measure_case(section_data)
 
         _optimum_section_optimization_steps = (OptimizationStep
-                                               .select()
-                                               .join(OptimizationSelectedMeasure, JOIN.INNER, on=(
+        .select()
+        .join(OptimizationSelectedMeasure, JOIN.INNER, on=(
                 OptimizationStep.optimization_selected_measure_id == OptimizationSelectedMeasure.id))
-                                               .where(
+        .where(
             (OptimizationSelectedMeasure.optimization_run == self.run_id_dsn) & (
                     OptimizationStep.step_number == _optimum_section_step_number))
-                                               )
+        )
 
         return self._get_final_measure(_optimum_section_optimization_steps)
 
@@ -174,10 +185,12 @@ class DikeSectionImporter(OrmImporterProtocol):
 
         # 1. Get the final step number, default is the one for which the Total Cost is minimal.
         _final_step_number = OptimizationStep.get(OptimizationStep.id == self.final_greedy_step_id).step_number
-        _optimization_steps = get_optimization_steps(self.run_id_vr)
+
+        _optimization_steps = get_optimization_steps_ordered(self.run_id_vr)
 
         # 2. Get the most optimal optimization step number
         # This is the last step_number (=highest) for the section of interest before the final_step_number
+        # this implies that the _optimum_section_steps are ordered in ascending order of step_number
         _optimum_section_step_number = None
 
         for _optimization_step in _optimization_steps:
@@ -198,8 +211,8 @@ class DikeSectionImporter(OrmImporterProtocol):
                 _optimum_section_step_number = _optimization_step.step_number
 
         if _optimum_section_step_number is None:
-            raise ValueError(
-                f"Sectie {section_data.id} niet gevonden in de optimalisatie")  # TODO: reassign the betas to those of the initial assessment.
+            # In this case, the section has not been reinforced, so the initial assessment is the final measure.
+            return self._get_no_measure_case(section_data)
 
         _optimum_section_optimization_steps = (OptimizationStep
         .select()
@@ -212,6 +225,15 @@ class DikeSectionImporter(OrmImporterProtocol):
 
         # 3. Get all information into a dict based on the optimum optimization steps.
         return self._get_final_measure(_optimum_section_optimization_steps)
+
+    def _get_no_measure_case(self, section_data: SectionData) -> dict:
+
+        _final_measure = self._get_initial_assessment(section_data)
+
+        _final_measure["LCC"] = 0
+        _final_measure["name"] = "Geen maatregel"
+
+        return _final_measure
 
     def _get_final_measure(self, optimization_steps) -> dict:
         """
@@ -228,16 +250,31 @@ class DikeSectionImporter(OrmImporterProtocol):
         _final_measure["LCC"] = self._get_section_lcc(optimization_steps[0])
 
         if optimization_steps.count() == 1:
-            _final_measure["name"] = self._get_single_measure_name(optimization_steps[0])
+            _final_measure["name"] = self._get_single_measure(optimization_steps[0]).name
+            _final_measure['investment_year'] = self._get_investment_year(optimization_steps[0])
 
         elif optimization_steps.count() == 2:
             _final_measure["name"] = self._get_combined_measure_name(optimization_steps)
+            _year_1 = self._get_investment_year(optimization_steps[0])
+            _year_2 = self._get_investment_year(optimization_steps[1])
+            _final_measure['investment_year'] = min([_year_1, _year_2])
 
         else:
             raise ValueError(f"Unexpected number of optimum steps: {optimization_steps.count()}")
 
         _final_measure.update(self._get_measure_parameters(optimization_steps))
         return _final_measure
+
+    def _get_investment_year(self, optimization_step: OptimizationStep) -> int:
+        """
+        Get the investment year of the optimization step.
+        :param optimization_step: optimization step for which the investment year is retrieved.
+        :return: investment year
+        """
+        _selected_optimization_measure = OptimizationSelectedMeasure.select().where(
+            OptimizationSelectedMeasure.id == optimization_step.optimization_selected_measure_id).get()
+
+        return _selected_optimization_measure.investment_year
 
     def _get_mechanism_beta(self, optimization_step: OptimizationStep, mechanism: str) -> Iterator[
         orm.OptimizationStepResultMechanism]:
@@ -318,39 +355,47 @@ class DikeSectionImporter(OrmImporterProtocol):
         _final_measure = {}
         _dict_probabilities = {}
 
-        section = (SectionData
-        .select()
-        .join(MeasurePerSection)
-        .join(MeasureResult)
-        .join(OptimizationSelectedMeasure)
-        .where(
-            OptimizationSelectedMeasure.id == optimization_steps[0].optimization_selected_measure_id)
-        ).get()
-
         for mechanism in ["Piping", "StabilityInner", "Overflow"]:
-            _mechanism_id = Mechanism.get(Mechanism.name == mechanism).id
-            _mechanism_per_section_id = MechanismPerSection.get(
-                (MechanismPerSection.section == section.id) & (
-                        MechanismPerSection.mechanism == _mechanism_id)).id
 
-            _query_initial_betas = (AssessmentMechanismResult
-                                    .select(AssessmentMechanismResult.time, AssessmentMechanismResult.beta)
-                                    .where(
-                AssessmentMechanismResult.mechanism_per_section == _mechanism_per_section_id)
-                                    .order_by(AssessmentMechanismResult.time))
-            # It doesnt matter which one is which because we multiply their pf anyway
-            _measure_1_pf = np.array([beta_to_pf(row.beta) for row in
-                                      self._get_mechanism_beta(optimization_steps[0], mechanism)])
-            _measure_2_pf = np.array([beta_to_pf(row.beta) for row in
-                                      self._get_mechanism_beta(optimization_steps[1], mechanism)])
+            _measure_1_type = self._get_mesure_type_from_optimization_step(
+                optimization_steps[0])  # Vertical Geotextile
+            _measure_2_type = self._get_mesure_type_from_optimization_step(optimization_steps[1])
 
-            _initial_pf = np.array([beta_to_pf(row.beta) for row in _query_initial_betas])
-            pf_solution_failure, pf_with_solution = self._get_vzg_parameters()
+            if _measure_1_type.name in ["Soil reinforcement", "Soil reinforcement with stability screen"]:
+                soil_reinforcement_step = optimization_steps[0]
+                vzg_step = optimization_steps[1]
+            elif _measure_2_type.name in ["Soil reinforcement", "Soil reinforcement with stability screen"]:
+                soil_reinforcement_step = optimization_steps[1]
+                vzg_step = optimization_steps[0]
+            else:
+                raise ValueError("Something went wrong with the combination of the measures")
 
-            pf_vzg = pf_solution_failure * _initial_pf + (1 - pf_solution_failure) * pf_with_solution
-            pf_combined_solutions = _measure_1_pf * _measure_2_pf + (1 - pf_solution_failure) * pf_vzg
-            _final_measure[mechanism] = pf_to_beta(pf_combined_solutions)
-            _dict_probabilities[mechanism] = pf_combined_solutions
+            if mechanism == "Piping" and self._get_mesure_type_from_optimization_step(
+                    vzg_step).name == "Vertical Geotextile":
+                _pf_solution_failure, _pf_with_solution = self._get_vzg_parameters()
+                _betas_soil_reinforcement = np.array(
+                    [row.beta for row in self._get_mechanism_beta(soil_reinforcement_step, mechanism)])
+                _pf_soil_reinforcement = beta_to_pf(_betas_soil_reinforcement)
+                _pf_combined_solutions = _pf_solution_failure * _pf_soil_reinforcement + (
+                        1 - _pf_solution_failure) * _pf_with_solution
+                _beta_combined_solutions = pf_to_beta(_pf_combined_solutions)
+
+            else:
+
+                _betas_1 = np.array([row.beta for row in
+                                     self._get_mechanism_beta(optimization_steps[0], mechanism)])
+                _betas_2 = np.array([row.beta for row in
+                                     self._get_mechanism_beta(optimization_steps[1], mechanism)])
+
+                _beta_combined_solutions = np.maximum(
+                    _betas_1,
+                    _betas_2
+                )
+
+                _pf_combined_solutions = beta_to_pf(_beta_combined_solutions)
+
+            _final_measure[mechanism] = _beta_combined_solutions
+            _dict_probabilities[mechanism] = _pf_combined_solutions
 
         section = CombinFunctions.combine_probabilities(_dict_probabilities, tuple(_dict_probabilities.keys()))
 
@@ -359,6 +404,18 @@ class DikeSectionImporter(OrmImporterProtocol):
         _final_measure["Section"] = [pf_to_beta(pf_section) for pf_section in section]
 
         return _final_measure
+
+    def _get_mesure_type_from_optimization_step(self, optimization_step: OptimizationStep) -> MeasureType:
+        """
+        Get the measure type from the optimization step
+        :param optimization_step:
+        :return:
+        """
+        measure = self._get_single_measure(optimization_step)
+
+        measure_type = MeasureType.get(MeasureType.id == measure.measure_type_id)
+
+        return measure_type
 
     def _get_coordinates(self, section_data: SectionData) -> list[tuple[float, float]]:
         """

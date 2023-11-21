@@ -5,7 +5,6 @@ from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.orm.io.importers.optimization.optimization_step_importer import OptimizationStepImporter
 from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol
 from vrtool.orm.models import SectionData, MeasurePerSection
-from vrtool.orm.orm_controllers import get_optimization_steps
 
 from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject
@@ -16,6 +15,7 @@ from src.orm.models.dike_traject_info import DikeTrajectInfo
 
 import geopandas as gpd
 
+from src.orm.orm_controller_custom import get_optimization_steps_ordered
 from src.utils.utils import get_signal_value
 
 
@@ -75,9 +75,10 @@ class DikeTrajectImporter(OrmImporterProtocol):
 
         return _traject_gdf[["geometry", "section_name"]]
 
-    def _get_reinforcement_section_order_dsn(self, run_id: int) -> list[str]:
+    def _get_reinforcement_section_order_dsn(self) -> list[str]:
         """Get the reinforcement order of the section names for Doorsnede Eisen"""
-        _optimization_steps = get_optimization_steps(run_id)
+
+        _optimization_steps = get_optimization_steps_ordered(self.run_id_dsn)
 
         _ordered_section_names = [
             SectionData.select(SectionData.section_name)
@@ -95,14 +96,14 @@ class DikeTrajectImporter(OrmImporterProtocol):
 
         return _ordered_section_names
 
-    def _get_reinforcement_section_order_vr(self, run_id) -> tuple[list[str], int]:
+    def _get_reinforcement_section_order_vr(self) -> tuple[list[str], int]:
         """Get the reinforcement order of the section names for Veiligheidsrendement and return the final step id of the
          greedy optimization """
-        _optimization_steps = get_optimization_steps(run_id)
+        _optimization_steps = get_optimization_steps_ordered(self.run_id_vr)
 
         _ordered_section_names = []
 
-        _final_step_id = self._get_final_step_vr(run_id)
+        _final_step_id = self._get_final_step_vr()
         _final_step_number = OptimizationStep.get(OptimizationStep.id == _final_step_id).step_number
         for step in _optimization_steps:
 
@@ -119,17 +120,18 @@ class DikeTrajectImporter(OrmImporterProtocol):
 
         return _ordered_section_names, _final_step_id
 
-    def _get_final_step_vr(self, optimization_run_id: int) -> int:
+    def _get_final_step_vr(self) -> int:
         """Get the final step id of the optimization run.
         The final step in this case is the step with the lowest total cost.
-
-        :param optimization_run_id: The id of the optimization run
 
         :return: The id of the final step
         """
 
         _results = []
-        for _optimization_step in get_optimization_steps(optimization_run_id):
+
+        _optimization_steps = get_optimization_steps_ordered(self.run_id_vr)
+
+        for _optimization_step in _optimization_steps:
             _as_df = OptimizationStepImporter.import_optimization_step_results_df(
                 _optimization_step
             )
@@ -162,15 +164,13 @@ class DikeTrajectImporter(OrmImporterProtocol):
 
         # check if the table OptimizationRun is empty:
         if orm_model.OptimizationRun.select().exists():
-            _dike_traject.reinforcement_order_dsn = self._get_reinforcement_section_order_dsn(
-                run_id=self.run_id_dsn)
-            _dike_traject.reinforcement_order_vr, final_greedy_step_id = self._get_reinforcement_section_order_vr(
-                run_id=self.run_id_vr)
+            _dike_traject.reinforcement_order_dsn = self._get_reinforcement_section_order_dsn()
+            _dike_traject.reinforcement_order_vr, final_greedy_step_id = self._get_reinforcement_section_order_vr()
         else:
             _dike_traject.reinforcement_order_dsn = []
             _dike_traject.reinforcement_order_vr = []
             final_greedy_step_id = None
-
+            _dike_traject.run_name_dsn = None
 
         _dike_traject.dike_sections = self._import_dike_section_list(_selected_sections, _traject_gdf,
                                                                      final_greedy_step_id=final_greedy_step_id)

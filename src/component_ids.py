@@ -10,3 +10,5 @@ DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID = "dummy_optimize_button_output_id"
 EDITABLE_TRAJECT_TABLE_ID = "editable_traject_table_id"
 
 STORE_CONFIG = "stored-config"
+NAME_NEW_OPTIMIZATION_RUN_ID = "name_new_optimization_run"
+

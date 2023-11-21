@@ -43,9 +43,17 @@ def get_name_optimization_runs(vr_config: VrtoolConfig) -> list[str]:
     open_database(_path_database)
 
     _names = import_optimization_runs_name(orm_model)
+    # Define substrings to remove
+    _substrings_to_remove = ["Veiligheidsrendement", "Doorsnede-eisen"]
 
-    # remove duplicates
-    return list(set(_names))
+    # Remove specified substrings from each element and keep unique prefixes
+    _unique_prefixes = {name.replace(_substrings_to_remove[0], '').replace(_substrings_to_remove[1], '').strip() for
+                        name in _names}
+
+    # Remove empty strings
+    _unique_prefixes = [prefix for prefix in _unique_prefixes if prefix]
+
+    return _unique_prefixes
 
 
 def get_run_optimization_ids(vr_config, optimization_run_name: str) -> tuple[int, int]:
@@ -64,12 +72,16 @@ def get_run_optimization_ids(vr_config, optimization_run_name: str) -> tuple[int
 
     open_database(_path_database)
 
-    _run = orm_model.OptimizationRun.select().where(
-        orm_model.OptimizationRun.name == optimization_run_name,
-    )
+    _vr_run_name = optimization_run_name + ' Veiligheidsrendement'
+    _dsn_run_name = optimization_run_name + ' Doorsnede-eisen'
 
-    _run_id_vr = _run[0].id
-    _run_id_dsn = _run[1].id
+    _run_id_vr = orm_model.OptimizationRun.select().where(
+        orm_model.OptimizationRun.name == _vr_run_name,
+    )[0].id
+
+    _run_id_dsn = orm_model.OptimizationRun.select().where(
+        orm_model.OptimizationRun.name == _dsn_run_name,
+    )[0].id
 
     return _run_id_vr, _run_id_dsn
 
@@ -104,3 +116,25 @@ def get_measure_result_ids_per_section(vr_config: VrtoolConfig, section_name: st
     ))
 
     return [measure_resutl.id for measure_resutl in _measure_results]
+
+
+
+def get_all_default_selected_measure(_vr_config: VrtoolConfig) -> list[tuple]:
+    """
+    Returns a list of tuple (measure_result_id, investment_year) for all the default selected measures in the ORM, that
+    is to say the measures for optimization run id = 1.
+    :param _vr_config:
+    :return:
+    """
+    _path_dir = Path(_vr_config.input_directory)
+    _path_database = _path_dir.joinpath(_vr_config.input_database_name)
+
+    open_database(_path_database)
+
+    _selected_optimization_measure = orm_model.OptimizationSelectedMeasure.select()
+    _meas_list = []
+    for meas in _selected_optimization_measure:
+        if meas.optimization_run_id == 1:
+            _meas_list.append((meas.measure_result_id, meas.investment_year))
+
+    return _meas_list
