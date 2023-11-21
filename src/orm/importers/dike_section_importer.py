@@ -162,8 +162,7 @@ class DikeSectionImporter(OrmImporterProtocol):
                 _optimum_section_step_number = _optimization_step.step_number
 
         if _optimum_section_step_number is None:
-            raise ValueError(
-                f"Sectie {section_data.id} niet gevonden in de optimalisatie")  # TODO: reassign the betas to those of the initial assessment.
+            return self._get_no_measure_case(section_data)
 
         _optimum_section_optimization_steps = (OptimizationStep
         .select()
