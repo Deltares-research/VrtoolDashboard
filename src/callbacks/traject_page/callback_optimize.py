@@ -1,22 +1,18 @@
 from pathlib import Path
 
 import dash
-from dash import Output, Input, State
+from dash import Output, Input
 from dash.long_callback import DiskcacheLongCallbackManager
 from vrtool.api import ApiRunWorkflows
 from vrtool.common.enums import MechanismEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
-from vrtool.orm.orm_controllers import export_results_optimization, clear_optimization_results, open_database
 
 from src.app import app, background_callback_manager
 from src.component_ids import OPTIMIZE_BUTTON_ID, STORE_CONFIG, DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID, \
-    EDITABLE_TRAJECT_TABLE_ID, DROPDOWN_SELECTION_RUN_ID, NAME_NEW_OPTIMIZATION_RUN_ID
-    EDITABLE_TRAJECT_TABLE_ID, DROPDOWN_SELECTION_RUN_ID, OPTIMIZATION_NEW_RUN_NAME_ID
+    NAME_NEW_OPTIMIZATION_RUN_ID, EDITABLE_TRAJECT_TABLE_ID, DROPDOWN_SELECTION_RUN_ID
 from src.constants import REFERENCE_YEAR
-from src.orm.import_database import get_dike_traject_from_config_ORM, get_measure_result_ids_per_section, \
+from src.orm.import_database import get_measure_result_ids_per_section, \
     get_name_optimization_runs, get_all_default_selected_measure
-
-
 
 
 @app.callback(
@@ -117,4 +113,3 @@ def get_selected_measure(vr_config: VrtoolConfig, dike_traject_table: list) -> l
                 list_selected_measures.append((measure_result_id, _investment_year))
 
         return list_selected_measures
-
