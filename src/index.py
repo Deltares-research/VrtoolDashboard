@@ -2,6 +2,7 @@ from dash import html, dcc
 import dash_bootstrap_components as dbc
 
 from src.component_ids import STORE_CONFIG
+from src.layouts.layout_modal_optimize import modal_optimize
 from src.layouts.layout_navigation_bar import nav_bar_layout
 from src.layouts.layout_main_page import make_layout_main_page
 
@@ -22,6 +23,7 @@ app.layout = dbc.Container(
         dcc.Store(id=STORE_CONFIG, data=None),
         nav_bar_layout,
         make_layout_main_page(),
+        modal_optimize,  # keep this line to import the modal as closed to the app by default
     ],
     fluid=True,
 )
