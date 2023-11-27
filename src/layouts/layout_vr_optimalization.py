@@ -6,12 +6,6 @@ from src.component_ids import OPTIMIZE_BUTTON_ID, DUMMY_OPTIMIZE_BUTTON_OUTPUT_I
     NAME_NEW_OPTIMIZATION_RUN_ID
 from src.constants import Measures
 
-row1 = html.Tr([html.Td("01A"), html.Td("Aan"), html.Td("Bermverbreding"), html.Td("2025")])
-row2 = html.Tr([html.Td("01B"), html.Td("Uit"), html.Td("VZG"), html.Td("2025")])
-row3 = html.Tr([html.Td("2"), html.Td("Aan"), html.Td("Stabiliteitsscherm"), html.Td("2035")])
-row4 = html.Tr([html.Td("3"), html.Td("Aan"), html.Td("VZG"), html.Td("2035")])
-
-table_body = [html.Tbody([row1, row2, row3, row4])]
 
 dike_vr_optimization_layout = html.Div([
 

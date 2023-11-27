@@ -158,10 +158,12 @@ def toggle_collapse2(n: int, is_open: bool) -> bool:
 
 @app.callback(
     Output("collapse_3", "is_open"),
+    Output("left-column", 'md'),
+    Output("right-column", 'md'),
     [Input("collapse_button_3", "n_clicks")],
     [State("collapse_3", "is_open")],
 )
-def toggle_collapse3(n: int, is_open: bool) -> bool:
+def toggle_collapse3(n: int, is_open: bool):
     """
     Callback to toggle the collapse of the second section.
     :param n: dummy integer
@@ -169,8 +171,10 @@ def toggle_collapse3(n: int, is_open: bool) -> bool:
     :return:
     """
     if n:
-        return not is_open
-    return is_open
+        if n % 2 == 1:
+            return True, 8, 4
+        return False, 4, 8
+    return is_open, 4, 8
 
 
 @app.callback(
