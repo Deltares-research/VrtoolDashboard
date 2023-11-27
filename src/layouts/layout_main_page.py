@@ -49,7 +49,8 @@ def make_layout_main_page() -> dbc.Row:
 
                     ]
                 ),
-                md=4,  # Specify the width of the column (6 out of 12 columns)
+                md=4,  # Specify the width of the column (6 out of 12 columns),
+                id="left-column",
             ),
             dbc.Col(
                 html.Div(
@@ -71,7 +72,8 @@ def make_layout_main_page() -> dbc.Row:
 
                     ]
                 ),
-                md=8,  # Specify the width of the column (6 out of 12 columns)
+                md=8,  # Specify the width of the column (6 out of 12 columns),
+                id="right-column",
             ),
         ]
     )
