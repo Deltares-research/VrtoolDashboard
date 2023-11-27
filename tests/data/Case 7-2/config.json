@@ -11,7 +11,7 @@
  "excluded_mechanisms": [
   "HYDRAULIC_STRUCTURES"
  ],
- "input_database_name": "traject_7_2_4.db",
+ "input_database_name": "traject_7_2.db",
  "input_directory": "C:/Users/hauth/bitbucket/VRtoolDashboard/tests/data/Case 7-2",
  "output_directory": "C:/Users/hauth/bitbucket/VRtoolDashboard/tests/data/Case 7-2/res"
 }

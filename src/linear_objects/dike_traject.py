@@ -51,7 +51,7 @@ class DikeTraject(BaseLinearObject):
     def calc_traject_probability_array(self, calc_type: str):
 
         _beta_df = self.get_initial_assessment_df()
-        _traject_pf, _ = get_traject_prob(_beta_df, ['StabilityInner', 'Piping', 'Overflow'])
+        _traject_pf, _ = get_traject_prob(_beta_df, ['StabilityInner', 'Piping', 'Overflow', "Revetment"])
         years = self.dike_sections[0].years
 
         if calc_type == "vr":
@@ -78,9 +78,11 @@ class DikeTraject(BaseLinearObject):
             if (calc_type == 'veiligheidsrendement') and (
                     not section.is_reinforced_veiligheidsrendement):  # skip if the section is not reinforced
                 continue
-
+            _active_mechanisms = ["Overflow", "Piping", "StabilityInner"]
+            if section.revetment:
+                _active_mechanisms.append("Revetment")
             # add a row to the dataframe with the initial assessment of the section
-            for mechanism in ["Overflow", "Piping", "StabilityInner"]:
+            for mechanism in _active_mechanisms:
                 mask = (_beta_df['name'] == section.name) & (_beta_df['mechanism'] == mechanism)
                 # replace the row in the dataframe with the betas of the section if both the name and mechanism match
                 d = {"name": section.name, "mechanism": mechanism, "Length": section.length
@@ -90,7 +92,7 @@ class DikeTraject(BaseLinearObject):
                 for year, beta in zip(years, getattr(section, _section_measure)[mechanism]):
                     d[year] = beta
                 _beta_df.loc[mask, years] = d
-            _reinforced_traject_pf, _ = get_traject_prob(_beta_df, ['StabilityInner', 'Piping', 'Overflow'])
+            _reinforced_traject_pf, _ = get_traject_prob(_beta_df, _active_mechanisms)
 
             _traject_pf = np.concatenate((_traject_pf, _reinforced_traject_pf), axis=0)
 
@@ -211,6 +213,11 @@ def get_traject_prob(beta_df: DataFrame, mechanisms: list) -> tuple[np.array, di
     traject_probs = dict((el, []) for el in mechanisms)
     total_traject_prob = np.empty((1, beta_df.shape[1]))
     for mechanism in mechanisms:
+        if mechanism == 'Revetment':
+            # check is mechanism is in the index
+            if not mechanism in beta_df.index:
+                continue
+
         if mechanism == 'Overflow':
             # take min beta in each column
             traject_probs[mechanism] = beta_to_pf(beta_df.loc[mechanism].min().values)
