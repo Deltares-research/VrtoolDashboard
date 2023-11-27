@@ -27,7 +27,6 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
     :param result_type:
     :param cost_length_switch:
 
-
     :return:
     """
 

@@ -43,7 +43,7 @@ def make_graph_map_initial_assessment(dike_traject_data: dict, selected_year: fl
     :param selected_year: Selected year by the user from the slider
     :param result_type: Selected result type by the user from the OptionField, one of "RELIABILITY" or "PROBABILITY"
     :param mechanism_type: Selected mechanism type by the user from the OptionField, one of "PIPING", "STABILITY",
-    "OVERFLOW" or "SECTION"
+    "OVERFLOW", "REVETMENT" or "SECTION"
 
     :return: dcc.Graph with the plotly figure
 
@@ -76,7 +76,7 @@ def make_graph_map_measures(dike_traject_data: dict, selected_year: float, resul
     :param color_bar_result_type: Select which type of colored result must be displayed on the map for the measures: either
     show the reliability, the cost of the type of measure. Must be one of "RELIABILITY" or "COST" or "MEASURE",
     :param mechanism_type: Selected mechanism type by the user from the OptionField, one of "PIPING", "STABILITY",
-    "OVERFLOW" or "SECTION"
+    "OVERFLOW", "REVETMENT or "SECTION"
     :param sub_result_type: Selected sub result type by the user from the OptionField, one of "ABSOLUTE" or "DIFFERENCE"
     or "RATIO"
 

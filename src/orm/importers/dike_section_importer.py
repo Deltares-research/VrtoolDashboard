@@ -47,8 +47,9 @@ class DikeSectionImporter(OrmImporterProtocol):
         _section_id = section_data.id
 
         # Add mechanism results
-        for mechanism in ["Overflow", "StabilityInner", "Piping"]:
+        for mechanism in self.active_mechanisms:
             _mechanism_id = Mechanism.get(Mechanism.name == mechanism).id
+
             _mechanism_per_section_id = MechanismPerSection.get(
                 (MechanismPerSection.section == _section_id) & (MechanismPerSection.mechanism == _mechanism_id)).id
 
@@ -68,7 +69,6 @@ class DikeSectionImporter(OrmImporterProtocol):
         _initial_assessment["Section"] = [row.beta for row in _query_betas]
 
         self.__setattr__("assessment_time", [row.time for row in _query_betas])
-
         return _initial_assessment
 
     def _get_single_measure(self, optimization_step: OptimizationStep) -> Measure:
@@ -142,7 +142,8 @@ class DikeSectionImporter(OrmImporterProtocol):
         Get the dictionary containing the information about the final mesure of the section for Doorsnede-eisen.
 
         :param section_data:
-        :return: dictionary with the followings keys: "name", "LCC", "Piping", "StabilityInner", "Overflow", "Section"
+        :return: dictionary with the followings keys: "name", "LCC", "Piping", "StabilityInner", "Overflow", "Revetment"
+        ,"Section"
         """
         _optimization_steps = get_optimization_steps_ordered(self.run_id_dsn)
 
@@ -180,7 +181,8 @@ class DikeSectionImporter(OrmImporterProtocol):
         Get the dictionary containing the information about the final mesure of the section for Veiligheidsrendement.
 
         :param section_data: section fror which information should be retrieved.
-        :return: dictionary with the followings keys: "name", "LCC", "Piping", "StabilityInner", "Overflow", "Section"
+        :return: dictionary with the followings keys: "name", "LCC", "Piping", "StabilityInner", "Overflow",
+        "Revetment", "Section"
         """
 
         # 1. Get the final step number, default is the one for which the Total Cost is minimal.
@@ -240,7 +242,8 @@ class DikeSectionImporter(OrmImporterProtocol):
         Retrieve from the database the information related to the selected optimization steps: betas, LCC, name, measure
         paramaters.
         :param optimization_steps:
-        :return: dictionary with the followings keys: "name", "LCC", "Piping", "StabilityInner", "Overflow", "Section"
+        :return: dictionary with the followings keys: "name", "LCC", "Piping", "StabilityInner", "Overflow", "Revetment"
+        , "Section"
         """
 
         # Get the betas for the measure:
@@ -328,7 +331,7 @@ class DikeSectionImporter(OrmImporterProtocol):
         if optimization_steps.count() == 1:
 
             # for mechanism_per_section in mechanisms_per_section:
-            for mechanism in ["Piping", "StabilityInner", "Overflow"]:
+            for mechanism in self.active_mechanisms:
                 _final_measure[mechanism] = [row.beta for row in
                                              self._get_mechanism_beta(optimization_steps[0], mechanism)]
             # Add section betas as well:
@@ -355,7 +358,7 @@ class DikeSectionImporter(OrmImporterProtocol):
         _final_measure = {}
         _dict_probabilities = {}
 
-        for mechanism in ["Piping", "StabilityInner", "Overflow"]:
+        for mechanism in self.active_mechanisms:
 
             _measure_1_type = self._get_mesure_type_from_optimization_step(
                 optimization_steps[0])  # Vertical Geotextile
@@ -444,7 +447,7 @@ class DikeSectionImporter(OrmImporterProtocol):
                                     coordinates_rd=[],
                                     in_analyse=True,
                                     )
-
+        self.active_mechanisms = self._get_all_section_mechanism(orm_model)
         # years: list[int]  # Years for which a reliability result is available (both for initial and measures)
         _dike_section.name = orm_model.section_name
         _dike_section.length = orm_model.section_length
@@ -453,7 +456,7 @@ class DikeSectionImporter(OrmImporterProtocol):
         _dike_section.is_reinforced = True  # TODO remove this argument?
         _dike_section.is_reinforced_veiligheidsrendement = True  # TODO remove this argument?
         _dike_section.is_reinforced_doorsnede = True  # TODO remove this argument?
-        _dike_section.revetment = False  # TODO
+        _dike_section.revetment = True if "Revetment" in self.active_mechanisms else False
 
         _dike_section.initial_assessment = self._get_initial_assessment(orm_model)
         _dike_section.years = self.assessment_time
@@ -466,3 +469,24 @@ class DikeSectionImporter(OrmImporterProtocol):
             _dike_section.final_measure_doorsnede = None
 
         return _dike_section
+
+    def _get_all_section_mechanism(self, section_data: SectionData) -> list[str]:
+        """
+        Get all the active mechanism for the given section.
+        A mechanism is active if it is present in the table MechanismPerSection.
+        :param section_data:
+        :return:
+        """
+        _mechanism_list = []
+
+        mechanisms_for_section = (
+            Mechanism
+            .select(Mechanism.name)
+            .join(MechanismPerSection, on=(Mechanism.id == MechanismPerSection.mechanism_id))
+            .where(MechanismPerSection.section_id == section_data.id)
+        )
+
+        # Execute the query and print the results
+        for mechanism in mechanisms_for_section:
+            _mechanism_list.append(mechanism.name)
+        return _mechanism_list

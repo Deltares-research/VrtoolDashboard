@@ -71,7 +71,7 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
     :param selected_year: selected year by the user for which results must be displayed
     :param result_type: one of "Reliability" or "Probability"
     :param mechanism_type: Selected mechanism type by the user from the OptionField, one of "PIPING", "STABILITY",
-    "OVERFLOW" or "SECTION"
+    "OVERFLOW", "REVETMENT" or "SECTION"
 
     :return:
     """
@@ -194,7 +194,7 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
 
                 if mechanism_type == Mechanism.SECTION.name and sub_result_type == SubResultType.ABSOLUTE.name:
                     _beta_dict = {key: value[_year_index] for key, value in _measure_results.items() if
-                                  key in ["StabilityInner", "Piping", "Overflow"]}
+                                  key in ["StabilityInner", "Piping", "Overflow", "Revetment"]}
                     _mechanism = min(_beta_dict, key=_beta_dict.get)  # mechanism with lowest beta
                     _hovertemplate = _hovertemplate[:-15] + f"Laagste beta: {_mechanism}<br>" + "<extra></extra>"
 
