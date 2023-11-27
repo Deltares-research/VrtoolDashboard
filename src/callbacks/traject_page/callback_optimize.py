@@ -1,18 +1,34 @@
+import logging
+import threading
+
 from pathlib import Path
 
 import dash
-from dash import Output, Input, State
-from dash.long_callback import DiskcacheLongCallbackManager
+from dash import Output, Input, html
 from vrtool.api import ApiRunWorkflows
 from vrtool.common.enums import MechanismEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
 
-from src.app import app, background_callback_manager
+from src.app import app
 from src.component_ids import OPTIMIZE_BUTTON_ID, STORE_CONFIG, DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID, \
     NAME_NEW_OPTIMIZATION_RUN_ID, EDITABLE_TRAJECT_TABLE_ID, DROPDOWN_SELECTION_RUN_ID, OPTIMIZE_MODAL_ID
 from src.constants import REFERENCE_YEAR
 from src.orm.import_database import get_measure_result_ids_per_section, \
     get_name_optimization_runs, get_all_default_selected_measure
+from src.vrtool_logger_custom import VrToolLogger
+
+
+@app.callback(
+    [Output(component_id='latest-timestamp', component_property='children')],
+    [Input('interval-component', 'n_intervals')]
+)
+def update_timestamp(interval):
+    _path_log = Path(__file__).parent.parent.parent / "log.log"
+    with open(_path_log, 'r') as f:
+        # Read the last line of the log
+        _latest_log = f.readlines()[-1]
+
+    return [html.Span(f"{_latest_log}")]
 
 
 @app.callback(
@@ -27,13 +43,7 @@ from src.orm.import_database import get_measure_result_ids_per_section, \
         Input(STORE_CONFIG, "data"),
         Input(EDITABLE_TRAJECT_TABLE_ID, "data"),
     ],
-    # state=[State(OPTIMIZE_MODAL_ID, "is_open")],
     prevent_initial_call=True,
-    # background=True,
-    # manager=background_callback_manager,
-    # running=[
-    #     (Output(OPTIMIZE_BUTTON_ID, 'disabled'), True, False),
-    # ],
 
 )
 def run_optimize_algorithm(n_clicks: int, optimization_run_name: str, stored_data: dict, vr_config: dict,
@@ -49,7 +59,6 @@ def run_optimize_algorithm(n_clicks: int, optimization_run_name: str, stored_dat
 
     :return:
     """
-
     if stored_data is None:
         return dash.no_update
 
@@ -75,7 +84,14 @@ def run_optimize_algorithm(n_clicks: int, optimization_run_name: str, stored_dat
         selected_measures = get_all_default_selected_measure(_vr_config)
 
         # 3. Run optimization
-        api = ApiRunWorkflows(_vr_config)
+        _path_log = Path(__file__).parent.parent.parent / "log.log"
+
+        VrToolLogger.init_file_handler(_path_log, logging.INFO)
+
+        #Start the optimization in a separate thread, so that the user can continue using the app while the optimization
+        # is running.
+        thread = threading.Thread(target=run_vrtool_optimization, args=(_vr_config,))
+        thread.start()
         # api.run_optimization(optimization_run_name, selected_measures)
 
         # 4. Update the selection Dropwdown with all the names of the optimization runs
@@ -83,6 +99,13 @@ def run_optimize_algorithm(n_clicks: int, optimization_run_name: str, stored_dat
         _options = [{"label": name, "value": name} for name in _names_optimization_run]
 
         return [], _options, True
+
+
+def run_vrtool_optimization(_vr_config: VrtoolConfig):
+    """Runs the optimization algorithm in a separate thread of the VRTool core"""
+
+    api = ApiRunWorkflows(_vr_config)
+    api.run_all()
 
 
 def get_selected_measure(vr_config: VrtoolConfig, dike_traject_table: list) -> list[tuple[int, int]]:
