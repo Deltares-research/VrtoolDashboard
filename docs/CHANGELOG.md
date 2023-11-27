@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 Integration database to dashboard (Initial assessment + Optimization results)
+Modal and display of VRTOOL logging when running optimization
+Support of revement cases with database
 
 ### Changed
 How data is initialized in the dashboard
