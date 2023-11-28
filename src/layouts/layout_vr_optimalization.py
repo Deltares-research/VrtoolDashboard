@@ -6,50 +6,84 @@ from src.component_ids import OPTIMIZE_BUTTON_ID, DUMMY_OPTIMIZE_BUTTON_OUTPUT_I
     NAME_NEW_OPTIMIZATION_RUN_ID
 from src.constants import Measures, MeasuresTable
 
-dike_vr_optimization_layout = html.Div([
+import dash_ag_grid as dag
+import pandas as pd
 
-    DataTable(id=EDITABLE_TRAJECT_TABLE_ID,
-              columns=(
-                  [{'id': 'section_col', 'name': 'Dijkvak'},
-                   {'id': 'reinforcement_col', 'name': 'Versterking', 'presentation': 'dropdown'},
-                   {'id': MeasuresTable.GROUND_IMPROVEMENT.name, 'name': MeasuresTable.GROUND_IMPROVEMENT.value,
-                    'presentation': 'dropdown'},
-                   {'id': MeasuresTable.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.name,
-                    'name': MeasuresTable.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.value,
-                    'presentation': 'dropdown'},
-                   {'id': MeasuresTable.GEOTEXTILE.name, 'name': MeasuresTable.GEOTEXTILE.value,
-                    'presentation': 'dropdown'},
-                   {'id': MeasuresTable.DIAPHRAGM_WALL.name, 'name': MeasuresTable.DIAPHRAGM_WALL.value,
-                    'presentation': 'dropdown'},
-                   {'id': MeasuresTable.STABILITY_SCREEN.name, 'name': MeasuresTable.STABILITY_SCREEN.value,
-                    'presentation': 'dropdown'},
+"""
+Inspiration for cell toggle: https://community.plotly.com/t/checkbox-column-in-dash-ag-grid/78670/6
+"""
 
-                   {'id': 'reference_year_col', 'name': 'Referentiejaar'},
-                   ]
-              ),
-              data=[],
-              dropdown={
-                  'reinforcement_col': {
-                      'options': [{'label': 'Aan', 'value': "yes"}, {'label': 'Uit', 'value': "no"}]},
-                  MeasuresTable.GROUND_IMPROVEMENT.name: {
-                      'options': [{'label': meas.value, 'value': meas.name} for meas in Measures]},
-                  MeasuresTable.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.name: {
-                      'options': [{'label': meas.value, 'value': meas.name} for meas in Measures]},
-                  MeasuresTable.GEOTEXTILE.name: {
-                      'options': [{'label': meas.value, 'value': meas.name} for meas in Measures]},
-                  MeasuresTable.DIAPHRAGM_WALL.name: {
-                      'options': [{'label': meas.value, 'value': meas.name} for meas in Measures]},
-                  MeasuresTable.STABILITY_SCREEN.name: {
-                      'options': [{'label': meas.value, 'value': meas.name} for meas in Measures]},
+columns_defs = [
+    {"field": "section_col",
+     "headerName": "Dijkvak",
+     "editable": False,
+     "initialWidth": 100},
 
-              },
-              style_cell={'textAlign': 'left', 'whiteSpace': "pre-line"},
-              editable=True,
-              # fixed_rows={'headers': True},  # either fix row with risk of overlap or have a slider
-              style_table={'overflowX': 'scroll',
-                           'overflowY': 'scroll'},
+    {"field": "reinforcement_col",
+     "headerName": "Versterking",
+     "cellRenderer": "DBC_Switch",
+     "editable": True,
+     "CellRendererParams": {"onColor": "success", "offColor": "danger"},
+     "initialWidth": 120, },
 
-              ),
+    {"field": "reference_year",
+     "headerName": "Referentiejaar",
+     "editable": True,
+     "initialWidth": 160, },
+
+    {"field": Measures.GROUND_IMPROVEMENT.name,
+     "headerName": Measures.GROUND_IMPROVEMENT.value,
+     "editable": True,
+     "cellRenderer": "DBC_Switch",
+     "CellRendererParams": {"onColor": "success", "offColor": "danger"}},
+
+    {"field": Measures.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.name,
+     "headerName": Measures.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.value,
+     "cellRenderer": "DBC_Switch",
+     "editable": True,
+     "CellRendererParams": {"onColor": "success", "offColor": "danger"},
+     "initialWidth": 160, },
+
+    {"field": Measures.GEOTEXTILE.name,
+     "headerName": Measures.GEOTEXTILE.value,
+     "editable": True,
+     "cellRenderer": "DBC_Switch",
+     "CellRendererParams": {"onColor": "success", "offColor": "danger"},
+     "initialWidth": 80, },
+
+    {"field": Measures.DIAPHRAGM_WALL.name,
+     "headerName": Measures.DIAPHRAGM_WALL.value,
+     "editable": True,
+     "cellRenderer": "DBC_Switch",
+     "CellRendererParams": {"onColor": "success", "offColor": "danger"}},
+
+    {"field": Measures.STABILITY_SCREEN.name,
+     "headerName": Measures.STABILITY_SCREEN.value,
+     "editable": True,
+     "cellRenderer": "DBC_Switch",
+     "CellRendererParams": {"onColor": "success", "offColor": "danger"}},
+
+]
+df = pd.DataFrame(columns=["section_col", "reinforcement_col", "reference_year",
+                           Measures.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.value,
+                           Measures.GROUND_IMPROVEMENT.value,
+                           Measures.GEOTEXTILE.value,
+                           Measures.DIAPHRAGM_WALL.value,
+                           Measures.STABILITY_SCREEN.value
+
+                           ])  # empty dataframe
+
+dike_vr_optimization_layout_ag_grid = html.Div([
+    dag.AgGrid(
+        id=EDITABLE_TRAJECT_TABLE_ID,
+        rowData=df.to_dict('records'),
+        columnDefs=columns_defs,
+        defaultColDef={"resizable": True,
+                       "wrapHeaderText": True,
+                       "autoHeaderHeight": True, },
+        dashGridOptions={"rowSelection": "multiple"}
+
+    ),
 
     html.Div(
         [
@@ -59,5 +93,4 @@ dike_vr_optimization_layout = html.Div([
                         target=OPTIMIZE_BUTTON_ID),
             html.Div(id=DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID)
         ])
-
 ])

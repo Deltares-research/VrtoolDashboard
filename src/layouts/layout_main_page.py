@@ -8,7 +8,7 @@ from .layout_radio_items import layout_radio_color_bar_result_type, layout_radio
     layout_radio_length_switch
 from .layout_sliders import layout_urgency_length_slider
 from .layout_upload_dike_files import layout_traject_select
-from .layout_vr_optimalization import dike_vr_optimization_layout
+from .layout_vr_optimalization import dike_vr_optimization_layout_ag_grid
 from ..constants import get_mapbox_token
 from ..plotly_graphs.pf_length_cost import plot_default_scatter_dummy
 from ..plotly_graphs.plotly_maps import plot_default_overview_map_dummy
@@ -44,7 +44,8 @@ def make_layout_main_page() -> dbc.Row:
 
                         make_collapsing_menu(menu_name="Maatregelen optimalisatie",
                                              collapse_id=3,
-                                             inner_layouts=[dike_vr_optimization_layout],
+                                             # inner_layouts=[dike_vr_optimization_layout],
+                                             inner_layouts=[dike_vr_optimization_layout_ag_grid],
                                              is_open=False),
 
                     ]
