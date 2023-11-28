@@ -82,8 +82,6 @@ def run_optimize_algorithm(n_clicks: int, optimization_run_name: str, stored_dat
 
         # 2. Get all selected measures ids from optimization table in the dashboard
         selected_measures = get_selected_measure(_vr_config, traject_optimization_table)
-        print(selected_measures)
-        # selected_measures = get_all_default_selected_measure(_vr_config)
 
         # 3. Run optimization in a separate thread, so that the user can continue using the app while the optimization
         # is running.
@@ -130,16 +128,10 @@ def get_selected_measure(vr_config: VrtoolConfig, dike_traject_table: list) -> l
             if section_row['reinforcement_col'] == 'no':
                 continue
             for measure in Measures:
-                print(measure)
                 _measure_result_ids = get_measure_result_ids_per_section(vr_config, section_row["section_col"],
                                                                          measure.name)
-                print(_measure_result_ids)
 
                 for measure_result_id in _measure_result_ids:
                     list_selected_measures.append((measure_result_id, _investment_year))
-                    if measure == Measures.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN or measure == Measures.GROUND_IMPROVEMENT:
-                        list_selected_measures.append((measure_result_id, 0))
-                    # list_selected_measures.append((measure_result_id,
-                    #                                0))  # TODO: check if we always want to have 2025 (0) as a SelectedMeasureResult
 
         return list_selected_measures
