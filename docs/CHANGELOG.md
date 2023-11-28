@@ -12,6 +12,7 @@ Support of revement cases with database
 ### Changed
 How data is initialized in the dashboard
 Wheels of VRCrool v0.1.1
+Changed optimization DataTable to Ag Grid
 
 ### Deprecated
 None.

@@ -115,7 +115,7 @@ def get_measure_result_ids_per_section(vr_config: VrtoolConfig, section_name: st
         orm_model.MeasurePerSection.section_id == orm_model.SectionData.id
     ))
 
-    return [measure_resutl.id for measure_resutl in _measure_results]
+    return [measure_result.id for measure_result in _measure_results]
 
 
 

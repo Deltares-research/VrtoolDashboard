@@ -5,6 +5,7 @@ from dash import html, dcc, Output, Input, State
 import dash_bootstrap_components as dbc
 from vrtool.common.enums import MechanismEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
+import pandas as pd
 
 from src.component_ids import STORE_CONFIG, DROPDOWN_SELECTION_RUN_ID, EDITABLE_TRAJECT_TABLE_ID
 from src.constants import ColorBarResultType, SubResultType, Measures
@@ -158,10 +159,12 @@ def toggle_collapse2(n: int, is_open: bool) -> bool:
 
 @app.callback(
     Output("collapse_3", "is_open"),
+    Output("left-column", 'md'),
+    Output("right-column", 'md'),
     [Input("collapse_button_3", "n_clicks")],
     [State("collapse_3", "is_open")],
 )
-def toggle_collapse3(n: int, is_open: bool) -> bool:
+def toggle_collapse3(n: int, is_open: bool):
     """
     Callback to toggle the collapse of the second section.
     :param n: dummy integer
@@ -169,8 +172,10 @@ def toggle_collapse3(n: int, is_open: bool) -> bool:
     :return:
     """
     if n:
-        return not is_open
-    return is_open
+        if n % 2 == 1:
+            return True, 8, 4
+        return False, 4, 8
+    return is_open, 4, 8
 
 
 @app.callback(
@@ -178,7 +183,7 @@ def toggle_collapse3(n: int, is_open: bool) -> bool:
      Output('select_sub_result_type_measure_map', 'value')],
     Input('select_measure_map_result_type', 'value'),
 )
-def update_radio_sub_result_type(result_type: str) -> list:
+def update_radio_sub_result_type(result_type: str) -> tuple[list, str]:
     """
     This is a callback to update the sub Radio list depending on the result type selected by the user.
     If the result type is "RELIABILITY" then the sub Radio list will contain the options "Absoluut" and "Ratio vr/dsn".
@@ -213,22 +218,34 @@ def update_radio_sub_result_type(result_type: str) -> list:
 
 
 @app.callback(
-    Output(EDITABLE_TRAJECT_TABLE_ID, "data"),
+    Output(EDITABLE_TRAJECT_TABLE_ID, "rowData"),
     Input('stored-data', 'data'),
 )
 def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
     """
     This is a callback to fill the editable table with the data from the database for the selected database.
+    By default all toggle are set to True.
+    :param dike_traject_data: the data of the dike traject
 
-    :param selection_traject_name:
     :return:
     """
+
+    df = pd.DataFrame(columns=["section_col", "reinforcement_col"])
+
     if dike_traject_data is not None:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
 
-        data = []
         for section in _dike_traject.dike_sections:
-            data.append({"section_col": section.name, "reinforcement_col": "yes",
-                         'measure_col': Measures.GROUND_IMPROVEMENT.name, 'reference_year_col': '2045'})
+            df = df.append({"section_col": section.name,
+                            "reinforcement_col": True,
+                            "reference_year": 2045,
+                            Measures.GROUND_IMPROVEMENT.name: True,
+                            Measures.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.name: True,
+                            Measures.GEOTEXTILE.name: True,
+                            Measures.DIAPHRAGM_WALL.name: True,
+                            Measures.STABILITY_SCREEN.name: True,
 
-        return data
+                            }, ignore_index=True)
+
+        return df.to_dict('records')
+

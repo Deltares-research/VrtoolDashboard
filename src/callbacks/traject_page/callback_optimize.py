@@ -12,7 +12,7 @@ from vrtool.defaults.vrtool_config import VrtoolConfig
 from src.app import app
 from src.component_ids import OPTIMIZE_BUTTON_ID, STORE_CONFIG, DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID, \
     NAME_NEW_OPTIMIZATION_RUN_ID, EDITABLE_TRAJECT_TABLE_ID, DROPDOWN_SELECTION_RUN_ID, OPTIMIZE_MODAL_ID
-from src.constants import REFERENCE_YEAR
+from src.constants import REFERENCE_YEAR, Measures
 from src.orm.import_database import get_measure_result_ids_per_section, \
     get_name_optimization_runs, get_all_default_selected_measure
 from src.vrtool_logger_custom import VrToolLogger
@@ -41,7 +41,7 @@ def update_timestamp(interval):
         Input(NAME_NEW_OPTIMIZATION_RUN_ID, "value"),
         Input("stored-data", "data"),
         Input(STORE_CONFIG, "data"),
-        Input(EDITABLE_TRAJECT_TABLE_ID, "data"),
+        Input(EDITABLE_TRAJECT_TABLE_ID, "rowData"),
     ],
     prevent_initial_call=True,
 
@@ -59,6 +59,7 @@ def run_optimize_algorithm(n_clicks: int, optimization_run_name: str, stored_dat
 
     :return:
     """
+
     if stored_data is None:
         return dash.no_update
 
@@ -81,18 +82,15 @@ def run_optimize_algorithm(n_clicks: int, optimization_run_name: str, stored_dat
 
         # 2. Get all selected measures ids from optimization table in the dashboard
         selected_measures = get_selected_measure(_vr_config, traject_optimization_table)
-        selected_measures = get_all_default_selected_measure(_vr_config)
 
-        # 3. Run optimization
+        # 3. Run optimization in a separate thread, so that the user can continue using the app while the optimization
+        # is running.
         _path_log = Path(__file__).parent.parent.parent / "log.log"
-
         VrToolLogger.init_file_handler(_path_log, logging.INFO)
 
-        #Start the optimization in a separate thread, so that the user can continue using the app while the optimization
-        # is running.
-        thread = threading.Thread(target=run_vrtool_optimization, args=(_vr_config,))
+        thread = threading.Thread(target=run_vrtool_optimization,
+                                  args=(_vr_config, optimization_run_name, selected_measures))
         thread.start()
-        # api.run_optimization(optimization_run_name, selected_measures)
 
         # 4. Update the selection Dropwdown with all the names of the optimization runs
         _names_optimization_run = get_name_optimization_runs(_vr_config)
@@ -101,11 +99,11 @@ def run_optimize_algorithm(n_clicks: int, optimization_run_name: str, stored_dat
         return [], _options, True
 
 
-def run_vrtool_optimization(_vr_config: VrtoolConfig):
+def run_vrtool_optimization(_vr_config: VrtoolConfig, optimization_run_name: str, selected_measures: list[tuple]):
     """Runs the optimization algorithm in a separate thread of the VRTool core"""
 
     api = ApiRunWorkflows(_vr_config)
-    api.run_all()
+    api.run_optimization(optimization_run_name, selected_measures)
 
 
 def get_selected_measure(vr_config: VrtoolConfig, dike_traject_table: list) -> list[tuple[int, int]]:
@@ -124,17 +122,16 @@ def get_selected_measure(vr_config: VrtoolConfig, dike_traject_table: list) -> l
 
         list_selected_measures = []
         for section_row in dike_traject_table:
+            _investment_year = int(section_row['reference_year']) - REFERENCE_YEAR
 
             # if the section is not reinforced, don't add the corresponding MeasureResult for the optimization
             if section_row['reinforcement_col'] == 'no':
                 continue
+            for measure in Measures:
+                _measure_result_ids = get_measure_result_ids_per_section(vr_config, section_row["section_col"],
+                                                                         measure.name)
 
-            measure_result_ids = get_measure_result_ids_per_section(vr_config, section_row["section_col"],
-                                                                    section_row["measure_col"])
-
-            _investment_year = int(section_row['reference_year_col']) - REFERENCE_YEAR
-
-            for measure_result_id in measure_result_ids:
-                list_selected_measures.append((measure_result_id, _investment_year))
+                for measure_result_id in _measure_result_ids:
+                    list_selected_measures.append((measure_result_id, _investment_year))
 
         return list_selected_measures
