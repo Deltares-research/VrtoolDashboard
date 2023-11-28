@@ -8,7 +8,7 @@ from vrtool.defaults.vrtool_config import VrtoolConfig
 import pandas as pd
 
 from src.component_ids import STORE_CONFIG, DROPDOWN_SELECTION_RUN_ID, EDITABLE_TRAJECT_TABLE_ID
-from src.constants import ColorBarResultType, SubResultType, Measures, MeasuresTable
+from src.constants import ColorBarResultType, SubResultType, Measures
 from src.linear_objects.dike_traject import DikeTraject
 
 from src.app import app

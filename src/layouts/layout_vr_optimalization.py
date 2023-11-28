@@ -4,10 +4,11 @@ from dash.dash_table import DataTable
 
 from src.component_ids import OPTIMIZE_BUTTON_ID, DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID, EDITABLE_TRAJECT_TABLE_ID, \
     NAME_NEW_OPTIMIZATION_RUN_ID
-from src.constants import Measures, MeasuresTable
 
 import dash_ag_grid as dag
 import pandas as pd
+
+from src.constants import Measures
 
 """
 Inspiration for cell toggle: https://community.plotly.com/t/checkbox-column-in-dash-ag-grid/78670/6
@@ -81,7 +82,7 @@ dike_vr_optimization_layout_ag_grid = html.Div([
         defaultColDef={"resizable": True,
                        "wrapHeaderText": True,
                        "autoHeaderHeight": True, },
-        dashGridOptions={"rowSelection": "multiple"}
+        dashGridOptions={"rowSelection": "multiple", "enableCellTextSelection": True, "ensureDomOrder": True}
 
     ),
 

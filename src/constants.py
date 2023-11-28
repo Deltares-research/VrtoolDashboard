@@ -48,13 +48,6 @@ class Measures(Enum):
     DIAPHRAGM_WALL = "Zelferende constructie"
     STABILITY_SCREEN = "Stabiliteitsscherm"
 
-class MeasuresTable(Enum):
-    GROUND_IMPROVEMENT = "Grondversterking"
-    GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN = "Grondversterking\nmet\nstabiliteitsscherm"
-    GEOTEXTILE = "VZG"
-    DIAPHRAGM_WALL = "Zelferende\nconstructie"
-    STABILITY_SCREEN = "Stabiliteit\nsscherm"
-
 
 
 def get_mapbox_token() -> str:
@@ -65,6 +58,5 @@ def get_mapbox_token() -> str:
 conversion_dict_measure_names = {"GROUND_IMPROVEMENT": "Soil reinforcement",
                                  "GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN": "Soil reinforcement with stability screen",
                                  "GEOTEXTILE": "Vertical Geotextile",
-                                 "DIAPHRAGM_WALL": "Diaphragm wall",
-                                 "STABILITY_SCREEN": "Stability screen"}
-
+                                 "DIAPHRAGM_WALL": "Diaphragm Wall",
+                                 "STABILITY_SCREEN": "Stability Screen"}
