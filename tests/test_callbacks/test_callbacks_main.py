@@ -43,7 +43,8 @@ class TestCallback:
 
         # 2. Assert
 
-        assert isinstance(output, bool)
+        assert isinstance(output, tuple)
+        assert isinstance(output[0], bool)
 
     @pytest.mark.parametrize("result_type", [ColorBarResultType.RELIABILITY, ColorBarResultType.COST])
     def test_update_radio_sub_result_type(self, result_type: ColorBarResultType):
