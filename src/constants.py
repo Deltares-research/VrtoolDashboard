@@ -48,6 +48,14 @@ class Measures(Enum):
     DIAPHRAGM_WALL = "Zelferende constructie"
     STABILITY_SCREEN = "Stabiliteitsscherm"
 
+class MeasuresTable(Enum):
+    GROUND_IMPROVEMENT = "Grondversterking"
+    GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN = "Grondversterking\nmet\nstabiliteitsscherm"
+    GEOTEXTILE = "VZG"
+    DIAPHRAGM_WALL = "Zelferende\nconstructie"
+    STABILITY_SCREEN = "Stabiliteit\nsscherm"
+
+
 
 def get_mapbox_token() -> str:
     with open(Path(__file__).parent / "assets" / "mapbox_token.txt") as f:
