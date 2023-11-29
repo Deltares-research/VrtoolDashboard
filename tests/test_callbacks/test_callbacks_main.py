@@ -5,7 +5,7 @@ import pytest
 import json
 
 from src.callbacks.traject_page.callbacks_main_page import toggle_collapse, toggle_collapse2, toggle_collapse3, \
-    update_radio_sub_result_type, fill_traject_table_from_database
+    update_radio_sub_result_type, fill_traject_table_from_database, update_slider_years_from_database
 from src.constants import ColorBarResultType
 
 
@@ -73,3 +73,22 @@ class TestCallback:
         output = ctx.run(run_callback)
 
         assert isinstance(output, list)
+
+    def test_update_slider_years_from_database(self):
+        """
+        Test if the callback filling the slider with the years from the database returns a dictionary.
+        :return:
+        """
+
+        _dike_data = json.load(
+            open(Path(__file__).parent.parent / 'data/Case_38_1_sterker_VZG2/reference' / 'dike_data.json'))
+
+        def run_callback():
+            return update_slider_years_from_database(_dike_data)
+
+        ctx = copy_context()
+        output = ctx.run(run_callback)
+
+        assert isinstance(output, dict)
+        assert 2025 in output.keys()
+        assert output[2025] == {'label': '2025'}

@@ -265,6 +265,6 @@ def update_slider_years_from_database(dike_traject_data: dict):
         return marks
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
-        _assessment_years = _dike_traject.dike_sections[0].years
+        _assessment_years = _dike_traject.dike_sections[0].years  # all sections should have the same assessment years
         _marks = {year + REFERENCE_YEAR: {'label': f"{year + REFERENCE_YEAR}"} for year in _assessment_years}
         return _marks
