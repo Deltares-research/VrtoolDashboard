@@ -1,5 +1,7 @@
 from dash import dcc, html
 
+from src.component_ids import SLIDER_YEAR_RELIABILITY_RESULTS_ID
+
 layout_year_slider = dcc.Slider(2025, 2125, value=2025,
                                 marks={
                                     2025: {'label': '2025'},
@@ -9,7 +11,7 @@ layout_year_slider = dcc.Slider(2025, 2125, value=2025,
                                 },
                                 included=False,
                                 tooltip={"placement": "bottom", "always_visible": True},
-                                id="slider_year_reliability_results",
+                                id=SLIDER_YEAR_RELIABILITY_RESULTS_ID,
                                 )
 
 layout_urgency_length_slider = html.Div([dcc.Slider(0, 20, value=10,

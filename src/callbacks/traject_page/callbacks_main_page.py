@@ -7,8 +7,9 @@ from vrtool.common.enums import MechanismEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
 import pandas as pd
 
-from src.component_ids import STORE_CONFIG, DROPDOWN_SELECTION_RUN_ID, EDITABLE_TRAJECT_TABLE_ID
-from src.constants import ColorBarResultType, SubResultType, Measures
+from src.component_ids import STORE_CONFIG, DROPDOWN_SELECTION_RUN_ID, EDITABLE_TRAJECT_TABLE_ID, \
+    SLIDER_YEAR_RELIABILITY_RESULTS_ID
+from src.constants import ColorBarResultType, SubResultType, Measures, REFERENCE_YEAR
 from src.linear_objects.dike_traject import DikeTraject
 
 from src.app import app
@@ -244,8 +245,26 @@ def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
                             Measures.GEOTEXTILE.name: True,
                             Measures.DIAPHRAGM_WALL.name: True,
                             Measures.STABILITY_SCREEN.name: True,
-
                             }, ignore_index=True)
 
         return df.to_dict('records')
 
+@app.callback(
+    Output(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "marks"),
+    Input('stored-data', 'data'),
+)
+def update_slider_years_from_database(dike_traject_data: dict):
+
+    if dike_traject_data is None:
+        marks = {
+            2025: {'label': '2025'},
+            2045: {'label': '2045'},
+            2075: {'label': '2075'},
+            2125: {'label': '2125'}
+        }
+        return marks
+    else:
+        _dike_traject = DikeTraject.deserialize(dike_traject_data)
+        _assessment_years = _dike_traject.dike_sections[0].years  # all sections should have the same assessment years
+        _marks = {year + REFERENCE_YEAR: {'label': f"{year + REFERENCE_YEAR}"} for year in _assessment_years}
+        return _marks
