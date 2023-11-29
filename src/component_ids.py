@@ -1,6 +1,8 @@
 """
 This file contains the IDs of the components used in the app.
 The ids must be all unique.
+
+WARNING: Not all ids have been migrated to this file yet
 """
 
 OPTIMIZE_BUTTON_ID = "optimize_button"
@@ -13,4 +15,5 @@ STORE_CONFIG = "stored-config"
 NAME_NEW_OPTIMIZATION_RUN_ID = "name_new_optimization_run"
 
 OPTIMIZE_MODAL_ID = "optimize_modal_id"
+SLIDER_YEAR_RELIABILITY_RESULTS_ID = "slider_year_reliability_results"
 
