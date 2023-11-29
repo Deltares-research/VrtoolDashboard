@@ -234,6 +234,7 @@ class DikeSectionImporter(OrmImporterProtocol):
 
         _final_measure["LCC"] = 0
         _final_measure["name"] = "Geen maatregel"
+        _final_measure["investment_year"] = None
 
         return _final_measure
 
@@ -450,7 +451,7 @@ class DikeSectionImporter(OrmImporterProtocol):
         self.active_mechanisms = self._get_all_section_mechanism(orm_model)
         # years: list[int]  # Years for which a reliability result is available (both for initial and measures)
         _dike_section.name = orm_model.section_name
-        _dike_section.length = orm_model.section_length
+        _dike_section.length = round(orm_model.section_length)
         _dike_section.coordinates_rd = self._get_coordinates(orm_model)
         _dike_section.in_analyse = orm_model.in_analysis
         _dike_section.is_reinforced = True  # TODO remove this argument?
