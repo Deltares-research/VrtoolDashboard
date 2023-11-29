@@ -234,6 +234,7 @@ class DikeSectionImporter(OrmImporterProtocol):
 
         _final_measure["LCC"] = 0
         _final_measure["name"] = "Geen maatregel"
+        _final_measure["investment_year"] = None
 
         return _final_measure
 

@@ -149,7 +149,7 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
 
     if colorbar_result_type == ColorBarResultType.MEASURE.name:
         # In this case, returns a totally different figure
-        return plot_dike_traject_measures_map(dike_traject, sub_result_type, calc_type)
+        return plot_dike_traject_measures_map(dike_traject, sub_result_type, calc_type, selected_year)
 
     for section in dike_traject.dike_sections:
 
@@ -277,9 +277,19 @@ def plot_dike_traject_urgency(dike_traject: DikeTraject, selected_year: float, l
     return fig
 
 
-def plot_dike_traject_measures_map(dike_traject: DikeTraject, subresult_type: str, calc_type: str):
+def plot_dike_traject_measures_map(dike_traject: DikeTraject, subresult_type: str, calc_type: str,
+                                   selected_year: float):
+    """
+    This function plots a Map displaying the types of measures of the dike traject.
+
+    :param dike_traject: Dike traject
+    :param subresult_type: one of "MEASURE_TYPE" or "CREST_HEIGHTENING" or "BERM_WIDENING"
+    :param calc_type: type of the optimization run: one of "VEILIGHEIDSRENDEMENT" or "DOORSNEDE"
+    :param selected_year: year for which the results must be displayed
+    :return:
+    """
     fig = go.Figure()
-    _legend_display = {"2025": True, "2045": True, "VZG": True, "screen": True, "diaphram wall": True,
+    _legend_display = {"ground_reinforcement": True, "VZG": True, "screen": True, "diaphram wall": True,
                        "crest_heightening": True, "berm_widening": True}
     for section in dike_traject.dike_sections:
 
@@ -289,13 +299,22 @@ def plot_dike_traject_measures_map(dike_traject: DikeTraject, subresult_type: st
 
         _measure_results = section.final_measure_veiligheidsrendement if calc_type == CalcType.VEILIGHEIDSRENDEMENT.name else section.final_measure_doorsnede
         if _measure_results is not None:
-            if subresult_type == SubResultType.MEASURE_TYPE.name:
-                add_measure_type_trace(fig, section, _measure_results, _legend_display)
-            elif subresult_type == SubResultType.CREST_HIGHTENING.name:
-                add_measure_crest_heightening_trace(fig, section, _measure_results)
+            if _measure_results["investment_year"] is not None and _measure_results[
+                "investment_year"] + REFERENCE_YEAR <= selected_year:  # only show measures that are implemented in the selected year
 
-            elif subresult_type == SubResultType.BERM_WIDENING.name:
-                add_measure_berm_widening_trace(fig, section, _measure_results)
+                if subresult_type == SubResultType.MEASURE_TYPE.name:
+                    add_measure_type_trace(fig, section, _measure_results, _legend_display)
+                elif subresult_type == SubResultType.CREST_HIGHTENING.name:
+                    add_measure_crest_heightening_trace(fig, section, _measure_results)
+
+                elif subresult_type == SubResultType.BERM_WIDENING.name:
+                    add_measure_berm_widening_trace(fig, section, _measure_results)
+            else:
+                fig.add_trace(go.Scattermapbox(
+                    mode="lines",
+                    lat=[],
+                    lon=[],
+                    showlegend=False))
 
     _middle_point = get_middle_point(dike_traject.dike_sections)
     update_layout_map_box(fig, _middle_point)
@@ -312,22 +331,13 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
     :param legend_display: dict to avoid double legend entries
     """
 
-    if "Grondversterking binnenwaarts" in measure_results['name']:
+    if "Grondversterking" in measure_results['name']:
         # convert in GWS coordinates:
 
         _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(section.trajectory_rd, buffersize=60)
-        if measure_results['investment_year'] == 0:
-            _color = '#008000'  # Green
-            _showlegend = legend_display.get("2025")
-            legend_display["2025"] = False
-            _name = "Grondversterking binnenwaarts 2025"
-        elif measure_results['investment_year'] == 20:
-            _color = '#bfdbbf'  # Lighter green
-            _showlegend = legend_display.get("2045")
-            legend_display["2045"] = False
-            _name = "Grondversterking binnenwaarts 2045"
-        else:
-            raise NotImplementedError("Only Investment year 2025 or 2045 are supported for now")
+        _color = '#008000'  # Green
+        _showlegend = legend_display.get("ground_reinforcement")
+        _name = "Grondversterking binnenwaarts"
 
         fig.add_trace(go.Scattermapbox(
             name=_name,
@@ -341,11 +351,13 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
             showlegend=_showlegend,
             hovertemplate=f'Vaknaam {section.name}<br>' \
                           f"Maatregel: {measure_results['name']} <br>" \
+                          f"Investeringsjaar: {REFERENCE_YEAR + measure_results['investment_year']} <br>" \
                           f"Kruinverhoging: {measure_results['dcrest']}m <br>" \
                           f"Bermverbreding: {measure_results['dberm']}m <br>" \
                           f"<extra></extra>"
 
         ))
+        legend_display["ground_reinforcement"] = False
 
     if "Verticaal Zanddicht Geotextiel" in measure_results['name']:
         _color = "red"
@@ -360,7 +372,8 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
             line={'color': _color, 'width': 4},
             showlegend=legend_display.get("VZG"),
             hovertemplate=f'Vaknaam {section.name}<br>' \
-                          f"{measure_results['name']}" \
+                          f"{measure_results['name']}<br>" \
+                          f"Investeringsjaar: {REFERENCE_YEAR + measure_results['investment_year']} <br>" \
                           f"<extra></extra>"
             ,
         ))
@@ -379,7 +392,8 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
             line={'color': _color, 'width': 4},
             showlegend=legend_display.get("screen"),
             hovertemplate=f'Vaknaam {section.name}<br>' \
-                          f"{measure_results['name']}" \
+                          f"{measure_results['name']} <br>" \
+                          f"Investeringsjaar: {REFERENCE_YEAR + measure_results['investment_year']} <br>" \
                           f"<extra></extra>"
             ,
         ))
@@ -399,7 +413,8 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
             fill="toself",
             showlegend=legend_display.get("diaphram wall"),
             hovertemplate=f'Vaknaam {section.name}<br>' \
-                          f"{measure_results['name']}" \
+                          f"{measure_results['name']} <br>" \
+                          f"Investeringsjaar: {REFERENCE_YEAR + measure_results['investment_year']} <br>" \
                           f"<extra></extra>"
             ,
         ))
@@ -428,6 +443,7 @@ def add_measure_crest_heightening_trace(fig: go.Figure, section: DikeSection, me
                 showlegend=False,
                 hovertemplate=f'Vaknaam {section.name}<br>' \
                               f"Maatregel: {measure_results['name']} <br>" \
+                              f"Investeringsjaar: {REFERENCE_YEAR + measure_results['investment_year']} <br>" \
                               f"Kruin verhoging: {measure_results['dcrest']}m <br>" \
                               f"Bermverbreding: {measure_results['dberm']}m <br>" \
                               f"<extra></extra>"
@@ -455,6 +471,7 @@ def add_measure_berm_widening_trace(fig: go.Figure, section: DikeSection, measur
                 showlegend=False,
                 hovertemplate=f'Vaknaam {section.name}<br>' \
                               f"Maatregel: {measure_results['name']} <br>" \
+                              f"Investeringsjaar: {REFERENCE_YEAR + measure_results['investment_year']} <br>" \
                               f"Kruin verhoging: {measure_results['dcrest']}m <br>" \
                               f"Bermverbreding: {measure_results['dberm']}m <br>" \
                               f"<extra></extra>"

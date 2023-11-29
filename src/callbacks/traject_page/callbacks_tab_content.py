@@ -21,7 +21,7 @@ def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
     :param dike_traject_data: The data of the dike traject to be displayed.
     """
 
-    # export_to_json(dike_traject_data)
+    export_to_json(dike_traject_data)
 
     if dike_traject_data is None:
         _fig = plot_default_overview_map_dummy()
