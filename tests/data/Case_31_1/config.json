@@ -1,0 +1,18 @@
+{
+ "traject": "10-3",
+ "T": [
+  0,
+  20,
+  25,
+  50,
+  75,
+  100
+ ],
+ "excluded_mechanisms": [
+  "REVETMENT",
+  "HYDRAULIC_STRUCTURES"
+ ],
+ "input_database_name": "database_10-3.db",
+ "input_directory": "n:/Projects/11209000/11209353/B. Measurements and calculations/008 - Resultaten Proefvlucht/WDOD/10-3/database_vrtool_0_1_3_no_stix",
+ "output_directory": "Basisberekening"
+}
