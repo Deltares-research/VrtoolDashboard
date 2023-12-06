@@ -94,18 +94,19 @@ class GWSRDConvertor:
         return [phi, lam]
 
     @staticmethod
-    def generate_coordinates_from_buffer(section_trajectory_rd: LineString, buffersize=60) -> list[list[float]]:
+    def generate_coordinates_from_buffer(section_coordinates_rd: list, buffersize=60) -> list[list[float]]:
         """
         Generate the GWS coordinates for the buffer area around a section. This function distinguishes between cases
         where the buffer is a Polygon (most of the time) or a MultiPolygon (when the section is very short and at a
         corner).
 
-        :param section_trajectory_rd: Linestring of the section trajectory in RD coordinates
+        :param section_coordinates_rd: coordinates of the section in RD
         :param buffersize: size of the buffer in meters
 
         :return:
         """
-        _trajectory_buffer = section_trajectory_rd.buffer(buffersize, cap_style=2)
+        _section_trajectory_rd = LineString(section_coordinates_rd)
+        _trajectory_buffer = _section_trajectory_rd.buffer(buffersize, cap_style=2)
         # distinguish Polygon and MultiPolygon
         if isinstance(_trajectory_buffer, Polygon):
             coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in

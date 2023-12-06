@@ -257,7 +257,7 @@ class DikeSectionImporter(OrmImporterProtocol):
             _final_measure["name"] = self._get_single_measure(optimization_steps[0]).name
             _final_measure['investment_year'] = self._get_investment_year(optimization_steps[0])
 
-        elif optimization_steps.count() == 2:
+        elif optimization_steps.count() in [2, 3]:
             _final_measure["name"] = self._get_combined_measure_name(optimization_steps)
             _year_1 = self._get_investment_year(optimization_steps[0])
             _year_2 = self._get_investment_year(optimization_steps[1])
@@ -341,11 +341,11 @@ class DikeSectionImporter(OrmImporterProtocol):
             return _final_measure
 
 
-        elif optimization_steps.count() == 2:
+        elif optimization_steps.count() in [2, 3]:
             _final_measure = self._get_final_measure_combined_betas(optimization_steps)
 
             return _final_measure
-        elif optimization_steps.count() > 2:
+        elif optimization_steps.count() > 3:
             raise ValueError("No more than 2 measure results is allowed")
         else:
             raise ValueError("No measure results found")
@@ -359,23 +359,27 @@ class DikeSectionImporter(OrmImporterProtocol):
         _final_measure = {}
         _dict_probabilities = {}
 
+        # find which optimization step is the soil reinforcement or vzg or revetment
+        soil_reinforcement_step, vzg_step, revetment_step = None, None, None
+        for optimization_step in optimization_steps:
+            _measure_type = self._get_mesure_type_from_optimization_step(optimization_step)
+            if _measure_type.name in ["Soil reinforcement", "Soil reinforcement with stability screen"]:
+                soil_reinforcement_step = optimization_step
+            elif _measure_type.name in ["Vertical Geotextile"]:
+                vzg_step = optimization_step
+            elif _measure_type.name in ["Revetment"]:
+                revetment_step = optimization_step
+        # Assign the mechanism betas according to the right optimization step(s):
         for mechanism in self.active_mechanisms:
 
-            _measure_1_type = self._get_mesure_type_from_optimization_step(
-                optimization_steps[0])  # Vertical Geotextile
-            _measure_2_type = self._get_mesure_type_from_optimization_step(optimization_steps[1])
+            if mechanism == "Revetment" and revetment_step is not None:
+                _betas_revetment = np.array(
+                    [row.beta for row in self._get_mechanism_beta(revetment_step, mechanism)])
+                _final_measure[mechanism] = _betas_revetment
+                _dict_probabilities[mechanism] = beta_to_pf(_betas_revetment)
+                continue  # don't need to go further
 
-            if _measure_1_type.name in ["Soil reinforcement", "Soil reinforcement with stability screen"]:
-                soil_reinforcement_step = optimization_steps[0]
-                vzg_step = optimization_steps[1]
-            elif _measure_2_type.name in ["Soil reinforcement", "Soil reinforcement with stability screen"]:
-                soil_reinforcement_step = optimization_steps[1]
-                vzg_step = optimization_steps[0]
-            else:
-                raise ValueError("Something went wrong with the combination of the measures")
-
-            if mechanism == "Piping" and self._get_mesure_type_from_optimization_step(
-                    vzg_step).name == "Vertical Geotextile":
+            if mechanism == "Piping" and vzg_step is not None and soil_reinforcement_step is not None:
                 _pf_solution_failure, _pf_with_solution = self._get_vzg_parameters()
                 _betas_soil_reinforcement = np.array(
                     [row.beta for row in self._get_mechanism_beta(soil_reinforcement_step, mechanism)])
@@ -383,23 +387,39 @@ class DikeSectionImporter(OrmImporterProtocol):
                 _pf_combined_solutions = _pf_solution_failure * _pf_soil_reinforcement + (
                         1 - _pf_solution_failure) * _pf_with_solution
                 _beta_combined_solutions = pf_to_beta(_pf_combined_solutions)
+                _final_measure[mechanism] = _beta_combined_solutions
+                _dict_probabilities[mechanism] = _pf_combined_solutions
+                continue
 
-            else:
-
-                _betas_1 = np.array([row.beta for row in
-                                     self._get_mechanism_beta(optimization_steps[0], mechanism)])
-                _betas_2 = np.array([row.beta for row in
-                                     self._get_mechanism_beta(optimization_steps[1], mechanism)])
+            if vzg_step is not None and soil_reinforcement_step is not None:
+                _betas_soil_reinforcement = np.array([row.beta for row in
+                                                      self._get_mechanism_beta(soil_reinforcement_step, mechanism)])
+                _betas_vzg = np.array([row.beta for row in
+                                       self._get_mechanism_beta(vzg_step, mechanism)])
 
                 _beta_combined_solutions = np.maximum(
-                    _betas_1,
-                    _betas_2
+                    _betas_soil_reinforcement,
+                    _betas_vzg
                 )
-
+                _final_measure[mechanism] = _beta_combined_solutions
                 _pf_combined_solutions = beta_to_pf(_beta_combined_solutions)
+                _dict_probabilities[mechanism] = _pf_combined_solutions
+                continue
 
-            _final_measure[mechanism] = _beta_combined_solutions
-            _dict_probabilities[mechanism] = _pf_combined_solutions
+            if vzg_step is not None and soil_reinforcement_step is None:
+                _betas = np.array([row.beta for row in self._get_mechanism_beta(vzg_step, mechanism)])
+                _final_measure[mechanism] = _betas
+                _dict_probabilities[mechanism] = beta_to_pf(_betas)
+                continue
+
+            if soil_reinforcement_step is not None and vzg_step is None:
+                _betas = np.array([row.beta for row in
+                                      self._get_mechanism_beta(soil_reinforcement_step, mechanism)])
+                _final_measure[mechanism] = _betas
+                _dict_probabilities[mechanism] = beta_to_pf(_betas)
+                continue
+
+            raise ValueError("Error, configuration to be implemented")
 
         section = CombinFunctions.combine_probabilities(_dict_probabilities, tuple(_dict_probabilities.keys()))
 
