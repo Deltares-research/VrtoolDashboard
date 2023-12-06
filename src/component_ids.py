@@ -15,5 +15,6 @@ STORE_CONFIG = "stored-config"
 NAME_NEW_OPTIMIZATION_RUN_ID = "name_new_optimization_run"
 
 OPTIMIZE_MODAL_ID = "optimize_modal_id"
+CLOSE_OPTIMAL_MODAL_BUTTON_ID = "close-modal-optimize"
 SLIDER_YEAR_RELIABILITY_RESULTS_ID = "slider_year_reliability_results"
 

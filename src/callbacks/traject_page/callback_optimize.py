@@ -11,7 +11,8 @@ from vrtool.defaults.vrtool_config import VrtoolConfig
 
 from src.app import app
 from src.component_ids import OPTIMIZE_BUTTON_ID, STORE_CONFIG, DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID, \
-    NAME_NEW_OPTIMIZATION_RUN_ID, EDITABLE_TRAJECT_TABLE_ID, DROPDOWN_SELECTION_RUN_ID, OPTIMIZE_MODAL_ID
+    NAME_NEW_OPTIMIZATION_RUN_ID, EDITABLE_TRAJECT_TABLE_ID, DROPDOWN_SELECTION_RUN_ID, OPTIMIZE_MODAL_ID, \
+    CLOSE_OPTIMAL_MODAL_BUTTON_ID
 from src.constants import REFERENCE_YEAR, Measures
 from src.orm.import_database import get_measure_result_ids_per_section, \
     get_name_optimization_runs, get_all_default_selected_measure
@@ -32,9 +33,47 @@ def update_timestamp(interval):
 
 
 @app.callback(
+    [Output(OPTIMIZE_MODAL_ID, "is_open", allow_duplicate=True),
+     Output(DROPDOWN_SELECTION_RUN_ID, "options", allow_duplicate=True)
+     ],
+    [Input(CLOSE_OPTIMAL_MODAL_BUTTON_ID, "n_clicks"),
+     Input(STORE_CONFIG, "data"),
+     ],
+    prevent_initial_call=True,
+)
+def close_optimize_modal_button(n_clicks: int, vr_config:dict) -> tuple[bool, list]:
+    """
+    This is a callback to close the optimization modal when the user clicks on the "Close" button.
+
+    :param n_clicks: dummy input to trigger the callback upon clicking.
+
+    :return:
+    """
+    if n_clicks is None:
+        return dash.no_update
+    elif n_clicks == 0:
+        return dash.no_update
+    else:
+        _vr_config = VrtoolConfig()
+        _vr_config.traject = vr_config['traject']
+        _vr_config.input_directory = Path(vr_config['input_directory'])
+        _vr_config.output_directory = Path(vr_config['output_directory'])
+        _vr_config.input_database_name = vr_config['input_database_name']
+        _vr_config.excluded_mechanisms = [MechanismEnum.HYDRAULIC_STRUCTURES]
+
+        # _dike_traject = get_dike_traject_from_config_ORM(vr_config, run_id_dsn=2, run_is_vr=1)
+        _value_selection_run_dropwdown = "Basisberekening"
+
+        # Update the selection Dropwdown with all the names of the optimization runs
+        _names_optimization_run = get_name_optimization_runs(_vr_config)
+        _options = [{"label": name, "value": name} for name in _names_optimization_run]
+        return False, _options
+
+
+@app.callback(
     output=[Output(DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID, 'children'),
             Output(DROPDOWN_SELECTION_RUN_ID, "options", allow_duplicate=True),
-            Output(OPTIMIZE_MODAL_ID, "is_open"),
+            Output(OPTIMIZE_MODAL_ID, "is_open", allow_duplicate=True),
             ],
     inputs=[
         Input(OPTIMIZE_BUTTON_ID, "n_clicks"),
@@ -78,7 +117,7 @@ def run_optimize_algorithm(n_clicks: int, optimization_run_name: str, stored_dat
         _vr_config.input_directory = Path(vr_config['input_directory'])
         _vr_config.output_directory = Path(vr_config['output_directory'])
         _vr_config.input_database_name = vr_config['input_database_name']
-        _vr_config.excluded_mechanisms = [MechanismEnum.REVETMENT, MechanismEnum.HYDRAULIC_STRUCTURES]
+        _vr_config.excluded_mechanisms = [MechanismEnum.HYDRAULIC_STRUCTURES]
 
         # 2. Get all selected measures ids from optimization table in the dashboard
         selected_measures = get_selected_measure(_vr_config, traject_optimization_table)
