@@ -290,7 +290,7 @@ def plot_dike_traject_measures_map(dike_traject: DikeTraject, subresult_type: st
     """
     fig = go.Figure()
     _legend_display = {"ground_reinforcement": True, "VZG": True, "screen": True, "diaphram wall": True,
-                       "crest_heightening": True, "berm_widening": True,
+                       "crest_heightening": True, "berm_widening": True, "revetment": True
                        }
     for section in dike_traject.dike_sections:
 
@@ -331,10 +331,11 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
     :param measure_results:
     :param legend_display: dict to avoid double legend entries
     """
+    # TODO measure types should be based on MeasureType from the database and not the arbitrary (Dutch) names
 
     if "Grondversterking" in measure_results['name']:
         # convert in GWS coordinates:
-        _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(section.trajectory_rd, buffersize=60)
+        _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(section.coordinates_rd, buffersize=60)
 
         if measure_results['dcrest'] == 0 and measure_results['dberm'] > 0:
             _name = "Bermverbreding"
@@ -419,7 +420,7 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
         legend_display["screen"] = False
 
     if "Zelfkerende constructie" in measure_results['name']:
-        _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(section.trajectory_rd, buffersize=60)
+        _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(section.coordinates_rd, buffersize=60)
 
         fig.add_trace(go.Scattermapbox(
             name='Zelfkerende constructie',
@@ -438,6 +439,28 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
             ,
         ))
         legend_display["diaphram wall"] = False
+
+    if "bekleding" in measure_results['name']:
+        _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(section.coordinates_rd, buffersize=30)
+
+        fig.add_trace(go.Scattermapbox(
+            name='Aanpassing bekleding',
+            legendgroup='revetment',
+            mode="lines",
+            lat=[x[0] for x in _coordinates_wgs],
+            lon=[x[1] for x in _coordinates_wgs],
+            fillcolor="grey",
+            line={'width': 1, 'color': "black"},
+            fill="toself",
+            opacity=0.5,
+            showlegend=legend_display.get("revetment"),
+            hovertemplate=f'Vaknaam {section.name}<br>' \
+                          f"{measure_results['name']} <br>" \
+                          f"Investeringsjaar: {REFERENCE_YEAR + measure_results['investment_year']} <br>" \
+                          f"<extra></extra>"
+            ,
+        ))
+        legend_display["revetment"] = False
 
 
 def add_measure_crest_heightening_trace(fig: go.Figure, section: DikeSection, measure_results: dict):
@@ -474,7 +497,7 @@ def add_measure_crest_heightening_trace(fig: go.Figure, section: DikeSection, me
 def add_measure_berm_widening_trace(fig: go.Figure, section: DikeSection, measure_results: dict):
     if "Grondversterking" in measure_results['name']:
         if measure_results['dberm'] > 0:
-            _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(section.trajectory_rd, buffersize=60)
+            _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(section.coordinates_rd, buffersize=60)
 
             _color = get_berm_widening_color(measure_results['dberm'])
 
