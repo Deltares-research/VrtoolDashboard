@@ -75,7 +75,14 @@ df = pd.DataFrame(columns=["section_col", "reinforcement_col", "reference_year",
                            ])  # empty dataframe
 
 dike_vr_optimization_layout_ag_grid = html.Div([
-    dag.AgGrid(
+    # add text
+    dcc.Markdown(
+        '''
+        Met de onderstaande tabel, kunt u dijkvakken selecteren en de versterkingen aanpassen.
+        
+        Geef een naam voor de optimizatie run en klik op de knop "Optimize" om de optimalisatie te starten.
+        '''
+    ),    dag.AgGrid(
         id=EDITABLE_TRAJECT_TABLE_ID,
         rowData=df.to_dict('records'),
         columnDefs=columns_defs,
