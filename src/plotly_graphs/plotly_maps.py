@@ -292,6 +292,7 @@ def plot_dike_traject_measures_map(dike_traject: DikeTraject, subresult_type: st
     _legend_display = {"ground_reinforcement": True, "VZG": True, "screen": True, "diaphram wall": True,
                        "crest_heightening": True, "berm_widening": True, "revetment": True
                        }
+
     for section in dike_traject.dike_sections:
 
         # if a section is not in analyse, skip it, and it turns blank on the map.
@@ -336,7 +337,6 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
     if "Grondversterking" in measure_results['name']:
         # convert in GWS coordinates:
         _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(section.coordinates_rd, buffersize=60)
-
         if measure_results['dcrest'] == 0 and measure_results['dberm'] > 0:
             _name = "Bermverbreding"
             _color = "#9ACD32"
@@ -457,9 +457,12 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
             hovertemplate=f'Vaknaam {section.name}<br>' \
                           f"{measure_results['name']} <br>" \
                           f"Investeringsjaar: {REFERENCE_YEAR + measure_results['investment_year']} <br>" \
+                          f"Verhouding target {measure_results['pf_target_ratio']} <br>" \
+                          f"Verschil transitie niveaus {measure_results['diff_transition_level']}m <br>" \
                           f"<extra></extra>"
             ,
         ))
+
         legend_display["revetment"] = False
 
 
