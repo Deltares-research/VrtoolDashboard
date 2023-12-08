@@ -144,7 +144,8 @@ class DikeSectionImporter(OrmImporterProtocol):
                     (MeasureResultParameter.name == "TRANSITION_LEVEL")
                 )
 
-                _params['pf_target_ratio'] = round(beta_to_pf(ini_beta_target[0].value) / beta_to_pf(_params['beta_target']), 1)
+                _params['pf_target_ratio'] = round(
+                    beta_to_pf(ini_beta_target[0].value) / beta_to_pf(_params['beta_target']), 1)
                 _params["diff_transition_level"] = _params['transition_level'] - ini_transition_level[0].value
 
         return _params
@@ -174,7 +175,7 @@ class DikeSectionImporter(OrmImporterProtocol):
         _optimization_steps = get_optimization_steps_ordered(self.run_id_dsn)
 
         _optimum_section_step_number = None
-
+        _cost = 0
         for _optimization_step in _optimization_steps:
 
             section = (SectionData
@@ -187,6 +188,7 @@ class DikeSectionImporter(OrmImporterProtocol):
 
             if section.id == section_data.id:
                 _optimum_section_step_number = _optimization_step.step_number
+                _cost += self._get_section_lcc(_optimization_step) # for dsn there should be only one addition
 
         if _optimum_section_step_number is None:
             return self._get_no_measure_case(section_data)
@@ -200,7 +202,9 @@ class DikeSectionImporter(OrmImporterProtocol):
                     OptimizationStep.step_number == _optimum_section_step_number))
         )
 
-        return self._get_final_measure(_optimum_section_optimization_steps)
+        _final_measure = self._get_final_measure(_optimum_section_optimization_steps)
+        _final_measure["LCC"] = _cost
+        return _final_measure
 
     def get_final_measure_vr(self, section_data: SectionData) -> dict:
         """
@@ -221,8 +225,9 @@ class DikeSectionImporter(OrmImporterProtocol):
         # this implies that the _optimum_section_steps are ordered in ascending order of step_number
         _optimum_section_step_number = None
 
+        _section_cumulative_cost = 0  # this is the cost for one section, cumulative for all the optimization steps
+        _iterated_step_number = []
         for _optimization_step in _optimization_steps:
-
             # Stop when the last step has been reached
             if _optimization_step.step_number > _final_step_number:
                 break
@@ -235,8 +240,10 @@ class DikeSectionImporter(OrmImporterProtocol):
                        .where(OptimizationSelectedMeasure.id == _optimization_step.optimization_selected_measure_id)
                        ).get()
 
-            if section.id == section_data.id:
+            if section.id == section_data.id and _optimization_step.step_number not in _iterated_step_number:
+                _section_cumulative_cost += self._get_section_lcc(_optimization_step)
                 _optimum_section_step_number = _optimization_step.step_number
+                _iterated_step_number.append(_optimization_step.step_number)
 
         if _optimum_section_step_number is None:
             # In this case, the section has not been reinforced, so the initial assessment is the final measure.
@@ -251,7 +258,10 @@ class DikeSectionImporter(OrmImporterProtocol):
         )
         )
         # 3. Get all information into a dict based on the optimum optimization steps.
-        return self._get_final_measure(_optimum_section_optimization_steps)
+
+        _final_measure = self._get_final_measure(_optimum_section_optimization_steps)
+        _final_measure["LCC"] = _section_cumulative_cost
+        return _final_measure
 
     def _get_no_measure_case(self, section_data: SectionData) -> dict:
 
@@ -276,8 +286,6 @@ class DikeSectionImporter(OrmImporterProtocol):
         _final_measure = self._get_final_measure_betas(optimization_steps)
 
         # Get the extra information measure name and the corresponding parameter values for the most (combined or not) optimal step
-        _final_measure["LCC"] = self._get_section_lcc(optimization_steps[0])
-
         if optimization_steps.count() == 1:
             _final_measure["name"] = self._get_single_measure(optimization_steps[0]).name
             _final_measure['investment_year'] = self._get_investment_year(optimization_steps[0])
@@ -340,8 +348,11 @@ class DikeSectionImporter(OrmImporterProtocol):
         """
         Get the lcc of a section for a given optimization step
         :param optimization_step:
+        :param section_data:
         :return:
         """
+
+        # Get all the optimization_steps for the section:
 
         _query = (OptimizationStepResultSection
                   .select(OptimizationStepResultSection.lcc)

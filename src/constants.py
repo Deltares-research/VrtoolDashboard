@@ -45,7 +45,7 @@ class Measures(Enum):
     GROUND_IMPROVEMENT = "Grondversterking"
     GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN = "Grondversterking met stabiliteitsscherm"
     GEOTEXTILE = "VZG"
-    DIAPHRAGM_WALL = "Zelferende constructie"
+    DIAPHRAGM_WALL = "Zelfkerende constructie"
     STABILITY_SCREEN = "Stabiliteitsscherm"
 
 
