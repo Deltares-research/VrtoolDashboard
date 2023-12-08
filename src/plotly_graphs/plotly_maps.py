@@ -441,7 +441,8 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
         legend_display["diaphram wall"] = False
 
     if "bekleding" in measure_results['name']:
-        _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(section.coordinates_rd, buffersize=30)
+        _coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
+                            section.coordinates_rd]  # convert in GWS coordinates:
 
         fig.add_trace(go.Scattermapbox(
             name='Aanpassing bekleding',
@@ -457,8 +458,8 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
             hovertemplate=f'Vaknaam {section.name}<br>' \
                           f"{measure_results['name']} <br>" \
                           f"Investeringsjaar: {REFERENCE_YEAR + measure_results['investment_year']} <br>" \
-                          f"Verhouding target {measure_results['pf_target_ratio']} <br>" \
-                          f"Verschil transitie niveaus {measure_results['diff_transition_level']}m <br>" \
+                          f"Factor veiliger bekleding {measure_results['pf_target_ratio']} <br>" \
+                          f"Verhoging overgang {measure_results['diff_transition_level']}m <br>" \
                           f"<extra></extra>"
             ,
         ))
