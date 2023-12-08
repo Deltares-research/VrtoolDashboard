@@ -176,6 +176,7 @@ class DikeSectionImporter(OrmImporterProtocol):
 
         _optimum_section_step_number = None
         _cost = 0
+        _iterated_step_number = []
         for _optimization_step in _optimization_steps:
 
             section = (SectionData
@@ -186,9 +187,12 @@ class DikeSectionImporter(OrmImporterProtocol):
                        .where(OptimizationSelectedMeasure.id == _optimization_step.optimization_selected_measure_id)
                        ).get()
 
-            if section.id == section_data.id:
+            if section.id == section_data.id and _optimization_step.step_number not in _iterated_step_number:
                 _optimum_section_step_number = _optimization_step.step_number
                 _cost += self._get_section_lcc(_optimization_step) # for dsn there should be only one addition
+                _iterated_step_number.append(_optimization_step.step_number)
+
+
 
         if _optimum_section_step_number is None:
             return self._get_no_measure_case(section_data)
