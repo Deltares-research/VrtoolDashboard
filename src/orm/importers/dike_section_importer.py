@@ -144,7 +144,8 @@ class DikeSectionImporter(OrmImporterProtocol):
                     (MeasureResultParameter.name == "TRANSITION_LEVEL")
                 )
 
-                _params['pf_target_ratio'] = round(beta_to_pf(ini_beta_target[0].value) / beta_to_pf(_params['beta_target']), 1)
+                _params['pf_target_ratio'] = round(
+                    beta_to_pf(ini_beta_target[0].value) / beta_to_pf(_params['beta_target']), 1)
                 _params["diff_transition_level"] = _params['transition_level'] - ini_transition_level[0].value
 
         return _params
@@ -187,10 +188,7 @@ class DikeSectionImporter(OrmImporterProtocol):
 
             if section.id == section_data.id:
                 _optimum_section_step_number = _optimization_step.step_number
-                _query = (OptimizationStepResultSection
-                          .select(OptimizationStepResultSection.lcc)
-                          .where(OptimizationStepResultSection.optimization_step_id == _optimization_step.id)).first()
-                _cost += _query.lcc
+                _cost += self._get_section_lcc(_optimization_step) # for dsn there should be only one addition
 
         if _optimum_section_step_number is None:
             return self._get_no_measure_case(section_data)
@@ -204,7 +202,7 @@ class DikeSectionImporter(OrmImporterProtocol):
                     OptimizationStep.step_number == _optimum_section_step_number))
         )
 
-        _final_measure =  self._get_final_measure(_optimum_section_optimization_steps)
+        _final_measure = self._get_final_measure(_optimum_section_optimization_steps)
         _final_measure["LCC"] = _cost
         return _final_measure
 
@@ -243,10 +241,7 @@ class DikeSectionImporter(OrmImporterProtocol):
                        ).get()
 
             if section.id == section_data.id and _optimization_step.step_number not in _iterated_step_number:
-                _query = (OptimizationStepResultSection
-                          .select(OptimizationStepResultSection.lcc)
-                          .where(OptimizationStepResultSection.optimization_step_id == _optimization_step.id)).first()
-                _section_cumulative_cost += _query.lcc
+                _section_cumulative_cost += self._get_section_lcc(_optimization_step)
                 _optimum_section_step_number = _optimization_step.step_number
                 _iterated_step_number.append(_optimization_step.step_number)
 
@@ -349,7 +344,7 @@ class DikeSectionImporter(OrmImporterProtocol):
                   .where(OptimizationStepResultSection.optimization_step_id == optimization_step.id))
         return _query
 
-    def _get_cumulative_section_lcc(self, optimization_step: OptimizationStep, section_data: SectionData) -> float:
+    def _get_section_lcc(self, optimization_step: OptimizationStep) -> float:
         """
         Get the lcc of a section for a given optimization step
         :param optimization_step:
