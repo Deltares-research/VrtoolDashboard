@@ -4,7 +4,7 @@ from typing import Tuple
 import numpy as np
 import plotly.graph_objects as go
 from matplotlib import pyplot as plt, colors
-from shapely import Polygon, MultiPolygon
+from shapely import Polygon, MultiPolygon, LineString
 
 from src.constants import REFERENCE_YEAR, ColorBarResultType, Mechanism, SubResultType, CalcType, ResultType
 from src.linear_objects.dike_section import DikeSection
@@ -441,8 +441,11 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
         legend_display["diaphram wall"] = False
 
     if "bekleding" in measure_results['name']:
+        _ls = LineString(section.coordinates_rd)
+        _offset_ls = _ls.parallel_offset(20, 'left')
+
         _coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
-                            section.coordinates_rd]  # convert in GWS coordinates:
+                            _offset_ls.coords]  # convert in GWS coordinates:
 
         fig.add_trace(go.Scattermapbox(
             name='Aanpassing bekleding',
@@ -451,9 +454,9 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
             lat=[x[0] for x in _coordinates_wgs],
             lon=[x[1] for x in _coordinates_wgs],
             fillcolor="grey",
-            line={'width': 1, 'color': "black"},
-            fill="toself",
-            opacity=0.5,
+            line={'width': 4, 'color': "black"},
+            # fill="toself",
+            opacity=1,
             showlegend=legend_display.get("revetment"),
             hovertemplate=f'Vaknaam {section.name}<br>' \
                           f"{measure_results['name']} <br>" \
