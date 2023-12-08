@@ -4,7 +4,7 @@ from typing import Tuple
 import numpy as np
 import plotly.graph_objects as go
 from matplotlib import pyplot as plt, colors
-from shapely import Polygon, MultiPolygon
+from shapely import Polygon, MultiPolygon, LineString
 
 from src.constants import REFERENCE_YEAR, ColorBarResultType, Mechanism, SubResultType, CalcType, ResultType
 from src.linear_objects.dike_section import DikeSection
@@ -292,6 +292,7 @@ def plot_dike_traject_measures_map(dike_traject: DikeTraject, subresult_type: st
     _legend_display = {"ground_reinforcement": True, "VZG": True, "screen": True, "diaphram wall": True,
                        "crest_heightening": True, "berm_widening": True, "revetment": True
                        }
+
     for section in dike_traject.dike_sections:
 
         # if a section is not in analyse, skip it, and it turns blank on the map.
@@ -336,7 +337,6 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
     if "Grondversterking" in measure_results['name']:
         # convert in GWS coordinates:
         _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(section.coordinates_rd, buffersize=60)
-
         if measure_results['dcrest'] == 0 and measure_results['dberm'] > 0:
             _name = "Bermverbreding"
             _color = "#9ACD32"
@@ -441,7 +441,11 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
         legend_display["diaphram wall"] = False
 
     if "bekleding" in measure_results['name']:
-        _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(section.coordinates_rd, buffersize=30)
+        _ls = LineString(section.coordinates_rd)
+        _offset_ls = _ls.parallel_offset(20, 'left')
+
+        _coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
+                            _offset_ls.coords]  # convert in GWS coordinates:
 
         fig.add_trace(go.Scattermapbox(
             name='Aanpassing bekleding',
@@ -450,16 +454,19 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
             lat=[x[0] for x in _coordinates_wgs],
             lon=[x[1] for x in _coordinates_wgs],
             fillcolor="grey",
-            line={'width': 1, 'color': "black"},
-            fill="toself",
-            opacity=0.5,
+            line={'width': 4, 'color': "black"},
+            # fill="toself",
+            opacity=1,
             showlegend=legend_display.get("revetment"),
             hovertemplate=f'Vaknaam {section.name}<br>' \
                           f"{measure_results['name']} <br>" \
                           f"Investeringsjaar: {REFERENCE_YEAR + measure_results['investment_year']} <br>" \
+                          f"Factor veiliger bekleding {measure_results['pf_target_ratio']} <br>" \
+                          f"Verhoging overgang {measure_results['diff_transition_level']}m <br>" \
                           f"<extra></extra>"
             ,
         ))
+
         legend_display["revetment"] = False
 
 

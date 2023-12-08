@@ -98,12 +98,6 @@ class DikeSectionImporter(OrmImporterProtocol):
                 OptimizationSelectedMeasure.id == optimum_step.optimization_selected_measure_id)
             measure_result = MeasureResult.get(MeasureResult.id == optimum_selected_measure.measure_result_id)
 
-            names_to_search = ["DBERM", "DCREST"]
-            params = MeasureResultParameter.select().where(
-                (MeasureResultParameter.measure_result_id == measure_result.id) &
-                (MeasureResultParameter.name.in_(names_to_search))
-            )
-
             params_dberm = MeasureResultParameter.select().where(
                 (MeasureResultParameter.measure_result_id == measure_result.id) &
                 (MeasureResultParameter.name == "DBERM")
@@ -113,15 +107,47 @@ class DikeSectionImporter(OrmImporterProtocol):
                 (MeasureResultParameter.name == "DCREST")
             )
 
-            if params.count() > 0:
-                _params['dberm'] = params_dberm[0].value
-                _params['dcrest'] = params_dcrest[0].value
-                return _params
+            params_beta_target = MeasureResultParameter.select().where(
+                (MeasureResultParameter.measure_result_id == measure_result.id) &
+                (MeasureResultParameter.name == "BETA_TARGET")
+            )
+            params_transition_level = MeasureResultParameter.select().where(
+                (MeasureResultParameter.measure_result_id == measure_result.id) &
+                (MeasureResultParameter.name == "TRANSITION_LEVEL")
+            )
 
-            else:
-                _params['dberm'] = None
-                _params['dcrest'] = None
-                return _params
+            _params['dberm'] = params_dberm[0].value if params_dberm.count() > 0 else 0
+            _params['dcrest'] = params_dcrest[0].value if params_dcrest.count() > 0 else 0
+            _params['beta_target'] = params_beta_target[0].value if params_beta_target.count() > 0 else None
+            _params['transition_level'] = params_transition_level[
+                0].value if params_transition_level.count() > 0 else None
+            _params['pf_target_ratio'] = None
+            _params['diff_transition_level'] = None
+
+            # get the ratio of beta target and diff transition level when relevant
+            if params_beta_target.count() > 0:
+                _measure_per_section_id = MeasurePerSection.get(
+                    MeasurePerSection.id == measure_result.measure_per_section_id).id
+
+                # get the measure result which has the same measure_per_section as the applied measure but with the
+                # lowest beta target (this is the initial revetment measure)
+                _ini_measure_result = MeasureResult.select().where(
+                    MeasureResult.measure_per_section_id == _measure_per_section_id).order_by(MeasureResult.id.asc())
+
+                # Get the initial revetment parameters:
+                ini_beta_target = MeasureResultParameter.select().where(
+                    (MeasureResultParameter.measure_result_id == _ini_measure_result) &
+                    (MeasureResultParameter.name == "BETA_TARGET")
+                )
+                ini_transition_level = MeasureResultParameter.select().where(
+                    (MeasureResultParameter.measure_result_id == _ini_measure_result) &
+                    (MeasureResultParameter.name == "TRANSITION_LEVEL")
+                )
+
+                _params['pf_target_ratio'] = round(beta_to_pf(ini_beta_target[0].value) / beta_to_pf(_params['beta_target']), 1)
+                _params["diff_transition_level"] = _params['transition_level'] - ini_transition_level[0].value
+
+        return _params
 
     def _get_vzg_parameters(self) -> tuple[float, float]:
         _vzg_params = (StandardMeasure.select(StandardMeasure.prob_of_solution_failure,
@@ -224,7 +250,6 @@ class DikeSectionImporter(OrmImporterProtocol):
             & (OptimizationStep.step_number == _optimum_section_step_number)
         )
         )
-
         # 3. Get all information into a dict based on the optimum optimization steps.
         return self._get_final_measure(_optimum_section_optimization_steps)
 
@@ -265,7 +290,6 @@ class DikeSectionImporter(OrmImporterProtocol):
 
         else:
             raise ValueError(f"Unexpected number of optimum steps: {optimization_steps.count()}")
-
         _final_measure.update(self._get_measure_parameters(optimization_steps))
         return _final_measure
 
@@ -414,7 +438,7 @@ class DikeSectionImporter(OrmImporterProtocol):
 
             if soil_reinforcement_step is not None and vzg_step is None:
                 _betas = np.array([row.beta for row in
-                                      self._get_mechanism_beta(soil_reinforcement_step, mechanism)])
+                                   self._get_mechanism_beta(soil_reinforcement_step, mechanism)])
                 _final_measure[mechanism] = _betas
                 _dict_probabilities[mechanism] = beta_to_pf(_betas)
                 continue
