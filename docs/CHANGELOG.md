@@ -19,6 +19,23 @@ None.
 ### Fixed
 None.
 
+## v0.3.1 [11/12/2023]
+
+### Added
+None.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+Bug Diaphram Wall + aanpassing bekledin
+
 ## v0.3.0 [11/12/2023]
 
 ### Added
