@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased] [dd/mm/yyyy]
 
 ### Added
+None.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
+## v0.3.0 [11/12/2023]
+
+### Added
 Integration database to dashboard (Initial assessment + Optimization results)
 Modal and display of VRTOOL logging when running optimization
 Support of revement cases with database
@@ -13,6 +30,7 @@ Support of revement cases with database
 How data is initialized in the dashboard
 Wheels of VRCrool v0.1.1
 Changed optimization DataTable to Ag Grid
+Maatregel type map 
 
 ### Deprecated
 None.
@@ -22,7 +40,7 @@ CSv related methods and importers
 Temporary signalering and ondergrens NumberFields
 
 ### Fixed
-None.
+Fixed LCC cost
 
 ## v0.2.3 [19/10/2023]
 
