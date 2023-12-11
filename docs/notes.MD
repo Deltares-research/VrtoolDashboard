@@ -7,3 +7,11 @@ Grant access to testers/users BEFORE deploying phase, locally:
 
 Grant access to testers/users AFTER deploying phase, remotely:
 5. Deploy a staging environment on a dummy platform. (e.g. Heroku)
+
+
+
+For deployment, replace in pyproject.toml:
+```
+vrtool = "0.1.3"
+```
+  
