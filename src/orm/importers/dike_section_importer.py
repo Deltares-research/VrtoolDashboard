@@ -399,7 +399,7 @@ class DikeSectionImporter(OrmImporterProtocol):
         _dict_probabilities = {}
 
         # find which optimization step is the soil reinforcement or vzg or revetment
-        soil_reinforcement_step, vzg_step, revetment_step = None, None, None
+        soil_reinforcement_step, vzg_step, revetment_step, diaphram_wall_step, stability_screen_step = None, None, None, None, None
         for optimization_step in optimization_steps:
             _measure_type = self._get_mesure_type_from_optimization_step(optimization_step)
             if _measure_type.name in ["Soil reinforcement", "Soil reinforcement with stability screen"]:
@@ -408,8 +408,35 @@ class DikeSectionImporter(OrmImporterProtocol):
                 vzg_step = optimization_step
             elif _measure_type.name in ["Revetment"]:
                 revetment_step = optimization_step
+            elif _measure_type.name in ["Diaphragm Wall"]:
+                diaphram_wall_step = optimization_step
+            elif _measure_type.name in ["Stability Screen"]:
+                stability_screen_step = optimization_step
+
         # Assign the mechanism betas according to the right optimization step(s):
         for mechanism in self.active_mechanisms:
+
+            if mechanism == "Stability Screen" and stability_screen_step is not None:
+                _betas = np.array([row.beta for row in
+                                   self._get_mechanism_beta(stability_screen_step, mechanism)])
+                _final_measure[mechanism] = _betas
+                _dict_probabilities[mechanism] = beta_to_pf(_betas)
+                continue
+
+            if diaphram_wall_step is not None and mechanism != "Revetment":
+                _betas = np.array([row.beta for row in
+                                   self._get_mechanism_beta(diaphram_wall_step, mechanism)])
+                _final_measure[mechanism] = _betas
+                _dict_probabilities[mechanism] = beta_to_pf(_betas)
+                continue
+
+            if revetment_step is not None and mechanism != "Revetment" and vzg_step is None and soil_reinforcement_step is None:
+                _betas = np.array([row.beta for row in
+                                   self._get_mechanism_beta(revetment_step, mechanism)])
+                _final_measure[mechanism] = _betas
+                _dict_probabilities[mechanism] = beta_to_pf(_betas)
+                continue
+
 
             if mechanism == "Revetment" and revetment_step is not None:
                 _betas_revetment = np.array(
@@ -458,7 +485,7 @@ class DikeSectionImporter(OrmImporterProtocol):
                 _dict_probabilities[mechanism] = beta_to_pf(_betas)
                 continue
 
-            raise ValueError("Error, configuration to be implemented")
+            # raise ValueError("Error, configuration to be implemented")
 
         section = CombinFunctions.combine_probabilities(_dict_probabilities, tuple(_dict_probabilities.keys()))
 
@@ -510,6 +537,7 @@ class DikeSectionImporter(OrmImporterProtocol):
         self.active_mechanisms = self._get_all_section_mechanism(orm_model)
         # years: list[int]  # Years for which a reliability result is available (both for initial and measures)
         _dike_section.name = orm_model.section_name
+        print("section name: ", orm_model.section_name)
         _dike_section.length = round(orm_model.section_length)
         _dike_section.coordinates_rd = self._get_coordinates(orm_model)
         _dike_section.in_analyse = orm_model.in_analysis
