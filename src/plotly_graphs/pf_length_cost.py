@@ -42,11 +42,14 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
         x_dsn = dike_traject.get_cum_cost("dsn")
         title_x_axis = "Kosten (mln €)"
         max_x = max(x_vr[-1], x_dsn[-1])
+        hover_extra = "Kosten: €%{x:.2f} mln<br>"
+
     elif cost_length_switch == "LENGTH":
         x_vr = dike_traject.get_cum_length("vr")
         x_dsn = dike_traject.get_cum_length("dsn")
         title_x_axis = "Lengte (km)"
         max_x = max(x_vr[-1], x_dsn[-1])
+        hover_extra = "Lengte: %{x:.2f} m<br>"
     else:
         raise ValueError("Wrong cost_length_switch value")
 
@@ -77,8 +80,7 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
                              line=dict(color='blue'),
                              marker=dict(size=6, color='blue'),
                              hovertemplate="<b>%{customdata}</b><br><br>" +
-                                           "Kosten: €%{x:.2f} mln<br>" +
-                                           "Trajectfaalkans: %{y:.2e}<br>"
+                                           "Trajectfaalkans: %{y:.2e}<br>" + hover_extra
                              ))
 
     fig.add_trace(go.Scatter(x=x_vr,
@@ -89,8 +91,7 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
                              line=dict(color='gold'),
                              marker=dict(size=6, color='gold'),
                              hovertemplate="<b>%{customdata}</b><br><br>" +
-                                           "Kosten: €%{x:.2f} mln<br>" +
-                                           "Trajectfaalkans: %{y:.2e}<br>"
+                                           "Trajectfaalkans: %{y:.2e}<br>"  + hover_extra
                              ))
 
     fig.add_trace(go.Scatter(

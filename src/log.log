@@ -1,0 +1,175 @@
+2023-12-06 12:03:05 PM - [vrtool_logger_custom.py:72] - root - INFO - Initialized VrTool logger with handler VrTool log file handler.
+2023-12-06 12:03:27 PM - [orm_controllers.py:406] - root - INFO - Opened connection to export optimization run ppp.
+2023-12-06 12:03:27 PM - [orm_controllers.py:433] - root - INFO - Closed connection after export optimization run ppp.
+2023-12-06 12:03:27 PM - [run_optimization.py:190] - root - INFO - Start step 3: Optimization
+2023-12-06 12:04:05 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 28 steps, weakest section has no more available measures
+2023-12-06 12:04:05 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 18 steps, weakest section has no more available measures
+2023-12-06 12:04:05 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 0
+2023-12-06 12:04:06 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 28 steps, weakest section has no more available measures
+2023-12-06 12:04:06 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 18 steps, weakest section has no more available measures
+2023-12-06 12:04:06 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 1
+2023-12-06 12:04:06 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 28 steps, weakest section has no more available measures
+2023-12-06 12:04:07 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 18 steps, weakest section has no more available measures
+2023-12-06 12:04:07 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 2
+2023-12-06 12:04:07 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 28 steps, weakest section has no more available measures
+2023-12-06 12:04:08 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:08 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 3
+2023-12-06 12:04:08 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 28 steps, weakest section has no more available measures
+2023-12-06 12:04:08 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:08 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 4
+2023-12-06 12:04:09 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 28 steps, weakest section has no more available measures
+2023-12-06 12:04:09 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:09 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 5
+2023-12-06 12:04:10 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 28 steps, weakest section has no more available measures
+2023-12-06 12:04:10 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:10 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 6
+2023-12-06 12:04:10 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 28 steps, weakest section has no more available measures
+2023-12-06 12:04:11 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:11 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 7
+2023-12-06 12:04:11 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 25 steps, weakest section has no more available measures
+2023-12-06 12:04:12 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:12 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 8
+2023-12-06 12:04:12 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 25 steps, weakest section has no more available measures
+2023-12-06 12:04:13 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:13 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 9
+2023-12-06 12:04:13 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 25 steps, weakest section has no more available measures
+2023-12-06 12:04:14 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:14 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 10
+2023-12-06 12:04:14 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 25 steps, weakest section has no more available measures
+2023-12-06 12:04:14 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:14 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 11
+2023-12-06 12:04:15 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 18 steps, weakest section has no more available measures
+2023-12-06 12:04:15 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:15 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 12
+2023-12-06 12:04:16 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 18 steps, weakest section has no more available measures
+2023-12-06 12:04:16 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:17 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 8 steps, weakest section has no more available measures
+2023-12-06 12:04:17 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:17 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 14
+2023-12-06 12:04:18 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 8 steps, weakest section has no more available measures
+2023-12-06 12:04:18 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:18 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 15
+2023-12-06 12:04:19 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 8 steps, weakest section has no more available measures
+2023-12-06 12:04:19 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:19 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 16
+2023-12-06 12:04:19 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 8 steps, weakest section has no more available measures
+2023-12-06 12:04:20 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:20 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 17
+2023-12-06 12:04:20 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 8 steps, weakest section has no more available measures
+2023-12-06 12:04:21 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:21 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 6 steps, weakest section has no more available measures
+2023-12-06 12:04:22 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:22 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 2 steps, weakest section has no more available measures
+2023-12-06 12:04:23 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:23 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 20
+2023-12-06 12:04:23 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 2 steps, weakest section has no more available measures
+2023-12-06 12:04:24 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:24 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 21
+2023-12-06 12:04:24 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 2 steps, weakest section has no more available measures
+2023-12-06 12:04:25 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:25 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 22
+2023-12-06 12:04:25 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 2 steps, weakest section has no more available measures
+2023-12-06 12:04:25 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:25 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 23
+2023-12-06 12:04:26 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 2 steps, weakest section has no more available measures
+2023-12-06 12:04:26 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:26 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 24
+2023-12-06 12:04:27 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 2 steps, weakest section has no more available measures
+2023-12-06 12:04:27 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:27 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 25
+2023-12-06 12:04:28 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 2 steps, weakest section has no more available measures
+2023-12-06 12:04:28 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:28 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 26
+2023-12-06 12:04:29 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:29 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:29 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 27
+2023-12-06 12:04:30 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:30 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:30 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 28
+2023-12-06 12:04:31 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:31 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:31 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 29
+2023-12-06 12:04:32 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:32 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:32 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 30
+2023-12-06 12:04:32 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:33 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:33 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 31
+2023-12-06 12:04:33 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:34 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:34 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 32
+2023-12-06 12:04:34 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:35 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:35 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 33
+2023-12-06 12:04:35 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:36 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:36 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 34
+2023-12-06 12:04:36 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:37 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:37 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 35
+2023-12-06 12:04:37 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:37 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:37 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 36
+2023-12-06 12:04:38 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:38 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:38 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 37
+2023-12-06 12:04:39 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:39 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:39 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 38
+2023-12-06 12:04:40 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:40 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:40 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 39
+2023-12-06 12:04:41 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:41 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:41 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 40
+2023-12-06 12:04:42 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:42 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:42 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 41
+2023-12-06 12:04:43 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:43 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:43 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 42
+2023-12-06 12:04:44 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:44 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:44 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 43
+2023-12-06 12:04:44 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:45 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:45 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 44
+2023-12-06 12:04:45 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:46 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:46 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 45
+2023-12-06 12:04:46 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:47 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:47 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 46
+2023-12-06 12:04:47 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:48 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:48 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 47
+2023-12-06 12:04:48 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:49 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:49 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 48
+2023-12-06 12:04:49 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:50 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:50 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 49
+2023-12-06 12:04:50 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:50 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:50 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 50
+2023-12-06 12:04:51 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:51 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:51 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 51
+2023-12-06 12:04:52 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:52 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:52 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 52
+2023-12-06 12:04:53 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:53 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:53 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 53
+2023-12-06 12:04:54 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:54 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:54 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 54
+2023-12-06 12:04:55 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:55 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:55 PM - [greedy_strategy.py:643] - root - INFO - Single measure in step 55
+2023-12-06 12:04:56 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 1 steps, weakest section has no more available measures
+2023-12-06 12:04:56 PM - [greedy_strategy.py:101] - root - INFO - Bundle quit after 0 steps, weakest section has no more available measures
+2023-12-06 12:04:56 PM - [greedy_strategy.py:720] - root - INFO - Elapsed time for greedy algorithm: 51.84344983100891
+2023-12-06 12:05:37 PM - [run_optimization.py:204] - root - INFO - Finished step 3: Optimization
+2023-12-06 12:05:37 PM - [orm_controllers.py:453] - root - INFO - Opened connection to export optimizations.
+2023-12-06 12:05:42 PM - [orm_controllers.py:460] - root - INFO - Closed connection after export optimizations.
