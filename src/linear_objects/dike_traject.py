@@ -88,9 +88,7 @@ class DikeTraject(BaseLinearObject):
             for mechanism in _active_mechanisms:
                 mask = (_beta_df['name'] == section.name) & (_beta_df['mechanism'] == mechanism)
                 # replace the row in the dataframe with the betas of the section if both the name and mechanism match
-                d = {"name": section.name, "mechanism": mechanism, "Length": section.length
-
-                     }
+                d = {"name": section.name, "mechanism": mechanism, "Length": section.length}
 
                 for year, beta in zip(years, getattr(section, _section_measure)[mechanism]):
                     d[year] = beta

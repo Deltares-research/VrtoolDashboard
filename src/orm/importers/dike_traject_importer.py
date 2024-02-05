@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import numpy as np
 from geopandas import GeoDataFrame
 from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.orm.io.importers.optimization.optimization_step_importer import OptimizationStepImporter
@@ -7,9 +8,10 @@ from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol
 from vrtool.orm.models import SectionData, MeasurePerSection
 
 from src.linear_objects.dike_section import DikeSection
-from src.linear_objects.dike_traject import DikeTraject
+from src.linear_objects.dike_traject import DikeTraject, get_initial_assessment_df, get_traject_prob
 
 from src.orm.importers.dike_section_importer import DikeSectionImporter
+from src.orm.importers.optimization_step_importer import _get_final_measure_betas
 from src.orm.models import OptimizationSelectedMeasure, OptimizationStep, MeasureResult
 from src.orm.models.dike_traject_info import DikeTrajectInfo
 
@@ -120,8 +122,73 @@ class DikeTrajectImporter(OrmImporterProtocol):
 
         return _ordered_section_names, _final_step_id
 
-    def _get_greedy_steps(self):
-        pass
+    def _get_greedy_steps(self, sections: list[DikeSection]):
+        """Get the greedy steps for the veiligheidsrendement optimization"""
+        _beta_df = get_initial_assessment_df(sections)
+        _optimization_steps = get_optimization_steps_ordered(self.run_id_vr)
+        _traject_pf, _ = get_traject_prob(_beta_df, ['StabilityInner', 'Piping', 'Overflow', "Revetment"])
+        years = sections[0].years
+        section_dict = {section.name: section for section in sections}
+        _greedy_steps_res = [{"pf": _traject_pf['Section'], 'LCC': 0}]
+        _previous_step_number = None
+        for _optimization_step in _optimization_steps:
+            _step_number = _optimization_step.step_number
+
+            # We bundle Optimization steps that share the same step number
+            if _previous_step_number == _step_number:
+                continue
+
+            # Get corresponding section information
+            _section_data = (SectionData
+                             .select()
+                             .join(MeasurePerSection)
+                             .join(MeasureResult)
+                             .join(OptimizationSelectedMeasure)
+                             .where(OptimizationSelectedMeasure.id == _optimization_step.optimization_selected_measure_id)
+                             ).get()
+            _section = section_dict[_section_data.section_name]
+            _active_mechanisms = ['StabilityInner', 'Piping', 'Overflow']
+            if _section.revetment:
+                _active_mechanisms.append("Revetment")
+
+            # Get all the optimization steps with the same step number
+            _optimum_section_optimization_steps = (OptimizationStep
+            .select()
+            .join(OptimizationSelectedMeasure)
+            .where(
+                (OptimizationSelectedMeasure.optimization_run == self.run_id_vr)
+                & (OptimizationStep.step_number == _step_number)
+            ))
+
+            # get the betas of the step number
+            _final_measure = _get_final_measure_betas(_optimum_section_optimization_steps, _active_mechanisms)
+
+
+
+            # Modify matrix
+            for mechanism in _active_mechanisms:
+                mask = (_beta_df['name'] == _section.name) & (_beta_df['mechanism'] == mechanism)
+                # replace the row in the dataframe with the betas of the section if both the name and mechanism match
+                d = {"name": _section.name, "mechanism": mechanism, "Length": _section.length}
+
+                for year, beta in zip(years, _final_measure[mechanism]):
+                    d[year] = beta
+                _beta_df.loc[mask, years] = d
+
+
+            # Calculate traject faalkans
+            _reinforced_traject_pf, _ = get_traject_prob(_beta_df, _active_mechanisms)
+
+            _traject_pf = np.concatenate((_traject_pf, _reinforced_traject_pf), axis=0)
+
+            _previous_step_number = _step_number
+
+        traject_pf_matrix = np.array(_traject_pf)
+
+        _final_measure = {}
+        _final_measure["LCC"] = 111111111111111111
+        return _final_measure
+
 
     def _get_final_step_vr(self) -> int:
         """Get the final step id of the optimization run.
@@ -170,7 +237,7 @@ class DikeTrajectImporter(OrmImporterProtocol):
         if orm_model.OptimizationRun.select().exists():
             _dike_traject.reinforcement_order_dsn = self._get_reinforcement_section_order_dsn()
             _dike_traject.reinforcement_order_vr, final_greedy_step_id = self._get_reinforcement_section_order_vr()
-            _dike_traject.greedy_steps = self._get_greedy_steps()
+
         else:
             _dike_traject.reinforcement_order_dsn = []
             _dike_traject.reinforcement_order_vr = []
@@ -180,5 +247,8 @@ class DikeTrajectImporter(OrmImporterProtocol):
 
         _dike_traject.dike_sections = self._import_dike_section_list(_selected_sections, _traject_gdf,
                                                                      final_greedy_step_id=final_greedy_step_id)
+
+        # add the greedy steps to the dike traject
+        _dike_traject.greedy_steps = self._get_greedy_steps(_dike_traject.dike_sections)
 
         return _dike_traject
