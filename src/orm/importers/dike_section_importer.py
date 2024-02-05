@@ -554,6 +554,7 @@ class DikeSectionImporter(OrmImporterProtocol):
         else:
             _dike_section.final_measure_veiligheidsrendement = None
             _dike_section.final_measure_doorsnede = None
+            _dike_section.greedy_steps = None
 
         return _dike_section
 
