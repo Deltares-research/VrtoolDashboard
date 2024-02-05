@@ -120,6 +120,9 @@ class DikeTrajectImporter(OrmImporterProtocol):
 
         return _ordered_section_names, _final_step_id
 
+    def _get_greedy_steps(self):
+        pass
+
     def _get_final_step_vr(self) -> int:
         """Get the final step id of the optimization run.
         The final step in this case is the step with the lowest total cost.
@@ -154,6 +157,7 @@ class DikeTrajectImporter(OrmImporterProtocol):
                                     dike_sections=[],
                                     reinforcement_order_vr=[],
                                     reinforcement_order_dsn=[],
+                                    greedy_steps=[],
                                     signalering_value=_traject_p_signal,
                                     lower_bound_value=_traject_p_lower_bound)
 
@@ -166,9 +170,11 @@ class DikeTrajectImporter(OrmImporterProtocol):
         if orm_model.OptimizationRun.select().exists():
             _dike_traject.reinforcement_order_dsn = self._get_reinforcement_section_order_dsn()
             _dike_traject.reinforcement_order_vr, final_greedy_step_id = self._get_reinforcement_section_order_vr()
+            _dike_traject.greedy_steps = self._get_greedy_steps()
         else:
             _dike_traject.reinforcement_order_dsn = []
             _dike_traject.reinforcement_order_vr = []
+            _dike_traject.greedy_steps = []
             final_greedy_step_id = None
             _dike_traject.run_name_dsn = None
 

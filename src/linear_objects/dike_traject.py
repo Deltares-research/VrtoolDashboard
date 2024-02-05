@@ -18,6 +18,7 @@ class DikeTraject(BaseLinearObject):
     dike_sections: list[DikeSection]
     reinforcement_order_vr: list[str]
     reinforcement_order_dsn: list[str]
+    greedy_steps: list[dict]
     run_name: str = None
 
     def serialize(self) -> dict:
@@ -29,6 +30,7 @@ class DikeTraject(BaseLinearObject):
             'reinforcement_order_dsn': self.reinforcement_order_dsn,
             'signalering_value': self.signalering_value,
             'lower_bound_value': self.lower_bound_value,
+            'greedy_steps': self.greedy_steps,
             'run_name': self.run_name
         }
 
@@ -45,12 +47,13 @@ class DikeTraject(BaseLinearObject):
                            reinforcement_order_dsn=data['reinforcement_order_dsn'],
                            signalering_value=data["signalering_value"],
                            lower_bound_value=data["lower_bound_value"],
+                            greedy_steps=data["greedy_steps"],
                            run_name=data["run_name"]
                            )
 
     def calc_traject_probability_array(self, calc_type: str):
 
-        _beta_df = self.get_initial_assessment_df()
+        _beta_df = get_initial_assessment_df(self.dike_sections)
         _traject_pf, _ = get_traject_prob(_beta_df, ['StabilityInner', 'Piping', 'Overflow', "Revetment"])
         years = self.dike_sections[0].years
 
@@ -105,13 +108,14 @@ class DikeTraject(BaseLinearObject):
                 return section
         raise ValueError(f"Section with name {name} not found")
 
-    def get_initial_assessment_df(self) -> DataFrame:
+    @staticmethod
+    def get_initial_assessment_df(sections: list[DikeSection]) -> DataFrame:
         """Get the initial assessment dataframe from all children sections"""
 
-        years = self.dike_sections[0].years
+        years = sections[0].years
         df = pd.DataFrame(columns=["name", "mechanism"] + years + ["Length"])
 
-        for section in self.dike_sections:
+        for section in sections:
             if not section.in_analyse:
                 continue
             if not section.is_reinforced_doorsnede and not section.is_reinforced_veiligheidsrendement:
@@ -230,3 +234,32 @@ def get_traject_prob(beta_df: DataFrame, mechanisms: list) -> tuple[np.array, di
             # 1-prod(1-p)
         total_traject_prob += traject_probs[mechanism]
     return total_traject_prob, traject_probs
+
+
+def get_initial_assessment_df(sections: list[DikeSection]) -> DataFrame:
+    """Get the initial assessment dataframe from all children sections"""
+
+    years = sections[0].years
+    df = pd.DataFrame(columns=["name", "mechanism"] + years + ["Length"])
+
+    for section in sections:
+        if not section.in_analyse:
+            continue
+        if not section.is_reinforced_doorsnede and not section.is_reinforced_veiligheidsrendement:
+            continue
+        # add a row to the dataframe with the initial assessment of the section
+        mechanisms = ["Overflow", "StabilityInner", "Piping"]
+        if section.revetment:
+            mechanisms.append("Revetment")
+
+        for mechanism in mechanisms:
+            d = {"name": section.name, "mechanism": mechanism, "Length": section.length
+
+                 }
+
+            for year, beta in zip(years, section.initial_assessment[mechanism]):
+                d[year] = beta
+            s = pd.DataFrame(d, index=[0])
+            df = pd.concat([df, s])
+
+    return df

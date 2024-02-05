@@ -15,7 +15,6 @@ class DikeSection(BaseLinearObject):
     initial_assessment: Optional[dict]
     final_measure_veiligheidsrendement: Optional[dict]
     final_measure_doorsnede: Optional[dict]  # replace dict with a Measure Object
-    greedy_steps: list[dict]
     years: list[int]  # Years for which a reliability result is available (both for initial and measures)
 
     def __init__(self, name: str, coordinates_rd: list[tuple[float, float]], in_analyse: int):
@@ -34,7 +33,6 @@ class DikeSection(BaseLinearObject):
         self.initial_assessment = None
         self.final_measure_veiligheidsrendement = None
         self.final_measure_doorsnede = None
-        self.greedy_steps = []
         self.years = []
         self.revetment = False
 
@@ -51,7 +49,6 @@ class DikeSection(BaseLinearObject):
             'initial_assessment': self.initial_assessment,
             'final_measure_veiligheidsrendement': self.final_measure_veiligheidsrendement,
             'final_measure_doorsnede': self.final_measure_doorsnede,
-            'greedy_steps': self.greedy_steps,
             'years': self.years,
         }
 
@@ -70,6 +67,5 @@ class DikeSection(BaseLinearObject):
         section.final_measure_veiligheidsrendement = data['final_measure_veiligheidsrendement']
         section.final_measure_doorsnede = data['final_measure_doorsnede']
         section.years = data['years']
-        section.greedy_steps = data['greedy_steps']
         section.revetment = data['revetment']
         return section
