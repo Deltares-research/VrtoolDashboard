@@ -13,6 +13,21 @@ from vrtool.probabilistic_tools.probabilistic_functions import beta_to_pf, pf_to
 from src.orm import models as orm
 
 
+def _get_section_lcc(optimization_step: OptimizationStep) -> float:
+    """
+    Get the lcc of a section for a given optimization step
+    :param optimization_step:
+    :param section_data:
+    :return:
+    """
+
+    # Get all the optimization_steps for the section:
+
+    _query = (OptimizationStepResultSection
+              .select(OptimizationStepResultSection.lcc)
+              .where(OptimizationStepResultSection.optimization_step_id == optimization_step.id)).first()
+
+    return _query.lcc
 
 def _get_final_measure_betas(optimization_steps: OptimizationStep, active_mechanisms: list[str]) -> dict:
     _final_measure = {}

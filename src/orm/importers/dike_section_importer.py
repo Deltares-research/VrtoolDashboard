@@ -16,7 +16,7 @@ from vrtool.probabilistic_tools.probabilistic_functions import beta_to_pf, pf_to
 
 from src.linear_objects.dike_section import DikeSection
 from src.orm import models as orm
-from src.orm.importers.optimization_step_importer import _get_final_measure_betas
+from src.orm.importers.optimization_step_importer import _get_final_measure_betas, _get_section_lcc
 from src.orm.models import AssessmentMechanismResult, AssessmentSectionResult
 from src.orm.orm_controller_custom import get_optimization_step_with_lowest_total_cost_table_no_closing, \
     get_optimization_steps_ordered
@@ -177,7 +177,7 @@ class DikeSectionImporter(OrmImporterProtocol):
 
             if section.id == section_data.id and _optimization_step.step_number not in _iterated_step_number:
                 _optimum_section_step_number = _optimization_step.step_number
-                _cost += self._get_section_lcc(_optimization_step) # for dsn there should be only one addition
+                _cost += _get_section_lcc(_optimization_step) # for dsn there should be only one addition
                 _iterated_step_number.append(_optimization_step.step_number)
 
 
@@ -233,7 +233,7 @@ class DikeSectionImporter(OrmImporterProtocol):
                        ).get()
 
             if section.id == section_data.id and _optimization_step.step_number not in _iterated_step_number:
-                _section_cumulative_cost += self._get_section_lcc(_optimization_step)
+                _section_cumulative_cost += _get_section_lcc(_optimization_step)
                 _optimum_section_step_number = _optimization_step.step_number
                 _iterated_step_number.append(_optimization_step.step_number)
 
@@ -303,24 +303,6 @@ class DikeSectionImporter(OrmImporterProtocol):
             OptimizationSelectedMeasure.id == optimization_step.optimization_selected_measure_id).get()
 
         return _selected_optimization_measure.investment_year
-
-    def _get_section_lcc(self, optimization_step: OptimizationStep) -> float:
-        """
-        Get the lcc of a section for a given optimization step
-        :param optimization_step:
-        :param section_data:
-        :return:
-        """
-
-        # Get all the optimization_steps for the section:
-
-        _query = (OptimizationStepResultSection
-                  .select(OptimizationStepResultSection.lcc)
-                  .where(OptimizationStepResultSection.optimization_step_id == optimization_step.id)).first()
-
-        return _query.lcc
-
-
 
     def _get_coordinates(self, section_data: SectionData) -> list[tuple[float, float]]:
         """

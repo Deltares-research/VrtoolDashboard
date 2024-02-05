@@ -261,3 +261,24 @@ def get_initial_assessment_df(sections: list[DikeSection]) -> DataFrame:
             df = pd.concat([df, s])
 
     return df
+
+
+def cum_cost_steps(dike_traject: DikeTraject):
+
+    cost_list = []
+    for step in dike_traject.greedy_steps:
+        cost_list.append(step["LCC"])
+
+    return np.cumsum(cost_list) / 1e6
+
+def get_step_traject_pf(dike_traject: DikeTraject)-> np.array:
+
+    pf_array = []
+    for step in dike_traject.greedy_steps:
+        pf_array.append(step["pf"])
+
+    return np.array(pf_array)
+
+
+
+

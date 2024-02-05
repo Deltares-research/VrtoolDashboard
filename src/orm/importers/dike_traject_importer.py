@@ -11,7 +11,7 @@ from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject, get_initial_assessment_df, get_traject_prob
 
 from src.orm.importers.dike_section_importer import DikeSectionImporter
-from src.orm.importers.optimization_step_importer import _get_final_measure_betas
+from src.orm.importers.optimization_step_importer import _get_final_measure_betas, _get_section_lcc
 from src.orm.models import OptimizationSelectedMeasure, OptimizationStep, MeasureResult
 from src.orm.models.dike_traject_info import DikeTrajectInfo
 
@@ -129,7 +129,7 @@ class DikeTrajectImporter(OrmImporterProtocol):
         _traject_pf, _ = get_traject_prob(_beta_df, ['StabilityInner', 'Piping', 'Overflow', "Revetment"])
         years = sections[0].years
         section_dict = {section.name: section for section in sections}
-        _greedy_steps_res = [{"pf": _traject_pf['Section'], 'LCC': 0}]
+        _greedy_steps_res = [{"pf": _traject_pf[0].tolist(), 'LCC': 0}]
         _previous_step_number = None
         for _optimization_step in _optimization_steps:
             _step_number = _optimization_step.step_number
@@ -144,7 +144,8 @@ class DikeTrajectImporter(OrmImporterProtocol):
                              .join(MeasurePerSection)
                              .join(MeasureResult)
                              .join(OptimizationSelectedMeasure)
-                             .where(OptimizationSelectedMeasure.id == _optimization_step.optimization_selected_measure_id)
+                             .where(
+                OptimizationSelectedMeasure.id == _optimization_step.optimization_selected_measure_id)
                              ).get()
             _section = section_dict[_section_data.section_name]
             _active_mechanisms = ['StabilityInner', 'Piping', 'Overflow']
@@ -163,8 +164,6 @@ class DikeTrajectImporter(OrmImporterProtocol):
             # get the betas of the step number
             _final_measure = _get_final_measure_betas(_optimum_section_optimization_steps, _active_mechanisms)
 
-
-
             # Modify matrix
             for mechanism in _active_mechanisms:
                 mask = (_beta_df['name'] == _section.name) & (_beta_df['mechanism'] == mechanism)
@@ -175,20 +174,16 @@ class DikeTrajectImporter(OrmImporterProtocol):
                     d[year] = beta
                 _beta_df.loc[mask, years] = d
 
-
             # Calculate traject faalkans
             _reinforced_traject_pf, _ = get_traject_prob(_beta_df, _active_mechanisms)
 
-            _traject_pf = np.concatenate((_traject_pf, _reinforced_traject_pf), axis=0)
+            # Get step LCC:
+            LCC = _get_section_lcc(_optimization_step)
+            _greedy_steps_res.append({"pf": _reinforced_traject_pf[0].tolist(), 'LCC': LCC})
 
             _previous_step_number = _step_number
 
-        traject_pf_matrix = np.array(_traject_pf)
-
-        _final_measure = {}
-        _final_measure["LCC"] = 111111111111111111
-        return _final_measure
-
+        return _greedy_steps_res
 
     def _get_final_step_vr(self) -> int:
         """Get the final step id of the optimization run.
