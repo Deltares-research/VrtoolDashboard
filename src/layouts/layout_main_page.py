@@ -5,7 +5,7 @@ from dash.dash_table import DataTable
 from .layout_collasping_menus import make_collapsing_menu
 from .layout_dike_settings import dike_settings_layout
 from .layout_radio_items import layout_radio_color_bar_result_type, layout_radio_sub_type_result, \
-    layout_radio_length_switch
+    layout_radio_length_switch, layout_radio_greedy_optimization_stop_criteria
 from .layout_sliders import layout_urgency_length_slider
 from .layout_upload_dike_files import layout_traject_select
 from .layout_vr_optimalization import dike_vr_optimization_layout_ag_grid
@@ -132,6 +132,8 @@ def layout_tab_three() -> html.Div:
 
 
 def layout_tab_four() -> html.Div:
+    layout_number_field_optimization_stop_criteria = html.Div()
+
     layout = html.Div(
         children=[
             html.H2("Optimalisatie"),
@@ -141,6 +143,8 @@ def layout_tab_four() -> html.Div:
             dbc.Row([
 
                 dbc.Col([layout_radio_length_switch], md=4),
+                dbc.Col([layout_radio_greedy_optimization_stop_criteria], md=4),
+                dbc.Col([layout_number_field_optimization_stop_criteria], md=4),
 
             ]),
 

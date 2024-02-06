@@ -1,6 +1,7 @@
 from dash import dcc
 import dash_bootstrap_components as dbc
 
+from src.component_ids import SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA
 from src.constants import ColorBarResultType, ResultType, CalcType, Mechanism, SubResultType
 
 """
@@ -69,3 +70,9 @@ layout_radio_length_switch = dbc.RadioItems(
              {"label": "Lengte", "value": "LENGTH"}],
     value="COST",
 )
+
+layout_radio_greedy_optimization_stop_criteria = dbc.RadioItems(
+    id=SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA,
+    options=[{"label": "Economisch optimaal (standaard)", "value": "ECONOMIC_OPTIMAL"},
+             {"label": "Faalkans", "value": "TARGET_PF"}, ],
+    value="ECONOMIC_OPTIMAL")

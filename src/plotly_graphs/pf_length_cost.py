@@ -103,7 +103,7 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
                              y=y_step,
                              customdata=greedy_step_order,
                              mode='markers+lines',
-                             name='Optimisatie stappen',
+                             name='Optimalisatie stappen',
                              line=dict(color='green', dash='dot'),
                              marker=dict(size=3, color='green'),
                              hovertemplate="<b>%{customdata}</b><br><br>" +
