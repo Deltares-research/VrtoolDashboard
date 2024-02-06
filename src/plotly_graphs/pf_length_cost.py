@@ -30,12 +30,12 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
     :return:
     """
 
-
     fig = go.Figure()
     _year_index = bisect_right(dike_traject.dike_sections[0].years, selected_year - REFERENCE_YEAR) - 1
 
     section_order_dsn = ["Geen maatregel"] + dike_traject.reinforcement_order_dsn
     section_order_vr = ["Geen maatregel"] + dike_traject.reinforcement_order_vr
+    greedy_step_order = ["Geen maatregel"] + [f"Stap {o}" for o in range(1, len(dike_traject.greedy_steps))]
 
     if cost_length_switch == "COST":
         x_vr = dike_traject.get_cum_cost("vr")
@@ -48,6 +48,7 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
     elif cost_length_switch == "LENGTH":
         x_vr = dike_traject.get_cum_length("vr")
         x_dsn = dike_traject.get_cum_length("dsn")
+        x_step = []
         title_x_axis = "Lengte (km)"
         max_x = max(x_vr[-1], x_dsn[-1])
         hover_extra = "Lengte: %{x:.2f} m<br>"
@@ -92,20 +93,22 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
                              customdata=section_order_vr,
                              mode='markers+lines',
                              name='Veiligheidsrendement',
-                             line=dict(color='gold'),
-                             marker=dict(size=6, color='gold'),
+                             line=dict(color='green'),
+                             marker=dict(size=6, color='green'),
                              hovertemplate="<b>%{customdata}</b><br><br>" +
-                                           "Trajectfaalkans: %{y:.2e}<br>"  + hover_extra
+                                           "Trajectfaalkans: %{y:.2e}<br>" + hover_extra
                              ))
 
     fig.add_trace(go.Scatter(x=x_step,
-                                y=y_step,
-                                mode='markers+lines',
-                                name='Stapsgewijs',
-                                line=dict(color='green'),
-                                marker=dict(size=6, color='green'),
-                                hovertemplate="Trajectfaalkans: %{y:.2e}<br>" + hover_extra
-                                ))
+                             y=y_step,
+                             customdata=greedy_step_order,
+                             mode='markers+lines',
+                             name='Optimisatie stappen',
+                             line=dict(color='green', dash='dot'),
+                             marker=dict(size=3, color='green'),
+                             hovertemplate="<b>%{customdata}</b><br><br>" +
+                                           "Trajectfaalkans: %{y:.2e}<br>" + hover_extra
+                             ))
 
     fig.add_trace(go.Scatter(
         x=[0, max_x],
@@ -134,7 +137,7 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
                            text=section_name,
                            textangle=270,
                            showarrow=False,
-                           font=dict(size=14, color='gold'),
+                           font=dict(size=14, color='green'),
                            )
 
     for index, (x, section_name) in enumerate(zip(x_dsn[1:], section_order_dsn[1:])):
