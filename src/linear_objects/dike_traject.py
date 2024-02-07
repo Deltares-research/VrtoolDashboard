@@ -1,9 +1,12 @@
+from bisect import bisect_right
 from dataclasses import dataclass
+from typing import Optional
 
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
 
+from src.constants import REFERENCE_YEAR
 from src.linear_objects.base_linear import BaseLinearObject
 from src.linear_objects.dike_section import DikeSection
 
@@ -47,11 +50,11 @@ class DikeTraject(BaseLinearObject):
                            reinforcement_order_dsn=data['reinforcement_order_dsn'],
                            signalering_value=data["signalering_value"],
                            lower_bound_value=data["lower_bound_value"],
-                            greedy_steps=data["greedy_steps"],
+                           greedy_steps=data["greedy_steps"],
                            run_name=data["run_name"]
                            )
 
-    def calc_traject_probability_array(self, calc_type: str):
+    def calc_traject_probability_array(self, calc_type: str) -> np.array:
 
         _beta_df = get_initial_assessment_df(self.dike_sections)
         _traject_pf, _ = get_traject_prob(_beta_df, ['StabilityInner', 'Piping', 'Overflow', "Revetment"])
@@ -205,6 +208,21 @@ class DikeTraject(BaseLinearObject):
 
         return np.cumsum(length_list)
 
+    def _get_greedy_optimization_step_from_speficiations(self, target_year: int, target_beta: float) -> int:
+        """Get the optimization step number for the greedy optimization algorithm based on the specifications
+
+        :param target_year: the year for which the reliability should be met
+        :param target_beta: the target reliability
+        :return: the optimization step number
+        """
+        # find for which optimization step_number the criteria 'reliability in year' is met
+        _year_step_index = bisect_right(self.dike_sections[0].years,
+                                        target_year - REFERENCE_YEAR) - 1
+        _target_pf = beta_to_pf(target_beta)
+        _step_pf_array = get_step_traject_pf(self)[:, _year_step_index]
+        _step_index = np.argmax(_step_pf_array < _target_pf)
+        return int(_step_index)
+
 
 def get_traject_prob(beta_df: DataFrame, mechanisms: list) -> tuple[np.array, dict]:
     """Determines the probability of failure for a traject based on the standardized beta input"""
@@ -264,21 +282,16 @@ def get_initial_assessment_df(sections: list[DikeSection]) -> DataFrame:
 
 
 def cum_cost_steps(dike_traject: DikeTraject):
-
     cost_list = []
     for step in dike_traject.greedy_steps:
         cost_list.append(step["LCC"])
 
     return np.cumsum(cost_list) / 1e6
 
-def get_step_traject_pf(dike_traject: DikeTraject)-> np.array:
 
+def get_step_traject_pf(dike_traject: DikeTraject) -> np.array:
     pf_array = []
     for step in dike_traject.greedy_steps:
         pf_array.append(step["pf"])
 
     return np.array(pf_array)
-
-
-
-

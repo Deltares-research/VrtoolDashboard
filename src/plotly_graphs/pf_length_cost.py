@@ -1,11 +1,12 @@
 from bisect import bisect_right
+from typing import Optional
 
 import numpy as np
 import plotly.graph_objects as go
 
 from src.constants import REFERENCE_YEAR, ResultType
 from src.linear_objects.dike_traject import DikeTraject, cum_cost_steps, get_step_traject_pf
-from src.utils.utils import pf_to_beta
+from src.utils.utils import pf_to_beta, beta_to_pf
 
 
 def plot_default_scatter_dummy() -> go.Figure:
@@ -19,19 +20,26 @@ def plot_default_scatter_dummy() -> go.Figure:
 
 
 def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_type: str,
-                        cost_length_switch: str) -> go.Figure:
+                        cost_length_switch: str, greedy_criteria: str,
+                        greedy_criteria_params: Optional[tuple[float, int]]) -> go.Figure:
     """
 
     :param dike_traject:
     :param selected_year:
     :param result_type:
     :param cost_length_switch:
+    :param greedy_criteria:
+    :param greedy_criteria_params: tuple (beta, year) for which the greedy optimization stops
 
     :return:
     """
 
     fig = go.Figure()
     _year_index = bisect_right(dike_traject.dike_sections[0].years, selected_year - REFERENCE_YEAR) - 1
+
+    if greedy_criteria == "TARGET_PF" and greedy_criteria_params[0] is not None and greedy_criteria_params[1] is not None:
+        _step_index = dike_traject._get_greedy_optimization_step_from_speficiations(target_year=greedy_criteria_params[1], target_beta=greedy_criteria_params[0])
+
 
     section_order_dsn = ["Geen maatregel"] + dike_traject.reinforcement_order_dsn
     section_order_vr = ["Geen maatregel"] + dike_traject.reinforcement_order_vr
@@ -128,6 +136,18 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
         name="Signaleringswaarde",
         line=dict(color='black', dash='dot')
     ))
+
+    # Add vertical line if greedy_criteria is set to "TARGET_PF"
+    if greedy_criteria == "TARGET_PF" and greedy_criteria_params[0] is not None and greedy_criteria_params[1] is not None:
+        fig.add_trace(go.Scatter(
+            x=[x_step[_step_index], x_step[_step_index]],
+            y=[0, y_vr[-1]],
+            mode="lines",
+            marker=dict(size=0),
+            showlegend=True,
+            name="Voldoen aan PF target",
+            line=dict(color='red', dash='dot')
+        ))
 
     # add annotations for dijkvaken order:
     for index, (x, section_name) in enumerate(zip(x_vr[1:], section_order_vr[1:])):

@@ -1,7 +1,8 @@
 from dash import dcc, Output, Input
 from plotly.graph_objs import Figure
 
-from src.component_ids import SLIDER_YEAR_RELIABILITY_RESULTS_ID
+from src.component_ids import SLIDER_YEAR_RELIABILITY_RESULTS_ID, GREEDY_OPTIMIZATION_CRITERIA_BETA, \
+    GREEDY_OPTIMIZATION_CRITERIA_YEAR, SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA
 from src.constants import get_mapbox_token
 from src.linear_objects.dike_traject import DikeTraject
 from src.plotly_graphs.pf_length_cost import plot_pf_length_cost, plot_default_scatter_dummy
@@ -95,11 +96,16 @@ def make_graph_map_measures(dike_traject_data: dict, selected_year: float, resul
 
 
 @app.callback(Output('dike_traject_pf_cost_graph', 'figure'),
-              [Input('stored-data', 'data'), Input(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "value"),
-               Input("select_result_type", 'value'), Input("select_length_cost_switch", "value"),
+              [Input('stored-data', 'data'),
+               Input(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "value"),
+               Input("select_result_type", 'value'),
+               Input("select_length_cost_switch", "value"),
+               Input(SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA, "value"),
+               Input(GREEDY_OPTIMIZATION_CRITERIA_BETA, "value"),
+               Input(GREEDY_OPTIMIZATION_CRITERIA_YEAR, "value"),
                ])
 def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_type: str,
-                          cost_length_switch: str):
+                          cost_length_switch: str, greedy_stop_criteria: str, beta: float, year: int):
     """
     Call to display the graph of the plot of the probability of failure vs the cost of the measures.
 
@@ -107,6 +113,9 @@ def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_
     :param selected_year: Selected year by the user from the slider
     :param result_type: Selected result type by the user from the OptionField, one of "RELIABILITY" or "PROBABILITY"
     :param cost_length_switch: Selected cost length switch by the user from the OptionField, one of "COST" or "LENGTH"
+    :param greedy_stop_criteria: The stop criteria for the greedy optimization, one of "ECONOMIC_OPTIMAL" or "TARGET_PF"
+    :param beta: The beta value for the greedy optimization
+    :param year: The year value for the greedy optimization
 
 
     """
@@ -115,7 +124,7 @@ def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_
         return plot_default_scatter_dummy()
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
-        _fig = plot_pf_length_cost(_dike_traject, selected_year, result_type, cost_length_switch)
+        _fig = plot_pf_length_cost(_dike_traject, selected_year, result_type, cost_length_switch, greedy_stop_criteria, (beta, year))
     return _fig
 
 
