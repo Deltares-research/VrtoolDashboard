@@ -362,7 +362,6 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
             legend_display["ground_reinforcement"] = False
             _visible = False
 
-
         fig.add_trace(go.Scattermapbox(
             name=_name,
             legendgroup=_name,

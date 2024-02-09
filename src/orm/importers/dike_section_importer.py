@@ -92,8 +92,7 @@ class DikeSectionImporter(OrmImporterProtocol):
 
     def _get_measure_parameters(self, optimization_steps: OptimizationStep) -> dict:
         _params = {}
-        if optimization_steps.count() >1:
-            a =1
+
         for optimum_step in optimization_steps:
 
             optimum_selected_measure = OptimizationSelectedMeasure.get(
