@@ -19,6 +19,23 @@ None.
 ### Fixed
 None.
 
+## v0.3.2 [09/02/2024]
+
+### Added
+None.
+
+### Changed
+- no display of Soil reinforcement when dberm=dcrest=0
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+- wrong measure params fetched from database
+
 ## v0.3.1 [11/12/2023]
 
 ### Added
