@@ -92,6 +92,7 @@ class DikeSectionImporter(OrmImporterProtocol):
 
     def _get_measure_parameters(self, optimization_steps: OptimizationStep) -> dict:
         _params = {}
+
         for optimum_step in optimization_steps:
 
             optimum_selected_measure = OptimizationSelectedMeasure.get(
@@ -116,11 +117,15 @@ class DikeSectionImporter(OrmImporterProtocol):
                 (MeasureResultParameter.name == "TRANSITION_LEVEL")
             )
 
-            _params['dberm'] = params_dberm[0].value if params_dberm.count() > 0 else 0
-            _params['dcrest'] = params_dcrest[0].value if params_dcrest.count() > 0 else 0
-            _params['beta_target'] = params_beta_target[0].value if params_beta_target.count() > 0 else None
-            _params['transition_level'] = params_transition_level[
-                0].value if params_transition_level.count() > 0 else None
+            if _params.get('dberm') is None and params_dberm.count() > 0:
+                _params['dberm'] = params_dberm[0].value
+            if _params.get('dcrest') is None and params_dcrest.count() > 0:
+                _params['dcrest'] = params_dcrest[0].value
+            if _params.get('beta_target') is None and params_beta_target.count() > 0:
+                _params['beta_target'] = params_beta_target[0].value
+            if _params.get('transition_level') is None and params_transition_level.count() > 0:
+                _params['transition_level'] = params_transition_level[0].value
+
             _params['pf_target_ratio'] = None
             _params['diff_transition_level'] = None
 
@@ -529,7 +534,6 @@ class DikeSectionImporter(OrmImporterProtocol):
         """ Import a SectionData ORM model into a DikeSection object"""
         if not orm_model:
             raise ValueError(f"No valid value given for {SectionData.__name__}.")
-
         _dike_section = DikeSection(name=orm_model.section_name,
                                     coordinates_rd=[],
                                     in_analyse=True,
