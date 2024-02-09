@@ -337,6 +337,7 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
     if "Grondversterking" in measure_results['name']:
         # convert in GWS coordinates:
         _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(section.coordinates_rd, buffersize=60)
+        _visible = True
         if measure_results['dcrest'] == 0 and measure_results['dberm'] > 0:
             _name = "Bermverbreding"
             _color = "#9ACD32"
@@ -359,6 +360,8 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
             _color = '#008000'  # Green
             _showlegend = legend_display.get("ground_reinforcement")
             legend_display["ground_reinforcement"] = False
+            _visible = False
+
 
         fig.add_trace(go.Scattermapbox(
             name=_name,
@@ -370,6 +373,7 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
             line={'width': 1, 'color': _color},
             fill="toself",
             showlegend=_showlegend,
+            visible=_visible,
             hovertemplate=f'Vaknaam {section.name}<br>' \
                           f"Maatregel: {measure_results['name']} <br>" \
                           f"Investeringsjaar: {REFERENCE_YEAR + measure_results['investment_year']} <br>" \

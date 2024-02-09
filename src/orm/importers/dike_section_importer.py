@@ -127,7 +127,6 @@ class DikeSectionImporter(OrmImporterProtocol):
             if _params.get('transition_level') is None and params_transition_level.count() > 0:
                 _params['transition_level'] = params_transition_level[0].value
 
-
             _params['pf_target_ratio'] = None
             _params['diff_transition_level'] = None
 
