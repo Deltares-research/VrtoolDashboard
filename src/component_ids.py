@@ -20,4 +20,5 @@ SLIDER_YEAR_RELIABILITY_RESULTS_ID = "slider_year_reliability_results"
 SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA = "select_greedy_optimization_stop_criteria"
 GREEDY_OPTIMIZATION_CRITERIA_BETA = "greedy_optimization_criteria_beta"
 GREEDY_OPTIMIZATION_CRITERIA_YEAR = "greedy_optimization_criteria_year"
+BUTTON_RECOMPUTE_GREEDY_STEPS = "button_recompute_greedy_steps"
 

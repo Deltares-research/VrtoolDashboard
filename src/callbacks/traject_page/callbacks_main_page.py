@@ -124,6 +124,8 @@ def selection_traject_run(name: str, vr_config) -> dict:
     return _dike_traject.serialize()
 
 
+
+
 @app.callback(
     Output("collapse_1", "is_open"),
     [Input("collapse_button_1", "n_clicks")],

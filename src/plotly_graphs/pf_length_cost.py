@@ -38,7 +38,7 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
     _year_index = bisect_right(dike_traject.dike_sections[0].years, selected_year - REFERENCE_YEAR) - 1
 
     if greedy_criteria == "TARGET_PF" and greedy_criteria_params[0] is not None and greedy_criteria_params[1] is not None:
-        _step_index = dike_traject._get_greedy_optimization_step_from_speficiations(target_year=greedy_criteria_params[1], target_beta=greedy_criteria_params[0])
+        _step_index = dike_traject._get_greedy_optimization_step_from_speficiations(target_year=int(greedy_criteria_params[1]), target_beta=greedy_criteria_params[0])
 
 
     section_order_dsn = ["Geen maatregel"] + dike_traject.reinforcement_order_dsn

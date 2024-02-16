@@ -134,12 +134,6 @@ def layout_tab_three() -> html.Div:
 
 
 def layout_tab_four() -> html.Div:
-    layout_number_field_optimization_stop_criteria = html.Div(
-        dbc.Row([
-            dbc.Col(dcc.Input(id=GREEDY_OPTIMIZATION_CRITERIA_BETA, type='number', placeholder='beta',  style={'width': '50%'})),
-            dbc.Col(dcc.Input(id=GREEDY_OPTIMIZATION_CRITERIA_YEAR, type='number', placeholder='jaar', style={'width': '50%'})),
-
-        ]), )
 
     layout = html.Div(
         children=[
@@ -150,8 +144,6 @@ def layout_tab_four() -> html.Div:
             dbc.Row([
 
                 dbc.Col([layout_radio_length_switch], md=4),
-                dbc.Col([layout_radio_greedy_optimization_stop_criteria], md=4),
-                dbc.Col([layout_number_field_optimization_stop_criteria], md=4),
 
             ]),
 
