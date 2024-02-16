@@ -327,7 +327,7 @@ class DikeSectionImporter(OrmImporterProtocol):
 
         return _coordinates
 
-    def import_orm(self, orm_model: SectionData) -> DikeSection:
+    def import_orm_without_measure(self, orm_model: SectionData) -> DikeSection:
         """ Import a SectionData ORM model into a DikeSection object"""
         if not orm_model:
             raise ValueError(f"No valid value given for {SectionData.__name__}.")
@@ -349,12 +349,14 @@ class DikeSectionImporter(OrmImporterProtocol):
         _dike_section.initial_assessment = self._get_initial_assessment(orm_model)
         _dike_section.years = self.assessment_time
 
-        if self.final_greedy_step_id is not None:
-            _dike_section.final_measure_veiligheidsrendement = self.get_final_measure_vr(orm_model)
-            _dike_section.final_measure_doorsnede = self.get_final_measure_dsn(orm_model)
-        else:
-            _dike_section.final_measure_veiligheidsrendement = None
-            _dike_section.final_measure_doorsnede = None
+        #TODO: Decompose import of section in 2 parts: one for initial assessment and one for measures
+        #TODO: then the greedy step can be used to determine the final measure in case we dont select economic optimization
+        # if self.final_greedy_step_id is not None:
+        #     _dike_section.final_measure_veiligheidsrendement = self.get_final_measure_vr(orm_model)
+        #     _dike_section.final_measure_doorsnede = self.get_final_measure_dsn(orm_model)
+        # else:
+        #     _dike_section.final_measure_veiligheidsrendement = None
+        #     _dike_section.final_measure_doorsnede = None
 
         return _dike_section
 

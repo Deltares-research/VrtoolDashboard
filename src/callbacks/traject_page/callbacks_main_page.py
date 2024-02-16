@@ -8,7 +8,7 @@ from vrtool.defaults.vrtool_config import VrtoolConfig
 import pandas as pd
 
 from src.component_ids import STORE_CONFIG, DROPDOWN_SELECTION_RUN_ID, EDITABLE_TRAJECT_TABLE_ID, \
-    SLIDER_YEAR_RELIABILITY_RESULTS_ID
+    SLIDER_YEAR_RELIABILITY_RESULTS_ID, GREEDY_OPTIMIZATION_CRITERIA_BETA, GREEDY_OPTIMIZATION_CRITERIA_YEAR
 from src.constants import ColorBarResultType, SubResultType, Measures, REFERENCE_YEAR
 from src.linear_objects.dike_traject import DikeTraject
 
@@ -93,11 +93,12 @@ def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
     State(STORE_CONFIG, "data"),
     prevent_initial_call=True
 )
-def selection_traject_run(name: str, vr_config) -> dict:
+def selection_traject_run(name: str, vr_config: dict) -> dict:
     """
     Callback to select the run id for the traject.
 
     :param name: name of the traject
+    :param vr_config: dictionary with the configuration of the traject.
     :return: DikeTraject object
     """
 
@@ -123,7 +124,42 @@ def selection_traject_run(name: str, vr_config) -> dict:
     _dike_traject.run_name = name
     return _dike_traject.serialize()
 
+@app.callback(
+    Output('stored-data', 'data'),
+    [Input(DROPDOWN_SELECTION_RUN_ID, "value"),
+     Input(GREEDY_OPTIMIZATION_CRITERIA_BETA, "value"),
+     Input(GREEDY_OPTIMIZATION_CRITERIA_YEAR, "value")],
+    State(STORE_CONFIG, "data"),
+    prevent_initial_call=True
+)
+def recompute_dike_traject_with_new_greedy_criteria(name: str, vr_config: dict, beta_greedy_criteria: float, year_greedy_criteria: float) -> dict:
+    """
+    Callback to recompute the dike traject with new greedy criteria.
 
+
+    :return:
+    """
+    if vr_config is None or vr_config == {}:
+        return dash.no_update
+
+    _vr_config = VrtoolConfig()
+    _vr_config.traject = vr_config['traject']
+    _vr_config.input_directory = Path(vr_config['input_directory'])
+    _vr_config.output_directory = Path(vr_config['output_directory'])
+    _vr_config.input_database_name = vr_config['input_database_name']
+    _vr_config.excluded_mechanisms = [MechanismEnum.REVETMENT, MechanismEnum.HYDRAULIC_STRUCTURES]
+
+    if name == "Basisberekening":
+        _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=2, run_is_vr=1)
+
+    elif name in get_name_optimization_runs(_vr_config):
+        run_id_vr, run_id_dsn = get_run_optimization_ids(_vr_config, name)
+        _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=run_id_dsn, run_is_vr=run_id_vr)
+    else:
+        raise ValueError("Name of the Optimization run is not correct.")
+
+    _dike_traject.run_name = name
+    return _dike_traject.serialize()
 
 
 @app.callback(

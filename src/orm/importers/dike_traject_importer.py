@@ -58,7 +58,7 @@ class DikeTrajectImporter(OrmImporterProtocol):
                                            run_id_vr=self.run_id_vr,
                                            final_greedy_step_id=final_greedy_step_id)
 
-        return list(map(_ds_importer.import_orm, orm_dike_section_list))
+        return list(map(_ds_importer.import_orm_without_measure, orm_dike_section_list))
 
     def parse_geo_dataframe(self, traject_name: str) -> GeoDataFrame:
         """Open the geojson of the spatial coordinates of the dike traject and parse it to a GeoDataFrame
@@ -231,17 +231,17 @@ class DikeTrajectImporter(OrmImporterProtocol):
         # check if the table OptimizationRun is empty:
         if orm_model.OptimizationRun.select().exists():
             _dike_traject.reinforcement_order_dsn = self._get_reinforcement_section_order_dsn()
-            _dike_traject.reinforcement_order_vr, final_greedy_step_id = self._get_reinforcement_section_order_vr()
+            _dike_traject.reinforcement_order_vr, _final_greedy_step_id = self._get_reinforcement_section_order_vr()
 
         else:
             _dike_traject.reinforcement_order_dsn = []
             _dike_traject.reinforcement_order_vr = []
             _dike_traject.greedy_steps = []
-            final_greedy_step_id = None
+            _final_greedy_step_id = None
             _dike_traject.run_name_dsn = None
 
         _dike_traject.dike_sections = self._import_dike_section_list(_selected_sections, _traject_gdf,
-                                                                     final_greedy_step_id=final_greedy_step_id)
+                                                                     final_greedy_step_id=_final_greedy_step_id)
 
         # add the greedy steps to the dike traject
         _dike_traject.greedy_steps = self._get_greedy_steps(_dike_traject.dike_sections)
