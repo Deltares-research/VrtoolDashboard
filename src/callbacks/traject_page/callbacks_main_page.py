@@ -8,7 +8,8 @@ from vrtool.defaults.vrtool_config import VrtoolConfig
 import pandas as pd
 
 from src.component_ids import STORE_CONFIG, DROPDOWN_SELECTION_RUN_ID, EDITABLE_TRAJECT_TABLE_ID, \
-    SLIDER_YEAR_RELIABILITY_RESULTS_ID, GREEDY_OPTIMIZATION_CRITERIA_BETA, GREEDY_OPTIMIZATION_CRITERIA_YEAR
+    SLIDER_YEAR_RELIABILITY_RESULTS_ID, GREEDY_OPTIMIZATION_CRITERIA_BETA, GREEDY_OPTIMIZATION_CRITERIA_YEAR, \
+    BUTTON_RECOMPUTE_GREEDY_STEPS, BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA
 from src.constants import ColorBarResultType, SubResultType, Measures, REFERENCE_YEAR
 from src.linear_objects.dike_traject import DikeTraject
 
@@ -126,22 +127,34 @@ def selection_traject_run(name: str, vr_config: dict) -> dict:
 
 
 @app.callback(
-    Output('stored-data', 'data', allow_duplicate=True),
-    [Input(DROPDOWN_SELECTION_RUN_ID, "value"),
-     Input(GREEDY_OPTIMIZATION_CRITERIA_BETA, "value"),
-     Input(GREEDY_OPTIMIZATION_CRITERIA_YEAR, "value")],
+
+    [Output('stored-data', 'data', allow_duplicate=True),
+     Output(BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, 'value')],
+    [
+        Input(DROPDOWN_SELECTION_RUN_ID, "value"),
+        Input(SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA, "value"),
+        Input(GREEDY_OPTIMIZATION_CRITERIA_BETA, "value"),
+        Input(GREEDY_OPTIMIZATION_CRITERIA_YEAR, "value"),
+        Input(BUTTON_RECOMPUTE_GREEDY_STEPS, "n_clicks"),
+        Input(BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, 'value')
+
+    ],
     State(STORE_CONFIG, "data"),
     prevent_initial_call=True,
 
 )
-def recompute_dike_traject_with_new_greedy_criteria(name: str, vr_config: dict, beta_greedy_criteria: float,
-                                                    year_greedy_criteria: float) -> dict:
+def recompute_dike_traject_with_new_greedy_criteria(name: str, name_type: str, beta: float, year: float, n_click: int,
+                                                    store_n_click_button, vr_config) -> tuple[dict, int]:
     """
     Callback to recompute the dike traject with new greedy criteria.
 
 
     :return:
     """
+
+    if n_click is None or store_n_click_button == n_click:  # update when clicking on button ONLY
+        return dash.no_update
+
     if vr_config is None or vr_config == {}:
         return dash.no_update
 
@@ -162,7 +175,7 @@ def recompute_dike_traject_with_new_greedy_criteria(name: str, vr_config: dict, 
         raise ValueError("Name of the Optimization run is not correct.")
 
     _dike_traject.run_name = name
-    return _dike_traject.serialize()
+    return _dike_traject.serialize(), n_click
 
 
 @app.callback(

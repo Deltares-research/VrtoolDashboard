@@ -2,7 +2,7 @@ from dash import html, dcc
 import dash_bootstrap_components as dbc
 
 from src.component_ids import DROPDOWN_SELECTION_RUN_ID, GREEDY_OPTIMIZATION_CRITERIA_BETA, \
-    GREEDY_OPTIMIZATION_CRITERIA_YEAR, BUTTON_RECOMPUTE_GREEDY_STEPS
+    GREEDY_OPTIMIZATION_CRITERIA_YEAR, BUTTON_RECOMPUTE_GREEDY_STEPS, BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS
 from src.layouts.layout_radio_items import layout_radio_greedy_optimization_stop_criteria
 
 layout_number_field_optimization_stop_criteria = html.Div(
@@ -16,11 +16,11 @@ layout_number_field_optimization_stop_criteria = html.Div(
 
     ]), )
 
-layout_button_recompute_greedy_steps = html.Div(
+layout_button_recompute_greedy_steps = html.Div(children=[
     dbc.Button(
-        "Recompute", id=BUTTON_RECOMPUTE_GREEDY_STEPS, className="ml-auto")
+        "Recompute", id=BUTTON_RECOMPUTE_GREEDY_STEPS, className="ml-auto"),
+    dcc.Input(id=BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, value=0, type='hidden')]
 )
-
 
 layout_traject_select = html.Div([
 
