@@ -57,7 +57,7 @@ class AcceptanceTestCase:
                 traject_name="31-1",
                 case_name="31-1",
                 excluded_mechanisms=[],
-                database_name="database_31-1.db.db",
+                database_name="database_31-1.db",
             ),
 
         ]
@@ -132,7 +132,7 @@ class TestDikeTrajectImporter:
         acceptance_test_cases,
         indirect=True,
     )
-    def test_importer(self, valid_vrtool_config: VrtoolConfig):
+    def test_importer_dike_traject(self, valid_vrtool_config: VrtoolConfig):
 
         # 1. Import the dike traject from database
         _dike_traject = get_dike_traject_from_config_ORM(valid_vrtool_config, run_id_dsn=2, run_is_vr=1)
@@ -164,3 +164,49 @@ class TestDikeTrajectImporter:
         assert not comparison_errors, "errors occured:\n{}".format(
             "\n".join(comparison_errors)
         )
+
+    @pytest.mark.parametrize(
+        "valid_vrtool_config",
+        acceptance_test_cases,
+        indirect=True,
+    )
+    def test_calc_traject_probability_array(self, valid_vrtool_config: VrtoolConfig):
+        # 1. Import the dike traject from database
+        _dike_traject = get_dike_traject_from_config_ORM(valid_vrtool_config, run_id_dsn=2, run_is_vr=1)
+
+        # 2. Calculate the probability array
+        _probability_array_vr = _dike_traject.calc_traject_probability_array("vr")
+        _probability_array_dsn = _dike_traject.calc_traject_probability_array("dsn")
+
+
+        # export to json
+        export_to_json(_probability_array_vr, path=valid_vrtool_config.output_directory.joinpath("reference_probability_array_vr.json"))
+        export_to_json(_probability_array_dsn, path=valid_vrtool_config.output_directory.joinpath("reference_probability_array_dsn.json"))
+
+        # 3. Validate results
+        _test_reference_dir = valid_vrtool_config.input_directory.joinpath("reference")
+        _files_to_compare = [
+            "reference_probability_array_vr.json",
+            "reference_probability_array_dsn.json",
+        ]
+
+        comparison_errors = []
+        for file in _files_to_compare:
+            # load jsons:
+            with open(_test_reference_dir.joinpath(file), 'r') as f:
+                reference = json.load(f)
+
+            if "vr" in file:
+                results = _probability_array_vr
+            else:
+                results = _probability_array_dsn
+
+            try:
+                assert reference == results
+
+            except Exception:
+                comparison_errors.append("{} is different.".format(file))
+
+
+
+
