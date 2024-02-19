@@ -4,7 +4,7 @@ from vrtool.orm.models import OptimizationStep, SectionData, MeasurePerSection, 
     OptimizationSelectedMeasure, Measure, MeasureResultParameter
 
 from src.linear_objects.dike_section import DikeSection
-from src.linear_objects.dike_traject import DikeTraject
+from src.linear_objects.dike_traject import DikeTraject, get_initial_assessment_df, get_traject_prob
 from src.orm.importers.optimization_step_importer import _get_section_lcc, _get_final_measure_betas
 from src.orm.orm_controller_custom import get_optimization_steps_ordered
 from src.utils.utils import beta_to_pf
@@ -25,11 +25,10 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         self.final_greedy_step_id = final_greedy_step_id
 
     def import_orm(self):
-        self.get_final_measure_vr()
+        greedy_steps = self.get_final_measure_vr()
         self.get_final_measure_dsn()
 
-
-        return
+        return greedy_steps
 
     def get_final_measure_dsn(self) -> dict:
         """
@@ -75,7 +74,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
                     _optimization_step)
                 dike_section.final_measure_doorsnede = _step_measure
 
-    def get_final_measure_vr(self) -> dict:
+    def get_final_measure_vr(self) -> list[dict]:
         """
         Get the dictionary containing the information about the final measure of the section for Veiligheidsrendement,
         and calculates
@@ -91,8 +90,18 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         # This is the last step_number (=highest) for the section of interest before the final_step_number
         # this implies that the _optimum_section_steps are ordered in ascending order of step_number
 
-        _iterated_step_number = []
+        _previous_step_number = None
+
+        _beta_df = get_initial_assessment_df(list(self.dike_section_mapping.values()))
+        _traject_pf, _ = get_traject_prob(_beta_df, ['StabilityInner', 'Piping', 'Overflow', "Revetment"])
+        _greedy_steps_res = [{"pf": _traject_pf[0].tolist(), 'LCC': 0}]
+
         for _optimization_step in _optimization_steps:
+            _step_number = _optimization_step.step_number
+
+            if _previous_step_number == _step_number:
+                continue
+
             # Stop when the last step has been reached
             if _optimization_step.step_number > _final_step_number:
                 break
@@ -108,25 +117,45 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             # find corresponding section in dike_section
             dike_section: DikeSection = self.dike_section_mapping[section.section_name]
 
-            if _optimization_step.step_number not in _iterated_step_number:
-                dike_section.final_measure_veiligheidsrendement["LCC"] += _get_section_lcc(_optimization_step)
-                _iterated_step_number.append(_optimization_step.step_number)
+            dike_section.final_measure_veiligheidsrendement["LCC"] += _get_section_lcc(_optimization_step)
 
-                _optimum_section_optimization_steps = (OptimizationStep
-                .select()
-                .join(OptimizationSelectedMeasure)
-                .where(
-                    (OptimizationSelectedMeasure.optimization_run == self.run_id_vr)
-                    & (OptimizationStep.step_number == _optimization_step.step_number)
-                )
-                )
+            _optimum_section_optimization_steps = (OptimizationStep
+            .select()
+            .join(OptimizationSelectedMeasure)
+            .where(
+                (OptimizationSelectedMeasure.optimization_run == self.run_id_vr)
+                & (OptimizationStep.step_number == _optimization_step.step_number)
+            )
+            )
 
-                # 3. Get all information into a dict based on the optimum optimization steps.
-                _step_measure = self._get_measure(_optimum_section_optimization_steps,
-                                                  active_mechanisms=dike_section.active_mechanisms)
-                _step_measure["LCC"] = dike_section.final_measure_veiligheidsrendement["LCC"]
+            # 3. Get all information into a dict based on the optimum optimization steps.
+            _step_measure = self._get_measure(_optimum_section_optimization_steps,
+                                              active_mechanisms=dike_section.active_mechanisms)
+            _step_measure["LCC"] = dike_section.final_measure_veiligheidsrendement["LCC"]
 
-                dike_section.final_measure_veiligheidsrendement = _step_measure
+            dike_section.final_measure_veiligheidsrendement = _step_measure
+
+            # 4. Calculate the probability of failure for the current step
+
+            for mechanism in dike_section.active_mechanisms:
+                mask = (_beta_df['name'] == dike_section.name) & (_beta_df['mechanism'] == mechanism)
+                # replace the row in the dataframe with the betas of the section if both the name and mechanism match
+                d = {"name": dike_section.name, "mechanism": mechanism, "Length": dike_section.length}
+
+                for year, beta in zip(dike_section.years, _step_measure[mechanism]):
+                    d[year] = beta
+                _beta_df.loc[mask, dike_section.years] = d
+
+            # Calculate traject faalkans
+            _reinforced_traject_pf, _ = get_traject_prob(_beta_df, dike_section.active_mechanisms)
+
+            # Get step LCC:
+            LCC = _get_section_lcc(_optimization_step)
+            _greedy_steps_res.append({"pf": _reinforced_traject_pf[0].tolist(), 'LCC': LCC})
+
+            _previous_step_number = _step_number
+
+        return _greedy_steps_res
 
     def _get_measure(self, optimization_steps, active_mechanisms: list) -> dict:
         """

@@ -88,7 +88,7 @@ def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
 
 
 @app.callback(
-    Output('stored-data', 'data', allow_duplicate=True),
+    Output('stored-data', 'data'),
     [Input(DROPDOWN_SELECTION_RUN_ID, "value")],
     State(STORE_CONFIG, "data"),
     prevent_initial_call=True,

@@ -254,7 +254,6 @@ def get_traject_prob(beta_df: DataFrame, mechanisms: list) -> tuple[np.array, di
 
 def get_initial_assessment_df(sections: list[DikeSection]) -> DataFrame:
     """Get the initial assessment dataframe from all children sections"""
-
     years = sections[0].years
     df = pd.DataFrame(columns=["name", "mechanism"] + years + ["Length"])
 
