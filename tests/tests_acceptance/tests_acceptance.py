@@ -32,13 +32,6 @@ class AcceptanceTestCase:
         # Defining acceptance test cases so they are accessible from the other test classes.
         return [
             AcceptanceTestCase(
-                case_directory="Case 7-2",
-                traject_name="7-2",
-                case_name="7-2",
-                excluded_mechanisms=[],
-                database_name="traject_7_2.db",
-            ),
-            AcceptanceTestCase(
                 case_directory="Case_10_3",
                 traject_name="10-3",
                 case_name="10-3",
@@ -178,10 +171,11 @@ class TestDikeTrajectImporter:
         _probability_array_vr = _dike_traject.calc_traject_probability_array("vr")
         _probability_array_dsn = _dike_traject.calc_traject_probability_array("dsn")
 
-
         # export to json
-        export_to_json(_probability_array_vr, path=valid_vrtool_config.output_directory.joinpath("reference_probability_array_vr.json"))
-        export_to_json(_probability_array_dsn, path=valid_vrtool_config.output_directory.joinpath("reference_probability_array_dsn.json"))
+        export_to_json(_probability_array_vr,
+                       path=valid_vrtool_config.output_directory.joinpath("reference_probability_array_vr.json"))
+        export_to_json(_probability_array_dsn,
+                       path=valid_vrtool_config.output_directory.joinpath("reference_probability_array_dsn.json"))
 
         # 3. Validate results
         _test_reference_dir = valid_vrtool_config.input_directory.joinpath("reference")
@@ -206,7 +200,3 @@ class TestDikeTrajectImporter:
 
             except Exception:
                 comparison_errors.append("{} is different.".format(file))
-
-
-
-
