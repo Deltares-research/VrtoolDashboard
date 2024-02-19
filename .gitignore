@@ -58,3 +58,4 @@ __pycache__/
 # Pytest related files
 .pytest_cache/
 **/__pycache__/**
+/tests/test_results/

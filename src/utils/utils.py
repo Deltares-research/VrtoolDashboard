@@ -1,5 +1,7 @@
 from pathlib import Path
+from typing import Optional
 
+import numpy as np
 from scipy.stats import norm
 import json
 
@@ -21,12 +23,22 @@ def pf_to_beta(pf):
     return -norm.ppf(pf)
 
 
-def export_to_json(data):
+class MyEncoder(json.JSONEncoder):
+    """Special encoder for numpy arrays to be able to write them to a json file."""
+
+    def default(self, obj):
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)
+
+
+def export_to_json(data, path: Optional[Path] = None):
     # convert dike_traject_data to json :
     # write to a json file:
-    path = Path(__file__).parent / 'data.json'
+    if path is None:
+        path = Path(__file__).parent / 'data.json'
     with open(path, 'w') as outfile:
-        json.dump(data, outfile)
+        json.dump(data, outfile, cls=MyEncoder)
 
 
 def get_signal_value(p_max: float):

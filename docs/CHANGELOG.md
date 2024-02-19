@@ -5,7 +5,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased] [dd/mm/yyyy]
 
 ### Added
-None.
+- Acceptance test for DikeTraject importer
+- Acceptance test for DikeTraject faalkans matrix
 
 ### Changed
 None.
