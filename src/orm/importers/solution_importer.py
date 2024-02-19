@@ -25,8 +25,8 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         self.final_greedy_step_id = final_greedy_step_id
 
     def import_orm(self):
-        d = self.get_final_measure_vr()
-        dd = self.get_final_measure_dsn()
+        self.get_final_measure_vr()
+        self.get_final_measure_dsn()
 
     def get_final_measure_dsn(self) -> dict:
         """
