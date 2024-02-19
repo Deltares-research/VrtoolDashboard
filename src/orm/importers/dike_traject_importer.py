@@ -245,13 +245,13 @@ class DikeTrajectImporter(OrmImporterProtocol):
 
         # import solution: both
         print("ECONOMICAL OPTIMUM STEP NB: ", _final_greedy_step_id)
-        _solution_importer = TrajectSolutionRunImporter(dike_section=_dike_traject.dike_sections,
+        _solution_importer = TrajectSolutionRunImporter(dike_traject=_dike_traject,
                                                         run_id_vr=1,
                                                         run_id_dsn=2,
                                                         final_greedy_step_id=_final_greedy_step_id)  # TODO change and adapt
         _solution_importer.import_orm()
 
         # add the greedy steps to the dike traject
-        # _dike_traject.greedy_steps = self._get_greedy_steps(_dike_traject.dike_sections)
+        _dike_traject.greedy_steps = self._get_greedy_steps(_dike_traject.dike_sections)
 
         return _dike_traject

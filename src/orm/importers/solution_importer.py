@@ -4,6 +4,7 @@ from vrtool.orm.models import OptimizationStep, SectionData, MeasurePerSection, 
     OptimizationSelectedMeasure, Measure, MeasureResultParameter
 
 from src.linear_objects.dike_section import DikeSection
+from src.linear_objects.dike_traject import DikeTraject
 from src.orm.importers.optimization_step_importer import _get_section_lcc, _get_final_measure_betas
 from src.orm.orm_controller_custom import get_optimization_steps_ordered
 from src.utils.utils import beta_to_pf
@@ -15,11 +16,10 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
     final_greedy_step_id: int  # id of the final step of the greedy optimization
     assessment_time: list[int]
 
-    def __init__(self, dike_section: list[DikeSection],
+    def __init__(self, dike_traject: DikeTraject,
                  run_id_vr: int, run_id_dsn: int, final_greedy_step_id: int
                  ):
-        # self.dike_section = dike_section
-        self.dike_section_mapping = {section.name: section for section in dike_section}
+        self.dike_section_mapping = {section.name: section for section in dike_traject.dike_sections}
         self.run_id_dsn = run_id_dsn
         self.run_id_vr = run_id_vr
         self.final_greedy_step_id = final_greedy_step_id
@@ -27,6 +27,9 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
     def import_orm(self):
         self.get_final_measure_vr()
         self.get_final_measure_dsn()
+
+
+        return
 
     def get_final_measure_dsn(self) -> dict:
         """
@@ -38,8 +41,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         """
         _optimization_steps = get_optimization_steps_ordered(self.run_id_dsn)
 
-        _optimum_section_step_number = None
-        _cost = 0
         _iterated_step_number = []
         for _optimization_step in _optimization_steps:
 
@@ -54,34 +55,31 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             # find corresponding section in dike_section
             dike_section: DikeSection = self.dike_section_mapping[section.section_name]
 
+            # With this if statement, we avoid getting the combined measures multiple times
             if _optimization_step.step_number not in _iterated_step_number:
-                # dike_section.final_measure_doorsnede["LCC"] += _get_section_lcc(_optimization_step)
-                _optimum_section_step_number = _optimization_step.step_number
                 _iterated_step_number.append(_optimization_step.step_number)
 
-            _optimum_section_optimization_steps = (OptimizationStep
-            .select()
-            .join(OptimizationSelectedMeasure)
-            .where(
-                (OptimizationSelectedMeasure.optimization_run == self.run_id_dsn)
-                & (OptimizationStep.step_number == _optimum_section_step_number)
-            )
-            )
-            # 3. Get all information into a dict based on the optimum optimization steps.
+                _optimum_section_optimization_steps = (OptimizationStep
+                .select()
+                .join(OptimizationSelectedMeasure)
+                .where(
+                    (OptimizationSelectedMeasure.optimization_run == self.run_id_dsn)
+                    & (OptimizationStep.step_number == _optimization_step.step_number)
+                )
+                )
+                # 3. Get all information into a dict based on the optimum optimization steps.
 
-            _step_measure = self._get_final_measure(_optimum_section_optimization_steps,
-                                                    active_mechanisms=dike_section.active_mechanisms)
-            _step_measure["LCC"] = dike_section.final_measure_doorsnede["LCC"] = _get_section_lcc(
-                _optimization_step)
-            dike_section.final_measure_doorsnede = _step_measure
+                _step_measure = self._get_measure(_optimum_section_optimization_steps,
+                                                  active_mechanisms=dike_section.active_mechanisms)
+                _step_measure["LCC"] = dike_section.final_measure_doorsnede["LCC"] = _get_section_lcc(
+                    _optimization_step)
+                dike_section.final_measure_doorsnede = _step_measure
 
     def get_final_measure_vr(self) -> dict:
         """
-        Get the dictionary containing the information about the final mesure of the section for Veiligheidsrendement.
+        Get the dictionary containing the information about the final measure of the section for Veiligheidsrendement,
+        and calculates
 
-        :param section_data: section fror which information should be retrieved.
-        :return: dictionary with the followings keys: "name", "LCC", "Piping", "StabilityInner", "Overflow",
-        "Revetment", "Section"
         """
 
         # 1. Get the final step number, default is the one for which the Total Cost is minimal.
@@ -92,7 +90,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         # 2. Get the most optimal optimization step number
         # This is the last step_number (=highest) for the section of interest before the final_step_number
         # this implies that the _optimum_section_steps are ordered in ascending order of step_number
-        _optimum_section_step_number = None
 
         _iterated_step_number = []
         for _optimization_step in _optimization_steps:
@@ -113,26 +110,25 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
 
             if _optimization_step.step_number not in _iterated_step_number:
                 dike_section.final_measure_veiligheidsrendement["LCC"] += _get_section_lcc(_optimization_step)
-                _optimum_section_step_number = _optimization_step.step_number
                 _iterated_step_number.append(_optimization_step.step_number)
 
-            _optimum_section_optimization_steps = (OptimizationStep
-            .select()
-            .join(OptimizationSelectedMeasure)
-            .where(
-                (OptimizationSelectedMeasure.optimization_run == self.run_id_vr)
-                & (OptimizationStep.step_number == _optimum_section_step_number)
-            )
-            )
-            # 3. Get all information into a dict based on the optimum optimization steps.
+                _optimum_section_optimization_steps = (OptimizationStep
+                .select()
+                .join(OptimizationSelectedMeasure)
+                .where(
+                    (OptimizationSelectedMeasure.optimization_run == self.run_id_vr)
+                    & (OptimizationStep.step_number == _optimization_step.step_number)
+                )
+                )
 
-            _step_measure = self._get_final_measure(_optimum_section_optimization_steps,
-                                                    active_mechanisms=dike_section.active_mechanisms)
-            _step_measure["LCC"] = dike_section.final_measure_veiligheidsrendement["LCC"]
+                # 3. Get all information into a dict based on the optimum optimization steps.
+                _step_measure = self._get_measure(_optimum_section_optimization_steps,
+                                                  active_mechanisms=dike_section.active_mechanisms)
+                _step_measure["LCC"] = dike_section.final_measure_veiligheidsrendement["LCC"]
 
-            dike_section.final_measure_veiligheidsrendement = _step_measure
+                dike_section.final_measure_veiligheidsrendement = _step_measure
 
-    def _get_final_measure(self, optimization_steps, active_mechanisms: list) -> dict:
+    def _get_measure(self, optimization_steps, active_mechanisms: list) -> dict:
         """
         Retrieve from the database the information related to the selected optimization steps: betas, name, measure
         paramaters.
