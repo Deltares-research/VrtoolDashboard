@@ -12,6 +12,7 @@ from src.linear_objects.dike_traject import DikeTraject, get_initial_assessment_
 
 from src.orm.importers.dike_section_importer import DikeSectionImporter
 from src.orm.importers.optimization_step_importer import _get_final_measure_betas, _get_section_lcc
+from src.orm.importers.solution_importer import TrajectSolutionRunImporter
 from src.orm.models import OptimizationSelectedMeasure, OptimizationStep, MeasureResult
 from src.orm.models.dike_traject_info import DikeTrajectInfo
 
@@ -44,7 +45,6 @@ class DikeTrajectImporter(OrmImporterProtocol):
 
     def _import_dike_section_list(
             self, orm_dike_section_list: list[SectionData], traject_gdf: GeoDataFrame,
-            final_greedy_step_id: int
     ) -> list[DikeSection]:
         """Import the dike sections from the ORM to a list of DikeSection objects
 
@@ -54,9 +54,10 @@ class DikeTrajectImporter(OrmImporterProtocol):
         :param final_greedy_step_id: id of the final step of the greedy optimization
         """
         _ds_importer = DikeSectionImporter(traject_gdf,
-                                           run_id_dsn=self.run_id_dsn,
-                                           run_id_vr=self.run_id_vr,
-                                           final_greedy_step_id=final_greedy_step_id)
+                                           # run_id_dsn=self.run_id_dsn,
+                                           # run_id_vr=self.run_id_vr,
+                                           # final_greedy_step_id=final_greedy_step_i
+                                           )
 
         return list(map(_ds_importer.import_orm_without_measure, orm_dike_section_list))
 
@@ -140,13 +141,13 @@ class DikeTrajectImporter(OrmImporterProtocol):
 
             # Get corresponding section information
             _section_data = (SectionData
-                             .select()
-                             .join(MeasurePerSection)
-                             .join(MeasureResult)
-                             .join(OptimizationSelectedMeasure)
-                             .where(
+            .select()
+            .join(MeasurePerSection)
+            .join(MeasureResult)
+            .join(OptimizationSelectedMeasure)
+            .where(
                 OptimizationSelectedMeasure.id == _optimization_step.optimization_selected_measure_id)
-                             ).get()
+            ).get()
             _section = section_dict[_section_data.section_name]
             _active_mechanisms = ['StabilityInner', 'Piping', 'Overflow']
             if _section.revetment:
@@ -240,10 +241,17 @@ class DikeTrajectImporter(OrmImporterProtocol):
             _final_greedy_step_id = None
             _dike_traject.run_name_dsn = None
 
-        _dike_traject.dike_sections = self._import_dike_section_list(_selected_sections, _traject_gdf,
-                                                                     final_greedy_step_id=_final_greedy_step_id)
+        _dike_traject.dike_sections = self._import_dike_section_list(_selected_sections, _traject_gdf)
+
+        # import solution: both
+        print("ECONOMICAL OPTIMUM STEP NB: ", _final_greedy_step_id)
+        _solution_importer = TrajectSolutionRunImporter(dike_section=_dike_traject.dike_sections,
+                                                        run_id_vr=1,
+                                                        run_id_dsn=2,
+                                                        final_greedy_step_id=_final_greedy_step_id)  # TODO change and adapt
+        _solution_importer.import_orm()
 
         # add the greedy steps to the dike traject
-        _dike_traject.greedy_steps = self._get_greedy_steps(_dike_traject.dike_sections)
+        # _dike_traject.greedy_steps = self._get_greedy_steps(_dike_traject.dike_sections)
 
         return _dike_traject

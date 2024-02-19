@@ -29,14 +29,18 @@ class DikeSectionImporter(OrmImporterProtocol):
     final_greedy_step_id: int  # id of the final step of the greedy optimization
     assessment_time: list[int]
 
-    def __init__(self, traject_gdf: GeoDataFrame, run_id_vr: int, run_id_dsn: int, final_greedy_step_id: int):
+    def __init__(self, traject_gdf: GeoDataFrame,
+                 # run_id_vr: int, run_id_dsn: int, final_greedy_step_id: int
+
+                 ):
         self.traject_gdf = traject_gdf
-        self.run_id_dsn = run_id_dsn
-        self.run_id_vr = run_id_vr
-        self.final_greedy_step_id = final_greedy_step_id
+        # self.run_id_dsn = run_id_dsn
+        # self.run_id_vr = run_id_vr
+        # self.final_greedy_step_id = final_greedy_step_id
 
     def _get_initial_assessment(self,
                                 section_data: SectionData,
+                                active_mechanisms: list[str]
                                 ) -> dict:
         """
         Gets the initial assessment of a section based on the table ComputationScenarioResult.
@@ -48,7 +52,7 @@ class DikeSectionImporter(OrmImporterProtocol):
         _section_id = section_data.id
 
         # Add mechanism results
-        for mechanism in self.active_mechanisms:
+        for mechanism in active_mechanisms:
             _mechanism_id = Mechanism.get(Mechanism.name == mechanism).id
 
             _mechanism_per_section_id = MechanismPerSection.get(
@@ -185,11 +189,6 @@ class DikeSectionImporter(OrmImporterProtocol):
                 _cost += _get_section_lcc(_optimization_step) # for dsn there should be only one addition
                 _iterated_step_number.append(_optimization_step.step_number)
 
-
-
-        if _optimum_section_step_number is None:
-            return self._get_no_measure_case(section_data)
-
         _optimum_section_optimization_steps = (OptimizationStep
         .select()
         .join(OptimizationSelectedMeasure, JOIN.INNER, on=(
@@ -203,66 +202,9 @@ class DikeSectionImporter(OrmImporterProtocol):
         _final_measure["LCC"] = _cost
         return _final_measure
 
-    def get_final_measure_vr(self, section_data: SectionData) -> dict:
-        """
-        Get the dictionary containing the information about the final mesure of the section for Veiligheidsrendement.
+    def _get_no_measure_case(self, section_data: SectionData, active_mechanisms: list[str]) -> dict:
 
-        :param section_data: section fror which information should be retrieved.
-        :return: dictionary with the followings keys: "name", "LCC", "Piping", "StabilityInner", "Overflow",
-        "Revetment", "Section"
-        """
-
-        # 1. Get the final step number, default is the one for which the Total Cost is minimal.
-        _final_step_number = OptimizationStep.get(OptimizationStep.id == self.final_greedy_step_id).step_number
-
-        _optimization_steps = get_optimization_steps_ordered(self.run_id_vr)
-
-        # 2. Get the most optimal optimization step number
-        # This is the last step_number (=highest) for the section of interest before the final_step_number
-        # this implies that the _optimum_section_steps are ordered in ascending order of step_number
-        _optimum_section_step_number = None
-
-        _section_cumulative_cost = 0  # this is the cost for one section, cumulative for all the optimization steps
-        _iterated_step_number = []
-        for _optimization_step in _optimization_steps:
-            # Stop when the last step has been reached
-            if _optimization_step.step_number > _final_step_number:
-                break
-
-            section = (SectionData
-                       .select()
-                       .join(MeasurePerSection)
-                       .join(MeasureResult)
-                       .join(OptimizationSelectedMeasure)
-                       .where(OptimizationSelectedMeasure.id == _optimization_step.optimization_selected_measure_id)
-                       ).get()
-
-            if section.id == section_data.id and _optimization_step.step_number not in _iterated_step_number:
-                _section_cumulative_cost += _get_section_lcc(_optimization_step)
-                _optimum_section_step_number = _optimization_step.step_number
-                _iterated_step_number.append(_optimization_step.step_number)
-
-        if _optimum_section_step_number is None:
-            # In this case, the section has not been reinforced, so the initial assessment is the final measure.
-            return self._get_no_measure_case(section_data)
-
-        _optimum_section_optimization_steps = (OptimizationStep
-        .select()
-        .join(OptimizationSelectedMeasure)
-        .where(
-            (OptimizationSelectedMeasure.optimization_run == self.run_id_vr)
-            & (OptimizationStep.step_number == _optimum_section_step_number)
-        )
-        )
-        # 3. Get all information into a dict based on the optimum optimization steps.
-
-        _final_measure = self._get_final_measure(_optimum_section_optimization_steps)
-        _final_measure["LCC"] = _section_cumulative_cost
-        return _final_measure
-
-    def _get_no_measure_case(self, section_data: SectionData) -> dict:
-
-        _final_measure = self._get_initial_assessment(section_data)
+        _final_measure = self._get_initial_assessment(section_data, active_mechanisms)
 
         _final_measure["LCC"] = 0
         _final_measure["name"] = "Geen maatregel"
@@ -335,7 +277,6 @@ class DikeSectionImporter(OrmImporterProtocol):
                                     coordinates_rd=[],
                                     in_analyse=True,
                                     )
-        self.active_mechanisms = self._get_all_section_mechanism(orm_model)
         # years: list[int]  # Years for which a reliability result is available (both for initial and measures)
         _dike_section.name = orm_model.section_name
         _dike_section.length = round(orm_model.section_length)
@@ -344,19 +285,15 @@ class DikeSectionImporter(OrmImporterProtocol):
         _dike_section.is_reinforced = True  # TODO remove this argument?
         _dike_section.is_reinforced_veiligheidsrendement = True  # TODO remove this argument?
         _dike_section.is_reinforced_doorsnede = True  # TODO remove this argument?
-        _dike_section.revetment = True if "Revetment" in self.active_mechanisms else False
+        _dike_section.active_mechanisms = self._get_all_section_mechanism(orm_model)
+        _dike_section.revetment = True if "Revetment" in _dike_section.active_mechanisms else False
 
-        _dike_section.initial_assessment = self._get_initial_assessment(orm_model)
+
+        _dike_section.initial_assessment = self._get_initial_assessment(orm_model, _dike_section.active_mechanisms)
         _dike_section.years = self.assessment_time
 
-        #TODO: Decompose import of section in 2 parts: one for initial assessment and one for measures
-        #TODO: then the greedy step can be used to determine the final measure in case we dont select economic optimization
-        if self.final_greedy_step_id is not None:
-            _dike_section.final_measure_veiligheidsrendement = self.get_final_measure_vr(orm_model)
-            _dike_section.final_measure_doorsnede = self.get_final_measure_dsn(orm_model)
-        else:
-            _dike_section.final_measure_veiligheidsrendement = None
-            _dike_section.final_measure_doorsnede = None
+        _dike_section.final_measure_veiligheidsrendement = self._get_no_measure_case(orm_model, _dike_section.active_mechanisms)
+        _dike_section.final_measure_doorsnede = self._get_no_measure_case(orm_model, _dike_section.active_mechanisms)
 
         return _dike_section
 
