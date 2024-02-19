@@ -28,7 +28,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         d = self.get_final_measure_vr()
         dd = self.get_final_measure_dsn()
 
-
     def get_final_measure_dsn(self) -> dict:
         """
         Get the dictionary containing the information about the final mesure of the section for Doorsnede-eisen.
@@ -43,8 +42,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         _cost = 0
         _iterated_step_number = []
         for _optimization_step in _optimization_steps:
-            print(_optimization_step.id, _optimization_step.step_number)
-
 
             section = (SectionData
                        .select()
@@ -56,10 +53,9 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
 
             # find corresponding section in dike_section
             dike_section: DikeSection = self.dike_section_mapping[section.section_name]
-            print(dike_section.name)
 
             if _optimization_step.step_number not in _iterated_step_number:
-                dike_section.final_measure_doorsnede["LCC"] += _get_section_lcc(_optimization_step)
+                # dike_section.final_measure_doorsnede["LCC"] += _get_section_lcc(_optimization_step)
                 _optimum_section_step_number = _optimization_step.step_number
                 _iterated_step_number.append(_optimization_step.step_number)
 
@@ -67,7 +63,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             .select()
             .join(OptimizationSelectedMeasure)
             .where(
-                (OptimizationSelectedMeasure.optimization_run == self.run_id_vr)
+                (OptimizationSelectedMeasure.optimization_run == self.run_id_dsn)
                 & (OptimizationStep.step_number == _optimum_section_step_number)
             )
             )
@@ -75,10 +71,9 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
 
             _step_measure = self._get_final_measure(_optimum_section_optimization_steps,
                                                     active_mechanisms=dike_section.active_mechanisms)
-            _step_measure["LCC"] = dike_section.final_measure_doorsnede["LCC"] + _get_section_lcc(
+            _step_measure["LCC"] = dike_section.final_measure_doorsnede["LCC"] = _get_section_lcc(
                 _optimization_step)
             dike_section.final_measure_doorsnede = _step_measure
-            print(dike_section.final_measure_doorsnede)
 
     def get_final_measure_vr(self) -> dict:
         """
@@ -99,10 +94,8 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         # this implies that the _optimum_section_steps are ordered in ascending order of step_number
         _optimum_section_step_number = None
 
-        _section_cumulative_cost = 0  # this is the cost for one section, cumulative for all the optimization steps
         _iterated_step_number = []
         for _optimization_step in _optimization_steps:
-            # print(_optimization_step.id, _optimization_step.step_number)
             # Stop when the last step has been reached
             if _optimization_step.step_number > _final_step_number:
                 break
@@ -117,7 +110,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
 
             # find corresponding section in dike_section
             dike_section: DikeSection = self.dike_section_mapping[section.section_name]
-            # print(dike_section.name)
 
             if _optimization_step.step_number not in _iterated_step_number:
                 dike_section.final_measure_veiligheidsrendement["LCC"] += _get_section_lcc(_optimization_step)
@@ -135,10 +127,10 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             # 3. Get all information into a dict based on the optimum optimization steps.
 
             _step_measure = self._get_final_measure(_optimum_section_optimization_steps,
-                                                     active_mechanisms=dike_section.active_mechanisms)
-            _step_measure["LCC"] = dike_section.final_measure_veiligheidsrendement["LCC"] + _get_section_lcc(_optimization_step)
-            dike_section.final_measure_veiligheidsrendement = _step_measure
+                                                    active_mechanisms=dike_section.active_mechanisms)
+            _step_measure["LCC"] = dike_section.final_measure_veiligheidsrendement["LCC"]
 
+            dike_section.final_measure_veiligheidsrendement = _step_measure
 
     def _get_final_measure(self, optimization_steps, active_mechanisms: list) -> dict:
         """
@@ -168,7 +160,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         _final_measure.update(self._get_measure_parameters(optimization_steps))
         return _final_measure
 
-
     def _get_single_measure(self, optimization_step: OptimizationStep) -> Measure:
         """Return the measure associated with a given single optimization step"""
 
@@ -192,7 +183,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             OptimizationSelectedMeasure.id == optimization_step.optimization_selected_measure_id).get()
 
         return _selected_optimization_measure.investment_year
-
 
     def _get_combined_measure_name(self, optimization_step: OptimizationStep) -> str:
 
@@ -264,6 +254,3 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
                 _params["diff_transition_level"] = _params['transition_level'] - ini_transition_level[0].value
 
         return _params
-
-
-
