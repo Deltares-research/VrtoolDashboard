@@ -351,12 +351,12 @@ class DikeSectionImporter(OrmImporterProtocol):
 
         #TODO: Decompose import of section in 2 parts: one for initial assessment and one for measures
         #TODO: then the greedy step can be used to determine the final measure in case we dont select economic optimization
-        # if self.final_greedy_step_id is not None:
-        #     _dike_section.final_measure_veiligheidsrendement = self.get_final_measure_vr(orm_model)
-        #     _dike_section.final_measure_doorsnede = self.get_final_measure_dsn(orm_model)
-        # else:
-        #     _dike_section.final_measure_veiligheidsrendement = None
-        #     _dike_section.final_measure_doorsnede = None
+        if self.final_greedy_step_id is not None:
+            _dike_section.final_measure_veiligheidsrendement = self.get_final_measure_vr(orm_model)
+            _dike_section.final_measure_doorsnede = self.get_final_measure_dsn(orm_model)
+        else:
+            _dike_section.final_measure_veiligheidsrendement = None
+            _dike_section.final_measure_doorsnede = None
 
         return _dike_section
 

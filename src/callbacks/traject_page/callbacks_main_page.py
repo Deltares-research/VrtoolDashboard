@@ -88,10 +88,10 @@ def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
 
 
 @app.callback(
-    Output('stored-data', 'data'),
+    Output('stored-data', 'data', allow_duplicate=True),
     [Input(DROPDOWN_SELECTION_RUN_ID, "value")],
     State(STORE_CONFIG, "data"),
-    prevent_initial_call=True
+    prevent_initial_call=True,
 )
 def selection_traject_run(name: str, vr_config: dict) -> dict:
     """
@@ -124,15 +124,18 @@ def selection_traject_run(name: str, vr_config: dict) -> dict:
     _dike_traject.run_name = name
     return _dike_traject.serialize()
 
+
 @app.callback(
-    Output('stored-data', 'data'),
+    Output('stored-data', 'data', allow_duplicate=True),
     [Input(DROPDOWN_SELECTION_RUN_ID, "value"),
      Input(GREEDY_OPTIMIZATION_CRITERIA_BETA, "value"),
      Input(GREEDY_OPTIMIZATION_CRITERIA_YEAR, "value")],
     State(STORE_CONFIG, "data"),
-    prevent_initial_call=True
+    prevent_initial_call=True,
+
 )
-def recompute_dike_traject_with_new_greedy_criteria(name: str, vr_config: dict, beta_greedy_criteria: float, year_greedy_criteria: float) -> dict:
+def recompute_dike_traject_with_new_greedy_criteria(name: str, vr_config: dict, beta_greedy_criteria: float,
+                                                    year_greedy_criteria: float) -> dict:
     """
     Callback to recompute the dike traject with new greedy criteria.
 
@@ -287,12 +290,12 @@ def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
 
         return df.to_dict('records')
 
+
 @app.callback(
     Output(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "marks"),
     Input('stored-data', 'data'),
 )
 def update_slider_years_from_database(dike_traject_data: dict):
-
     if dike_traject_data is None:
         marks = {
             2025: {'label': '2025'},
