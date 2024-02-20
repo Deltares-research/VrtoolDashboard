@@ -7,6 +7,7 @@ from vrtool.orm.io.importers.optimization.optimization_step_importer import Opti
 from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol
 from vrtool.orm.models import SectionData, MeasurePerSection
 
+from src.constants import GreedyOPtimizationCriteria
 from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject, get_initial_assessment_df, get_traject_prob
 
@@ -203,6 +204,8 @@ class DikeTrajectImporter(OrmImporterProtocol):
             )
             _cost = _optimization_step.total_lcc + _optimization_step.total_risk
             _results.append((_optimization_step, _as_df, _cost))
+            print(_optimization_step.step_number, _optimization_step.id, _cost)
+
 
         _step_id, _, _ = min(_results, key=lambda results_tuple: results_tuple[2])
 
@@ -231,8 +234,11 @@ class DikeTrajectImporter(OrmImporterProtocol):
 
         # check if the table OptimizationRun is empty:
         if orm_model.OptimizationRun.select().exists():
+            pass
             _dike_traject.reinforcement_order_dsn = self._get_reinforcement_section_order_dsn()
             _dike_traject.reinforcement_order_vr, _final_greedy_step_id = self._get_reinforcement_section_order_vr()
+
+            print(_final_greedy_step_id, "THEORY NUMBER")
 
         else:
             _dike_traject.reinforcement_order_dsn = []
@@ -241,16 +247,15 @@ class DikeTrajectImporter(OrmImporterProtocol):
             _final_greedy_step_id = None
             _dike_traject.run_name_dsn = None
 
+
         _dike_traject.dike_sections = self._import_dike_section_list(_selected_sections, _traject_gdf)
 
         # import solution: both
-        print("ECONOMICAL OPTIMUM STEP NB: ", _final_greedy_step_id)
         _solution_importer = TrajectSolutionRunImporter(dike_traject=_dike_traject,
                                                         run_id_vr=1,
                                                         run_id_dsn=2,
-                                                        final_greedy_step_id=_final_greedy_step_id)  # TODO change and adapt
-
-        # add the greedy steps to the dike traject
-        _dike_traject.greedy_steps = _solution_importer.import_orm()
+                                                        greedy_optimization_criteria=GreedyOPtimizationCriteria.ECONOMIC_OPTIMAL.name
+                                                        )
+        _solution_importer.import_orm()
 
         return _dike_traject
