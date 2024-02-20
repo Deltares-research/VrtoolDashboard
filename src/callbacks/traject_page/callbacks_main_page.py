@@ -148,6 +148,14 @@ def recompute_dike_traject_with_new_greedy_criteria(name: str, name_type: str, b
     """
     Callback to recompute the dike traject with new greedy criteria.
 
+    :param name: name of the calculation run in the database
+    :param name_type: type of the greedy optimization criteria
+    :param beta: value of the beta parameter for greedy optimization if criterion 'target_pf' is selected
+    :param year: value of the year parameter for greedy optimization if criterion 'target_year' is selected
+    :param n_click: number of clicks on the button
+    :param store_n_click_button: number of clicks on the button, used to detect when the button is clicked
+    :param vr_config: dictionary with the configuration of the traject.
+
 
     :return:
     """
@@ -166,11 +174,15 @@ def recompute_dike_traject_with_new_greedy_criteria(name: str, name_type: str, b
     _vr_config.excluded_mechanisms = [MechanismEnum.REVETMENT, MechanismEnum.HYDRAULIC_STRUCTURES]
 
     if name == "Basisberekening":
-        _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=2, run_is_vr=1)
+        _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=2, run_is_vr=1,
+                                                         greedy_optimization_criteria=name_type,
+                                                         greedy_criteria_beta=beta, greedy_criteria_year=int(year))
 
     elif name in get_name_optimization_runs(_vr_config):
         run_id_vr, run_id_dsn = get_run_optimization_ids(_vr_config, name)
-        _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=run_id_dsn, run_is_vr=run_id_vr)
+        _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=run_id_dsn, run_is_vr=run_id_vr,
+                                                         greedy_optimization_criteria=name_type,
+                                                         greedy_criteria_beta=beta, greedy_criteria_year=int(year))
     else:
         raise ValueError("Name of the Optimization run is not correct.")
 

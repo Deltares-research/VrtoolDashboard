@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Optional
 
 import numpy as np
 from geopandas import GeoDataFrame
@@ -29,8 +30,12 @@ class DikeTrajectImporter(OrmImporterProtocol):
     traject_name: str
     run_id_vr: int
     run_id_dsn: int
+    greedy_optimization_criteria: str
+    greedy_criteria_year: Optional[int]
+    greedy_criteria_beta: Optional[float]
 
-    def __init__(self, vr_config: VrtoolConfig, run_id_vr: int, run_id_dsn: int) -> None:
+    def __init__(self, vr_config: VrtoolConfig, run_id_vr: int, run_id_dsn: int, greedy_optimization_criteria: str,
+                 greedy_criteria_year: Optional[int] = None, greedy_criteria_beta: Optional[float] = None) -> None:
         """
 
         :param vr_config: VrtoolConfig object
@@ -43,6 +48,9 @@ class DikeTrajectImporter(OrmImporterProtocol):
         self.traject_name = vr_config.traject
         self.run_id_vr = run_id_vr
         self.run_id_dsn = run_id_dsn
+        self.greedy_optimization_criteria = greedy_optimization_criteria
+        self.greedy_criteria_year = greedy_criteria_year
+        self.greedy_criteria_beta = greedy_criteria_beta
 
     def _import_dike_section_list(
             self, orm_dike_section_list: list[SectionData], traject_gdf: GeoDataFrame,
@@ -104,9 +112,11 @@ class DikeTrajectImporter(OrmImporterProtocol):
 
         # import solution: both
         _solution_importer = TrajectSolutionRunImporter(dike_traject=_dike_traject,
-                                                        run_id_vr=1,
-                                                        run_id_dsn=2,
-                                                        greedy_optimization_criteria=GreedyOPtimizationCriteria.ECONOMIC_OPTIMAL.name
+                                                        run_id_vr=self.run_id_vr,
+                                                        run_id_dsn=self.run_id_dsn,
+                                                        greedy_optimization_criteria=self.greedy_optimization_criteria,
+                                                        greedy_criteria_beta=self.greedy_criteria_beta,
+                                                        greedy_criteria_year=self.greedy_criteria_year
                                                         )
         _solution_importer.import_orm()
 

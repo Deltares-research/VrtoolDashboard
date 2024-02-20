@@ -14,7 +14,7 @@ from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject, get_initial_assessment_df, get_traject_prob
 from src.orm.importers.optimization_step_importer import _get_section_lcc, _get_final_measure_betas
 from src.orm.orm_controller_custom import get_optimization_steps_ordered
-from src.utils.utils import beta_to_pf
+from src.utils.utils import beta_to_pf, pf_to_beta
 
 
 class TrajectSolutionRunImporter(OrmImporterProtocol):
@@ -33,6 +33,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
                  ):
         self.dike_traject = dike_traject
         self.dike_section_mapping = {section.name: section for section in dike_traject.dike_sections}
+        self.assessment_time = self.dike_traject.dike_sections[0].years
         self.run_id_dsn = run_id_dsn
         self.run_id_vr = run_id_vr
         self.greedy_optimization_criteria = greedy_optimization_criteria
@@ -113,7 +114,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
                 # 5. Append the reinforcement order vr:
                 self._get_reinforced_section_order(_optimization_step, _ordered_reinforced_sections)
         self.dike_traject.reinforcement_order_dsn = _ordered_reinforced_sections
-
 
     def get_final_measure_vr(self):
         """
@@ -197,15 +197,15 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
                 return False
             return True
 
-
-
         elif self.greedy_optimization_criteria == GreedyOPtimizationCriteria.TARGET_PF.name:
 
             _year_step_index = bisect_right(self.assessment_time,
                                             self.greedy_criteria_year - REFERENCE_YEAR) - 1
             pf_traject_stop = traject_pf[_year_step_index]
-
-        return
+            beta_traject_stop = pf_to_beta(pf_traject_stop)
+            if beta_traject_stop > self.greedy_criteria_beta:
+                return False
+            return True
 
     def _add_greedy_step(self, dike_section: DikeSection, _optimization_step: OptimizationStep, _beta_df: pd.DataFrame,
                          _greedy_steps_res: list[dict], step_measure):

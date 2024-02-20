@@ -27,8 +27,7 @@ def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
     if dike_traject_data is None or dike_traject_data == {}:
         _fig = plot_default_overview_map_dummy()
     else:
-        print(dike_traject_data)
-        print(99999999999999999999999999999)
+
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
         _fig = plot_overview_map(_dike_traject)
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'},
