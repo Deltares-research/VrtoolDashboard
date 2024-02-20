@@ -24,10 +24,12 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
     greedy_optimization_criteria: str
     greedy_criteria_year: Optional[int]
     greedy_criteria_beta: Optional[float]
+    economic_optimal_final_step_id: int
 
     def __init__(self, dike_traject: DikeTraject,
-                 run_id_vr: int, run_id_dsn: int, greedy_optimization_criteria: str, greedy_criteria_year: Optional[int] = None,
-                    greedy_criteria_beta: Optional[float] = None
+                 run_id_vr: int, run_id_dsn: int, greedy_optimization_criteria: str,
+                 greedy_criteria_year: Optional[int] = None,
+                 greedy_criteria_beta: Optional[float] = None
                  ):
         self.dike_traject = dike_traject
         self.dike_section_mapping = {section.name: section for section in dike_traject.dike_sections}
@@ -36,12 +38,32 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         self.greedy_optimization_criteria = greedy_optimization_criteria
         self.greedy_criteria_year = greedy_criteria_year
         self.greedy_criteria_beta = greedy_criteria_beta
-
+        self.set_economic_optimal_final_step_id()
 
     def import_orm(self):
         self.get_final_measure_vr()
         self.get_final_measure_dsn()
 
+    def set_economic_optimal_final_step_id(self):
+        """Get the final step id of the optimization run.
+        The final step in this case is the step with the lowest total cost.
+
+        :return: The id of the final step
+        """
+
+        _results = []
+
+        _optimization_steps = get_optimization_steps_ordered(self.run_id_vr)
+
+        for _optimization_step in _optimization_steps:
+            _as_df = OptimizationStepImporter.import_optimization_step_results_df(
+                _optimization_step
+            )
+            _cost = _optimization_step.total_lcc + _optimization_step.total_risk
+            _results.append((_optimization_step, _as_df, _cost))
+
+        _step_id, _, _ = min(_results, key=lambda results_tuple: results_tuple[2])
+        self.__setattr__("economic_optimal_final_step_id", _step_id.id)
 
     def get_final_measure_dsn(self):
         """
@@ -54,6 +76,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         _optimization_steps = get_optimization_steps_ordered(self.run_id_dsn)
 
         _iterated_step_number = []
+        _ordered_reinforced_sections = []
         for _optimization_step in _optimization_steps:
 
             section = (SectionData
@@ -87,6 +110,11 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
                     _optimization_step)
                 dike_section.final_measure_doorsnede = _step_measure
 
+                # 5. Append the reinforcement order vr:
+                self._get_reinforced_section_order(_optimization_step, _ordered_reinforced_sections)
+        self.dike_traject.reinforcement_order_dsn = _ordered_reinforced_sections
+
+
     def get_final_measure_vr(self):
         """
         Get the dictionary containing the information about the final measure of the section for Veiligheidsrendement,
@@ -95,9 +123,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         """
 
         # 1. Get the final step number, default is the one for which the Total Cost is minimal.
-
-
-
 
         _optimization_steps = get_optimization_steps_ordered(self.run_id_vr)
 
@@ -110,11 +135,14 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         _beta_df = get_initial_assessment_df(list(self.dike_section_mapping.values()))
         _traject_pf, _ = get_traject_prob(_beta_df, ['StabilityInner', 'Piping', 'Overflow', "Revetment"])
         _greedy_steps_res = [{"pf": _traject_pf[0].tolist(), 'LCC': 0}]
-        _ttc = 99999999999999
-
+        _ordered_reinforced_sections = []
 
         for _optimization_step in _optimization_steps:
-            print("id=", _optimization_step.id, 'step=', _optimization_step.step_number)
+            _step_number = _optimization_step.step_number
+
+            # For combined steps, skip the step if it has already been processed
+            if _previous_step_number == _step_number:
+                continue
 
             section = (SectionData
                        .select()
@@ -126,14 +154,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
 
             # find corresponding section in dike_section
             dike_section: DikeSection = self.dike_section_mapping[section.section_name]
-
-            _step_number = _optimization_step.step_number
-
-
-            # For combined steps, skip the step if it has already been processed
-            if _previous_step_number == _step_number:
-                continue
-
 
             dike_section.final_measure_veiligheidsrendement["LCC"] += _get_section_lcc(_optimization_step)
 
@@ -156,23 +176,26 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             # 4. Calculate the probability of failure for the current step
             self._add_greedy_step(dike_section, _optimization_step, _beta_df, _greedy_steps_res, _step_measure)
 
-            status_step, _ttc = self.continue_next_step(_optimization_step, _ttc, _greedy_steps_res[-1]['pf'])
-            if status_step ==  False:
+            # 5. Append the reinforcement order vr:
+            self._get_reinforced_section_order(_optimization_step, _ordered_reinforced_sections)
+
+            status_step = self.continue_next_step(_optimization_step, _greedy_steps_res[-1]['pf'])
+            _previous_step_number = _step_number
+
+            if status_step == False:
                 _the_final_step = _optimization_step.step_number
                 break
 
         self.dike_traject.greedy_steps = _greedy_steps_res
+        self.dike_traject.reinforcement_order_vr = _ordered_reinforced_sections
 
-    def continue_next_step(self, optimization_step: OptimizationStep, ttc_previous_step: Optional[float],
+    def continue_next_step(self, optimization_step: OptimizationStep,
                            traject_pf):
-        _total_cost = optimization_step.total_lcc + optimization_step.total_risk
 
         if self.greedy_optimization_criteria == GreedyOPtimizationCriteria.ECONOMIC_OPTIMAL.name:
-            print(ttc_previous_step, _total_cost)
-
-            if _total_cost > ttc_previous_step:
-                return False, _total_cost
-            return True, _total_cost
+            if optimization_step.id + 1 > self.economic_optimal_final_step_id:
+                return False
+            return True
 
 
 
@@ -184,8 +207,8 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
 
         return
 
-
-    def _add_greedy_step(self, dike_section: DikeSection, _optimization_step: OptimizationStep, _beta_df: pd.DataFrame, _greedy_steps_res: list[dict], step_measure):
+    def _add_greedy_step(self, dike_section: DikeSection, _optimization_step: OptimizationStep, _beta_df: pd.DataFrame,
+                         _greedy_steps_res: list[dict], step_measure):
         for mechanism in dike_section.active_mechanisms:
             mask = (_beta_df['name'] == dike_section.name) & (_beta_df['mechanism'] == mechanism)
             # replace the row in the dataframe with the betas of the section if both the name and mechanism match
@@ -201,6 +224,16 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         # Get step LCC:
         LCC = _get_section_lcc(_optimization_step)
         _greedy_steps_res.append({"pf": _reinforced_traject_pf[0].tolist(), 'LCC': LCC})
+
+    def _get_reinforced_section_order(self, optimization_step: OptimizationStep, section_ordered_list: list[str]):
+        """ Add the section name to the list of reinforced sections if it is not already in the list."""
+        optimization_selected_measure = OptimizationSelectedMeasure.get(
+            OptimizationSelectedMeasure.id == optimization_step.optimization_selected_measure_id)
+        measure_result = MeasureResult.get(MeasureResult.id == optimization_selected_measure.measure_result_id)
+        measure_per_section = MeasurePerSection.get(MeasurePerSection.id == measure_result.measure_per_section_id)
+        section = SectionData.get(SectionData.id == measure_per_section.section_id)
+        if section.section_name not in section_ordered_list:
+            section_ordered_list.append(section.section_name)
 
     def _get_measure(self, optimization_steps, active_mechanisms: list) -> dict:
         """
