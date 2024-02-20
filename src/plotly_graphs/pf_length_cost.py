@@ -20,8 +20,7 @@ def plot_default_scatter_dummy() -> go.Figure:
 
 
 def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_type: str,
-                        cost_length_switch: str, greedy_criteria: str,
-                        greedy_criteria_params: Optional[tuple[float, int]]) -> go.Figure:
+                        cost_length_switch: str) -> go.Figure:
     """
 
     :param dike_traject:
@@ -36,10 +35,6 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
 
     fig = go.Figure()
     _year_index = bisect_right(dike_traject.dike_sections[0].years, selected_year - REFERENCE_YEAR) - 1
-
-    if greedy_criteria == "TARGET_PF" and greedy_criteria_params[0] is not None and greedy_criteria_params[1] is not None:
-        _step_index = dike_traject._get_greedy_optimization_step_from_speficiations(target_year=int(greedy_criteria_params[1]), target_beta=greedy_criteria_params[0])
-
 
     section_order_dsn = ["Geen maatregel"] + dike_traject.reinforcement_order_dsn
     section_order_vr = ["Geen maatregel"] + dike_traject.reinforcement_order_vr
@@ -136,18 +131,6 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
         name="Signaleringswaarde",
         line=dict(color='black', dash='dot')
     ))
-
-    # Add vertical line if greedy_criteria is set to "TARGET_PF"
-    if greedy_criteria == "TARGET_PF" and greedy_criteria_params[0] is not None and greedy_criteria_params[1] is not None:
-        fig.add_trace(go.Scatter(
-            x=[x_step[_step_index], x_step[_step_index]],
-            y=[0, y_vr[-1]],
-            mode="lines",
-            marker=dict(size=0),
-            showlegend=True,
-            name="Voldoen aan PF target",
-            line=dict(color='red', dash='dot')
-        ))
 
     # add annotations for dijkvaken order:
     for index, (x, section_name) in enumerate(zip(x_vr[1:], section_order_vr[1:])):

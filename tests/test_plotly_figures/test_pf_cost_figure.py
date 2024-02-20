@@ -20,7 +20,7 @@ class TestPlotlyScatter:
         _dike_traject = DikeTraject.deserialize(_dike_data)
 
         # 2. Call
-        _fig = plot_pf_length_cost(_dike_traject, 2025, result_type.name, cost_length_switch, "ECONOMICAL_OPTIMUM", None)
+        _fig = plot_pf_length_cost(_dike_traject, 2025, result_type.name, cost_length_switch)
 
         # 3. Assert
         assert isinstance(_fig, Figure)

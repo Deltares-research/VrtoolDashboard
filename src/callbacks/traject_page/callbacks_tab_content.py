@@ -125,7 +125,7 @@ def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_
         return plot_default_scatter_dummy()
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
-        _fig = plot_pf_length_cost(_dike_traject, selected_year, result_type, cost_length_switch, greedy_stop_criteria, (beta, year))
+        _fig = plot_pf_length_cost(_dike_traject, selected_year, result_type, cost_length_switch)
     return _fig
 
 

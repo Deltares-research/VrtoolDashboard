@@ -1,6 +1,7 @@
 from pathlib import Path
 import json
-path_to_reference_file = Path(r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_31_1\reference\reference_dike_traject.json")
+# path_to_reference_file = Path(r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_31_1\reference\reference_dike_traject.json")
+path_to_reference_file = Path(r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_38_1_sterker_VZG2\reference\dike_data.json")
 
 with open(path_to_reference_file, "r") as file:
     reference = json.load(file)
@@ -8,6 +9,9 @@ with open(path_to_reference_file, "r") as file:
 for section in reference['dike_sections']:
 
     mechanisms = []
+    if section.get("initial_assessment", {}) is None:
+        section['active_mechanisms'] = []
+        continue
     for key in section.get("initial_assessment", {}).keys():
         if key != "Section":
             mechanisms.append(key)
