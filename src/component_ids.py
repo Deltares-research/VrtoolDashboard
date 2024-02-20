@@ -23,3 +23,6 @@ GREEDY_OPTIMIZATION_CRITERIA_YEAR = "greedy_optimization_criteria_year"
 BUTTON_RECOMPUTE_GREEDY_STEPS = "button_recompute_greedy_steps"
 BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS = "button_recompute_greedy_steps_nb_clicks"
 
+DIV_NUMBERFIELD_OPTIMIZATION_STOP_CRITERIA = "div_number_field_optimization_stop_criteria_id"
+DIV_BUTTON_RECOMPUTE_GREEDY_STEPS_ID = "div_button_recompute_greedy_steps_id"
+

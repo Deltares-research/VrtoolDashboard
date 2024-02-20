@@ -77,4 +77,6 @@ layout_radio_greedy_optimization_stop_criteria = dbc.RadioItems(
               "value": GreedyOPtimizationCriteria.ECONOMIC_OPTIMAL.name},
              {"label": GreedyOPtimizationCriteria.TARGET_PF.value, "value": GreedyOPtimizationCriteria.TARGET_PF.name},
              ],
-    value=GreedyOPtimizationCriteria.ECONOMIC_OPTIMAL.name, )
+    value=GreedyOPtimizationCriteria.ECONOMIC_OPTIMAL.name,
+
+)
