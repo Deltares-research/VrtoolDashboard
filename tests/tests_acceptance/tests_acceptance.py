@@ -38,20 +38,20 @@ class AcceptanceTestCase:
                 excluded_mechanisms=["REVETMENT", "HYDRAULIC_STRUCTURES"],
                 database_name="database_10-3.db",
             ),
-            # AcceptanceTestCase(
-            #     case_directory="Case_24_3",
-            #     traject_name="24-3",
-            #     case_name="24-3",
-            #     excluded_mechanisms=[],
-            #     database_name="24-3_results_vrtool_0_1_1.db",
-            # ),
-            # AcceptanceTestCase(
-            #     case_directory="Case_31_1",
-            #     traject_name="31-1",
-            #     case_name="31-1",
-            #     excluded_mechanisms=[],
-            #     database_name="database_31-1.db",
-            # ),
+            AcceptanceTestCase(
+                case_directory="Case_24_3",
+                traject_name="24-3",
+                case_name="24-3",
+                excluded_mechanisms=[],
+                database_name="24-3_results_vrtool_0_1_1.db",
+            ),
+            AcceptanceTestCase(
+                case_directory="Case_31_1",
+                traject_name="31-1",
+                case_name="31-1",
+                excluded_mechanisms=[],
+                database_name="database_31-1.db",
+            ),
 
         ]
 
