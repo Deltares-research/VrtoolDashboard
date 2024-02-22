@@ -5,10 +5,11 @@ from dash.dash_table import DataTable
 from .layout_collasping_menus import make_collapsing_menu
 from .layout_dike_settings import dike_settings_layout
 from .layout_radio_items import layout_radio_color_bar_result_type, layout_radio_sub_type_result, \
-    layout_radio_length_switch
+    layout_radio_length_switch, layout_radio_greedy_optimization_stop_criteria
 from .layout_sliders import layout_urgency_length_slider
 from .layout_upload_dike_files import layout_traject_select
 from .layout_vr_optimalization import dike_vr_optimization_layout_ag_grid
+from ..component_ids import GREEDY_OPTIMIZATION_CRITERIA_BETA, GREEDY_OPTIMIZATION_CRITERIA_YEAR
 from ..constants import get_mapbox_token
 from ..plotly_graphs.pf_length_cost import plot_default_scatter_dummy
 from ..plotly_graphs.plotly_maps import plot_default_overview_map_dummy
@@ -86,7 +87,8 @@ def layout_tab_one() -> html.Div:
         children=[
             html.H2("Overzicht dijkvakken"),
             DataTable(id='table'),
-            html.Div("De onderstaande kaart geeft een overzicht van de dijkvakken binnen het geïmporteerde dijktraject."),
+            html.Div(
+                "De onderstaande kaart geeft een overzicht van de dijkvakken binnen het geïmporteerde dijktraject."),
             html.Div(id='overview_map_div',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
 
@@ -132,6 +134,7 @@ def layout_tab_three() -> html.Div:
 
 
 def layout_tab_four() -> html.Div:
+
     layout = html.Div(
         children=[
             html.H2("Optimalisatie"),
@@ -148,7 +151,8 @@ def layout_tab_four() -> html.Div:
                 style={'width': '130vh', 'height': '60vh', 'border': "2px solid black"},
                 children=[
                     dcc.Graph(id='dike_traject_pf_cost_graph', figure=plot_default_scatter_dummy(),
-                              style={'width': '100%', 'height': '100%'}, config={'mapboxAccessToken': get_mapbox_token()}),
+                              style={'width': '100%', 'height': '100%'},
+                              config={'mapboxAccessToken': get_mapbox_token()}),
                     dcc.Store(id="store_clicked_section", data='all')
                 ],
 
@@ -158,7 +162,8 @@ def layout_tab_four() -> html.Div:
                 style={'width': '130vh', 'height': '30vh', 'border': "2px solid black"},
                 children=[
                     dcc.Graph(id='dike_traject_pf_cost_helping_map', figure=plot_default_overview_map_dummy(),
-                              style={'width': '100%', 'height': '100%'}, config={'mapboxAccessToken': get_mapbox_token()})
+                              style={'width': '100%', 'height': '100%'},
+                              config={'mapboxAccessToken': get_mapbox_token()})
                 ]),
 
         ]

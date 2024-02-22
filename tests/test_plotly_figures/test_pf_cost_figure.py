@@ -13,7 +13,7 @@ from src.plotly_graphs.pf_length_cost import plot_pf_length_cost
 class TestPlotlyScatter:
     @pytest.mark.parametrize("result_type", [ResultType.RELIABILITY, ResultType.PROBABILITY])
     @pytest.mark.parametrize("cost_length_switch", ["COST", "LENGTH"])
-    def test_plot_pf_length_cost(self, result_type: Enum, cost_length_switch: str):
+    def test_plot_pf_length_cost_economic_optimum(self, result_type: Enum, cost_length_switch: str):
         # 1. Define data
         _dike_data = json.load(
             open(Path(__file__).parent.parent / 'data/Case_38_1_sterker_VZG2/reference' / 'dike_data.json'))

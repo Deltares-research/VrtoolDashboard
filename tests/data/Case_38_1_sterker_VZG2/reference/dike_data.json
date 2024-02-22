@@ -335,7 +335,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -567,7 +572,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -1023,7 +1033,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -1295,7 +1310,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -1755,7 +1775,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -1983,7 +2008,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -2231,7 +2261,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -2555,7 +2590,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -2863,7 +2903,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -3575,7 +3620,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -4087,7 +4137,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -4539,7 +4594,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -5043,7 +5103,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -5367,7 +5432,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -5575,7 +5645,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -5955,7 +6030,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -6211,7 +6291,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -6487,7 +6572,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -6703,7 +6793,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -7083,7 +7178,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -7415,7 +7515,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -7619,7 +7724,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -8042,7 +8152,8 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": []
         },
         {
             "coordinates_rd": [
@@ -8262,7 +8373,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -8474,7 +8590,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -8770,7 +8891,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -9002,7 +9128,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -9214,7 +9345,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -9470,7 +9606,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -9794,7 +9935,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -10142,7 +10288,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -10554,7 +10705,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -11050,7 +11206,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -11922,7 +12083,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -12242,7 +12408,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -12502,7 +12673,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -12862,7 +13038,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -13134,7 +13315,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -13314,7 +13500,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -13918,7 +14109,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -14358,7 +14554,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -14554,7 +14755,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -14878,7 +15084,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -15114,7 +15325,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -15502,7 +15718,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -15786,7 +16007,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -16050,7 +16276,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -16298,7 +16529,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -16706,7 +16942,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -16962,7 +17203,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -17298,7 +17544,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -17930,7 +18181,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -18614,7 +18870,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -18958,7 +19219,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -19230,7 +19496,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -19538,7 +19809,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -19934,7 +20210,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -20718,7 +20999,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -21126,7 +21412,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -21570,7 +21861,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -21806,7 +22102,12 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": [
+                "Overflow",
+                "StabilityInner",
+                "Piping"
+            ]
         },
         {
             "coordinates_rd": [
@@ -22325,7 +22626,8 @@
                 100
             ],
             "revetment": false,
-            "Revetment": false
+            "Revetment": false,
+            "active_mechanisms": []
         }
     ],
     "reinforcement_order_vr": [
@@ -22452,5 +22754,28 @@
     ],
     "signalering_value": 3.33e-05,
     "lower_bound_value": 0.0001,
+    "greedy_steps": [{
+      "pf": [
+        0.004238938094977579,
+        0.004355138455741861,
+        0.00438518755010954,
+        0.004541671565996947,
+        0.004709018477185048,
+        0.004887888335461946
+      ],
+      "LCC": 0
+    },
+    {
+      "pf": [
+        0.003859673249336587,
+        0.0039744140433607324,
+        0.004004083668025085,
+        0.004158579009754255,
+        0.004323777701677659,
+        0.004500329400201956
+      ],
+      "LCC": 8400.4
+    }
+    ],
     "run_name": "opti_run"
 }

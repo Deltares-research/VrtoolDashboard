@@ -49,6 +49,12 @@ class Measures(Enum):
     STABILITY_SCREEN = "Stabiliteitsscherm"
 
 
+class GreedyOPtimizationCriteria(Enum):
+    ECONOMIC_OPTIMAL = "Economisch optimaal (standaard)"
+    TARGET_PF = "Faalkans"
+
+
+
 
 def get_mapbox_token() -> str:
     with open(Path(__file__).parent / "assets" / "mapbox_token.txt") as f:
