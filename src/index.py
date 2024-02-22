@@ -12,6 +12,7 @@ from src.callbacks.traject_page import callbacks_main_page
 from src.callbacks.traject_page import callback_tabs_switch
 from src.callbacks.traject_page import callbacks_tab_content
 from src.callbacks.traject_page import callback_optimize
+from src.callbacks.traject_page import callback_download_geojson
 
 # Define the app layout
 app.layout = dbc.Container(

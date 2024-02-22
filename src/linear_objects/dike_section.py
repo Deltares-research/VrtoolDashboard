@@ -69,3 +69,26 @@ class DikeSection(BaseLinearObject):
         section.years = data['years']
         section.revetment = data['revetment']
         return section
+
+    def export_as_geojson_feature(self) -> dict:
+        """Export the dike section as a GeoJSON feature"""
+        return {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": self.coordinates_rd
+            },
+            "properties": {
+                "name": self.name,
+                "length": self.length,
+                "in_analyse": self.in_analyse,
+                "revetment": self.revetment,
+                # "is_reinforced_veiligheidsrendement": self.is_reinforced_veiligheidsrendement,
+                # "is_reinforced_doorsnede": self.is_reinforced_doorsnede,
+                # "initial_assessment": self.initial_assessment,
+                # "final_measure_veiligheidsrendement": self.final_measure_veiligheidsrendement,
+                # "final_measure_doorsnede": self.final_measure_doorsnede,
+                # "years": self.years,
+            }
+        }
+

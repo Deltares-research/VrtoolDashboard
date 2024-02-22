@@ -4,6 +4,7 @@ from dash.dash_table import DataTable
 
 from .layout_collasping_menus import make_collapsing_menu
 from .layout_dike_settings import dike_settings_layout
+from .layout_download_buttons import layout_download_overview
 from .layout_radio_items import layout_radio_color_bar_result_type, layout_radio_sub_type_result, \
     layout_radio_length_switch
 from .layout_sliders import layout_urgency_length_slider
@@ -84,9 +85,14 @@ def make_layout_main_page() -> dbc.Row:
 def layout_tab_one() -> html.Div:
     return html.Div(
         children=[
-            html.H2("Overzicht dijkvakken"),
+            dbc.Row([
+                dbc.Col([html.H2("Overzicht dijkvakken") ], md=10),
+                dbc.Col([layout_download_overview], md=2)
+            ]),
+
             DataTable(id='table'),
-            html.Div("De onderstaande kaart geeft een overzicht van de dijkvakken binnen het geïmporteerde dijktraject."),
+            html.Div(
+                "De onderstaande kaart geeft een overzicht van de dijkvakken binnen het geïmporteerde dijktraject."),
             html.Div(id='overview_map_div',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
 
@@ -148,7 +154,8 @@ def layout_tab_four() -> html.Div:
                 style={'width': '130vh', 'height': '60vh', 'border': "2px solid black"},
                 children=[
                     dcc.Graph(id='dike_traject_pf_cost_graph', figure=plot_default_scatter_dummy(),
-                              style={'width': '100%', 'height': '100%'}, config={'mapboxAccessToken': get_mapbox_token()}),
+                              style={'width': '100%', 'height': '100%'},
+                              config={'mapboxAccessToken': get_mapbox_token()}),
                     dcc.Store(id="store_clicked_section", data='all')
                 ],
 
@@ -158,7 +165,8 @@ def layout_tab_four() -> html.Div:
                 style={'width': '130vh', 'height': '30vh', 'border': "2px solid black"},
                 children=[
                     dcc.Graph(id='dike_traject_pf_cost_helping_map', figure=plot_default_overview_map_dummy(),
-                              style={'width': '100%', 'height': '100%'}, config={'mapboxAccessToken': get_mapbox_token()})
+                              style={'width': '100%', 'height': '100%'},
+                              config={'mapboxAccessToken': get_mapbox_token()})
                 ]),
 
         ]

@@ -1,3 +1,4 @@
+import json
 from dataclasses import dataclass
 
 import numpy as np
@@ -47,6 +48,17 @@ class DikeTraject(BaseLinearObject):
                            lower_bound_value=data["lower_bound_value"],
                            run_name=data["run_name"]
                            )
+
+    def export_to_geojson(self) -> str:
+        """
+        Export the dike traject to a geojson format
+        """
+        _geojson = {
+            "type": "FeatureCollection",
+            "crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:EPSG::28992"}},
+            "features": [section.export_as_geojson_feature() for section in self.dike_sections]
+        }
+        return json.dumps(_geojson)
 
     def calc_traject_probability_array(self, calc_type: str):
 

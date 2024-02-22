@@ -18,3 +18,6 @@ OPTIMIZE_MODAL_ID = "optimize_modal_id"
 CLOSE_OPTIMAL_MODAL_BUTTON_ID = "close-modal-optimize"
 SLIDER_YEAR_RELIABILITY_RESULTS_ID = "slider_year_reliability_results"
 
+
+DOWNLOAD_OVERVIEW_BUTTON_ID = "download_overview_button_id"
+DOWNLOAD_OVERVIEW_ID = "download_overview_id"
