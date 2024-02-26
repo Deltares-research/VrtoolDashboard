@@ -21,3 +21,9 @@ SLIDER_YEAR_RELIABILITY_RESULTS_ID = "slider_year_reliability_results"
 
 DOWNLOAD_OVERVIEW_BUTTON_ID = "download_overview_button_id"
 DOWNLOAD_OVERVIEW_ID = "download_overview_id"
+
+DOWNLOAD_ASSESSMENT_BUTTON_ID = "download_assessment_button_id"
+DOWNLOAD_ASSESSMENT_ID = "download_assessment_id"
+
+DOWNLOAD_REINFORCED_SECTIONS_BUTTON_ID = "download_reinforced_sections_button_id"
+DOWNLOAD_REINFORCED_SECTIONS_ID = "download_reinforced_sections_id"

@@ -4,7 +4,8 @@ from dash.dash_table import DataTable
 
 from .layout_collasping_menus import make_collapsing_menu
 from .layout_dike_settings import dike_settings_layout
-from .layout_download_buttons import layout_download_overview
+from .layout_download_buttons import layout_download_overview, layout_download_assessment, \
+    layout_download_reinforced_sections
 from .layout_radio_items import layout_radio_color_bar_result_type, layout_radio_sub_type_result, \
     layout_radio_length_switch
 from .layout_sliders import layout_urgency_length_slider
@@ -86,7 +87,7 @@ def layout_tab_one() -> html.Div:
     return html.Div(
         children=[
             dbc.Row([
-                dbc.Col([html.H2("Overzicht dijkvakken") ], md=10),
+                dbc.Col([html.H2("Overzicht dijkvakken")], md=10),
                 dbc.Col([layout_download_overview], md=2)
             ]),
 
@@ -102,7 +103,11 @@ def layout_tab_one() -> html.Div:
 def layout_tab_two() -> html.Div:
     layout = html.Div(
         children=[
-            html.H2("Beoordelingsresultaten"),
+            dbc.Row([
+                dbc.Col([html.H2("Beoordelingsresultaten")], md=10),
+                dbc.Col([layout_download_assessment], md=2)
+            ]),
+
             html.Div(
                 "De onderstaande kaart toont de betrouwbaarheid/faalkans van de initiële beoordeling voor het gehele dijktraject. Gebruik de schuifregelaar om een ander beoordelingsjaar te visualiseren."),
             html.Div(id='dike_traject_reliability_map_initial',
@@ -117,7 +122,11 @@ def layout_tab_two() -> html.Div:
 def layout_tab_three() -> html.Div:
     layout = html.Div(
         children=[
-            html.H2("Maatregelen"),
+
+            dbc.Row([
+                dbc.Col([html.H2("Maatregelen")], md=10),
+                dbc.Col([layout_download_reinforced_sections], md=2)
+            ]),
             html.Div(
                 " "),
 
