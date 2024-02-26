@@ -16,6 +16,7 @@ class DikeSection(BaseLinearObject):
     final_measure_veiligheidsrendement: Optional[dict]
     final_measure_doorsnede: Optional[dict]  # replace dict with a Measure Object
     years: list[int]  # Years for which a reliability result is available (both for initial and measures)
+    active_mechanisms: list[str]  # Active mechanisms for the dike section
 
     def __init__(self, name: str, coordinates_rd: list[tuple[float, float]], in_analyse: int):
         """
@@ -35,6 +36,7 @@ class DikeSection(BaseLinearObject):
         self.final_measure_doorsnede = None
         self.years = []
         self.revetment = False
+        self.active_mechanisms = []
 
     def serialize(self) -> dict:
         """Serialize the DikeSection object to a dict, in order to be saved in dcc.Store"""
@@ -50,6 +52,7 @@ class DikeSection(BaseLinearObject):
             'final_measure_veiligheidsrendement': self.final_measure_veiligheidsrendement,
             'final_measure_doorsnede': self.final_measure_doorsnede,
             'years': self.years,
+            'active_mechanisms': self.active_mechanisms,
         }
 
     @staticmethod
@@ -68,6 +71,7 @@ class DikeSection(BaseLinearObject):
         section.final_measure_doorsnede = data['final_measure_doorsnede']
         section.years = data['years']
         section.revetment = data['revetment']
+        section.active_mechanisms = data['active_mechanisms']
         return section
 
     def export_as_geojson_feature(self) -> dict:

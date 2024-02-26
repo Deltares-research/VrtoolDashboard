@@ -13,6 +13,7 @@ from src.callbacks.traject_page import callback_tabs_switch
 from src.callbacks.traject_page import callbacks_tab_content
 from src.callbacks.traject_page import callback_optimize
 from src.callbacks.traject_page import callback_download_geojson
+from src.callbacks.traject_page import callback_renderer
 
 # Define the app layout
 app.layout = dbc.Container(
@@ -43,8 +44,3 @@ if __name__ == '__main__':
     print("============================= RERUN THE APP ====================================")
     print(ascii_art)
     app.run_server(debug=True)
-
-
-
-
-

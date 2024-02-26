@@ -1,7 +1,32 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 
-from src.component_ids import DROPDOWN_SELECTION_RUN_ID
+from src.component_ids import DROPDOWN_SELECTION_RUN_ID, GREEDY_OPTIMIZATION_CRITERIA_BETA, \
+    GREEDY_OPTIMIZATION_CRITERIA_YEAR, BUTTON_RECOMPUTE_GREEDY_STEPS, BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, \
+    DIV_NUMBERFIELD_OPTIMIZATION_STOP_CRITERIA, DIV_BUTTON_RECOMPUTE_GREEDY_STEPS_ID
+from src.layouts.layout_radio_items import layout_radio_greedy_optimization_stop_criteria
+
+layout_number_field_optimization_stop_criteria = html.Div(
+    dbc.Row([
+        dbc.Col(
+            dcc.Input(id=GREEDY_OPTIMIZATION_CRITERIA_BETA, type='number', placeholder='beta',
+                      style={'width': '100%'})),
+        dbc.Col(
+            dcc.Input(id=GREEDY_OPTIMIZATION_CRITERIA_YEAR, type='number', placeholder='jaar',
+                      style={'width': '100%'})),
+
+    ]),
+    hidden=True,
+    id=DIV_NUMBERFIELD_OPTIMIZATION_STOP_CRITERIA
+)
+
+layout_button_recompute_greedy_steps = html.Div(children=[
+    dbc.Button(
+        "Recompute", id=BUTTON_RECOMPUTE_GREEDY_STEPS, className="ml-auto"),
+    dcc.Input(id=BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, value=0, type='hidden'), ],
+    hidden=True,
+    id=DIV_BUTTON_RECOMPUTE_GREEDY_STEPS_ID
+)
 
 layout_traject_select = html.Div([
 
@@ -62,5 +87,13 @@ layout_traject_select = html.Div([
             md=5),
 
     ]),
+    # add vertical space
+    html.Br(),
+    dbc.Row([
+        dbc.Col([layout_radio_greedy_optimization_stop_criteria], md=4),
+        dbc.Col([layout_number_field_optimization_stop_criteria], md=4),
+        dbc.Col([layout_button_recompute_greedy_steps], md=4)
+
+    ])
 
 ])

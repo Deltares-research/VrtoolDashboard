@@ -149,6 +149,8 @@ class TestDikeTrajectImporter:
                 results = json.load(f)
 
             try:
+                assert reference.keys() == results.keys()
+                assert reference['dike_sections'][0].keys() == results['dike_sections'][0].keys()
                 assert reference == results
 
             except Exception:
