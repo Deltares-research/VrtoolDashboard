@@ -26,12 +26,14 @@ BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS = "button_recompute_greedy_steps_nb_clic
 DIV_NUMBERFIELD_OPTIMIZATION_STOP_CRITERIA = "div_number_field_optimization_stop_criteria_id"
 DIV_BUTTON_RECOMPUTE_GREEDY_STEPS_ID = "div_button_recompute_greedy_steps_id"
 
-
 DOWNLOAD_OVERVIEW_BUTTON_ID = "download_overview_button_id"
 DOWNLOAD_OVERVIEW_ID = "download_overview_id"
+BUTTON_DOWNLOAD_OVERVIEW_NB_CLICKS = "button_download_overview_nb_clicks"
 
 DOWNLOAD_ASSESSMENT_BUTTON_ID = "download_assessment_button_id"
 DOWNLOAD_ASSESSMENT_ID = "download_assessment_id"
+BUTTON_DOWNLOAD_ASSESSMENT_NB_CLICKS = "button_download_assessment_nb_clicks"
 
 DOWNLOAD_REINFORCED_SECTIONS_BUTTON_ID = "download_reinforced_sections_button_id"
 DOWNLOAD_REINFORCED_SECTIONS_ID = "download_reinforced_sections_id"
+BUTTON_DOWNLOAD_REINFORCED_SECTIONS_NB_CLICKS = "button_download_reinforced_sections_nb_clicks"

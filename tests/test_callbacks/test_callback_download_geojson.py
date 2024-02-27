@@ -20,13 +20,13 @@ class TestCallbackDownloadGeojson:
 
         # 2. Define callback
         def run_callback():
-            return download_overview_geojson(_dike_data, 2)
+            return download_overview_geojson(_dike_data, 2, 3)
 
         ctx = copy_context()
         output = ctx.run(run_callback)
 
         # 3. Assert
-        assert isinstance(output, dict)
+        assert isinstance(output[0], dict)
 
     def test_download_assessment_geojson(self):
         # 1. Define data
@@ -35,13 +35,13 @@ class TestCallbackDownloadGeojson:
 
         # 2. Define callback
         def run_callback():
-            return download_assessment_geojson(_dike_data, 2045, 2)
+            return download_assessment_geojson(_dike_data, 2045, 2, 3)
 
         ctx = copy_context()
         output = ctx.run(run_callback)
 
         # 3. Assert
-        assert isinstance(output, dict)
+        assert isinstance(output[0], dict)
 
 
     def test_download_reinforced_sections_geojson(self):
@@ -51,10 +51,10 @@ class TestCallbackDownloadGeojson:
 
         # 2. Define callback
         def run_callback():
-            return download_reinforced_sections_geojson(_dike_data, 2045, CalcType.VEILIGHEIDSRENDEMENT.name, 2)
+            return download_reinforced_sections_geojson(_dike_data, 2045, CalcType.VEILIGHEIDSRENDEMENT.name, 2, 3)
 
         ctx = copy_context()
         output = ctx.run(run_callback)
 
         # 3. Assert
-        assert isinstance(output, dict)
+        assert isinstance(output[0], dict)

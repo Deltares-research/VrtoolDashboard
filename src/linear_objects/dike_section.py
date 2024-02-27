@@ -129,6 +129,7 @@ class DikeSection(BaseLinearObject):
         return feat
 
     def export_reinforced_sections_assessment(self, params: dict):
+        print(self.name)
         """Export the dike section as a GeoJSON feature for the assessment map"""
         if params['calculation_type'] == CalcType.DOORSNEDE_EISEN.name:
             _final_measure = self.final_measure_doorsnede
@@ -147,21 +148,23 @@ class DikeSection(BaseLinearObject):
             "properties": {
                 "name": self.name,
                 "in_analyse": self.in_analyse,
-                "revetment": self.revetment,
-                "is_reinforced": _is_reinforced,
-                "maatregel": _final_measure.get("name", None),
-                "investment_year": _final_measure.get("investment_year", None),
-                "dberm": _final_measure.get("dberm", None),
-                "dcrest": _final_measure.get("dberm_target_ratio", None),
-                "pf_target_ratio": _final_measure.get("pf_target_ratio", None),
-                "diff_transition_level": _final_measure.get("diff_transition_level", None),
-
             }
         }
+        if self.in_analyse:
 
-        for mechanism in self.active_mechanisms:
-            _year_index = bisect_right(self.years, params['selected_year'] - REFERENCE_YEAR) - 1
-            _beta_meca = get_beta(_final_measure, _year_index, mechanism.upper())
+            feat['properties']['in_analyse'] = self.in_analyse
+            feat['properties']['revetment'] = self.revetment
+            feat['properties']['is_reinforced'] = _is_reinforced
+            feat['properties']['maatregel'] = _final_measure.get("name", None)
+            feat['properties']['investment_year'] = _final_measure.get("investment_year", None)
+            feat['properties']['dberm'] = _final_measure.get("dberm", None)
+            feat['properties']['dcrest'] = _final_measure.get("dberm_target_ratio", None)
+            feat['properties']['pf_target_ratio'] = _final_measure.get("pf_target_ratio", None)
+            feat['properties']['diff_transition_level'] = _final_measure.get("diff_transition_level", None)
 
-            feat['properties'][f'beta_{mechanism}_veiligheidsrendement'] = _beta_meca
+            for mechanism in self.active_mechanisms:
+                _year_index = bisect_right(self.years, params['selected_year'] - REFERENCE_YEAR) - 1
+                _beta_meca = get_beta(_final_measure, _year_index, mechanism.upper())
+
+                feat['properties'][f'beta_{mechanism}_veiligheidsrendement'] = _beta_meca
         return feat
