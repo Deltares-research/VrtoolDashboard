@@ -1,7 +1,12 @@
+from bisect import bisect_right
 from typing import Optional
 
-
+from src.constants import REFERENCE_YEAR
 from src.linear_objects.base_linear import BaseLinearObject
+from src.utils.utils import get_beta
+
+
+# from src.plotly_graphs.plotly_maps import get_beta
 
 
 class DikeSection(BaseLinearObject):
@@ -74,8 +79,17 @@ class DikeSection(BaseLinearObject):
         section.active_mechanisms = data['active_mechanisms']
         return section
 
-    def export_as_geojson_feature(self) -> dict:
+    def export_as_geojson_feature(self, params: dict) -> dict:
         """Export the dike section as a GeoJSON feature"""
+        if params.get('tab') == 'overview':
+            return self.export_features_overview()
+        elif params.get('tab') == 'assessment':
+            return self.export_features_assessment(params)
+        else:
+            raise ValueError("This tab cannot be exported as geojson")
+
+    def export_features_overview(self):
+        """Export the dike section as a GeoJSON feature for the overview map"""
         return {
             "type": "Feature",
             "geometry": {
@@ -87,12 +101,36 @@ class DikeSection(BaseLinearObject):
                 "length": self.length,
                 "in_analyse": self.in_analyse,
                 "revetment": self.revetment,
-                # "is_reinforced_veiligheidsrendement": self.is_reinforced_veiligheidsrendement,
-                # "is_reinforced_doorsnede": self.is_reinforced_doorsnede,
-                # "initial_assessment": self.initial_assessment,
-                # "final_measure_veiligheidsrendement": self.final_measure_veiligheidsrendement,
-                # "final_measure_doorsnede": self.final_measure_doorsnede,
-                # "years": self.years,
             }
         }
+
+    def export_features_assessment(self, params: dict):
+        """Export the dike section as a GeoJSON feature for the assessment map"""
+
+
+        feat =  {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": self.coordinates_rd
+            },
+            "properties": {
+                "name": self.name,
+                "in_analyse": self.in_analyse,
+                "revetment": self.revetment,
+
+
+
+
+                # "years": self.years,
+                # "active_mechanisms": self.active_mechanisms,
+            }
+        }
+
+        for mechanism in self.active_mechanisms:
+            _year_index = bisect_right(self.years, params['selected_year'] - REFERENCE_YEAR) - 1
+            _beta_meca = get_beta(self.initial_assessment, _year_index, mechanism.upper())
+            feat['properties'][f'beta_{mechanism}'] = _beta_meca
+        return feat
+
 

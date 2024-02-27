@@ -36,3 +36,5 @@ _fig = plot_pf_length_cost(_dike_traject, 2025, result_type.name, cost_length_sw
 #                                                             mechanism_type=Mechanism.REVETMENT.name, )
 _fig.update_layout(mapbox=dict(accesstoken=get_mapbox_token()))
 _fig.show()
+
+
