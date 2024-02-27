@@ -129,7 +129,6 @@ class DikeSection(BaseLinearObject):
         return feat
 
     def export_reinforced_sections_assessment(self, params: dict):
-        print(self.name)
         """Export the dike section as a GeoJSON feature for the assessment map"""
         if params['calculation_type'] == CalcType.DOORSNEDE_EISEN.name:
             _final_measure = self.final_measure_doorsnede
