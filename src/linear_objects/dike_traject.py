@@ -1,3 +1,4 @@
+import json
 from bisect import bisect_right
 from dataclasses import dataclass
 from typing import Optional
@@ -6,7 +7,7 @@ import numpy as np
 import pandas as pd
 from pandas import DataFrame
 
-from src.constants import REFERENCE_YEAR
+from src.constants import REFERENCE_YEAR, Mechanism
 from src.linear_objects.base_linear import BaseLinearObject
 from src.linear_objects.dike_section import DikeSection
 
@@ -54,10 +55,21 @@ class DikeTraject(BaseLinearObject):
                            run_name=data["run_name"]
                            )
 
+    def export_to_geojson(self, params: dict) -> str:
+        """
+        Export the dike traject to a geojson format
+        """
+        _geojson = {
+            "type": "FeatureCollection",
+            "crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:EPSG::28992"}},
+            "features": [section.export_as_geojson_feature(params) for section in self.dike_sections]
+        }
+        return json.dumps(_geojson)
+
     def calc_traject_probability_array(self, calc_type: str) -> np.array:
 
         _beta_df = get_initial_assessment_df(self.dike_sections)
-        _traject_pf, _ = get_traject_prob(_beta_df, ['StabilityInner', 'Piping', 'Overflow', "Revetment"])
+        _traject_pf, _ = get_traject_prob(_beta_df, ["Overflow", "Piping", "StabilityInner", "Revetment"])
         years = self.dike_sections[0].years
 
         if calc_type == "vr":

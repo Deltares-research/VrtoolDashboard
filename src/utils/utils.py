@@ -5,7 +5,7 @@ import numpy as np
 from scipy.stats import norm
 import json
 
-from src.constants import SIGNALERING, ONDERGRENS
+from src.constants import SIGNALERING, ONDERGRENS, Mechanism
 
 
 def to_million_euros(cost: float) -> float:
@@ -94,3 +94,26 @@ def get_WBI_category(P_f_dsn: float, traject_length: float) -> str:
     else:
         cat = "VIIv"
     return cat
+
+
+def get_beta(results: dict, year_index: int, mechanism: str) -> float:
+    """Get the reliability value of a mechanism for a given year index.
+
+    :param results: dict of results.
+    :param year_index: int of the year index.
+    :param mechanism: str of the mechanism.
+    :return: float of the reliability value.
+
+    """
+    if mechanism == Mechanism.SECTION.name:
+        return results["Section"][year_index]
+    elif mechanism == Mechanism.PIPING.name:
+        return results["Piping"][year_index]
+    elif mechanism == Mechanism.OVERFLOW.name:
+        return results["Overflow"][year_index]
+    elif mechanism == Mechanism.STABILITY.name:
+        return results["StabilityInner"][year_index]
+    elif mechanism == Mechanism.REVETMENT.name:
+        return results["Revetment"][year_index]
+    elif mechanism == "STABILITYINNER":
+        return results["StabilityInner"][year_index]
