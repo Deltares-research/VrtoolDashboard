@@ -271,13 +271,13 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         # Get the extra information measure name and the corresponding parameter values for the most (combined or not) optimal step
         if optimization_steps.count() == 1:
             _final_measure["name"] = self._get_single_measure(optimization_steps[0]).name
-            _final_measure['investment_year'] = self._get_investment_year(optimization_steps[0])
+            _final_measure['investment_year'] = [self._get_investment_year(optimization_steps[0])]
 
         elif optimization_steps.count() in [2, 3]:
             _final_measure["name"] = self._get_combined_measure_name(optimization_steps)
             _year_1 = self._get_investment_year(optimization_steps[0])
             _year_2 = self._get_investment_year(optimization_steps[1])
-            _final_measure['investment_year'] = min([_year_1, _year_2])
+            _final_measure['investment_year'] = self._get_combined_measure_investment_year(optimization_steps)
 
         else:
             raise ValueError(f"Unexpected number of optimum steps: {optimization_steps.count()}")
@@ -309,10 +309,29 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         return _selected_optimization_measure.investment_year
 
     def _get_combined_measure_name(self, optimization_step: OptimizationStep) -> str:
+        if optimization_step.count() == 2:
+            name = self._get_single_measure(optimization_step[0]).name + " + " + self._get_single_measure(
+                optimization_step[1]).name
+        elif optimization_step.count() == 3:
+            name = self._get_single_measure(optimization_step[0]).name + " + " + self._get_single_measure(
+                optimization_step[1]).name + " + " + self._get_single_measure(optimization_step[2]).name
+        else:
+            raise ValueError()
 
-        name = self._get_single_measure(optimization_step[0]).name + " + " + self._get_single_measure(
-            optimization_step[1]).name
         return name
+
+    def _get_combined_measure_investment_year(self, optimization_step: OptimizationStep) -> list[int]:
+        if optimization_step.count() == 2:
+            _year_1 = self._get_investment_year(optimization_step[0])
+            _year_2 = self._get_investment_year(optimization_step[1])
+            return [_year_1, _year_2]
+        elif optimization_step.count() == 3:
+            _year_1 = self._get_investment_year(optimization_step[0])
+            _year_2 = self._get_investment_year(optimization_step[1])
+            _year_3 = self._get_investment_year(optimization_step[2])
+            return [_year_1, _year_2, _year_3]
+
+
 
     def _get_measure_parameters(self, optimization_steps: OptimizationStep) -> dict:
         _params = {}

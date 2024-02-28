@@ -290,8 +290,7 @@ def plot_dike_traject_measures_map(dike_traject: DikeTraject, subresult_type: st
     """
     fig = go.Figure()
     _legend_display = {"ground_reinforcement": True, "VZG": True, "screen": True, "diaphram wall": True,
-                       "crest_heightening": True, "berm_widening": True, "revetment": True
-                       }
+                       "crest_heightening": True, "berm_widening": True, "revetment": True}
 
     for section in dike_traject.dike_sections:
 
@@ -302,7 +301,8 @@ def plot_dike_traject_measures_map(dike_traject: DikeTraject, subresult_type: st
         _measure_results = section.final_measure_veiligheidsrendement if calc_type == CalcType.VEILIGHEIDSRENDEMENT.name else section.final_measure_doorsnede
         if _measure_results is not None:
             if _measure_results["investment_year"] is not None and _measure_results[
-                "investment_year"] + REFERENCE_YEAR <= selected_year:  # only show measures that are implemented in the selected year
+                "investment_year"][
+                0] + REFERENCE_YEAR <= selected_year:  # only show measures that are implemented in the selected year
 
                 if subresult_type == SubResultType.MEASURE_TYPE.name:
                     add_measure_type_trace(fig, section, _measure_results, _legend_display)
@@ -375,7 +375,7 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
             visible=_visible,
             hovertemplate=f'Vaknaam {section.name}<br>' \
                           f"Maatregel: {measure_results['name']} <br>" \
-                          f"Investeringsjaar: {REFERENCE_YEAR + measure_results['investment_year']} <br>" \
+                          f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>" \
                           f"Kruinverhoging: {measure_results['dcrest']}m <br>" \
                           f"Bermverbreding: {measure_results['dberm']}m <br>" \
                           f"<extra></extra>"
@@ -396,7 +396,7 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
             showlegend=legend_display.get("VZG"),
             hovertemplate=f'Vaknaam {section.name}<br>' \
                           f"{measure_results['name']}<br>" \
-                          f"Investeringsjaar: {REFERENCE_YEAR + measure_results['investment_year']} <br>" \
+                          f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>" \
                           f"<extra></extra>"
             ,
         ))
@@ -416,7 +416,7 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
             showlegend=legend_display.get("screen"),
             hovertemplate=f'Vaknaam {section.name}<br>' \
                           f"{measure_results['name']} <br>" \
-                          f"Investeringsjaar: {REFERENCE_YEAR + measure_results['investment_year']} <br>" \
+                          f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>" \
                           f"<extra></extra>"
             ,
         ))
@@ -437,7 +437,7 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
             showlegend=legend_display.get("diaphram wall"),
             hovertemplate=f'Vaknaam {section.name}<br>' \
                           f"{measure_results['name']} <br>" \
-                          f"Investeringsjaar: {REFERENCE_YEAR + measure_results['investment_year']} <br>" \
+                          f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>" \
                           f"<extra></extra>"
             ,
         ))
@@ -463,7 +463,7 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
             showlegend=legend_display.get("revetment"),
             hovertemplate=f'Vaknaam {section.name}<br>' \
                           f"{measure_results['name']} <br>" \
-                          f"Investeringsjaar: {REFERENCE_YEAR + measure_results['investment_year']} <br>" \
+                          f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>" \
                           f"Factor veiliger bekleding {measure_results['pf_target_ratio']} <br>" \
                           f"Verhoging overgang {measure_results['diff_transition_level']}m <br>" \
                           f"<extra></extra>"
@@ -495,7 +495,7 @@ def add_measure_crest_heightening_trace(fig: go.Figure, section: DikeSection, me
                 showlegend=False,
                 hovertemplate=f'Vaknaam {section.name}<br>' \
                               f"Maatregel: {measure_results['name']} <br>" \
-                              f"Investeringsjaar: {REFERENCE_YEAR + measure_results['investment_year']} <br>" \
+                              f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>" \
                               f"Kruin verhoging: {measure_results['dcrest']}m <br>" \
                               f"Bermverbreding: {measure_results['dberm']}m <br>" \
                               f"<extra></extra>"
@@ -523,7 +523,7 @@ def add_measure_berm_widening_trace(fig: go.Figure, section: DikeSection, measur
                 showlegend=False,
                 hovertemplate=f'Vaknaam {section.name}<br>' \
                               f"Maatregel: {measure_results['name']} <br>" \
-                              f"Investeringsjaar: {REFERENCE_YEAR + measure_results['investment_year']} <br>" \
+                              f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>" \
                               f"Kruin verhoging: {measure_results['dcrest']}m <br>" \
                               f"Bermverbreding: {measure_results['dberm']}m <br>" \
                               f"<extra></extra>"
@@ -886,9 +886,6 @@ def get_berm_widening_color(berm_widening_value: float) -> str:
     return get_color(berm_widening_value, cmap, 0, 30)
 
 
-
-
-
 def get_color_hover_prob_ratio(section: DikeSection, year_index: int, mechanism_type: str) -> Tuple[str, str]:
     if section.final_measure_veiligheidsrendement is None or section.final_measure_doorsnede is None:
         _color = 'grey'
@@ -968,3 +965,11 @@ def get_no_data_info(section: DikeSection) -> Tuple[str, str]:
     _hovertemplate = f'Vaknaam {section.name}<br>' \
                      f'Beta: NO DATA<br>' + "<extra></extra>"
     return _color, _hovertemplate
+
+
+def get_investment_year_str(investement_years: list[int]) -> str:
+    string = ''
+    for year in investement_years:
+        year = year + REFERENCE_YEAR
+        string = string + f"{year} + "
+    return string[:-3]
