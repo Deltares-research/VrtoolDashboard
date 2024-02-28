@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - New attribute active_mechanisms to DikeSection
 - Display greedy steps on graph beta vs cost along vr and dsn
 - Button recompute to generate a new vr line with specification year/beta
+- new buttons to download geojson content of the diketraject.
 
 ### Changed
 - Refactor import od DikeTraject from database
@@ -22,7 +23,8 @@ None.
 None.
 
 ### Fixed
-None.
+- Fixed measure name for 3 combined measures
+- Fixed investement year for 2/3 combined measures
 
 ## v0.3.2 [09/02/2024]
 
