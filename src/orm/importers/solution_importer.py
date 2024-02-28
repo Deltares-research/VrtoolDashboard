@@ -124,16 +124,10 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
 
         """
 
-        # 1. Get the final step number, default is the one for which the Total Cost is minimal.
-
         _optimization_steps = get_optimization_steps_ordered(self.run_id_vr)
 
-        # 2. Get the most optimal optimization step number
-        # This is the last step_number (=highest) for the section of interest before the final_step_number
-        # this implies that the _optimum_section_steps are ordered in ascending order of step_number
-
+        # 0. Initialize vars
         _previous_step_number = None
-
         _beta_df = get_initial_assessment_df(list(self.dike_section_mapping.values()))
         _traject_pf, _ = get_traject_prob(_beta_df, ['StabilityInner', 'Piping', 'Overflow', "Revetment"])
         _greedy_steps_res = [{"pf": _traject_pf[0].tolist(), 'LCC': 0}]
@@ -142,7 +136,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         for _optimization_step in _optimization_steps:
             _step_number = _optimization_step.step_number
 
-            # For combined steps, skip the step if it has already been processed
+            # For combined steps sharing the same step number, skip the step if it has already been processed
             if _previous_step_number == _step_number:
                 continue
 
@@ -157,8 +151,10 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             # find corresponding section in dike_section
             dike_section: DikeSection = self.dike_section_mapping[section.section_name]
 
+            # 1. Add and accumulate LCC for the final measure of the section
             dike_section.final_measure_veiligheidsrendement["LCC"] += _get_section_lcc(_optimization_step)
 
+            # 2. Get all steps sharing the same step number (=combined steps)
             _optimum_section_optimization_steps = (OptimizationStep
             .select()
             .join(OptimizationSelectedMeasure)
@@ -171,11 +167,11 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             # 3. Get all information into a dict based on the optimum optimization steps.
             _step_measure = self._get_measure(_optimum_section_optimization_steps,
                                               active_mechanisms=dike_section.active_mechanisms)
-            _step_measure["LCC"] = dike_section.final_measure_veiligheidsrendement["LCC"]
+            _step_measure["LCC"] = dike_section.final_measure_veiligheidsrendement["LCC"]  # reassign correct LCC
 
             dike_section.final_measure_veiligheidsrendement = _step_measure
 
-            # 4. Calculate the probability of failure for the current step
+            # 4. Calculate the traject probability of failure for the current step
             self._add_greedy_step(dike_section, _optimization_step, _beta_df, _greedy_steps_res, _step_measure)
 
             # 5. Append the reinforcement order vr:
@@ -229,11 +225,10 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
 
         :param dike_section:
         :param optimization_step: optimization step to be iterated from the osm table
-        :param _beta_df: dataframe of the beta for the initial assessment
+        :param _beta_df: dataframe with beta of all mechanism and all sections. The dataframe is modified in place here!
         :param greedy_steps_res: result list to be appended. Element have the following structure:
         {"LCC": xxx, "pf": [X,Y,Z]}
 
-        #TODO: check this??? why does it take _beta_df and not the beta of the optimization step
         """
         for mechanism in dike_section.active_mechanisms:
             mask = (_beta_df['name'] == dike_section.name) & (_beta_df['mechanism'] == mechanism)
@@ -252,7 +247,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         greedy_steps_res.append({"pf": _reinforced_traject_pf[0].tolist(), 'LCC': LCC})
 
     def _get_reinforced_section_order(self, optimization_step: OptimizationStep, section_ordered_list: list[str]):
-        """ Add the section name to the list of reinforced sections if it is not already in the list."""
+        """ Add in place the section name to the list of reinforced sections if it is not already in the list."""
         optimization_selected_measure = OptimizationSelectedMeasure.get(
             OptimizationSelectedMeasure.id == optimization_step.optimization_selected_measure_id)
         measure_result = MeasureResult.get(MeasureResult.id == optimization_selected_measure.measure_result_id)
