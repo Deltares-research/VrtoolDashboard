@@ -101,12 +101,9 @@ def make_graph_map_measures(dike_traject_data: dict, selected_year: float, resul
                Input(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "value"),
                Input("select_result_type", 'value'),
                Input("select_length_cost_switch", "value"),
-               Input(SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA, "value"),
-               Input(GREEDY_OPTIMIZATION_CRITERIA_BETA, "value"),
-               Input(GREEDY_OPTIMIZATION_CRITERIA_YEAR, "value"),
                ])
 def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_type: str,
-                          cost_length_switch: str, greedy_stop_criteria: str, beta: float, year: int):
+                          cost_length_switch: str):
     """
     Call to display the graph of the plot of the probability of failure vs the cost of the measures.
 
@@ -114,11 +111,6 @@ def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_
     :param selected_year: Selected year by the user from the slider
     :param result_type: Selected result type by the user from the OptionField, one of "RELIABILITY" or "PROBABILITY"
     :param cost_length_switch: Selected cost length switch by the user from the OptionField, one of "COST" or "LENGTH"
-    :param greedy_stop_criteria: The stop criteria for the greedy optimization, one of "ECONOMIC_OPTIMAL" or "TARGET_PF"
-    :param beta: The beta value for the greedy optimization
-    :param year: The year value for the greedy optimization
-
-
     """
 
     if dike_traject_data is None:
