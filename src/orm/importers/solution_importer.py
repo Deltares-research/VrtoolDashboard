@@ -42,6 +42,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         self.set_economic_optimal_final_step_id()
 
     def import_orm(self):
+        """Import the final measures for both Veiligheidsrendement and Doorsnede"""
         self.get_final_measure_vr()
         self.get_final_measure_dsn()
 
@@ -68,11 +69,10 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
 
     def get_final_measure_dsn(self):
         """
-        Get the dictionary containing the information about the final mesure of the section for Doorsnede-eisen.
+        Process the solution obtained for Doorsnede-eisen . In particular, this function:
+            - gets and assigns the reinforcement order to the traject
+            - import the final measure (beta, lcc, params, ...) for each dike section
 
-        :param section_data:
-        :return: dictionary with the followings keys: "name", "LCC", "Piping", "StabilityInner", "Overflow", "Revetment"
-        ,"Section"
         """
         _optimization_steps = get_optimization_steps_ordered(self.run_id_dsn)
 
@@ -111,14 +111,16 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
                     _optimization_step)
                 dike_section.final_measure_doorsnede = _step_measure
 
-                # 5. Append the reinforcement order vr:
+                # 5. Append the reinforcement order dsn:
                 self._get_reinforced_section_order(_optimization_step, _ordered_reinforced_sections)
         self.dike_traject.reinforcement_order_dsn = _ordered_reinforced_sections
 
     def get_final_measure_vr(self):
         """
-        Get the dictionary containing the information about the final measure of the section for Veiligheidsrendement,
-        and calculates
+        Process the solution obtained for GreedyOptimization (veiligheidsrendement). In particular, this function:
+            - gets and assigns the reinforcement order to the traject
+            - import all the greedy steps and calculate the traject probability of failure (traject faalkans)
+            - import the final measure (beta, lcc, params, ...) for each dike section
 
         """
 
@@ -190,7 +192,20 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         self.dike_traject.reinforcement_order_vr = _ordered_reinforced_sections
 
     def continue_next_step(self, optimization_step: OptimizationStep,
-                           traject_pf):
+                           traject_pf: list[float]) -> bool:
+        """
+        This function determines whether the next OptimizationStep should be imported/processed or not.
+            - If criteria is Economic Optimal, the loop should be stop when the id of the economic optimal is reached
+            (id previously determined at the step of lowest Total Cost).
+            - If criteria is determined for a tuple beta/year. the loop stops when the traject faalkans reaches the
+            specified reliability beta for a specified year.
+
+        :param optimization_step: optimization step to be iterated from the osm table
+        :param traject_pf: list of the traject faalkans for all years computed for the current optimization step
+
+        :return: True if the next optimization step should be processed. False otherwise.
+
+        """
 
         if self.greedy_optimization_criteria == GreedyOPtimizationCriteria.ECONOMIC_OPTIMAL.name:
             if optimization_step.id + 1 > self.economic_optimal_final_step_id:
@@ -207,8 +222,19 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
                 return False
             return True
 
-    def _add_greedy_step(self, dike_section: DikeSection, _optimization_step: OptimizationStep, _beta_df: pd.DataFrame,
-                         _greedy_steps_res: list[dict], step_measure):
+    def _add_greedy_step(self, dike_section: DikeSection, optimization_step: OptimizationStep, _beta_df: pd.DataFrame,
+                         greedy_steps_res: list[dict], step_measure):
+        """
+        Add the results of the step to the list greedy_steps_list
+
+        :param dike_section:
+        :param optimization_step: optimization step to be iterated from the osm table
+        :param _beta_df: dataframe of the beta for the initial assessment
+        :param greedy_steps_res: result list to be appended. Element have the following structure:
+        {"LCC": xxx, "pf": [X,Y,Z]}
+
+        #TODO: check this??? why does it take _beta_df and not the beta of the optimization step
+        """
         for mechanism in dike_section.active_mechanisms:
             mask = (_beta_df['name'] == dike_section.name) & (_beta_df['mechanism'] == mechanism)
             # replace the row in the dataframe with the betas of the section if both the name and mechanism match
@@ -222,8 +248,8 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         _reinforced_traject_pf, _ = get_traject_prob(_beta_df, dike_section.active_mechanisms)
 
         # Get step LCC:
-        LCC = _get_section_lcc(_optimization_step)
-        _greedy_steps_res.append({"pf": _reinforced_traject_pf[0].tolist(), 'LCC': LCC})
+        LCC = _get_section_lcc(optimization_step)
+        greedy_steps_res.append({"pf": _reinforced_traject_pf[0].tolist(), 'LCC': LCC})
 
     def _get_reinforced_section_order(self, optimization_step: OptimizationStep, section_ordered_list: list[str]):
         """ Add the section name to the list of reinforced sections if it is not already in the list."""
