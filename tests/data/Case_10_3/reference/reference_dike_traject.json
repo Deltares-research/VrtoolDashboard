@@ -138,8 +138,11 @@
           3.713898452009084
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.5,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -179,8 +182,11 @@
           3.8941282506241777
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.75,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -207,7 +213,7 @@
           508572.5090062751
         ],
         [
-          191140,
+          191140.0,
           508559.094
         ],
         [
@@ -293,8 +299,10 @@
           3.7622281326642466
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.75,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -334,8 +342,10 @@
           3.7622281326642466
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.75,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -448,10 +458,12 @@
           3.760613810609671
         ],
         "name": "Zelfkerende constructie",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 683800
+        "LCC": 683800.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -487,8 +499,11 @@
           3.814759657157789
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.25,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -613,8 +628,11 @@
           3.814807135460113
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.25,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -654,8 +672,10 @@
           3.8118793663092068
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.25,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -731,7 +751,7 @@
         ],
         [
           191074.984,
-          508363
+          508363.0
         ],
         [
           191073.391,
@@ -816,8 +836,11 @@
           3.8610760153131984
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.25,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -857,8 +880,10 @@
           3.8579490941092303
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.25,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -893,7 +918,7 @@
           508324.563
         ],
         [
-          191080,
+          191080.0,
           508314.156
         ],
         [
@@ -1046,7 +1071,7 @@
         ],
         [
           191455.25,
-          507962
+          507962.0
         ],
         [
           191456.06364244202,
@@ -1164,8 +1189,10 @@
           3.862894651996339
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.25,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -1197,7 +1224,7 @@
         ],
         [
           191464.234,
-          507953
+          507953.0
         ],
         [
           191468.5,
@@ -1439,8 +1466,10 @@
           3.859688833612984
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.25,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -1569,9 +1598,12 @@
           3.669464518930146
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 76201.2
@@ -1610,8 +1642,10 @@
           3.8424819758320115
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.25,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -1728,9 +1762,12 @@
           3.669184107160949
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 50800.8
@@ -1769,8 +1806,11 @@
           3.845943108086016
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.25,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -1907,12 +1947,15 @@
           3.668926316428614
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 1516016
+        "LCC": 1516016.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -1948,8 +1991,11 @@
           3.84837949668709
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
         "dcrest": 0.25,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -2066,10 +2112,12 @@
           3.753329783505823
         ],
         "name": "Zelfkerende constructie",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 341900
+        "LCC": 341900.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -2105,10 +2153,12 @@
           3.753329783505823
         ],
         "name": "Zelfkerende constructie",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 341900
+        "LCC": 341900.0
       },
       "years": [
         0,
@@ -2132,7 +2182,7 @@
         ],
         [
           192031.125,
-          507156
+          507156.0
         ],
         [
           192031.969,
@@ -2217,9 +2267,12 @@
           3.6694549209299954
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 20,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 20.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 43028.4
@@ -2258,8 +2311,11 @@
           3.847492084991855
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 12,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 12.0,
         "dcrest": 0.25,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -2295,7 +2351,7 @@
         ],
         [
           192051.563,
-          507086
+          507086.0
         ],
         [
           192051.781,
@@ -2408,9 +2464,12 @@
           3.740948759989533
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 15,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 15.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 1188876.8
@@ -2449,8 +2508,11 @@
           3.911759639889064
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 12,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 12.0,
         "dcrest": 0.25,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -2563,9 +2625,12 @@
           3.7410736541900165
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 20,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 20.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 43028.4
@@ -2604,8 +2669,11 @@
           3.9116923034645934
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 12,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 12.0,
         "dcrest": 0.25,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -2758,9 +2826,12 @@
           3.714065344896719
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 15,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 15.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 297219.1999999999
@@ -2799,8 +2870,11 @@
           3.8837500574214197
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 12,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 12.0,
         "dcrest": 0.25,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -2905,9 +2979,12 @@
           3.713963019915357
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 20,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 20.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 86056.79999999999
@@ -2946,8 +3023,11 @@
           3.8832798804645803
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 12,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 12.0,
         "dcrest": 0.25,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -3144,9 +3224,12 @@
           3.7138817707963265
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 762011.9999999998
@@ -3185,8 +3268,11 @@
           3.880599117990175
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.25,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -3299,9 +3385,12 @@
           3.71395803977925
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 50800.79999999998
@@ -3340,8 +3429,11 @@
           3.884867476815198
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.25,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -3574,10 +3666,12 @@
           3.7139670320209826
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 340000
+        "LCC": 340000.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -3613,8 +3707,11 @@
           3.8855010183008716
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.25,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -3682,7 +3779,7 @@
         ],
         [
           192373.188,
-          506180
+          506180.0
         ],
         [
           192386.031,
@@ -3698,7 +3795,7 @@
         ],
         [
           192425.031,
-          506148
+          506148.0
         ],
         [
           192477.75,
@@ -3803,10 +3900,12 @@
           4.095553840066444
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 629000
+        "LCC": 629000.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -3842,10 +3941,12 @@
           4.095553840066444
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 629000
+        "LCC": 629000.0
       },
       "years": [
         0,
@@ -3986,10 +4087,12 @@
           4.744823754658855
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 391000
+        "LCC": 391000.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -4025,10 +4128,12 @@
           4.744823754658855
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 391000
+        "LCC": 391000.0
       },
       "years": [
         0,
@@ -4137,10 +4242,12 @@
           4.732236740170321
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 238000
+        "LCC": 238000.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -4176,10 +4283,12 @@
           4.732236740170321
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 238000
+        "LCC": 238000.0
       },
       "years": [
         0,
@@ -4400,10 +4509,12 @@
           4.7441468719191375
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 357000
+        "LCC": 357000.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -4439,10 +4550,12 @@
           4.7441468719191375
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 357000
+        "LCC": 357000.0
       },
       "years": [
         0,
@@ -4555,9 +4668,12 @@
           4.046943386113657
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 23931.4
@@ -4596,10 +4712,12 @@
           4.045775454901634
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 17000
+        "LCC": 17000.0
       },
       "years": [
         0,
@@ -4663,11 +4781,11 @@
         ],
         [
           193200.063,
-          506158
+          506158.0
         ],
         [
           193203.438,
-          506157
+          506157.0
         ],
         [
           193206.75,
@@ -4829,9 +4947,11 @@
           4.045275207196008
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 53012.4
@@ -4935,9 +5055,12 @@
           4.046773912059562
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 8,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 8.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 21804.287999999964
@@ -4976,10 +5099,12 @@
           4.045579055314476
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 17000
+        "LCC": 17000.0
       },
       "years": [
         0,
@@ -5094,7 +5219,7 @@
           506072.875
         ],
         [
-          193617,
+          193617.0,
           506080.688
         ],
         [
@@ -5232,10 +5357,12 @@
           4.326575167336507
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 527000
+        "LCC": 527000.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -5271,10 +5398,12 @@
           4.326575167336507
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 527000
+        "LCC": 527000.0
       },
       "years": [
         0,
@@ -5487,10 +5616,12 @@
           3.8404477251861096
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 221000
+        "LCC": 221000.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -5526,10 +5657,12 @@
           3.8404477251861096
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 221000
+        "LCC": 221000.0
       },
       "years": [
         0,
@@ -5642,9 +5775,12 @@
           4.373286126170364
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 25400.4
@@ -5683,10 +5819,12 @@
           4.36870769852204
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 17000
+        "LCC": 17000.0
       },
       "years": [
         0,
@@ -5889,7 +6027,7 @@
           505809.25
         ],
         [
-          194119,
+          194119.0,
           505801.969
         ],
         [
@@ -5991,12 +6129,15 @@
           4.358218457155707
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 8,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 8.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 1475226
+        "LCC": 1475226.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -6032,12 +6173,15 @@
           4.358218457155707
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 8,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 8.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 1475226
+        "LCC": 1475226.0
       },
       "years": [
         0,
@@ -6182,9 +6326,12 @@
           4.37301801556223
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 293522.87999999983
@@ -6223,10 +6370,12 @@
           4.360326591981829
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 204000
+        "LCC": 204000.0
       },
       "years": [
         0,
@@ -6347,9 +6496,12 @@
           4.372898731904597
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 48920.47999999998
@@ -6388,10 +6540,12 @@
           4.360213740289264
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 34000
+        "LCC": 34000.0
       },
       "years": [
         0,
@@ -6548,9 +6702,12 @@
           3.9742453976240295
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 241370.59999999998
@@ -6589,10 +6746,12 @@
           3.97178672941254
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 170000
+        "LCC": 170000.0
       },
       "years": [
         0,
@@ -6624,7 +6783,7 @@
         ],
         [
           194038.359,
-          505501
+          505501.0
         ],
         [
           194036.406,
@@ -6757,9 +6916,12 @@
           3.9742710880371974
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 304804.8
@@ -6798,10 +6960,12 @@
           3.9718121710054506
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 204000
+        "LCC": 204000.0
       },
       "years": [
         0,
@@ -6910,10 +7074,12 @@
           3.941738404750967
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 68000
+        "LCC": 68000.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -6949,10 +7115,12 @@
           3.941738404750967
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 68000
+        "LCC": 68000.0
       },
       "years": [
         0,
@@ -7102,9 +7270,11 @@
           3.941995975584005
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 7573.2
@@ -7232,10 +7402,12 @@
           3.9418233424385685
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 119000
+        "LCC": 119000.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -7271,10 +7443,12 @@
           3.9418233424385685
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 119000
+        "LCC": 119000.0
       },
       "years": [
         0,
@@ -7298,7 +7472,7 @@
         ],
         [
           194046.656,
-          505313
+          505313.0
         ],
         [
           194048.563,
@@ -7495,10 +7669,12 @@
           3.9667199121261754
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 476000
+        "LCC": 476000.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -7534,10 +7710,12 @@
           3.9667199121261754
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 476000
+        "LCC": 476000.0
       },
       "years": [
         0,
@@ -7638,9 +7816,12 @@
           3.969129443384931
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 25400.4
@@ -7679,10 +7860,12 @@
           3.9667199121261754
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 17000
+        "LCC": 17000.0
       },
       "years": [
         0,
@@ -7787,9 +7970,12 @@
           4.373549921340937
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 25400.399999999987
@@ -7828,10 +8014,12 @@
           4.360829798615779
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 17000
+        "LCC": 17000.0
       },
       "years": [
         0,
@@ -7858,7 +8046,7 @@
           505014.719
         ],
         [
-          194039,
+          194039.0,
           505006.594
         ],
         [
@@ -7874,7 +8062,7 @@
           504980.71900001
         ],
         [
-          194050,
+          194050.0,
           504965.031
         ],
         [
@@ -7895,7 +8083,7 @@
         ],
         [
           194051.563,
-          504914
+          504914.0
         ],
         [
           194052.547,
@@ -8039,7 +8227,7 @@
         ],
         [
           194185.234,
-          504564
+          504564.0
         ],
         [
           194190.547,
@@ -8055,7 +8243,7 @@
         ],
         [
           194206.031,
-          504550
+          504550.0
         ],
         [
           194220.094,
@@ -8142,7 +8330,7 @@
           504489.25
         ],
         [
-          194420,
+          194420.0,
           504485.344
         ],
         [
@@ -8171,7 +8359,7 @@
         ],
         [
           194509.328,
-          504467
+          504467.0
         ],
         [
           194516.016,
@@ -8296,10 +8484,12 @@
           4.373937422811221
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 1598000
+        "LCC": 1598000.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -8335,10 +8525,12 @@
           4.373937422811221
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 1598000
+        "LCC": 1598000.0
       },
       "years": [
         0,
@@ -8443,10 +8635,12 @@
           4.9355581651735045
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 170000
+        "LCC": 170000.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -8482,10 +8676,12 @@
           4.9355581651735045
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 170000
+        "LCC": 170000.0
       },
       "years": [
         0,
@@ -8590,10 +8786,12 @@
           5.04758350558784
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 17000
+        "LCC": 17000.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -8629,10 +8827,12 @@
           5.04758350558784
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 17000
+        "LCC": 17000.0
       },
       "years": [
         0,
@@ -8663,7 +8863,7 @@
           504454.5
         ],
         [
-          194736,
+          194736.0,
           504453.469
         ],
         [
@@ -8884,7 +9084,7 @@
         ],
         [
           195198.844,
-          504400
+          504400.0
         ],
         [
           195204.969,
@@ -9006,10 +9206,12 @@
           5.071321434449256
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 884000
+        "LCC": 884000.0
       },
       "years": [
         0,
@@ -9190,10 +9392,12 @@
           5.051957703776547
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 289000
+        "LCC": 289000.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -9229,10 +9433,12 @@
           5.051957703776547
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 289000
+        "LCC": 289000.0
       },
       "years": [
         0,
@@ -9341,10 +9547,12 @@
           5.055590982666335
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 136000
+        "LCC": 136000.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -9380,10 +9588,12 @@
           5.055590982666335
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 136000
+        "LCC": 136000.0
       },
       "years": [
         0,
@@ -9430,7 +9640,7 @@
           504437.813
         ],
         [
-          195499,
+          195499.0,
           504439.219
         ],
         [
@@ -9447,7 +9657,7 @@
         ],
         [
           195968.984,
-          504737
+          504737.0
         ],
         [
           196018.9335931828,
@@ -9528,9 +9738,12 @@
           4.993621177979042
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 1701826.8000000005
@@ -9569,9 +9782,12 @@
           4.993621177979042
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 1701826.8000000005
@@ -9675,9 +9891,12 @@
           5.058522956875814
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 8,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 8.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 72464.06399999998
@@ -9716,9 +9935,12 @@
           5.001781377077181
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 67254.99000000002
@@ -9838,10 +10060,12 @@
           4.885067745020147
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 289000
+        "LCC": 289000.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -9877,10 +10101,12 @@
           4.885067745020147
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 289000
+        "LCC": 289000.0
       },
       "years": [
         0,
@@ -9989,9 +10215,12 @@
           5.056157441260304
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 177802.8
@@ -10030,10 +10259,12 @@
           4.883937289290511
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 119000
+        "LCC": 119000.0
       },
       "years": [
         0,
@@ -10142,10 +10373,12 @@
           4.834393409459985
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 153000
+        "LCC": 153000.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -10181,10 +10414,12 @@
           4.834393409459985
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 153000
+        "LCC": 153000.0
       },
       "years": [
         0,
@@ -10207,7 +10442,7 @@
           504987.0065882175
         ],
         [
-          196340,
+          196340.0,
           504995.281
         ],
         [
@@ -10293,9 +10528,11 @@
           4.939138485852669
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 50402.4
@@ -10334,9 +10571,11 @@
           4.825647612943611
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 15146.4
@@ -10379,7 +10618,7 @@
         ],
         [
           196591.281,
-          505193
+          505193.0
         ],
         [
           196599.578,
@@ -10464,10 +10703,12 @@
           4.878091319248407
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 493000
+        "LCC": 493000.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -10503,10 +10744,12 @@
           4.878091319248407
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 493000
+        "LCC": 493000.0
       },
       "years": [
         0,
@@ -10594,7 +10837,7 @@
         ],
         [
           196791.422,
-          505260
+          505260.0
         ],
         [
           196806.031,
@@ -10691,10 +10934,12 @@
           4.8821679221598355
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 442000
+        "LCC": 442000.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -10730,10 +10975,12 @@
           4.8821679221598355
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 442000
+        "LCC": 442000.0
       },
       "years": [
         0,
@@ -10797,7 +11044,7 @@
         ],
         [
           196986.203,
-          505273
+          505273.0
         ],
         [
           196994.797,
@@ -10939,12 +11186,14 @@
           4.849234509815877
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 50488
+        "LCC": 50488.0
       },
       "years": [
         0,
@@ -10971,7 +11220,7 @@
           505284.313
         ],
         [
-          197143,
+          197143.0,
           505284.68800001
         ],
         [
@@ -11028,7 +11277,7 @@
         ],
         [
           197510.219,
-          505249
+          505249.0
         ],
         [
           197539.88129480928,
@@ -11109,10 +11358,12 @@
           4.885073441921552
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 833000
+        "LCC": 833000.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -11148,10 +11399,12 @@
           4.885073441921552
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 833000
+        "LCC": 833000.0
       },
       "years": [
         0,
@@ -11299,7 +11552,7 @@
         ],
         [
           197882.953,
-          505084
+          505084.0
         ],
         [
           197885.453,
@@ -11335,7 +11588,7 @@
         ],
         [
           197908.719,
-          505071
+          505071.0
         ],
         [
           197911.906,
@@ -11415,7 +11668,7 @@
         ],
         [
           198117.75,
-          504990
+          504990.0
         ],
         [
           198120.078,
@@ -11605,9 +11858,11 @@
           4.887737938278223
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 217098.4
@@ -11735,9 +11990,12 @@
           5.062051509246723
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 333190.05000000016
@@ -11776,10 +12034,12 @@
           4.886424174982974
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 255000
+        "LCC": 255000.0
       },
       "years": [
         0,
@@ -11823,7 +12083,7 @@
         ],
         [
           198157.75,
-          504604
+          504604.0
         ],
         [
           198160.578,
@@ -11859,7 +12119,7 @@
         ],
         [
           198244.547,
-          504472
+          504472.0
         ],
         [
           198247.094,
@@ -11930,7 +12190,7 @@
           504381.93800001
         ],
         [
-          198261,
+          198261.0,
           504377.18800001
         ],
         [
@@ -11970,7 +12230,7 @@
           504224.53100001
         ],
         [
-          198229,
+          198229.0,
           504222.34400001
         ],
         [
@@ -12113,9 +12373,11 @@
           4.866223402624882
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 141366.4
@@ -12263,10 +12525,12 @@
           4.887411970886364
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 170000
+        "LCC": 170000.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -12302,12 +12566,14 @@
           4.691813749310288
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 25244
+        "LCC": 25244.0
       },
       "years": [
         0,
@@ -12665,9 +12931,11 @@
           4.823377980350904
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 260013.2
@@ -12864,9 +13132,11 @@
           4.7972177788209205
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 68158.8
@@ -13111,9 +13381,11 @@
           4.84826622238125
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 131268.8
@@ -13278,9 +13550,11 @@
           4.724577957597475
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 30292.8
@@ -13408,9 +13682,11 @@
           4.890603864763939
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 70367.625
@@ -13449,12 +13725,14 @@
           4.796354710763381
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
-        "LCC": 37866
+        "LCC": 37866.0
       },
       "years": [
         0,
@@ -13559,9 +13837,12 @@
           5.065015341589507
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 48891.100000000006
@@ -13600,9 +13881,11 @@
           4.820324446267813
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 5048.8
@@ -13714,9 +13997,12 @@
           5.064861865095307
         ],
         "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 95960.63999999998
@@ -13755,9 +14041,11 @@
           4.77888772057583
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 10097.6
@@ -13889,9 +14177,11 @@
           5.065149689569074
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 49751.479999999974
@@ -13930,9 +14220,11 @@
           4.887737938278223
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 20195.2
@@ -14015,7 +14307,7 @@
         ],
         [
           199842.406,
-          502405
+          502405.0
         ],
         [
           199846.078,
@@ -14124,9 +14416,11 @@
           5.0378501540841265
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 184808.7999999998
@@ -14165,9 +14459,11 @@
           4.6858716304210875
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 55536.8
@@ -14392,9 +14688,11 @@
           5.073678374362768
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 88894.22159999986

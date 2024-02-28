@@ -38,9 +38,9 @@ query = user.tweets
 _vr_config = VrtoolConfig().from_json(Path(
     # r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case 7-2\config.json"
     # r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\TestCase1_38-1_no_housing_testingonly\vr_config.json"
-    #  r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_31_1\config.json"
-     r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_24_3\config.json"
-     # r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_10_3\config.json"
+     r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_31_1\config.json"
+    #  r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_24_3\config.json"
+    #  r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_10_3\config.json"
     # r"N:\Projects\11209000\11209353\B. Measurements and calculations\008 - Resultaten Proefvlucht\WDOD\10-3\database_vrtool_0_1_3_no_stix/config.json"
     #  r"N:\Projects\11209000\11209353\B. Measurements and calculations\008 - Resultaten Proefvlucht\WSS\31-1\database_vrtool_0_1_3_aangepast\config.json"
     # r"n:\Projects\11209000\11209353\B. Measurements and calculations\008 - Resultaten Proefvlucht\WSRL\24-3\02_Berekening\config.json"
@@ -81,4 +81,4 @@ t2 = time.time()
 print(f"Time to plot: {t2 - t1}")
 
 _fig.update_layout(mapbox=dict(accesstoken=get_mapbox_token()))
-_fig.show()
+# _fig.show()
