@@ -6,9 +6,6 @@ from src.linear_objects.base_linear import BaseLinearObject
 from src.utils.utils import get_beta
 
 
-# from src.plotly_graphs.plotly_maps import get_beta
-
-
 class DikeSection(BaseLinearObject):
     coordinates_rd: list[tuple[float, float]]  # from parent class
     name: str
