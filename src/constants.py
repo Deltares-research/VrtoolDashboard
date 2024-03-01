@@ -25,6 +25,7 @@ class SubResultType(Enum):
     MEASURE_TYPE = "Maatregeltype"
     BERM_WIDENING = "Bermverbreding"
     CREST_HIGHTENING = "Kruinverhoging"
+    INVESTMENT_YEAR = "Investeringsjaar"
 
 
 class ColorBarResultType(Enum):

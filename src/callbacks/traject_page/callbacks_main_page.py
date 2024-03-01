@@ -276,6 +276,7 @@ def update_radio_sub_result_type(result_type: str) -> tuple[list, str]:
             {'label': SubResultType.MEASURE_TYPE.value, 'value': SubResultType.MEASURE_TYPE.name},
             {'label': SubResultType.BERM_WIDENING.value, 'value': SubResultType.BERM_WIDENING.name},
             {'label': SubResultType.CREST_HIGHTENING.value, 'value': SubResultType.CREST_HIGHTENING.name},
+            {'label': SubResultType.INVESTMENT_YEAR.value, 'value': SubResultType.INVESTMENT_YEAR.name},
         ]
         value = SubResultType.MEASURE_TYPE.name
     else:

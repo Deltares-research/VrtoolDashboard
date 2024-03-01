@@ -300,23 +300,27 @@ def plot_dike_traject_measures_map(dike_traject: DikeTraject, subresult_type: st
 
         _measure_results = section.final_measure_veiligheidsrendement if calc_type == CalcType.VEILIGHEIDSRENDEMENT.name else section.final_measure_doorsnede
         if _measure_results is not None:
-            if _measure_results["investment_year"] is not None and _measure_results[
-                "investment_year"][
-                0] + REFERENCE_YEAR <= selected_year:  # only show measures that are implemented in the selected year
+            if _measure_results["investment_year"] is not None:
+                if _measure_results["investment_year"][
+                    0] + REFERENCE_YEAR <= selected_year:  # only show measures that are implemented in the selected year
 
-                if subresult_type == SubResultType.MEASURE_TYPE.name:
-                    add_measure_type_trace(fig, section, _measure_results, _legend_display)
-                elif subresult_type == SubResultType.CREST_HIGHTENING.name:
-                    add_measure_crest_heightening_trace(fig, section, _measure_results)
+                    if subresult_type == SubResultType.MEASURE_TYPE.name:
+                        add_measure_type_trace(fig, section, _measure_results, _legend_display)
 
-                elif subresult_type == SubResultType.BERM_WIDENING.name:
-                    add_measure_berm_widening_trace(fig, section, _measure_results)
-            else:
-                fig.add_trace(go.Scattermapbox(
-                    mode="lines",
-                    lat=[],
-                    lon=[],
-                    showlegend=False))
+                    elif subresult_type == SubResultType.CREST_HIGHTENING.name:
+                        add_measure_crest_heightening_trace(fig, section, _measure_results)
+
+                    elif subresult_type == SubResultType.BERM_WIDENING.name:
+                        add_measure_berm_widening_trace(fig, section, _measure_results)
+
+                if subresult_type == SubResultType.INVESTMENT_YEAR.name:
+                    add_measure_investment_year_trace(fig, section, _measure_results, _legend_display)
+            # else:
+            #     fig.add_trace(go.Scattermapbox(
+            #         mode="lines",
+            #         lat=[],
+            #         lon=[],
+            #         showlegend=False))
 
     _middle_point = get_middle_point(dike_traject.dike_sections)
     update_layout_map_box(fig, _middle_point)
@@ -530,6 +534,30 @@ def add_measure_berm_widening_trace(fig: go.Figure, section: DikeSection, measur
 
             ))
             add_colorscale_bar_berm_widening(fig)
+
+
+def add_measure_investment_year_trace(fig: go.Figure, section: DikeSection, measure_results: dict,
+                                      legend_display: dict):
+    """
+    This function adds a trace to the figure for the investment year.
+    :param fig:
+    :param section:
+    :param measure_results:
+    :param legend_display:
+    :return:
+    """
+    _group = str(max(measure_results['investment_year']) + REFERENCE_YEAR)
+    _color = get_color(max(measure_results['investment_year']) + REFERENCE_YEAR, cmap=plt.cm.Dark2, vmin=2025, vmax=2075)
+    _hovertemplate = ""
+
+    if _group in legend_display.keys():
+        showlegend = False
+    else:
+        showlegend = True
+        legend_display[_group] = True
+
+    add_section_trace(fig, section, name=_group,
+                      color=_color, hovertemplate=_hovertemplate, legendgroup=_group, showlegend=showlegend)
 
 
 def add_section_trace(fig: go.Figure, section: DikeSection, name: str, color: str, hovertemplate: str,

@@ -65,7 +65,7 @@ _fig = plot_dike_traject_reliability_measures_assessment_map(_traject_db, 2025,
                                                              calc_type=CalcType.VEILIGHEIDSRENDEMENT.name,
                                                              colorbar_result_type=ColorBarResultType.MEASURE.name,
                                                              mechanism_type=Mechanism.SECTION.name,
-                                                             sub_result_type=SubResultType.MEASURE_TYPE.name,
+                                                             sub_result_type=SubResultType.INVESTMENT_YEAR.name,
                                                              # sub_result_type=SubResultType.BERM_WIDENING.name,
                                                              )
 
@@ -81,4 +81,4 @@ t2 = time.time()
 print(f"Time to plot: {t2 - t1}")
 
 _fig.update_layout(mapbox=dict(accesstoken=get_mapbox_token()))
-# _fig.show()
+_fig.show()
