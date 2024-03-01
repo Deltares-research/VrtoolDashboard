@@ -48,7 +48,7 @@
           379695.016
         ],
         [
-          73000,
+          73000.0,
           379689.527
         ],
         [
@@ -181,7 +181,7 @@
         ],
         [
           72743.682,
-          380000
+          380000.0
         ],
         [
           72741.922,
@@ -297,12 +297,16 @@
           3.4482373951281873,
           3.2707663636206386
         ],
-        "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 0,
+        "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel + Aanpassing bekleding",
+        "investment_year": [
+          0,
+          0,
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.25,
-        "pf_target_ratio": 1,
-        "diff_transition_level": 0,
+        "pf_target_ratio": 1.0,
+        "diff_transition_level": 0.0,
         "beta_target": 3.853880440467504,
         "transition_level": 7.27,
         "LCC": 3194226.6234476524
@@ -348,12 +352,16 @@
           3.8679778203788566,
           3.690838354920704
         ],
-        "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 1,
+        "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel + Aanpassing bekleding",
+        "investment_year": [
+          0,
+          0,
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 1.0,
         "pf_target_ratio": 19.4,
-        "diff_transition_level": 0,
+        "diff_transition_level": 0.0,
         "beta_target": 4.5266090113301605,
         "transition_level": 7.27,
         "LCC": 8546686.797995565
@@ -901,7 +909,7 @@
         ],
         [
           70898.224,
-          380000
+          380000.0
         ],
         [
           70895.003,
@@ -1121,7 +1129,7 @@
         ],
         [
           70358.902,
-          380000
+          380000.0
         ],
         [
           70357.202,
@@ -1236,7 +1244,7 @@
           379633.967
         ],
         [
-          70000,
+          70000.0,
           379632.065
         ],
         [
@@ -1685,12 +1693,16 @@
           3.5795563649234117,
           3.3132386535531313
         ],
-        "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
+        "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel + Aanpassing bekleding",
+        "investment_year": [
+          20,
+          0,
+          0
+        ],
+        "dberm": 5.0,
         "dcrest": 0.25,
-        "pf_target_ratio": 1,
-        "diff_transition_level": 0,
+        "pf_target_ratio": 1.0,
+        "diff_transition_level": 0.0,
         "beta_target": 5.231137000894817,
         "transition_level": 7.18,
         "LCC": 11879645.183782334
@@ -1736,12 +1748,16 @@
           3.8814388275716336,
           3.646540049780647
         ],
-        "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 8,
+        "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel + Aanpassing bekleding",
+        "investment_year": [
+          0,
+          0,
+          0
+        ],
+        "dberm": 8.0,
         "dcrest": 0.75,
-        "pf_target_ratio": 1,
-        "diff_transition_level": 0,
+        "pf_target_ratio": 1.0,
+        "diff_transition_level": 0.0,
         "beta_target": 5.231137000894817,
         "transition_level": 7.18,
         "LCC": 22906637.150801066
@@ -2099,11 +2115,14 @@
           3.7524963958439885
         ],
         "name": "Grondversterking binnenwaarts + Aanpassing bekleding",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.25,
-        "pf_target_ratio": 1,
-        "diff_transition_level": 1,
+        "pf_target_ratio": 1.0,
+        "diff_transition_level": 1.0,
         "beta_target": 5.2074115125469,
         "transition_level": 7.5,
         "LCC": 1714187.5460573388
@@ -2320,12 +2339,15 @@
           3.3435153032421736
         ],
         "name": "Verticaal Zanddicht Geotextiel + Aanpassing bekleding",
-        "investment_year": 0,
-        "pf_target_ratio": 1,
-        "diff_transition_level": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "pf_target_ratio": 1.0,
+        "diff_transition_level": 0.0,
         "beta_target": 5.116772473652019,
         "transition_level": 6.51,
-        "LCC": 1190000
+        "LCC": 1190000.0
       },
       "final_measure_doorsnede": {
         "Overflow": [
@@ -2368,12 +2390,16 @@
           3.9508456327674675,
           3.7644023665848927
         ],
-        "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 0,
+        "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel + Aanpassing bekleding",
+        "investment_year": [
+          0,
+          0,
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.5,
-        "pf_target_ratio": 1,
-        "diff_transition_level": 1,
+        "pf_target_ratio": 1.0,
+        "diff_transition_level": 1.0,
         "beta_target": 5.116772473652019,
         "transition_level": 7.51,
         "LCC": 4066798.9785281722
@@ -2520,7 +2546,7 @@
           379498.47500001
         ],
         [
-          68000,
+          68000.0,
           379499.79100002
         ],
         [
@@ -2962,11 +2988,15 @@
           3.9655787476879882,
           3.79675200753866
         ],
-        "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 1,
-        "pf_target_ratio": 1,
+        "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel + Aanpassing bekleding",
+        "investment_year": [
+          0,
+          0,
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 1.0,
+        "pf_target_ratio": 1.0,
         "diff_transition_level": 2.000000000000001,
         "beta_target": 3.987821944264864,
         "transition_level": 8.71,
@@ -3059,7 +3089,7 @@
         ],
         [
           66768.741,
-          380000
+          380000.0
         ],
         [
           66767.622,
@@ -3244,11 +3274,13 @@
           3.1949124475275625
         ],
         "name": "Aanpassing bekleding",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "beta_target": 3.5107421874992593,
         "transition_level": 6.88,
-        "pf_target_ratio": 1,
-        "diff_transition_level": 4,
+        "pf_target_ratio": 1.0,
+        "diff_transition_level": 4.0,
         "LCC": 459061.5233713228
       },
       "final_measure_doorsnede": {
@@ -3293,11 +3325,14 @@
           3.782295511009533
         ],
         "name": "Grondversterking binnenwaarts + Aanpassing bekleding",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 1.25,
-        "pf_target_ratio": 1,
-        "diff_transition_level": 5,
+        "pf_target_ratio": 1.0,
+        "diff_transition_level": 5.0,
         "beta_target": 3.5107421874992593,
         "transition_level": 7.88,
         "LCC": 2604372.487520131
@@ -3508,7 +3543,7 @@
           380363.34000002
         ],
         [
-          66000,
+          66000.0,
           380365.345
         ],
         [
@@ -3918,12 +3953,16 @@
           3.8668900814958924,
           3.6809950709005292
         ],
-        "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 0,
+        "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel + Aanpassing bekleding",
+        "investment_year": [
+          0,
+          0,
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.75,
-        "pf_target_ratio": 1,
-        "diff_transition_level": 0,
+        "pf_target_ratio": 1.0,
+        "diff_transition_level": 0.0,
         "beta_target": 5.073242186894887,
         "transition_level": 2.88,
         "LCC": 10546178.86093549
@@ -4213,10 +4252,13 @@
           3.6836441535082813
         ],
         "name": "Grondversterking binnenwaarts + Aanpassing bekleding",
-        "investment_year": 0,
-        "dberm": 5,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
         "dcrest": 0.5,
-        "pf_target_ratio": 1,
+        "pf_target_ratio": 1.0,
         "diff_transition_level": 3.999999999999998,
         "beta_target": 5.019531249538552,
         "transition_level": 7.019999999999998,
@@ -4328,7 +4370,7 @@
           380720.36900002
         ],
         [
-          64000,
+          64000.0,
           380719.655
         ],
         [
@@ -4509,7 +4551,7 @@
         ],
         [
           63683.873,
-          381000
+          381000.0
         ],
         [
           63682.905,
@@ -4666,11 +4708,14 @@
           3.2319344791843037
         ],
         "name": "Grondversterking binnenwaarts + Aanpassing bekleding",
-        "investment_year": 0,
-        "dberm": 5,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
         "dcrest": 1.25,
         "pf_target_ratio": 24.3,
-        "diff_transition_level": 1,
+        "diff_transition_level": 1.0,
         "beta_target": 4.458738011423286,
         "transition_level": 7.42,
         "LCC": 4903958.1557354685
@@ -4818,7 +4863,7 @@
           381184.992
         ],
         [
-          63452,
+          63452.0,
           381204.39900001
         ],
         [
@@ -4882,7 +4927,7 @@
           381331.203
         ],
         [
-          63121,
+          63121.0,
           381348.094
         ],
         [
@@ -4922,7 +4967,7 @@
           381366.023
         ],
         [
-          63000,
+          63000.0,
           381367.00600001
         ],
         [
@@ -5027,12 +5072,16 @@
           3.3890290292530825,
           3.206422433627947
         ],
-        "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 20,
+        "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel + Aanpassing bekleding",
+        "investment_year": [
+          0,
+          0,
+          0
+        ],
+        "dberm": 20.0,
         "dcrest": 0.75,
         "pf_target_ratio": 17.2,
-        "diff_transition_level": 0,
+        "diff_transition_level": 0.0,
         "beta_target": 4.561764862519725,
         "transition_level": 6.43,
         "LCC": 7029375.824021342
@@ -5189,7 +5238,7 @@
         ],
         [
           62735.364,
-          381500
+          381500.0
         ],
         [
           62706.575,
@@ -5421,7 +5470,7 @@
         ],
         [
           62143.591,
-          382089
+          382089.0
         ],
         [
           62141.343,
@@ -5594,11 +5643,14 @@
           3.2224881733117927
         ],
         "name": "Grondversterking binnenwaarts + Aanpassing bekleding",
-        "investment_year": 0,
-        "dberm": 8,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 8.0,
         "dcrest": 0.75,
         "pf_target_ratio": 18.4,
-        "diff_transition_level": 0,
+        "diff_transition_level": 0.0,
         "beta_target": 4.542273490552351,
         "transition_level": 6.22,
         "LCC": 5698253.515819721
@@ -5819,14 +5871,14 @@
         ],
         [
           62016.242,
-          382500
+          382500.0
         ],
         [
           62005.45,
           382513.27400002
         ],
         [
-          62000,
+          62000.0,
           382520.39000001
         ],
         [
@@ -5976,11 +6028,14 @@
           3.2670193443905906
         ],
         "name": "Grondversterking binnenwaarts + Aanpassing bekleding",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 1,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 1.0,
         "pf_target_ratio": 24.3,
-        "diff_transition_level": 2,
+        "diff_transition_level": 2.0,
         "beta_target": 4.459041232179191,
         "transition_level": 8.33,
         "LCC": 4728937.123371471
@@ -6253,7 +6308,7 @@
         ],
         [
           61972.023,
-          383000
+          383000.0
         ],
         [
           61973.38,
@@ -6272,7 +6327,7 @@
           383020.64
         ],
         [
-          62000,
+          62000.0,
           383027.646
         ],
         [
@@ -6538,11 +6593,14 @@
           3.215485063831016
         ],
         "name": "Grondversterking binnenwaarts + Aanpassing bekleding",
-        "investment_year": 0,
-        "dberm": 5,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
         "dcrest": 0.75,
-        "pf_target_ratio": 1,
-        "diff_transition_level": 0,
+        "pf_target_ratio": 1.0,
+        "diff_transition_level": 0.0,
         "beta_target": 5.2209483290847265,
         "transition_level": 6.75,
         "LCC": 4292232.813614104
@@ -6588,12 +6646,16 @@
           3.928605834293274,
           3.7345480085235128
         ],
-        "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 8,
+        "name": "Grondversterking binnenwaarts + Verticaal Zanddicht Geotextiel + Aanpassing bekleding",
+        "investment_year": [
+          0,
+          0,
+          0
+        ],
+        "dberm": 8.0,
         "dcrest": 1.75,
-        "pf_target_ratio": 1,
-        "diff_transition_level": 1,
+        "pf_target_ratio": 1.0,
+        "diff_transition_level": 1.0,
         "beta_target": 5.2209483290847265,
         "transition_level": 7.75,
         "LCC": 11418832.284932438
@@ -6874,11 +6936,14 @@
           3.341742095669171
         ],
         "name": "Grondversterking binnenwaarts + Aanpassing bekleding",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.75,
-        "pf_target_ratio": 1,
-        "diff_transition_level": 0,
+        "pf_target_ratio": 1.0,
+        "diff_transition_level": 0.0,
         "beta_target": 5.220279582155532,
         "transition_level": 6.79,
         "LCC": 3189910.764622785
@@ -6925,8 +6990,10 @@
           3.7431930222603276
         ],
         "name": "Grondversterking binnenwaarts",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 1.5,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -7228,11 +7295,14 @@
           3.4222264184894633
         ],
         "name": "Grondversterking binnenwaarts + Aanpassing bekleding",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
-        "pf_target_ratio": 1,
-        "diff_transition_level": 0,
+        "investment_year": [
+          20,
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
+        "pf_target_ratio": 1.0,
+        "diff_transition_level": 0.0,
         "beta_target": 4.505873391681398,
         "transition_level": 6.95,
         "LCC": 78946.23678928526
@@ -7279,11 +7349,14 @@
           3.938671359992683
         ],
         "name": "Grondversterking binnenwaarts + Aanpassing bekleding",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": 2.3,
-        "diff_transition_level": 1,
+        "diff_transition_level": 1.0,
         "beta_target": 4.679239439309253,
         "transition_level": 7.95,
         "LCC": 4232084.269944073
@@ -7315,7 +7388,7 @@
         ],
         [
           60671.055,
-          384000
+          384000.0
         ],
         [
           60655.369,
@@ -7375,7 +7448,7 @@
         ],
         [
           60394.704,
-          384000
+          384000.0
         ],
         [
           60372.249,
@@ -7484,11 +7557,14 @@
           3.3043816869831097
         ],
         "name": "Grondversterking binnenwaarts + Aanpassing bekleding",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.5,
-        "pf_target_ratio": 1,
-        "diff_transition_level": 0,
+        "pf_target_ratio": 1.0,
+        "diff_transition_level": 0.0,
         "beta_target": 4.415726057518662,
         "transition_level": 6.95,
         "LCC": 2419653.042119706
@@ -7535,8 +7611,11 @@
           3.7936557812520886
         ],
         "name": "Grondversterking binnenwaarts + Aanpassing bekleding",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 1.25,
         "pf_target_ratio": 17.9,
         "diff_transition_level": 1.9999999999999991,
@@ -7610,7 +7689,7 @@
           384211.833
         ],
         [
-          60000,
+          60000.0,
           384223.10900002
         ],
         [
@@ -7740,11 +7819,14 @@
           3.413452159094459
         ],
         "name": "Grondversterking binnenwaarts + Aanpassing bekleding",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
-        "pf_target_ratio": 1,
-        "diff_transition_level": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
+        "pf_target_ratio": 1.0,
+        "diff_transition_level": 0.0,
         "beta_target": 4.412805484676812,
         "transition_level": 6.8,
         "LCC": 989833.9862159104
@@ -7791,11 +7873,14 @@
           3.8031983327064407
         ],
         "name": "Grondversterking binnenwaarts + Aanpassing bekleding",
-        "investment_year": 0,
-        "dberm": 8,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 8.0,
+        "dcrest": 0.0,
         "pf_target_ratio": 2.5,
-        "diff_transition_level": 1,
+        "diff_transition_level": 1.0,
         "beta_target": 4.609438509055813,
         "transition_level": 7.8,
         "LCC": 4400143.770783617
@@ -7919,7 +8004,7 @@
         ],
         [
           59717.806,
-          385000
+          385000.0
         ],
         [
           59699.711,
@@ -7983,7 +8068,7 @@
         ],
         [
           59586.82,
-          385500
+          385500.0
         ],
         [
           59584.785,
@@ -8176,11 +8261,14 @@
           3.247948287963346
         ],
         "name": "Grondversterking binnenwaarts + Aanpassing bekleding",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 1,
-        "pf_target_ratio": 1,
-        "diff_transition_level": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 1.0,
+        "pf_target_ratio": 1.0,
+        "diff_transition_level": 0.0,
         "beta_target": 3.985720271470849,
         "transition_level": 6.69,
         "LCC": 8531020.96694889

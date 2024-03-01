@@ -282,9 +282,11 @@
           3.867654215802189
         ],
         "name": "Grondversterking met stabiliteitsscherm deprecated",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 2777580.77812656
@@ -327,9 +329,11 @@
           4.0471542265022435
         ],
         "name": "Grondversterking met stabiliteitsscherm deprecated",
-        "investment_year": 20,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          20
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 14694989.32356
@@ -432,7 +436,7 @@
           423177.435
         ],
         [
-          131098,
+          131098.0,
           423185.456
         ],
         [
@@ -710,7 +714,9 @@
           3.795803095598542
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 1044964.1838000001
@@ -753,9 +759,11 @@
           3.795803095598542
         ],
         "name": "Grondversterking met stabiliteitsscherm deprecated",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 1044964.1838000001
@@ -1220,9 +1228,12 @@
           3.7493796891888693
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 10,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 10.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 2973775.124672
@@ -1265,9 +1276,11 @@
           3.7493796891888693
         ],
         "name": "Grondversterking met stabiliteitsscherm deprecated",
-        "investment_year": 0,
-        "dberm": 10,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 10.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 2973775.124672
@@ -1492,7 +1505,9 @@
           3.6508718852355484
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 406032.80930000026
@@ -1535,9 +1550,11 @@
           3.6508718852355484
         ],
         "name": "Grondversterking met stabiliteitsscherm deprecated",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 406032.80930000026
@@ -1706,9 +1723,12 @@
           3.582461903942634
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 418007.70487493527
@@ -1751,9 +1771,11 @@
           3.582461903942634
         ],
         "name": "Grondversterking met stabiliteitsscherm deprecated",
-        "investment_year": 0,
-        "dberm": 8,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 8.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 418007.7048749352
@@ -2006,7 +2028,9 @@
           3.9007977136502063
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 693917.8830000003
@@ -2049,9 +2073,11 @@
           3.9056763043818767
         ],
         "name": "Grondversterking met stabiliteitsscherm deprecated",
-        "investment_year": 0,
-        "dberm": 8,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 8.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 1292851.8779879706
@@ -2155,7 +2181,7 @@
         ],
         [
           129162.064,
-          424529
+          424529.0
         ],
         [
           129157.586,
@@ -2348,9 +2374,12 @@
           3.4878282756615646
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 1558843.7245741256
@@ -2393,9 +2422,11 @@
           3.487828275661443
         ],
         "name": "Grondversterking met stabiliteitsscherm deprecated",
-        "investment_year": 0,
-        "dberm": 8,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 8.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 1558843.7245741254
@@ -2596,9 +2627,12 @@
           3.4188409639616166
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 8,
-        "dcrest": 0,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 8.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 493171.6817447039
@@ -2641,9 +2675,11 @@
           3.4185442404364017
         ],
         "name": "Grondversterking met stabiliteitsscherm deprecated",
-        "investment_year": 0,
-        "dberm": 8,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 8.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 457140.48371521506
@@ -2844,9 +2880,11 @@
           3.4175752726532322
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 12,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 12.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 358020.55128830706
@@ -2889,9 +2927,11 @@
           3.4171570646109077
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 20,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          20
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 309316.77314291574
@@ -3048,8 +3088,10 @@
           3.5788998451820397
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.5,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -3093,9 +3135,11 @@
           3.5788998451820397
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 12,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 12.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 85592.51142113398
@@ -3264,9 +3308,11 @@
           4.891625776154954
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 20,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 20.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 1186244.157353561
@@ -3309,9 +3355,11 @@
           4.59875121748601
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 20,
-        "dberm": 12,
-        "dcrest": 1,
+        "investment_year": [
+          20
+        ],
+        "dberm": 12.0,
+        "dcrest": 1.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 1004460.0356183625
@@ -3431,7 +3479,7 @@
         ],
         [
           128661.019,
-          425325
+          425325.0
         ],
         [
           128663.576,
@@ -3556,7 +3604,9 @@
           5.434411245918054
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 326124.83629999915
@@ -3599,9 +3649,11 @@
           5.434411245918054
         ],
         "name": "Grondversterking met stabiliteitsscherm deprecated",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 326124.83629999915
@@ -3879,9 +3931,11 @@
           6.2249816215436065
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 45968.92994116008
@@ -4166,8 +4220,10 @@
           4.133186092354471
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.5,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -4211,9 +4267,11 @@
           3.2643569595525044
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 84037.64229043994
@@ -4558,8 +4616,10 @@
           4.133186092354471
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.5,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -4603,9 +4663,11 @@
           3.2643569595525044
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 81902.056437
@@ -4903,9 +4965,11 @@
           5.953540970586439
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 40760.531819480035
@@ -5050,9 +5114,11 @@
           5.657736301716289
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 20,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 20.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 129877.71817857581
@@ -5095,9 +5161,11 @@
           5.039142594319353
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 20,
-        "dberm": 8,
-        "dcrest": 0,
+        "investment_year": [
+          20
+        ],
+        "dberm": 8.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 99695.19737341182
@@ -5250,9 +5318,11 @@
           3.6065791885010396
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 116016.65025313872
@@ -5295,9 +5365,11 @@
           3.6050796599046695
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 26203.579724359985
@@ -5614,9 +5686,11 @@
           3.675341815490609
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 12,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 12.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 853138.3065096762
@@ -5659,9 +5733,11 @@
           3.674489757662128
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 20,
-        "dberm": 5,
-        "dcrest": 0,
+        "investment_year": [
+          20
+        ],
+        "dberm": 5.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 735241.1662115701
@@ -5970,9 +6046,11 @@
           3.5312554884440894
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 12,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 12.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 810120.1051246263
@@ -6015,9 +6093,11 @@
           3.5312554884440894
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 8,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 8.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 810120.1051246263
@@ -6794,9 +6874,11 @@
           3.5419706590425015
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 20,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 20.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 4193455.633649821
@@ -6839,9 +6921,11 @@
           3.5419706590425015
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 10,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 10.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 4193455.633649821
@@ -7106,8 +7190,10 @@
           3.8777977631942377
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 20,
+        "investment_year": [
+          0
+        ],
+        "dberm": 20.0,
         "dcrest": 0.5,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -7151,9 +7237,11 @@
           3.8777977631942377
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 30,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 30.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 1794165.0181500495
@@ -7410,9 +7498,11 @@
           3.4274813382327634
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 15,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 15.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 487317.32454562315
@@ -7455,9 +7545,11 @@
           3.4274813382327634
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 20,
-        "dberm": 8,
-        "dcrest": 0,
+        "investment_year": [
+          20
+        ],
+        "dberm": 8.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 487317.32454562315
@@ -7630,9 +7722,11 @@
           3.95283408183588
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 10,
-        "dcrest": 1,
+        "investment_year": [
+          0
+        ],
+        "dberm": 10.0,
+        "dcrest": 1.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 955535.7648529984
@@ -7675,8 +7769,10 @@
           3.9516894256719732
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 5,
+        "investment_year": [
+          0
+        ],
+        "dberm": 5.0,
         "dcrest": 0.5,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -7866,9 +7962,11 @@
           3.953120265099749
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 12,
-        "dcrest": 1,
+        "investment_year": [
+          0
+        ],
+        "dberm": 12.0,
+        "dcrest": 1.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 1007992.4234228351
@@ -7911,8 +8009,10 @@
           3.9525470616443337
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 20,
-        "dberm": 5,
+        "investment_year": [
+          20
+        ],
+        "dberm": 5.0,
         "dcrest": 0.5,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -8278,8 +8378,10 @@
           3.9268278999011055
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 12,
+        "investment_year": [
+          0
+        ],
+        "dberm": 12.0,
         "dcrest": 0.5,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -8323,9 +8425,11 @@
           3.9268278999011055
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 20,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 20.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 2534118.957636287
@@ -8502,8 +8606,10 @@
           3.9623524053902917
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.5,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -8547,9 +8653,11 @@
           3.9623524053902917
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 12,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 12.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 427583.28326418495
@@ -8747,9 +8855,11 @@
           3.932489792928952
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 24412.086756839977
@@ -8903,9 +9013,11 @@
           3.5834836896326907
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 13150.506869359984
@@ -9009,7 +9121,7 @@
         ],
         [
           124023.501,
-          426233
+          426233.0
         ],
         [
           124019.753,
@@ -9342,7 +9454,9 @@
           3.8221357048378417
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 1230050.7946999993
@@ -9385,9 +9499,11 @@
           3.8221357048378417
         ],
         "name": "Grondversterking met stabiliteitsscherm deprecated",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 1230050.7946999993
@@ -9524,8 +9640,11 @@
           3.8358970094526565
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
         "dcrest": 0.5,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -9569,9 +9688,11 @@
           3.8188772017239274
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 20,
-        "dberm": 15,
-        "dcrest": 0,
+        "investment_year": [
+          20
+        ],
+        "dberm": 15.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 177013.05417080404
@@ -9704,8 +9825,11 @@
           3.9571504063293834
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 5,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 5.0,
         "dcrest": 0.5,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -9749,9 +9873,11 @@
           3.957092296603705
         ],
         "name": "Grondversterking met stabiliteitsscherm deprecated",
-        "investment_year": 20,
-        "dberm": 15,
-        "dcrest": 0,
+        "investment_year": [
+          20
+        ],
+        "dberm": 15.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 259609.71084459432
@@ -10044,7 +10170,9 @@
           3.530532223384878
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 713326.3580000008
@@ -10087,9 +10215,11 @@
           3.530532223384878
         ],
         "name": "Grondversterking met stabiliteitsscherm deprecated",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 713326.3580000008
@@ -10302,8 +10432,10 @@
           3.884066202546656
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.5,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -10347,9 +10479,11 @@
           3.884066202546656
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 12,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 12.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 649759.7075863217
@@ -10480,7 +10614,7 @@
           426202.114
         ],
         [
-          122601,
+          122601.0,
           426200.52
         ],
         [
@@ -10726,9 +10860,12 @@
           3.777631243861093
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n + Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 1,
+        "investment_year": [
+          0,
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 1.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 2424481.965260652
@@ -10771,8 +10908,10 @@
           3.777631243861093
         ],
         "name": "Grondversterking met stabiliteitsscherm deprecated",
-        "investment_year": 20,
-        "dberm": 5,
+        "investment_year": [
+          20
+        ],
+        "dberm": 5.0,
         "dcrest": 0.5,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -11014,7 +11153,9 @@
           3.7826029859118866
         ],
         "name": "Verticaal Zanddicht Geotextiel",
-        "investment_year": 0,
+        "investment_year": [
+          0
+        ],
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 489759.01800000283
@@ -11057,9 +11198,11 @@
           3.7826029859118866
         ],
         "name": "Grondversterking met stabiliteitsscherm deprecated",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 489759.01800000283
@@ -11424,9 +11567,11 @@
           3.824951672618886
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 1,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 1.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 1594278.0108211003
@@ -11469,8 +11614,10 @@
           3.824951672618886
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.5,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -11749,9 +11896,11 @@
           4.593077981356595
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 63475.04591079999
@@ -11944,8 +12093,10 @@
           3.72813819913984
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.5,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -11989,9 +12140,11 @@
           3.72813819913984
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 12,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 12.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 568343.7281309844
@@ -12168,8 +12321,10 @@
           3.758533646545836
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.5,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -12213,9 +12368,11 @@
           3.758533646545836
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 12,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 12.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 665068.9292093266
@@ -12412,9 +12569,11 @@
           3.534602494334159
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 1,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 1.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 693421.3791359179
@@ -12457,8 +12616,10 @@
           3.534602494334159
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 0.5,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -12820,8 +12981,10 @@
           3.8043732601576927
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
         "dcrest": 1.5,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -12865,8 +13028,10 @@
           3.8043732601576927
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 12,
+        "investment_year": [
+          0
+        ],
+        "dberm": 12.0,
         "dcrest": 0.5,
         "pf_target_ratio": null,
         "diff_transition_level": null,
@@ -13221,9 +13386,11 @@
           4.671661916669049
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 91409.96795679988
@@ -13577,9 +13744,11 @@
           4.671349409408549
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 94933.27556119992
@@ -14065,9 +14234,11 @@
           4.238719103794766
         ],
         "name": "Grondversterking binnenwaarts deprecated\r\n",
-        "investment_year": 0,
-        "dberm": 0,
-        "dcrest": 0,
+        "investment_year": [
+          0
+        ],
+        "dberm": 0.0,
+        "dcrest": 0.0,
         "pf_target_ratio": null,
         "diff_transition_level": null,
         "LCC": 189759.53170880012

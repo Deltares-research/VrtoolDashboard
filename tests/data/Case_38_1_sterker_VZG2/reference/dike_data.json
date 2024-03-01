@@ -236,7 +236,10 @@
                 ]
             },
             "final_measure_veiligheidsrendement": {
-                "investment_year": 0,
+                "investment_year": [
+                    0,
+                    0
+                ],
                 "LCC": 1701804.1612732029,
                 "name": "Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts",
                 "ID": "5+1",
@@ -323,7 +326,10 @@
                     4.364829752834651,
                     3.9940879580130377
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -515,7 +521,10 @@
                     3.5577843909459053,
                     3.126138991486184
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 977926.130620406,
@@ -560,7 +569,10 @@
                     4.305447183004367,
                     3.89662523757652
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -976,7 +988,10 @@
                     3.559607412980081,
                     3.1413188889473838
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 4259731.420492489,
@@ -1021,7 +1036,10 @@
                     4.198421373780617,
                     3.813173043768056
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -1253,7 +1271,10 @@
                     3.5803701848179674,
                     3.1663133723789265
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 2413229.610282508,
@@ -1298,7 +1319,10 @@
                     4.227400140943399,
                     3.840654643090516
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -1718,7 +1742,10 @@
                     3.704858979252143,
                     3.313888700920136
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 3942621.789514022,
@@ -1763,7 +1790,10 @@
                     4.440129259038449,
                     4.002059908541456
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -1951,7 +1981,9 @@
                     4.506050483054029,
                     4.1353165532910685
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 2730200,
@@ -1996,7 +2028,9 @@
                     4.506050483054029,
                     4.1353165532910685
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "years": [
                 0,
@@ -2204,7 +2238,9 @@
                     3.754997994023448,
                     3.35377280036109
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 363976.0298463019,
@@ -2249,7 +2285,9 @@
                     4.50979418412693,
                     4.103670980814075
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "years": [
                 0,
@@ -2533,7 +2571,10 @@
                     3.8707331583394073,
                     3.470937318663648
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 1942713.601765604,
@@ -2578,7 +2619,10 @@
                     4.627845678234099,
                     4.226465916040398
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -2846,7 +2890,10 @@
                     3.533661217448424,
                     3.126940600577847
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 5348200,
@@ -2891,7 +2938,9 @@
                     4.515901931718755,
                     4.152318872423267
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "years": [
                 0,
@@ -3563,7 +3612,9 @@
                     3.729658428625233,
                     3.3259561892960585
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 15956380.300860189,
@@ -3608,7 +3659,10 @@
                     4.484316518685516,
                     4.075642014829344
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -4080,7 +4134,10 @@
                     3.7666219845064406,
                     3.3627727872228967
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 5977694.992277518,
@@ -4125,7 +4182,10 @@
                     4.518500398648966,
                     4.111448391923911
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -4537,7 +4597,10 @@
                     3.4865936977091008,
                     3.086104713664918
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 4587848.640212881,
@@ -4582,7 +4645,10 @@
                     4.237543564069318,
                     3.828354676584148
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -5046,7 +5112,10 @@
                     4.475739409880514,
                     4.190522036272271
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 4380957.878552384,
@@ -5091,7 +5160,10 @@
                     4.483780682946742,
                     4.192828744778437
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -5375,7 +5447,10 @@
                     4.657284794478446,
                     4.356142596230471
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 1365371.091500807,
@@ -5420,7 +5495,10 @@
                     3.981032770413401,
                     3.6176200369453433
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -5588,7 +5666,9 @@
                     4.080999999986191,
                     3.671833333330508
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 340738.6615657898,
@@ -5633,7 +5713,9 @@
                     4.080999999986191,
                     3.671833333330508
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "years": [
                 0,
@@ -5973,7 +6055,10 @@
                     4.053740388499173,
                     3.640430114872684
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 2891065.170117303,
@@ -6018,7 +6103,10 @@
                     4.053511313830231,
                     3.640382505091652
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -6234,7 +6322,10 @@
                     3.531363793270452,
                     3.1349436569436606
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 1309328.8523215898,
@@ -6279,7 +6370,10 @@
                     4.156196350466735,
                     3.7775878209383422
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -6515,7 +6609,9 @@
                     5.338657826734408,
                     5.338641551637873
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 396340,
@@ -6560,7 +6656,9 @@
                     5.338657826734408,
                     5.338641551637873
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "years": [
                 0,
@@ -6736,7 +6834,10 @@
                     4.6506540774814535,
                     4.242755801408514
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 579930.5140583551,
@@ -6781,7 +6882,10 @@
                     4.6506540774814535,
                     4.242755801408514
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -7121,7 +7225,10 @@
                     3.628421961359943,
                     3.207957706343158
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 1884745.0561262737,
@@ -7166,7 +7273,10 @@
                     4.332815129794306,
                     3.91853937173724
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -7458,7 +7568,10 @@
                     4.374211711104877,
                     3.963878759948591
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 6293035.526118621,
@@ -7503,7 +7616,10 @@
                     4.380045272549037,
                     3.964921954628127
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -7667,7 +7783,9 @@
                     4.54399165646065,
                     4.1326237731595015
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 1514700,
@@ -7712,7 +7830,9 @@
                     4.54399165646065,
                     4.1326237731595015
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "years": [
                 0,
@@ -8316,7 +8436,9 @@
                     6.411859803907082,
                     6.299913972253443
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 178220,
@@ -8361,7 +8483,9 @@
                     6.411859803907082,
                     6.299913972253443
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "years": [
                 0,
@@ -8533,7 +8657,9 @@
                     5.003477478370676,
                     4.837692026185929
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 143817.6000000001,
@@ -8578,7 +8704,9 @@
                     5.003477478370676,
                     4.837692026185929
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "years": [
                 0,
@@ -8834,7 +8962,10 @@
                     3.765215988254474,
                     3.3575352492944432
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 1517583.5472997972,
@@ -8879,7 +9010,10 @@
                     4.5392908394087135,
                     4.134954561802858
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -9071,7 +9205,10 @@
                     4.618867496376238,
                     4.228108306771037
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 1284889.4100567969,
@@ -9116,7 +9253,10 @@
                     4.618867496376238,
                     4.228108306771037
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -9288,7 +9428,10 @@
                     3.8594872428693705,
                     3.446341576958601
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 829969.8628203738,
@@ -9333,7 +9476,10 @@
                     4.685177320697639,
                     4.273787396713171
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -9549,7 +9695,10 @@
                     4.731800838763825,
                     4.351393068944192
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 1106921.712861471,
@@ -9594,7 +9743,10 @@
                     4.746081686686182,
                     4.353861831715831
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -9878,7 +10030,10 @@
                     4.757115647245646,
                     4.409538103270408
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 2186791.3951249635,
@@ -9923,7 +10078,10 @@
                     3.970579727884839,
                     3.567951240648779
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -10231,7 +10389,10 @@
                     3.790149984908632,
                     3.3761666600876303
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 2993945.75672811,
@@ -10276,7 +10437,10 @@
                     4.598350217874355,
                     4.20002635976057
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -10648,7 +10812,10 @@
                     3.871727799656304,
                     3.4994816809960434
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 4702384.028402448,
@@ -10693,7 +10860,10 @@
                     4.586461693980083,
                     4.247567599005568
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -11149,7 +11319,10 @@
                     4.520692282631949,
                     4.166902489100986
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 5389466.6222259225,
@@ -11194,7 +11367,10 @@
                     4.532541272755768,
                     4.169397512038164
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -12026,7 +12202,10 @@
                     4.218617269928585,
                     3.823168077623453
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 12111273.860638686,
@@ -12071,7 +12250,10 @@
                     4.243948376444347,
                     3.82811368999856
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -12351,7 +12533,9 @@
                     3.910621112707693,
                     3.5295850941039144
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 3703920.5456412574,
@@ -12396,7 +12580,10 @@
                     3.948017767794174,
                     3.5464706780073314
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -12616,7 +12803,9 @@
                     3.826160118237573,
                     3.47022982930968
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 4094078.950279426,
@@ -12661,7 +12850,10 @@
                     4.488273225148195,
                     4.180122180915773
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -12981,7 +13173,9 @@
                     4.5122502728683855,
                     4.11658569311689
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 10752500,
@@ -13026,7 +13220,9 @@
                     4.538797255357523,
                     4.130090716144555
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "years": [
                 0,
@@ -13258,7 +13454,10 @@
                     4.760580417083792,
                     4.366437639247708
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 2397649.5808333554,
@@ -13303,7 +13502,10 @@
                     4.775061810933631,
                     4.3687658274499945
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -13443,7 +13645,10 @@
                     4.97240608255696,
                     4.663601227179719
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 217371.61757682412,
@@ -13488,7 +13693,10 @@
                     4.105646825524622,
                     3.6710475606863935
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -14052,7 +14260,10 @@
                     3.786421756818331,
                     3.386798003347808
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 8641315.947290532,
@@ -14097,7 +14308,10 @@
                     4.604788226776103,
                     4.181372587136452
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -14497,7 +14711,10 @@
                     3.6708191414669935,
                     3.246043459470423
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 8919900,
@@ -14542,7 +14759,9 @@
                     4.5405443120984605,
                     4.130175741903605
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "years": [
                 0,
@@ -14698,7 +14917,10 @@
                     3.4894710074250344,
                     3.0789924487724383
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 1535244.3531700112,
@@ -14743,7 +14965,10 @@
                     4.136657777274266,
                     3.767586899892682
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -15027,7 +15252,10 @@
                     3.635148999078525,
                     3.2603663567967267
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 3912019.0311123854,
@@ -15072,7 +15300,10 @@
                     4.273337515366778,
                     3.9543628784216014
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -15268,7 +15499,9 @@
                     3.5781660831570914,
                     3.161381502408812
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 1224997.9333575708,
@@ -15313,7 +15546,9 @@
                     4.3526175111053975,
                     3.9615800589549295
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "years": [
                 0,
@@ -15661,7 +15896,9 @@
                     3.631996969038501,
                     3.209396108862929
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 10135400,
@@ -15706,7 +15943,9 @@
                     4.544595228690223,
                     4.141472817320434
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "years": [
                 0,
@@ -15950,7 +16189,9 @@
                     3.78488231114716,
                     3.378109472537761
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 2220288.2215925124,
@@ -15995,7 +16236,10 @@
                     4.624409844055871,
                     4.227344980787457
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -16219,7 +16463,10 @@
                     4.4520508672108345,
                     4.026104549791978
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 2117397.276793627,
@@ -16264,7 +16511,10 @@
                     4.4520508672108345,
                     4.026104549791978
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -16472,7 +16722,10 @@
                     3.8711230999203625,
                     3.435987068940625
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 1234807.713610764,
@@ -16517,7 +16770,10 @@
                     4.731035267794955,
                     4.317220243487159
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -16885,7 +17141,9 @@
                     3.9553965077704514,
                     3.521807064814345
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 2915435.7191995988,
@@ -16930,7 +17188,9 @@
                     3.956237658034972,
                     3.5220560339231226
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "years": [
                 0,
@@ -17146,7 +17406,9 @@
                     3.973007613056138,
                     3.570008426368155
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 835863.119552321,
@@ -17191,7 +17453,10 @@
                     3.978450054939504,
                     3.5726558738321987
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -17487,7 +17752,9 @@
                     3.821621015638683,
                     3.437253127679683
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 6053763.837299348,
@@ -17532,7 +17799,10 @@
                     4.629372871497157,
                     4.245773712638381
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -18124,7 +18394,9 @@
                     3.7831229494548326,
                     3.3877338561347536
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 8577536.81393845,
@@ -18169,7 +18441,10 @@
                     4.590468163265667,
                     4.215098220143574
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -18813,7 +19088,9 @@
                     3.945977611636605,
                     3.662223822551698
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 9378123.776676107,
@@ -18858,7 +19135,10 @@
                     4.409048027673111,
                     4.1921325147146655
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0,
+                    0
+                ]
             },
             "years": [
                 0,
@@ -19162,7 +19442,9 @@
                     4.638572848093293,
                     4.376161690735624
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 787983.4758964692,
@@ -19207,7 +19489,9 @@
                     3.990587419750582,
                     3.613337898614635
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "years": [
                 0,
@@ -19439,7 +19723,9 @@
                     4.505103713360146,
                     4.231199907732808
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 698755.2967328778,
@@ -19484,7 +19770,9 @@
                     4.505103713360146,
                     4.231199907732808
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "years": [
                 0,
@@ -19752,7 +20040,9 @@
                     4.523172317536088,
                     4.263830798173993
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 1215076.3972876628,
@@ -19797,7 +20087,9 @@
                     4.523172317536088,
                     4.263830798173993
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "years": [
                 0,
@@ -20153,7 +20445,9 @@
                     3.826777828925544,
                     3.434955983399005
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 1008515.5009024184,
@@ -20198,7 +20492,9 @@
                     4.539820971804049,
                     4.22165572371231
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "years": [
                 0,
@@ -20942,7 +21238,9 @@
                     5.127675195152298,
                     4.90004394018508
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 240130.0000000033,
@@ -20987,7 +21285,9 @@
                     5.127675195152298,
                     4.90004394018508
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "years": [
                 0,
@@ -21355,7 +21655,9 @@
                     5.933517774726188,
                     5.753539855481842
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 95274.9999999987,
@@ -21400,7 +21702,9 @@
                     5.933517774726188,
                     5.753539855481842
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "years": [
                 0,
@@ -21804,7 +22108,9 @@
                     3.8758999999938943,
                     3.490066666665192
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 662972.764617998,
@@ -21849,7 +22155,9 @@
                     4.576749999881918,
                     4.287133333300619
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "years": [
                 0,
@@ -22045,7 +22353,9 @@
                     4.523292322040586,
                     4.219407428637594
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "final_measure_doorsnede": {
                 "LCC": 450048.5513702135,
@@ -22090,7 +22400,9 @@
                     4.514954441054606,
                     4.212785933805932
                 ],
-                "investment_year": 0
+                "investment_year": [
+                    0
+                ]
             },
             "years": [
                 0,
@@ -22754,28 +23066,29 @@
     ],
     "signalering_value": 3.33e-05,
     "lower_bound_value": 0.0001,
-    "greedy_steps": [{
-      "pf": [
-        0.004238938094977579,
-        0.004355138455741861,
-        0.00438518755010954,
-        0.004541671565996947,
-        0.004709018477185048,
-        0.004887888335461946
-      ],
-      "LCC": 0
-    },
-    {
-      "pf": [
-        0.003859673249336587,
-        0.0039744140433607324,
-        0.004004083668025085,
-        0.004158579009754255,
-        0.004323777701677659,
-        0.004500329400201956
-      ],
-      "LCC": 8400.4
-    }
+    "greedy_steps": [
+        {
+            "pf": [
+                0.004238938094977579,
+                0.004355138455741861,
+                0.00438518755010954,
+                0.004541671565996947,
+                0.004709018477185048,
+                0.004887888335461946
+            ],
+            "LCC": 0
+        },
+        {
+            "pf": [
+                0.003859673249336587,
+                0.0039744140433607324,
+                0.004004083668025085,
+                0.004158579009754255,
+                0.004323777701677659,
+                0.004500329400201956
+            ],
+            "LCC": 8400.4
+        }
     ],
     "run_name": "opti_run"
 }

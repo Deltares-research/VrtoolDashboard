@@ -42,6 +42,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         self.set_economic_optimal_final_step_id()
 
     def import_orm(self):
+        """Import the final measures for both Veiligheidsrendement and Doorsnede"""
         self.get_final_measure_vr()
         self.get_final_measure_dsn()
 
@@ -68,11 +69,10 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
 
     def get_final_measure_dsn(self):
         """
-        Get the dictionary containing the information about the final mesure of the section for Doorsnede-eisen.
+        Process the solution obtained for Doorsnede-eisen . In particular, this function:
+            - gets and assigns the reinforcement order to the traject
+            - import the final measure (beta, lcc, params, ...) for each dike section
 
-        :param section_data:
-        :return: dictionary with the followings keys: "name", "LCC", "Piping", "StabilityInner", "Overflow", "Revetment"
-        ,"Section"
         """
         _optimization_steps = get_optimization_steps_ordered(self.run_id_dsn)
 
@@ -111,27 +111,23 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
                     _optimization_step)
                 dike_section.final_measure_doorsnede = _step_measure
 
-                # 5. Append the reinforcement order vr:
+                # 5. Append the reinforcement order dsn:
                 self._get_reinforced_section_order(_optimization_step, _ordered_reinforced_sections)
         self.dike_traject.reinforcement_order_dsn = _ordered_reinforced_sections
 
     def get_final_measure_vr(self):
         """
-        Get the dictionary containing the information about the final measure of the section for Veiligheidsrendement,
-        and calculates
+        Process the solution obtained for GreedyOptimization (veiligheidsrendement). In particular, this function:
+            - gets and assigns the reinforcement order to the traject
+            - import all the greedy steps and calculate the traject probability of failure (traject faalkans)
+            - import the final measure (beta, lcc, params, ...) for each dike section
 
         """
 
-        # 1. Get the final step number, default is the one for which the Total Cost is minimal.
-
         _optimization_steps = get_optimization_steps_ordered(self.run_id_vr)
 
-        # 2. Get the most optimal optimization step number
-        # This is the last step_number (=highest) for the section of interest before the final_step_number
-        # this implies that the _optimum_section_steps are ordered in ascending order of step_number
-
+        # 0. Initialize vars
         _previous_step_number = None
-
         _beta_df = get_initial_assessment_df(list(self.dike_section_mapping.values()))
         _traject_pf, _ = get_traject_prob(_beta_df, ['StabilityInner', 'Piping', 'Overflow', "Revetment"])
         _greedy_steps_res = [{"pf": _traject_pf[0].tolist(), 'LCC': 0}]
@@ -140,7 +136,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         for _optimization_step in _optimization_steps:
             _step_number = _optimization_step.step_number
 
-            # For combined steps, skip the step if it has already been processed
+            # For combined steps sharing the same step number, skip the step if it has already been processed
             if _previous_step_number == _step_number:
                 continue
 
@@ -155,8 +151,10 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             # find corresponding section in dike_section
             dike_section: DikeSection = self.dike_section_mapping[section.section_name]
 
+            # 1. Add and accumulate LCC for the final measure of the section
             dike_section.final_measure_veiligheidsrendement["LCC"] += _get_section_lcc(_optimization_step)
 
+            # 2. Get all steps sharing the same step number (=combined steps)
             _optimum_section_optimization_steps = (OptimizationStep
             .select()
             .join(OptimizationSelectedMeasure)
@@ -169,11 +167,11 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             # 3. Get all information into a dict based on the optimum optimization steps.
             _step_measure = self._get_measure(_optimum_section_optimization_steps,
                                               active_mechanisms=dike_section.active_mechanisms)
-            _step_measure["LCC"] = dike_section.final_measure_veiligheidsrendement["LCC"]
+            _step_measure["LCC"] = dike_section.final_measure_veiligheidsrendement["LCC"]  # reassign correct LCC
 
             dike_section.final_measure_veiligheidsrendement = _step_measure
 
-            # 4. Calculate the probability of failure for the current step
+            # 4. Calculate the traject probability of failure for the current step
             self._add_greedy_step(dike_section, _optimization_step, _beta_df, _greedy_steps_res, _step_measure)
 
             # 5. Append the reinforcement order vr:
@@ -190,7 +188,20 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         self.dike_traject.reinforcement_order_vr = _ordered_reinforced_sections
 
     def continue_next_step(self, optimization_step: OptimizationStep,
-                           traject_pf):
+                           traject_pf: list[float]) -> bool:
+        """
+        This function determines whether the next OptimizationStep should be imported/processed or not.
+            - If criteria is Economic Optimal, the loop should be stop when the id of the economic optimal is reached
+            (id previously determined at the step of lowest Total Cost).
+            - If criteria is determined for a tuple beta/year. the loop stops when the traject faalkans reaches the
+            specified reliability beta for a specified year.
+
+        :param optimization_step: optimization step to be iterated from the osm table
+        :param traject_pf: list of the traject faalkans for all years computed for the current optimization step
+
+        :return: True if the next optimization step should be processed. False otherwise.
+
+        """
 
         if self.greedy_optimization_criteria == GreedyOPtimizationCriteria.ECONOMIC_OPTIMAL.name:
             if optimization_step.id + 1 > self.economic_optimal_final_step_id:
@@ -207,8 +218,18 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
                 return False
             return True
 
-    def _add_greedy_step(self, dike_section: DikeSection, _optimization_step: OptimizationStep, _beta_df: pd.DataFrame,
-                         _greedy_steps_res: list[dict], step_measure):
+    def _add_greedy_step(self, dike_section: DikeSection, optimization_step: OptimizationStep, _beta_df: pd.DataFrame,
+                         greedy_steps_res: list[dict], step_measure):
+        """
+        Add the results of the step to the list greedy_steps_list
+
+        :param dike_section:
+        :param optimization_step: optimization step to be iterated from the osm table
+        :param _beta_df: dataframe with beta of all mechanism and all sections. The dataframe is modified in place here!
+        :param greedy_steps_res: result list to be appended. Element have the following structure:
+        {"LCC": xxx, "pf": [X,Y,Z]}
+
+        """
         for mechanism in dike_section.active_mechanisms:
             mask = (_beta_df['name'] == dike_section.name) & (_beta_df['mechanism'] == mechanism)
             # replace the row in the dataframe with the betas of the section if both the name and mechanism match
@@ -222,11 +243,11 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         _reinforced_traject_pf, _ = get_traject_prob(_beta_df, dike_section.active_mechanisms)
 
         # Get step LCC:
-        LCC = _get_section_lcc(_optimization_step)
-        _greedy_steps_res.append({"pf": _reinforced_traject_pf[0].tolist(), 'LCC': LCC})
+        LCC = _get_section_lcc(optimization_step)
+        greedy_steps_res.append({"pf": _reinforced_traject_pf[0].tolist(), 'LCC': LCC})
 
     def _get_reinforced_section_order(self, optimization_step: OptimizationStep, section_ordered_list: list[str]):
-        """ Add the section name to the list of reinforced sections if it is not already in the list."""
+        """ Add in place the section name to the list of reinforced sections if it is not already in the list."""
         optimization_selected_measure = OptimizationSelectedMeasure.get(
             OptimizationSelectedMeasure.id == optimization_step.optimization_selected_measure_id)
         measure_result = MeasureResult.get(MeasureResult.id == optimization_selected_measure.measure_result_id)
@@ -250,13 +271,13 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         # Get the extra information measure name and the corresponding parameter values for the most (combined or not) optimal step
         if optimization_steps.count() == 1:
             _final_measure["name"] = self._get_single_measure(optimization_steps[0]).name
-            _final_measure['investment_year'] = self._get_investment_year(optimization_steps[0])
+            _final_measure['investment_year'] = [self._get_investment_year(optimization_steps[0])]
 
         elif optimization_steps.count() in [2, 3]:
             _final_measure["name"] = self._get_combined_measure_name(optimization_steps)
             _year_1 = self._get_investment_year(optimization_steps[0])
             _year_2 = self._get_investment_year(optimization_steps[1])
-            _final_measure['investment_year'] = min([_year_1, _year_2])
+            _final_measure['investment_year'] = self._get_combined_measure_investment_year(optimization_steps)
 
         else:
             raise ValueError(f"Unexpected number of optimum steps: {optimization_steps.count()}")
@@ -288,10 +309,29 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         return _selected_optimization_measure.investment_year
 
     def _get_combined_measure_name(self, optimization_step: OptimizationStep) -> str:
+        if optimization_step.count() == 2:
+            name = self._get_single_measure(optimization_step[0]).name + " + " + self._get_single_measure(
+                optimization_step[1]).name
+        elif optimization_step.count() == 3:
+            name = self._get_single_measure(optimization_step[0]).name + " + " + self._get_single_measure(
+                optimization_step[1]).name + " + " + self._get_single_measure(optimization_step[2]).name
+        else:
+            raise ValueError()
 
-        name = self._get_single_measure(optimization_step[0]).name + " + " + self._get_single_measure(
-            optimization_step[1]).name
         return name
+
+    def _get_combined_measure_investment_year(self, optimization_step: OptimizationStep) -> list[int]:
+        if optimization_step.count() == 2:
+            _year_1 = self._get_investment_year(optimization_step[0])
+            _year_2 = self._get_investment_year(optimization_step[1])
+            return [_year_1, _year_2]
+        elif optimization_step.count() == 3:
+            _year_1 = self._get_investment_year(optimization_step[0])
+            _year_2 = self._get_investment_year(optimization_step[1])
+            _year_3 = self._get_investment_year(optimization_step[2])
+            return [_year_1, _year_2, _year_3]
+
+
 
     def _get_measure_parameters(self, optimization_steps: OptimizationStep) -> dict:
         _params = {}
