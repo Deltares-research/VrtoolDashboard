@@ -391,7 +391,7 @@ def add_measure_type_trace(fig: go.Figure, section: DikeSection, measure_results
         _coordinates_wgs = [GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in
                             section.coordinates_rd]  # convert in GWS coordinates:
         fig.add_trace(go.Scattermapbox(
-            name="VZG",
+            name="Verticale pipingoplossing",
             legendgroup="VZG",
             mode="lines",
             lat=[x[0] for x in _coordinates_wgs],
