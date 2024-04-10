@@ -43,7 +43,8 @@ def update_timestamp(interval):
 
 
 @app.callback(
-    output=[Output(OPTIMIZE_MODAL_ID, "is_open", allow_duplicate=True)],
+    output=[Output(OPTIMIZE_MODAL_ID, "is_open", allow_duplicate=True),
+            Output(CLOSE_OPTIMAL_MODAL_BUTTON_ID, "n_clicks")],
     inputs=[
         Input(OPTIMIZE_BUTTON_ID, "n_clicks"),
         Input(CLOSE_OPTIMAL_MODAL_BUTTON_ID, "n_clicks"),
@@ -57,9 +58,10 @@ def open_canvas_logging_and_cancel(
     Dummy call to trigger the opening of the canvas so the `update_timestamp`
     can output the vrtool logging.
     """
+    print("open clock one", optimize_n_click, close_n_click)
     if close_n_click and close_n_click > 0:
-        return [False]
-    return [True]
+        return False, 0
+    return True, 0
 
 
 @app.callback(
