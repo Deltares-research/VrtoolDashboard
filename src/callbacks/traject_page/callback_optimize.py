@@ -32,6 +32,7 @@ from src.orm.import_database import (
     output=[Output(component_id="latest-timestamp", component_property="children")],
     inputs=[Input("interval-component", "n_intervals")],
     cancel=[Input(CLOSE_OPTIMAL_MODAL_BUTTON_ID, "n_clicks")],
+    prevent_initial_call=True,
 )
 def update_timestamp(interval):
     _path_log = Path().joinpath("vrtool_dashboard.log")
@@ -66,6 +67,7 @@ def open_canvas_logging_and_cancel(
     output=[
         Output(DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID, "children"),
         Output(DROPDOWN_SELECTION_RUN_ID, "options", allow_duplicate=True),
+        Output(OPTIMIZE_MODAL_ID, "is_open", allow_duplicate=True),
     ],
     inputs=[
         Input(OPTIMIZE_BUTTON_ID, "n_clicks"),
@@ -130,7 +132,7 @@ def run_optimize_algorithm(
         _names_optimization_run = get_name_optimization_runs(_vr_config)
         _options = [{"label": name, "value": name} for name in _names_optimization_run]
 
-        return [], _options
+        return [], _options, False
 
 
 def run_vrtool_optimization(
