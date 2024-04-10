@@ -1,7 +1,8 @@
 from dash import dcc, Output, Input
 from plotly.graph_objs import Figure
 
-from src.component_ids import SLIDER_YEAR_RELIABILITY_RESULTS_ID
+from src.component_ids import SLIDER_YEAR_RELIABILITY_RESULTS_ID, GREEDY_OPTIMIZATION_CRITERIA_BETA, \
+    GREEDY_OPTIMIZATION_CRITERIA_YEAR, SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA
 from src.constants import get_mapbox_token
 from src.linear_objects.dike_traject import DikeTraject
 from src.plotly_graphs.pf_length_cost import plot_pf_length_cost, plot_default_scatter_dummy
@@ -23,9 +24,10 @@ def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
 
     export_to_json(dike_traject_data)
 
-    if dike_traject_data is None:
+    if dike_traject_data is None or dike_traject_data == {}:
         _fig = plot_default_overview_map_dummy()
     else:
+
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
         _fig = plot_overview_map(_dike_traject)
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'},
@@ -95,8 +97,10 @@ def make_graph_map_measures(dike_traject_data: dict, selected_year: float, resul
 
 
 @app.callback(Output('dike_traject_pf_cost_graph', 'figure'),
-              [Input('stored-data', 'data'), Input(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "value"),
-               Input("select_result_type", 'value'), Input("select_length_cost_switch", "value"),
+              [Input('stored-data', 'data'),
+               Input(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "value"),
+               Input("select_result_type", 'value'),
+               Input("select_length_cost_switch", "value"),
                ])
 def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_type: str,
                           cost_length_switch: str):
@@ -107,8 +111,6 @@ def make_graph_pf_vs_cost(dike_traject_data: dict, selected_year: float, result_
     :param selected_year: Selected year by the user from the slider
     :param result_type: Selected result type by the user from the OptionField, one of "RELIABILITY" or "PROBABILITY"
     :param cost_length_switch: Selected cost length switch by the user from the OptionField, one of "COST" or "LENGTH"
-
-
     """
 
     if dike_traject_data is None:

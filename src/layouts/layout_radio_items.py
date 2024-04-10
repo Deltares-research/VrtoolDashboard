@@ -1,7 +1,8 @@
 from dash import dcc
 import dash_bootstrap_components as dbc
 
-from src.constants import ColorBarResultType, ResultType, CalcType, Mechanism, SubResultType
+from src.component_ids import SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA
+from src.constants import ColorBarResultType, ResultType, CalcType, Mechanism, SubResultType, GreedyOPtimizationCriteria
 
 """
 Keep preferably RadioItems components from .dbc library as they can be styled easily from css file.
@@ -68,4 +69,14 @@ layout_radio_length_switch = dbc.RadioItems(
     options=[{"label": "Kosten", "value": "COST"},
              {"label": "Lengte", "value": "LENGTH"}],
     value="COST",
+)
+
+layout_radio_greedy_optimization_stop_criteria = dbc.RadioItems(
+    id=SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA,
+    options=[{"label": GreedyOPtimizationCriteria.ECONOMIC_OPTIMAL.value,
+              "value": GreedyOPtimizationCriteria.ECONOMIC_OPTIMAL.name},
+             {"label": GreedyOPtimizationCriteria.TARGET_PF.value, "value": GreedyOPtimizationCriteria.TARGET_PF.name},
+             ],
+    value=GreedyOPtimizationCriteria.ECONOMIC_OPTIMAL.name,
+
 )

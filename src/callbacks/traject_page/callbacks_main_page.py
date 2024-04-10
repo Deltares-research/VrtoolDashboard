@@ -8,7 +8,8 @@ from vrtool.defaults.vrtool_config import VrtoolConfig
 import pandas as pd
 
 from src.component_ids import STORE_CONFIG, DROPDOWN_SELECTION_RUN_ID, EDITABLE_TRAJECT_TABLE_ID, \
-    SLIDER_YEAR_RELIABILITY_RESULTS_ID
+    SLIDER_YEAR_RELIABILITY_RESULTS_ID, GREEDY_OPTIMIZATION_CRITERIA_BETA, GREEDY_OPTIMIZATION_CRITERIA_YEAR, \
+    BUTTON_RECOMPUTE_GREEDY_STEPS, BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA
 from src.constants import ColorBarResultType, SubResultType, Measures, REFERENCE_YEAR
 from src.linear_objects.dike_traject import DikeTraject
 
@@ -91,13 +92,14 @@ def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
     Output('stored-data', 'data'),
     [Input(DROPDOWN_SELECTION_RUN_ID, "value")],
     State(STORE_CONFIG, "data"),
-    prevent_initial_call=True
+    prevent_initial_call=True,
 )
-def selection_traject_run(name: str, vr_config) -> dict:
+def selection_traject_run(name: str, vr_config: dict) -> dict:
     """
     Callback to select the run id for the traject.
 
     :param name: name of the traject
+    :param vr_config: dictionary with the configuration of the traject.
     :return: DikeTraject object
     """
 
@@ -122,6 +124,70 @@ def selection_traject_run(name: str, vr_config) -> dict:
 
     _dike_traject.run_name = name
     return _dike_traject.serialize()
+
+
+@app.callback(
+
+    [Output('stored-data', 'data', allow_duplicate=True),
+     Output(BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, 'value')],
+    [
+        Input(DROPDOWN_SELECTION_RUN_ID, "value"),
+        Input(SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA, "value"),
+        Input(GREEDY_OPTIMIZATION_CRITERIA_BETA, "value"),
+        Input(GREEDY_OPTIMIZATION_CRITERIA_YEAR, "value"),
+        Input(BUTTON_RECOMPUTE_GREEDY_STEPS, "n_clicks"),
+        Input(BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, 'value')
+
+    ],
+    State(STORE_CONFIG, "data"),
+    prevent_initial_call=True,
+
+)
+def recompute_dike_traject_with_new_greedy_criteria(name: str, name_type: str, beta: float, year: float, n_click: int,
+                                                    store_n_click_button, vr_config) -> tuple[dict, int]:
+    """
+    Callback to recompute the dike traject with new greedy criteria.
+
+    :param name: name of the calculation run in the database
+    :param name_type: type of the greedy optimization criteria
+    :param beta: value of the beta parameter for greedy optimization if criterion 'target_pf' is selected
+    :param year: value of the year parameter for greedy optimization if criterion 'target_year' is selected
+    :param n_click: number of clicks on the button
+    :param store_n_click_button: number of clicks on the button, used to detect when the button is clicked
+    :param vr_config: dictionary with the configuration of the traject.
+
+
+    :return:
+    """
+
+    if n_click is None or store_n_click_button == n_click:  # update when clicking on button ONLY
+        return dash.no_update
+
+    if vr_config is None or vr_config == {}:
+        return dash.no_update
+
+    _vr_config = VrtoolConfig()
+    _vr_config.traject = vr_config['traject']
+    _vr_config.input_directory = Path(vr_config['input_directory'])
+    _vr_config.output_directory = Path(vr_config['output_directory'])
+    _vr_config.input_database_name = vr_config['input_database_name']
+    _vr_config.excluded_mechanisms = [MechanismEnum.REVETMENT, MechanismEnum.HYDRAULIC_STRUCTURES]
+
+    if name == "Basisberekening":
+        _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=2, run_is_vr=1,
+                                                         greedy_optimization_criteria=name_type,
+                                                         greedy_criteria_beta=beta, greedy_criteria_year=int(year))
+
+    elif name in get_name_optimization_runs(_vr_config):
+        run_id_vr, run_id_dsn = get_run_optimization_ids(_vr_config, name)
+        _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=run_id_dsn, run_is_vr=run_id_vr,
+                                                         greedy_optimization_criteria=name_type,
+                                                         greedy_criteria_beta=beta, greedy_criteria_year=int(year))
+    else:
+        raise ValueError("Name of the Optimization run is not correct.")
+
+    _dike_traject.run_name = name
+    return _dike_traject.serialize(), n_click
 
 
 @app.callback(
@@ -249,12 +315,12 @@ def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
 
         return df.to_dict('records')
 
+
 @app.callback(
     Output(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "marks"),
     Input('stored-data', 'data'),
 )
 def update_slider_years_from_database(dike_traject_data: dict):
-
     if dike_traject_data is None:
         marks = {
             2025: {'label': '2025'},

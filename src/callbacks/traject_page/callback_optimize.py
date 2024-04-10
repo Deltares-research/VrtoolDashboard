@@ -27,7 +27,24 @@ from src.orm.import_database import (
 
 
 @app.callback(
-    output=[Output(OPTIMIZE_MODAL_ID, "is_open", allow_duplicate=True)],
+    output=[Output(component_id="latest-timestamp", component_property="children")],
+    inputs=[Input("interval-component", "n_intervals")],
+    cancel=[Input(CLOSE_OPTIMAL_MODAL_BUTTON_ID, "n_clicks")],
+)
+def update_timestamp(interval):
+    _path_log = Path().joinpath("vrtool_dashboard.log")
+    with open(_path_log, "r") as f:
+        # Read the last line of the log
+        _latest_log = f.readlines()[-1]
+
+    return [html.Span(f"{_latest_log}")]
+
+
+@app.callback(
+    output=[
+        Output(OPTIMIZE_MODAL_ID, "is_open", allow_duplicate=True),
+        Output(CLOSE_OPTIMAL_MODAL_BUTTON_ID, "n_clicks"),
+    ],
     inputs=[
         Input(OPTIMIZE_BUTTON_ID, "n_clicks"),
         Input(CLOSE_OPTIMAL_MODAL_BUTTON_ID, "n_clicks"),
@@ -42,8 +59,8 @@ def open_canvas_logging_and_cancel(
     can output the vrtool logging.
     """
     if close_n_click and close_n_click > 0:
-        return [False]
-    return [True]
+        return False, 0
+    return True, 0
 
 
 @app.callback(

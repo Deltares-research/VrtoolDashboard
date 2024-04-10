@@ -1,17 +1,21 @@
 from pathlib import Path
+from typing import Optional
 
 from peewee import JOIN
 from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.orm.orm_controllers import open_database
 
-from src.constants import conversion_dict_measure_names
+from src.constants import conversion_dict_measure_names, GreedyOPtimizationCriteria
 from src.linear_objects.dike_traject import DikeTraject
 from src.orm.importers.dike_traject_importer import DikeTrajectImporter
 from src.orm import models as orm_model
 from src.orm.importers.optimization_run_importer import import_optimization_runs_name
 
 
-def get_dike_traject_from_config_ORM(vr_config: VrtoolConfig, run_id_dsn: int, run_is_vr: int) -> DikeTraject:
+def get_dike_traject_from_config_ORM(vr_config: VrtoolConfig, run_id_dsn: int, run_is_vr: int,
+                                     greedy_optimization_criteria: str = GreedyOPtimizationCriteria.ECONOMIC_OPTIMAL.name,
+                                     greedy_criteria_year: Optional[int] = None,
+                                     greedy_criteria_beta: Optional[float] = None) -> DikeTraject:
     """
     Returns a DikeTraject object with all the required data from the ORM for the specified traject via a provided
     vr_config object
@@ -29,7 +33,10 @@ def get_dike_traject_from_config_ORM(vr_config: VrtoolConfig, run_id_dsn: int, r
     open_database(_path_database)
     _dike_traject = DikeTrajectImporter(vr_config=vr_config,
                                         run_id_dsn=run_id_dsn,
-                                        run_id_vr=run_is_vr
+                                        run_id_vr=run_is_vr,
+                                        greedy_optimization_criteria=greedy_optimization_criteria,
+                                        greedy_criteria_year=greedy_criteria_year,
+                                        greedy_criteria_beta=greedy_criteria_beta,
                                         ).import_orm(orm_model)
 
     return _dike_traject
@@ -116,7 +123,6 @@ def get_measure_result_ids_per_section(vr_config: VrtoolConfig, section_name: st
     ))
 
     return [measure_result.id for measure_result in _measure_results]
-
 
 
 def get_all_default_selected_measure(_vr_config: VrtoolConfig) -> list[tuple]:

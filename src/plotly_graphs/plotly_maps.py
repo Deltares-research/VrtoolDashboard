@@ -10,7 +10,7 @@ from src.constants import REFERENCE_YEAR, ColorBarResultType, Mechanism, SubResu
 from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject
 from src.utils.gws_convertor import GWSRDConvertor
-from src.utils.utils import to_million_euros, beta_to_pf, pf_to_beta
+from src.utils.utils import to_million_euros, beta_to_pf, pf_to_beta, get_beta
 
 color_dict = {""}
 
@@ -886,25 +886,7 @@ def get_berm_widening_color(berm_widening_value: float) -> str:
     return get_color(berm_widening_value, cmap, 0, 30)
 
 
-def get_beta(results: dict, year_index: int, mechanism: str) -> float:
-    """Get the reliability value of a mechanism for a given year index.
 
-    :param results: dict of results.
-    :param year_index: int of the year index.
-    :param mechanism: str of the mechanism.
-    :return: float of the reliability value.
-
-    """
-    if mechanism == Mechanism.SECTION.name:
-        return results["Section"][year_index]
-    elif mechanism == Mechanism.PIPING.name:
-        return results["Piping"][year_index]
-    elif mechanism == Mechanism.OVERFLOW.name:
-        return results["Overflow"][year_index]
-    elif mechanism == Mechanism.STABILITY.name:
-        return results["StabilityInner"][year_index]
-    elif mechanism == Mechanism.REVETMENT.name:
-        return results["Revetment"][year_index]
 
 
 def get_color_hover_prob_ratio(section: DikeSection, year_index: int, mechanism_type: str) -> Tuple[str, str]:

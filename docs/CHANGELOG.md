@@ -5,16 +5,22 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased] [dd/mm/yyyy]
 
 ### Added
-None.
+- Acceptance test for DikeTraject importer
+- Acceptance test for DikeTraject faalkans matrix
+- New attribute greedy steps to DikeTraject
+- New attribute active_mechanisms to DikeSection
+- Display greedy steps on graph beta vs cost along vr and dsn
+- Button recompute to generate a new vr line with specification year/beta
 
 ### Changed
-None.
+- Optimize callacbk switched to background callback
+- Refactor import od DikeTraject from database
 
 ### Deprecated
 None.
 
 ### Removed
-None.
+-  Custom VRtool logger
 
 ### Fixed
 None.
