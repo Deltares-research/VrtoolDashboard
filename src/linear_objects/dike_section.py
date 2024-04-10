@@ -1,7 +1,12 @@
+from bisect import bisect_right
 from typing import Optional
 
-
+from src.constants import REFERENCE_YEAR, CalcType
 from src.linear_objects.base_linear import BaseLinearObject
+from src.utils.utils import get_beta
+
+
+# from src.plotly_graphs.plotly_maps import get_beta
 
 
 class DikeSection(BaseLinearObject):
@@ -16,6 +21,7 @@ class DikeSection(BaseLinearObject):
     final_measure_veiligheidsrendement: Optional[dict]
     final_measure_doorsnede: Optional[dict]  # replace dict with a Measure Object
     years: list[int]  # Years for which a reliability result is available (both for initial and measures)
+    active_mechanisms: list[str]  # Active mechanisms for the dike section
 
     def __init__(self, name: str, coordinates_rd: list[tuple[float, float]], in_analyse: int):
         """
@@ -35,6 +41,7 @@ class DikeSection(BaseLinearObject):
         self.final_measure_doorsnede = None
         self.years = []
         self.revetment = False
+        self.active_mechanisms = []
 
     def serialize(self) -> dict:
         """Serialize the DikeSection object to a dict, in order to be saved in dcc.Store"""
@@ -50,6 +57,7 @@ class DikeSection(BaseLinearObject):
             'final_measure_veiligheidsrendement': self.final_measure_veiligheidsrendement,
             'final_measure_doorsnede': self.final_measure_doorsnede,
             'years': self.years,
+            'active_mechanisms': self.active_mechanisms,
         }
 
     @staticmethod
@@ -68,4 +76,94 @@ class DikeSection(BaseLinearObject):
         section.final_measure_doorsnede = data['final_measure_doorsnede']
         section.years = data['years']
         section.revetment = data['revetment']
+        section.active_mechanisms = data['active_mechanisms']
         return section
+
+    def export_as_geojson_feature(self, params: dict) -> dict:
+        """Export the dike section as a GeoJSON feature"""
+        if params.get('tab') == 'overview':
+            return self.export_features_overview()
+        elif params.get('tab') == 'assessment':
+            return self.export_features_assessment(params)
+        elif params.get('tab') == 'reinforced_sections':
+            return self.export_reinforced_sections_assessment(params)
+        else:
+            raise ValueError("This tab cannot be exported as geojson")
+
+    def export_features_overview(self):
+        """Export the dike section as a GeoJSON feature for the overview map"""
+        return {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": self.coordinates_rd
+            },
+            "properties": {
+                "name": self.name,
+                "length": self.length,
+                "in_analyse": self.in_analyse,
+                "revetment": self.revetment,
+            }
+        }
+
+    def export_features_assessment(self, params: dict):
+        """Export the dike section as a GeoJSON feature for the assessment map"""
+
+        feat = {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": self.coordinates_rd
+            },
+            "properties": {
+                "name": self.name,
+                "in_analyse": self.in_analyse,
+                "revetment": self.revetment,
+            }
+        }
+
+        for mechanism in self.active_mechanisms:
+            _year_index = bisect_right(self.years, params['selected_year'] - REFERENCE_YEAR) - 1
+            _beta_meca = get_beta(self.initial_assessment, _year_index, mechanism.upper())
+            feat['properties'][f'beta_{mechanism}'] = _beta_meca
+        return feat
+
+    def export_reinforced_sections_assessment(self, params: dict):
+        """Export the dike section as a GeoJSON feature for the assessment map"""
+        if params['calculation_type'] == CalcType.DOORSNEDE_EISEN.name:
+            _final_measure = self.final_measure_doorsnede
+            _is_reinforced = self.is_reinforced_doorsnede
+        elif params['calculation_type'] == CalcType.VEILIGHEIDSRENDEMENT.name:
+            _final_measure = self.final_measure_veiligheidsrendement
+            _is_reinforced = self.is_reinforced_veiligheidsrendement
+        else:
+            raise ValueError("Calculation type not recognized")
+        feat = {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": self.coordinates_rd
+            },
+            "properties": {
+                "name": self.name,
+                "in_analyse": self.in_analyse,
+            }
+        }
+        if self.in_analyse:
+
+            feat['properties']['in_analyse'] = self.in_analyse
+            feat['properties']['revetment'] = self.revetment
+            feat['properties']['is_reinforced'] = _is_reinforced
+            feat['properties']['maatregel'] = _final_measure.get("name", None)
+            feat['properties']['investment_year'] = _final_measure.get("investment_year", None)
+            feat['properties']['dberm'] = _final_measure.get("dberm", None)
+            feat['properties']['dcrest'] = _final_measure.get("dberm_target_ratio", None)
+            feat['properties']['pf_target_ratio'] = _final_measure.get("pf_target_ratio", None)
+            feat['properties']['diff_transition_level'] = _final_measure.get("diff_transition_level", None)
+
+            for mechanism in self.active_mechanisms:
+                _year_index = bisect_right(self.years, params['selected_year'] - REFERENCE_YEAR) - 1
+                _beta_meca = get_beta(_final_measure, _year_index, mechanism.upper())
+
+                feat['properties'][f'beta_{mechanism}_veiligheidsrendement'] = _beta_meca
+        return feat

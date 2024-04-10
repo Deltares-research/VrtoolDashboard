@@ -1,9 +1,13 @@
+import json
+from bisect import bisect_right
 from dataclasses import dataclass
+from typing import Optional
 
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
 
+from src.constants import REFERENCE_YEAR, Mechanism
 from src.linear_objects.base_linear import BaseLinearObject
 from src.linear_objects.dike_section import DikeSection
 
@@ -18,6 +22,7 @@ class DikeTraject(BaseLinearObject):
     dike_sections: list[DikeSection]
     reinforcement_order_vr: list[str]
     reinforcement_order_dsn: list[str]
+    greedy_steps: list[dict]
     run_name: str = None
 
     def serialize(self) -> dict:
@@ -29,6 +34,7 @@ class DikeTraject(BaseLinearObject):
             'reinforcement_order_dsn': self.reinforcement_order_dsn,
             'signalering_value': self.signalering_value,
             'lower_bound_value': self.lower_bound_value,
+            'greedy_steps': self.greedy_steps,
             'run_name': self.run_name
         }
 
@@ -45,13 +51,25 @@ class DikeTraject(BaseLinearObject):
                            reinforcement_order_dsn=data['reinforcement_order_dsn'],
                            signalering_value=data["signalering_value"],
                            lower_bound_value=data["lower_bound_value"],
+                           greedy_steps=data["greedy_steps"],
                            run_name=data["run_name"]
                            )
 
-    def calc_traject_probability_array(self, calc_type: str):
+    def export_to_geojson(self, params: dict) -> str:
+        """
+        Export the dike traject to a geojson format
+        """
+        _geojson = {
+            "type": "FeatureCollection",
+            "crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:EPSG::28992"}},
+            "features": [section.export_as_geojson_feature(params) for section in self.dike_sections]
+        }
+        return json.dumps(_geojson)
 
-        _beta_df = self.get_initial_assessment_df()
-        _traject_pf, _ = get_traject_prob(_beta_df, ['StabilityInner', 'Piping', 'Overflow', "Revetment"])
+    def calc_traject_probability_array(self, calc_type: str) -> np.array:
+
+        _beta_df = get_initial_assessment_df(self.dike_sections)
+        _traject_pf, _ = get_traject_prob(_beta_df, ["Overflow", "Piping", "StabilityInner", "Revetment"])
         years = self.dike_sections[0].years
 
         if calc_type == "vr":
@@ -85,9 +103,7 @@ class DikeTraject(BaseLinearObject):
             for mechanism in _active_mechanisms:
                 mask = (_beta_df['name'] == section.name) & (_beta_df['mechanism'] == mechanism)
                 # replace the row in the dataframe with the betas of the section if both the name and mechanism match
-                d = {"name": section.name, "mechanism": mechanism, "Length": section.length
-
-                     }
+                d = {"name": section.name, "mechanism": mechanism, "Length": section.length}
 
                 for year, beta in zip(years, getattr(section, _section_measure)[mechanism]):
                     d[year] = beta
@@ -105,13 +121,14 @@ class DikeTraject(BaseLinearObject):
                 return section
         raise ValueError(f"Section with name {name} not found")
 
-    def get_initial_assessment_df(self) -> DataFrame:
+    @staticmethod
+    def get_initial_assessment_df(sections: list[DikeSection]) -> DataFrame:
         """Get the initial assessment dataframe from all children sections"""
 
-        years = self.dike_sections[0].years
+        years = sections[0].years
         df = pd.DataFrame(columns=["name", "mechanism"] + years + ["Length"])
 
-        for section in self.dike_sections:
+        for section in sections:
             if not section.in_analyse:
                 continue
             if not section.is_reinforced_doorsnede and not section.is_reinforced_veiligheidsrendement:
@@ -203,6 +220,21 @@ class DikeTraject(BaseLinearObject):
 
         return np.cumsum(length_list)
 
+    def _get_greedy_optimization_step_from_speficiations(self, target_year: int, target_beta: float) -> int:
+        """Get the optimization step number for the greedy optimization algorithm based on the specifications
+
+        :param target_year: the year for which the reliability should be met
+        :param target_beta: the target reliability
+        :return: the optimization step number
+        """
+        # find for which optimization step_number the criteria 'reliability in year' is met
+        _year_step_index = bisect_right(self.dike_sections[0].years,
+                                        target_year - REFERENCE_YEAR) - 1
+        _target_pf = beta_to_pf(target_beta)
+        _step_pf_array = get_step_traject_pf(self)[:, _year_step_index]
+        _step_index = np.argmax(_step_pf_array < _target_pf)
+        return int(_step_index)
+
 
 def get_traject_prob(beta_df: DataFrame, mechanisms: list) -> tuple[np.array, dict]:
     """Determines the probability of failure for a traject based on the standardized beta input"""
@@ -230,3 +262,47 @@ def get_traject_prob(beta_df: DataFrame, mechanisms: list) -> tuple[np.array, di
             # 1-prod(1-p)
         total_traject_prob += traject_probs[mechanism]
     return total_traject_prob, traject_probs
+
+
+def get_initial_assessment_df(sections: list[DikeSection]) -> DataFrame:
+    """Get the initial assessment dataframe from all children sections"""
+    years = sections[0].years
+    df = pd.DataFrame(columns=["name", "mechanism"] + years + ["Length"])
+
+    for section in sections:
+        if not section.in_analyse:
+            continue
+        if not section.is_reinforced_doorsnede and not section.is_reinforced_veiligheidsrendement:
+            continue
+        # add a row to the dataframe with the initial assessment of the section
+        mechanisms = ["Overflow", "StabilityInner", "Piping"]
+        if section.revetment:
+            mechanisms.append("Revetment")
+
+        for mechanism in mechanisms:
+            d = {"name": section.name, "mechanism": mechanism, "Length": section.length
+
+                 }
+
+            for year, beta in zip(years, section.initial_assessment[mechanism]):
+                d[year] = beta
+            s = pd.DataFrame(d, index=[0])
+            df = pd.concat([df, s])
+
+    return df
+
+
+def cum_cost_steps(dike_traject: DikeTraject):
+    cost_list = []
+    for step in dike_traject.greedy_steps:
+        cost_list.append(step["LCC"])
+
+    return np.cumsum(cost_list) / 1e6
+
+
+def get_step_traject_pf(dike_traject: DikeTraject) -> np.array:
+    pf_array = []
+    for step in dike_traject.greedy_steps:
+        pf_array.append(step["pf"])
+
+    return np.array(pf_array)
