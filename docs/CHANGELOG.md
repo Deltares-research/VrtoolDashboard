@@ -8,13 +8,13 @@ All notable changes to this project will be documented in this file.
 None.
 
 ### Changed
-None.
+- Optimize callacbk switched to background callback
 
 ### Deprecated
 None.
 
 ### Removed
-None.
+-  Custom VRtool logger
 
 ### Fixed
 None.

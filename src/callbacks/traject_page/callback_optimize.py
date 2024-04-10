@@ -58,7 +58,6 @@ def open_canvas_logging_and_cancel(
     Dummy call to trigger the opening of the canvas so the `update_timestamp`
     can output the vrtool logging.
     """
-    print("open clock one", optimize_n_click, close_n_click)
     if close_n_click and close_n_click > 0:
         return False, 0
     return True, 0
