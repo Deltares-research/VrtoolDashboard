@@ -46,7 +46,8 @@ class VrToolLogger:
         # Set console handler
         _console_handler = logging.StreamHandler()
         _console_handler.set_name("VrTool log console handler")
-        VrToolLogger.add_handler(_console_handler, logging_level)
+        _logger = VrToolLogger()
+        _logger.add_handler(_console_handler, logging_level)
 
     @staticmethod
     def add_handler(handler: logging.StreamHandler, logging_level: int):
