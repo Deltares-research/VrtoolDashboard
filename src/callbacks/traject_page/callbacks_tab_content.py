@@ -30,8 +30,20 @@ def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
 
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
         _fig = plot_overview_map(_dike_traject)
+
+    config = {
+        'mapboxAccessToken': get_mapbox_token(),
+        'toImageButtonOptions': {
+            'format': 'svg',  # one of png, svg, jpeg, webp
+            'filename': 'custom_image',
+            'height': 500,
+            'width': 700,
+            'scale': 1  # Multiply title/legend/axis/canvas sizes by this factor
+        }
+    }
+
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'},
-                     config={'mapboxAccessToken': get_mapbox_token()})
+                     config=config)
 
 
 @app.callback(Output('dike_traject_reliability_map_initial', 'children'),

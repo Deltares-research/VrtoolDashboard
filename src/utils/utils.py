@@ -5,7 +5,7 @@ import numpy as np
 from scipy.stats import norm
 import json
 
-from src.constants import SIGNALERING, ONDERGRENS, Mechanism
+from src.constants import SIGNALERING, ONDERGRENS, Mechanism, get_mapbox_token
 
 
 def to_million_euros(cost: float) -> float:
@@ -117,3 +117,16 @@ def get_beta(results: dict, year_index: int, mechanism: str) -> float:
         return results["Revetment"][year_index]
     elif mechanism == "STABILITYINNER":
         return results["StabilityInner"][year_index]
+
+def get_default_plotly_config(filename: str) -> dict:
+    config = {
+        'mapboxAccessToken': get_mapbox_token(),
+        'toImageButtonOptions': {
+            'format': 'png',  # one of png, svg, jpeg, webp
+            'filename': filename,
+            'height': 500,
+            'width': 700,
+            'scale': 1  # Multiply title/legend/axis/canvas sizes by this factor
+        }
+    }
+    return config

@@ -29,6 +29,18 @@ def plot_default_overview_map_dummy() -> go.Figure:
 
     # this is centered on the Netherlands and zoomed out
     update_layout_map_box(fig, center=(51.798160177811454, 5.200357914732026), zoom=8)
+
+    # config = {
+    #     'toImageButtonOptions': {
+    #         'format': 'svg',  # one of png, svg, jpeg, webp
+    #         'filename': 'custom_image',
+    #         'height': 500,
+    #         'width': 700,
+    #         'scale': 1  # Multiply title/legend/axis/canvas sizes by this factor
+    #     }
+    # }
+
+
     return fig
 
 
