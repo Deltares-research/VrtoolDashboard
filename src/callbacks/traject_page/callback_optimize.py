@@ -1,5 +1,3 @@
-import logging
-
 from pathlib import Path
 
 import dash
@@ -7,7 +5,7 @@ from dash import Output, Input, html
 from vrtool.api import ApiRunWorkflows
 from vrtool.common.enums import MechanismEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
-from vrtool.vrtool_logger import VrToolLogger
+from vrtool.vrtool_logger import VrToolLogger, logging
 
 from src.app import app
 from src.component_ids import (
@@ -29,22 +27,10 @@ from src.orm.import_database import (
 
 
 @app.callback(
-    output=[Output(component_id="latest-timestamp", component_property="children")],
-    inputs=[Input("interval-component", "n_intervals")],
-    cancel=[Input(CLOSE_OPTIMAL_MODAL_BUTTON_ID, "n_clicks")],
-)
-def update_timestamp(interval):
-    _path_log = Path().joinpath("vrtool_dashboard.log")
-    with open(_path_log, "r") as f:
-        # Read the last line of the log
-        _latest_log = f.readlines()[-1]
-
-    return [html.Span(f"{_latest_log}")]
-
-
-@app.callback(
-    output=[Output(OPTIMIZE_MODAL_ID, "is_open", allow_duplicate=True),
-            Output(CLOSE_OPTIMAL_MODAL_BUTTON_ID, "n_clicks")],
+    output=[
+        Output(OPTIMIZE_MODAL_ID, "is_open", allow_duplicate=True),
+        Output(CLOSE_OPTIMAL_MODAL_BUTTON_ID, "n_clicks"),
+    ],
     inputs=[
         Input(OPTIMIZE_BUTTON_ID, "n_clicks"),
         Input(CLOSE_OPTIMAL_MODAL_BUTTON_ID, "n_clicks"),
@@ -67,6 +53,7 @@ def open_canvas_logging_and_cancel(
     output=[
         Output(DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID, "children"),
         Output(DROPDOWN_SELECTION_RUN_ID, "options", allow_duplicate=True),
+        Output(OPTIMIZE_MODAL_ID, "is_open", allow_duplicate=True),
     ],
     inputs=[
         Input(OPTIMIZE_BUTTON_ID, "n_clicks"),
@@ -77,9 +64,13 @@ def open_canvas_logging_and_cancel(
     ],
     background=True,
     cancel=[Input(CLOSE_OPTIMAL_MODAL_BUTTON_ID, "n_clicks")],
+    progress=[
+        Output(component_id="latest-timestamp", component_property="children"),
+    ],
     prevent_initial_call=True,
 )
 def run_optimize_algorithm(
+    set_progress,
     n_clicks: int,
     optimization_run_name: str,
     stored_data: dict,
@@ -118,20 +109,51 @@ def run_optimize_algorithm(
         _vr_config.input_database_name = vr_config["input_database_name"]
         _vr_config.excluded_mechanisms = [MechanismEnum.HYDRAULIC_STRUCTURES]
 
-        # 2. Get all selected measures ids from optimization table in the dashboard
-        selected_measures = get_selected_measure(_vr_config, traject_optimization_table)
+        class ModalPopupLogHandler(logging.StreamHandler):
+            """
+            Custom handler declared within this method so it is aware of the provided context
+            and able to trigger the `set_progress` method whilst running in the background.
+            """
 
-        # 3. Run optimization in a separate thread, so that the user can continue using the app while the optimization
-        # is running.
-        _path_log = Path().joinpath("vrtool_dashboard.log")
-        VrToolLogger.init_file_handler(_path_log, logging.INFO)
-        run_vrtool_optimization(_vr_config, optimization_run_name, selected_measures)
+            def __enter__(self):
+                """
+                This is required for the `with` statement that allows disposal of the object.
+                """
+                # Add this handler to the VrToolLogger to trace the messages
+                # of the given logging level.
+                VrToolLogger.add_handler(self, logging.INFO)
+                return self
 
-        # 4. Update the selection Dropwdown with all the names of the optimization runs
-        _names_optimization_run = get_name_optimization_runs(_vr_config)
+            def __exit__(self, exc_type, exc_value, traceback):
+                """
+                We are only interested into closing the handler stream.
+                This needs to be done here explicitely.
+                """
+                self.close()
+
+            def emit(self, record):
+                set_progress(self.format(record))
+
+        # Wrap al `VrtoolCore` calls into the logging handler so any logging message
+        # is redirected to our html modal (the pop-up logging window).
+        with ModalPopupLogHandler():
+            # 2. Get all selected measures ids from optimization table in the dashboard
+            selected_measures = get_selected_measure(
+                _vr_config, traject_optimization_table
+            )
+
+            # 3. Run optimization in a separate thread, so that the user can continue using the app while the optimization
+            # is running.
+            run_vrtool_optimization(
+                _vr_config, optimization_run_name, selected_measures
+            )
+
+            # 4. Update the selection Dropwdown with all the names of the optimization runs
+            _names_optimization_run = get_name_optimization_runs(_vr_config)
+
         _options = [{"label": name, "value": name} for name in _names_optimization_run]
 
-        return [], _options
+        return [], _options, False
 
 
 def run_vrtool_optimization(

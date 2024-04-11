@@ -6,7 +6,6 @@ import json
 
 from src.callbacks.traject_page.callback_optimize import run_optimize_algorithm
 
-
 optimization_table_1 = [{'section_col': '1A', 'reinforcement_col': 'yes', 'measure_col': 'GROUND_IMPROVEMENT',
                          'reference_year_col': '2025'},
                         {'section_col': '1B', 'reinforcement_col': 'yes', 'measure_col': 'GROUND_IMPROVEMENT',
@@ -52,7 +51,7 @@ optimization_table_2 = [{'section_col': '1A', 'reinforcement_col': 'yes', 'measu
 
 class TestCallbackOptimize:
 
-    @pytest.mark.skip(reason="slow")
+    @pytest.mark.skip(reason="can't test Background callback")
     @pytest.mark.slow
     def test_run_optimize_algorithm(self):
         """
@@ -69,12 +68,14 @@ class TestCallbackOptimize:
             _vr_config = json.loads(decoded)
 
         def run_callback():
-            return run_optimize_algorithm(n_clicks=1,
-                                          optimization_run_name="nametest",
-                                          stored_data=_dike_data,
-                                          vr_config=_vr_config,
-                                          traject_optimization_table=optimization_table_1,
-                                          )
+            return run_optimize_algorithm(
+                set_progress=None,
+                n_clicks=1,
+                optimization_run_name="nametest",
+                stored_data=_dike_data,
+                vr_config=_vr_config,
+                traject_optimization_table=optimization_table_1,
+            )
 
         ctx = copy_context()
         output = ctx.run(run_callback)
