@@ -14,13 +14,14 @@ All notable changes to this project will be documented in this file.
 - new buttons to download geojson content of the diketraject.
 
 ### Changed
+- Optimize callacbk switched to background callback
 - Refactor import od DikeTraject from database
 
 ### Deprecated
 None.
 
 ### Removed
-None.
+-  Custom VRtool logger
 
 ### Fixed
 - Fixed measure name for 3 combined measures
