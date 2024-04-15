@@ -3,7 +3,7 @@ from typing import Optional
 
 import numpy as np
 import pandas as pd
-from peewee import JOIN
+from peewee import JOIN, ModelBase, DoesNotExist
 from vrtool.orm.io.importers.optimization.optimization_step_importer import OptimizationStepImporter
 from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol
 from vrtool.orm.models import OptimizationStep, SectionData, MeasurePerSection, MeasureResult, \
@@ -74,7 +74,12 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             - import the final measure (beta, lcc, params, ...) for each dike section
 
         """
-        _optimization_steps = get_optimization_steps_ordered(self.run_id_dsn)
+
+        try:
+            _optimization_steps = get_optimization_steps_ordered(self.run_id_dsn)
+
+        except DoesNotExist:
+            return
 
         _iterated_step_number = []
         _ordered_reinforced_sections = []
@@ -124,7 +129,11 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
 
         """
 
-        _optimization_steps = get_optimization_steps_ordered(self.run_id_vr)
+        try:
+            _optimization_steps = get_optimization_steps_ordered(self.run_id_dsn)
+
+        except DoesNotExist:
+            return
 
         # 0. Initialize vars
         _previous_step_number = None
@@ -330,8 +339,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             _year_2 = self._get_investment_year(optimization_step[1])
             _year_3 = self._get_investment_year(optimization_step[2])
             return [_year_1, _year_2, _year_3]
-
-
 
     def _get_measure_parameters(self, optimization_steps: OptimizationStep) -> dict:
         _params = {}
