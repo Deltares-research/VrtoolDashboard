@@ -130,7 +130,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         """
 
         try:
-            _optimization_steps = get_optimization_steps_ordered(self.run_id_dsn)
+            _optimization_steps = get_optimization_steps_ordered(self.run_id_vr)
 
         except DoesNotExist:
             return
