@@ -54,8 +54,11 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         """
 
         _results = []
-
-        _optimization_steps = get_optimization_steps_ordered(self.run_id_vr)
+        try:
+            _optimization_steps = get_optimization_steps_ordered(self.run_id_vr)
+        except DoesNotExist:
+            print("Warning: No optimization steps found for run_id: {self.run_id_vr}")
+            return
 
         for _optimization_step in _optimization_steps:
             _as_df = OptimizationStepImporter.import_optimization_step_results_df(
@@ -79,6 +82,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             _optimization_steps = get_optimization_steps_ordered(self.run_id_dsn)
 
         except DoesNotExist:
+            print(f"No optimization steps found for run_id: {self.run_id_dsn}")
             return
 
         _iterated_step_number = []
