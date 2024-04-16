@@ -18,12 +18,14 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Optimize callacbk switched to background callback
 - Refactor import od DikeTraject from database
+- LCC from database is now already accumulated
 
 ### Deprecated
 None.
 
 ### Removed
 -  Custom VRtool logger
+- Remove combination of betas for piping VZG+Soil
 
 ### Fixed
 - Fixed measure name for 3 combined measures
