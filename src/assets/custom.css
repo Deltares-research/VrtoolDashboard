@@ -26,3 +26,7 @@ input[type="radio"]:disabled + label {
     display : block !important;
 
   }
+
+nav .navbar-nav.mr-auto.mt-2 .nav-item .nav-link{
+    color: #ffffff;
+}

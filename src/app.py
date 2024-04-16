@@ -12,7 +12,7 @@ background_callback_manager = DiskcacheManager(cache)
 
 app = Dash(
     __name__,
-    external_stylesheets=[theme],
+    external_stylesheets=[theme, dbc.icons.FONT_AWESOME],
     meta_tags=[{"name": "viewport", "content": "width=device-width"}],
     background_callback_manager=background_callback_manager,
     suppress_callback_exceptions=True,
