@@ -107,7 +107,6 @@ class DikeTrajectImporter(OrmImporterProtocol):
             SectionData.dike_traject == _traject_id
         )
         _traject_gdf = self.parse_geo_dataframe(_traject_name)
-
         _dike_traject.dike_sections = self._import_dike_section_list(_selected_sections, _traject_gdf)
 
         # import solution: both
