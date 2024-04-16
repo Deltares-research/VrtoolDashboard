@@ -85,3 +85,4 @@ print(f"Time to plot: {t2 - t1}")
 
 _fig.update_layout(mapbox=dict(accesstoken=get_mapbox_token()))
 _fig.show()
+
