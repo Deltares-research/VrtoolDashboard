@@ -233,7 +233,8 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             return True
 
     def _add_greedy_step(self, dike_section: DikeSection, optimization_step: OptimizationStep, _beta_df: pd.DataFrame,
-                         greedy_steps_res: list[dict], step_measure, recorded__previous_section_LCC: dict[str, float]):
+                         greedy_steps_res: list[dict], step_measure: dict,
+                         recorded__previous_section_LCC: dict[str, float]):
         """
         Add the results of the step to the list greedy_steps_list
 
@@ -241,7 +242,8 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         :param optimization_step: optimization step to be iterated from the osm table
         :param _beta_df: dataframe with beta of all mechanism and all sections. The dataframe is modified in place here!
         :param greedy_steps_res: result list to be appended. Element have the following structure:
-        :param step_measure: dictionary with the following keys:
+        :param step_measure: current state of the measure dictionary. it contains the beta for the considered
+        mechanisms
         :param recorded__previous_section_LCC: dictionary that stores the previous LCC of the section. This is needed
         because the LCC stored in the database is the accumulated LCC for the measure of the section. To retrieve the
         incremental increase from the step, it is required to keep the LCC of the previous step of the same section.
