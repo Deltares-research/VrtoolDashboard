@@ -56,7 +56,7 @@ def get_signal_value(p_max: float):
         return p_max / 3.0
 
 
-def get_WBI_category(P_f_dsn: float, traject_length: float) -> str:
+def get_WBI_category(P_f_dsn: float, traject_length: float, Pf_eis_sign: float, Pf_eis_ond: float) -> str:
     """
 
     Function to determine the WBI catgeory of a dike section based on its cross-sectional probability of failure and
@@ -65,12 +65,11 @@ def get_WBI_category(P_f_dsn: float, traject_length: float) -> str:
 
     :param P_f_dsn: Probability of failure of the section
     :param traject_length: Length of the dike trajectory in meters
+    :param Pf_eis_sign: Probability of failure signaleringswaarde
+    :param Pf_eis_ond: Maximum probability of failure for a lower bound: ondergrens
     :return:
     """
 
-    # Normering
-    Pf_eis_sign = SIGNALERING
-    Pf_eis_ond = ONDERGRENS
 
     # Lengte-effect
     w = 0.24

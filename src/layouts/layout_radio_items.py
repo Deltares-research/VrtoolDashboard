@@ -27,8 +27,9 @@ layout_radio_result_type = dbc.RadioItems(
     id="select_result_type",
     options=[
         {"label": ResultType.RELIABILITY.value, "value": ResultType.RELIABILITY.name},
-        {"label": ResultType.PROBABILITY.value, "value": ResultType.PROBABILITY.name
-         },
+        {"label": ResultType.PROBABILITY.value, "value": ResultType.PROBABILITY.name},
+        {"label": ResultType.INTERPRETATION_CLASS.value, "value": ResultType.INTERPRETATION_CLASS.name},
+
     ],
     value=ResultType.RELIABILITY.name,
     style={'width': '40vh', "height": "6vh", "margin-top": "2px"}
