@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file.
 - new buttons to download geojson content of the diketraject.
 - Database without doorsnede results can be imported
 - Database without any optimization results can be imported
+- Added link to the documentation
+- Added duidingsklassen to result maps
 
 ### Changed
 - Optimize callacbk switched to background callback
