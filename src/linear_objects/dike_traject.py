@@ -55,6 +55,13 @@ class DikeTraject(BaseLinearObject):
                            run_name=data["run_name"]
                            )
 
+    def get_section(self, section_name: str) -> DikeSection:
+        """Get the section object by name"""
+        for section in self.dike_sections:
+            if (section.name == section_name):
+                return section
+        raise ValueError(f"Section with name {section_name} not found")
+
     def export_to_geojson(self, params: dict) -> str:
         """
         Export the dike traject to a geojson format

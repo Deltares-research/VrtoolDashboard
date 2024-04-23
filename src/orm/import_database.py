@@ -9,8 +9,21 @@ from src.constants import conversion_dict_measure_names, GreedyOPtimizationCrite
 from src.linear_objects.dike_traject import DikeTraject
 from src.orm.importers.dike_traject_importer import DikeTrajectImporter
 from src.orm import models as orm_model
+from src.orm.importers.measures_importer import TrajectMeasureResultsImporter
 from src.orm.importers.optimization_run_importer import import_optimization_runs_name
 
+
+def get_all_measure_results(vr_config: VrtoolConfig, section_name: str) -> list:
+    _path_dir = Path(vr_config.input_directory)
+    _path_database = _path_dir.joinpath(vr_config.input_database_name)
+
+    open_database(_path_database)
+    _meas_results = TrajectMeasureResultsImporter(vr_config=vr_config,
+                                                  section_name=section_name
+  
+                                        ).import_orm(orm_model)
+
+    return _meas_results
 
 def get_dike_traject_from_config_ORM(vr_config: VrtoolConfig, run_id_dsn: int, run_is_vr: int,
                                      greedy_optimization_criteria: str = GreedyOPtimizationCriteria.ECONOMIC_OPTIMAL.name,
