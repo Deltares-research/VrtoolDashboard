@@ -43,7 +43,7 @@ def plot_measure_results_graph(measure_results: DataFrame, dike_section: DikeSec
     else:
         hover_extra = f"Dberm: {dsn_results['dberm']}m<br>" + f"Dcrest: {dsn_results['dcrest']}m<br>"
     fig.add_trace(go.Scatter(
-        name=f'Doorsnede {dsn_results["name"]}',
+        name=f'Doorsnede',
         x=[dsn_results['LCC'] / 1e6],
         y=[dsn_results['Section'][0]],
         mode='markers',
@@ -51,7 +51,7 @@ def plot_measure_results_graph(measure_results: DataFrame, dike_section: DikeSec
             size=8,
             color='red',
         ),
-        hovertemplate=f"<b>Doorsnede</b><br><br>" +
+        hovertemplate=f"<b>{dsn_results['name']}</b><br><br>" +
                       "Beta: %{y:.2f}<br>" +
                       "LCC: €%{x:.2f} mln<br>" + hover_extra
 
@@ -65,7 +65,7 @@ def plot_measure_results_graph(measure_results: DataFrame, dike_section: DikeSec
         hover_extra = f"Dberm: {vr_results['dberm']}m<br>" + f"Dcrest: {vr_results['dcrest']}m<br>"
 
     fig.add_trace(go.Scatter(
-        name=f'Veiligheidsrendement {vr_results["name"]}',
+        name=f'Veiligheidsrendement',
         x=[vr_results['LCC'] / 1e6],
         y=[vr_results['Section'][0]],
         mode='markers',
@@ -73,7 +73,7 @@ def plot_measure_results_graph(measure_results: DataFrame, dike_section: DikeSec
             size=8,
             color='blue',
         ),
-        hovertemplate=f"<b>Veiligheidsrendement</b><br><br>" +
+        hovertemplate=f"<b>{vr_results['name']}</b><br><br>" +
                       "Beta: %{y:.2f}<br>" +
                       "LCC: €%{x:.2f} mln<br>" + hover_extra
     ))
