@@ -37,3 +37,6 @@ BUTTON_DOWNLOAD_ASSESSMENT_NB_CLICKS = "button_download_assessment_nb_clicks"
 DOWNLOAD_REINFORCED_SECTIONS_BUTTON_ID = "download_reinforced_sections_button_id"
 DOWNLOAD_REINFORCED_SECTIONS_ID = "download_reinforced_sections_id"
 BUTTON_DOWNLOAD_REINFORCED_SECTIONS_NB_CLICKS = "button_download_reinforced_sections_nb_clicks"
+
+SELECT_DIKE_SECTION_FOR_MEASURES_ID = "select_dike_section_id"
+GRAPG_MEASURE_COMPARISON_ID = "graph_measure_comparison_id"

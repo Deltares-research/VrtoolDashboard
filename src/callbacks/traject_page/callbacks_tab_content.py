@@ -1,10 +1,16 @@
+from pathlib import Path
+
 from dash import dcc, Output, Input
 from plotly.graph_objs import Figure
+from vrtool.defaults.vrtool_config import VrtoolConfig
 
 from src.component_ids import SLIDER_YEAR_RELIABILITY_RESULTS_ID, GREEDY_OPTIMIZATION_CRITERIA_BETA, \
-    GREEDY_OPTIMIZATION_CRITERIA_YEAR, SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA
+    GREEDY_OPTIMIZATION_CRITERIA_YEAR, SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA, SELECT_DIKE_SECTION_FOR_MEASURES_ID, \
+    GRAPG_MEASURE_COMPARISON_ID, STORE_CONFIG
 from src.constants import get_mapbox_token
 from src.linear_objects.dike_traject import DikeTraject
+from src.orm.import_database import get_all_measure_results
+from src.plotly_graphs.measure_comparison_graph import plot_measure_results_graph
 from src.plotly_graphs.pf_length_cost import plot_pf_length_cost, plot_default_scatter_dummy
 from src.plotly_graphs.plotly_maps import plot_overview_map, plot_default_overview_map_dummy, \
     plot_dike_traject_reliability_initial_assessment_map, plot_dike_traject_reliability_measures_assessment_map, \
@@ -175,3 +181,58 @@ def update_click(dike_traject_data: dict, click_data: dict) -> Figure:
 
         return dike_traject_pf_cost_helping_map(_dike_traject,
                                                 click_data["points"][0]["curveNumber"], _reinforced_sections)
+
+
+### TAB Maatregelen ###
+
+
+@app.callback(
+    Output(SELECT_DIKE_SECTION_FOR_MEASURES_ID, "options"),
+    Input('stored-data', 'data'),
+)
+def fill_dike_section_selection(dike_traject_data: dict) -> list[dict]:
+    """
+
+    :return:
+    """
+
+    _option_list = []
+    if dike_traject_data is not None:
+        _dike_traject = DikeTraject.deserialize(dike_traject_data)
+
+        for section in _dike_traject.dike_sections:
+            _option_list.append({"label": section.name, "value": section.name})
+
+    return _option_list
+
+
+@app.callback(Output(GRAPG_MEASURE_COMPARISON_ID, 'figure'),
+              [Input('stored-data', 'data'),
+               Input(STORE_CONFIG, "data"),
+
+               Input(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "value"), ]
+              )
+def make_graph_measure_results_comparison(dike_traject_data: dict, vr_config: dict, selected_year: float):
+    """
+
+    :return:
+    """
+    if dike_traject_data is None:
+        return plot_default_scatter_dummy()
+    else:
+        _dike_traject = DikeTraject.deserialize(dike_traject_data)
+
+        _section = _dike_traject.dike_sections[0]
+
+        _vr_config = VrtoolConfig()
+        _vr_config.traject = vr_config["traject"]
+        _vr_config.input_directory = Path(vr_config["input_directory"])
+        _vr_config.output_directory = Path(vr_config["output_directory"])
+        _vr_config.input_database_name = vr_config["input_database_name"]
+
+        # section_name = "WsNoo_Stab_004150_005000"
+        section_name = "1A"
+        # mechanism = Mechanism.SECTION
+        res = get_all_measure_results(_vr_config, section_name)
+        _fig = plot_measure_results_graph(res, _section)
+    return _fig

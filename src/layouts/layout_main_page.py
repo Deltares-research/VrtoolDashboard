@@ -7,11 +7,12 @@ from .layout_dike_settings import dike_settings_layout
 from .layout_download_buttons import layout_download_overview, layout_download_assessment, \
     layout_download_reinforced_sections
 from .layout_radio_items import layout_radio_color_bar_result_type, layout_radio_sub_type_result, \
-    layout_radio_length_switch, layout_radio_greedy_optimization_stop_criteria
+    layout_radio_length_switch
 from .layout_sliders import layout_urgency_length_slider
+from .layout_traject_page.layout_tabs.layout_tab_measures import layout_radio_dike_section_selection
 from .layout_upload_dike_files import layout_traject_select
 from .layout_vr_optimalization import dike_vr_optimization_layout_ag_grid
-from ..component_ids import GREEDY_OPTIMIZATION_CRITERIA_BETA, GREEDY_OPTIMIZATION_CRITERIA_YEAR
+from ..component_ids import GRAPG_MEASURE_COMPARISON_ID
 from ..constants import get_mapbox_token
 from ..plotly_graphs.pf_length_cost import plot_default_scatter_dummy
 from ..plotly_graphs.plotly_maps import plot_default_overview_map_dummy
@@ -67,6 +68,8 @@ def make_layout_main_page() -> dbc.Row:
                                 dbc.Tab(label="Versterkingsmaatregelen", tab_id="tab-3"),
                                 dbc.Tab(label="Resultaten optimalisatie", tab_id="tab-4"),
                                 dbc.Tab(label="Prioriteringsinformatie", tab_id="tab-5"),
+                                dbc.Tab(label="Maatregelen", tab_id="tab-6"),
+
 
                             ],
                             id="tabs",
@@ -195,6 +198,32 @@ def layout_tab_five() -> html.Div:
             layout_urgency_length_slider,
             html.Div(id='dike_traject_urgency_map',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
+
+        ]
+    )
+
+    return layout
+
+
+
+def layout_tab_six() -> html.Div:
+    layout = html.Div(
+        children=[
+            html.H2("Maatregelen"),
+            html.Div("Selecteer een dijkvak om de resultaten van de maatregelen te bekijken:"),
+            layout_radio_dike_section_selection,
+            # html.Div(id=GRAPG_MEASURE_COMPARISON_ID,
+            #          style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
+
+            html.Div(
+                style={'width': '130vh', 'height': '60vh', 'border': "2px solid black"},
+                children=[
+                    dcc.Graph(id=GRAPG_MEASURE_COMPARISON_ID, figure=plot_default_scatter_dummy(),
+                              style={'width': '100%', 'height': '100%'},
+                              ),
+                ],
+
+            ),
 
         ]
     )

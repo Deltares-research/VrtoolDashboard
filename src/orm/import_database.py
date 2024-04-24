@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Optional
 
+from pandas import DataFrame
 from peewee import JOIN
 from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.orm.orm_controllers import open_database
@@ -13,7 +14,7 @@ from src.orm.importers.measures_importer import TrajectMeasureResultsImporter
 from src.orm.importers.optimization_run_importer import import_optimization_runs_name
 
 
-def get_all_measure_results(vr_config: VrtoolConfig, section_name: str) -> list:
+def get_all_measure_results(vr_config: VrtoolConfig, section_name: str) -> DataFrame:
     _path_dir = Path(vr_config.input_directory)
     _path_database = _path_dir.joinpath(vr_config.input_database_name)
 

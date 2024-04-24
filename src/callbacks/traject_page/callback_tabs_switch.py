@@ -2,7 +2,7 @@ from dash import html, Output, Input
 
 from src.app import app
 from src.layouts.layout_main_page import layout_tab_one, layout_tab_two, layout_tab_three, layout_tab_four, \
-    layout_tab_five
+    layout_tab_five, layout_tab_six
 from src.layouts.layout_radio_items import layout_radio_calc_type, layout_radio_result_type, layout_radio_mechanism
 
 
@@ -37,6 +37,10 @@ def render_tab_map_content(active_tab: str) -> tuple[html.Div, list, list, list]
         return layout_tab_four(), disabled_calc_type_options, enabled_result_type_options, disabled_mechanism_options
     elif active_tab == "tab-5":
         return layout_tab_five(), enabled_calc_type_options, enabled_result_type_options, disabled_mechanism_options
+    elif active_tab == "tab-6":
+        return layout_tab_six(), enabled_calc_type_options, enabled_result_type_options, disabled_mechanism_options
+
+
 
     else:
         return html.Div("Invalid tab selected"), [], [], []
