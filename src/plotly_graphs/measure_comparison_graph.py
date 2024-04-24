@@ -14,12 +14,11 @@ from src.utils.utils import pf_to_beta, beta_to_pf
 def plot_measure_results_graph(measure_results: DataFrame, dike_section: DikeSection) -> go.Figure:
     """
     """
-
-    dsn_results = dike_section.final_measure_doorsnede
-    vr_results = dike_section.final_measure_veiligheidsrendement
-
-    custom = np.stack((measure_results['measure'], measure_results['dberm'], measure_results['dcrest']), axis=-1)
     fig = go.Figure()
+
+    # Add traces for the measures (uncombined)
+    custom = np.stack((measure_results['measure'], measure_results['dberm'], measure_results['dcrest']), axis=-1)
+
     fig.add_trace(go.Scatter(
         name='Maatregelen',
         x=measure_results['LCC'] / 1e6,
@@ -37,6 +36,12 @@ def plot_measure_results_graph(measure_results: DataFrame, dike_section: DikeSec
                       "LCC: €%{x:.2f} mln<br>"
     ))
 
+    # Add traces for the selected measure of Doorsnede-eis:
+    dsn_results = dike_section.final_measure_doorsnede
+    if dsn_results['name'] == 'Geen maatregel':
+        hover_extra = ""
+    else:
+        hover_extra = f"Dberm: {dsn_results['dberm']}m<br>" + f"Dcrest: {dsn_results['dcrest']}m<br>"
     fig.add_trace(go.Scatter(
         name=f'Doorsnede {dsn_results["name"]}',
         x=[dsn_results['LCC'] / 1e6],
@@ -48,11 +53,16 @@ def plot_measure_results_graph(measure_results: DataFrame, dike_section: DikeSec
         ),
         hovertemplate=f"<b>Doorsnede</b><br><br>" +
                       "Beta: %{y:.2f}<br>" +
-                      "LCC: €%{x:.2f} mln<br>" +
-                      f"Dberm: {vr_results['dberm']}m<br>" +
-                      f"Dcrest: {vr_results['dcrest']}m<br>"
+                      "LCC: €%{x:.2f} mln<br>" + hover_extra
 
     ))
+
+    # Add traces for the selected measure of Veiligheidsrendement:
+    vr_results = dike_section.final_measure_veiligheidsrendement
+    if vr_results['name'] == 'Geen maatregel':
+        hover_extra = ""
+    else:
+        hover_extra = f"Dberm: {vr_results['dberm']}m<br>" + f"Dcrest: {vr_results['dcrest']}m<br>"
 
     fig.add_trace(go.Scatter(
         name=f'Veiligheidsrendement {vr_results["name"]}',
@@ -65,11 +75,10 @@ def plot_measure_results_graph(measure_results: DataFrame, dike_section: DikeSec
         ),
         hovertemplate=f"<b>Veiligheidsrendement</b><br><br>" +
                       "Beta: %{y:.2f}<br>" +
-                      "LCC: €%{x:.2f} mln<br>" +
-                      f"Dberm: {vr_results['dberm']}m<br>" +
-                      f"Dcrest: {vr_results['dcrest']}m<br>"
+                      "LCC: €%{x:.2f} mln<br>" + hover_extra
     ))
 
+    ## Update layout
     fig.update_layout(
         title=f"Maatregelen dijkvak {dike_section.name}",
         xaxis_title="LCC (mln €)",

@@ -209,20 +209,32 @@ def fill_dike_section_selection(dike_traject_data: dict) -> list[dict]:
 @app.callback(Output(GRAPG_MEASURE_COMPARISON_ID, 'figure'),
               [Input('stored-data', 'data'),
                Input(STORE_CONFIG, "data"),
+               Input(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "value"),
+               Input(SELECT_DIKE_SECTION_FOR_MEASURES_ID, "value"),
 
-               Input(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "value"), ]
+               ]
               )
-def make_graph_measure_results_comparison(dike_traject_data: dict, vr_config: dict, selected_year: float):
+def make_graph_measure_results_comparison(dike_traject_data: dict, vr_config: dict, selected_year: float,
+                                          selected_dike_section: str) -> Figure:
     """
+
+    :param dike_traject_data: The data of the dike traject to be displayed.
+    :param vr_config: Stored configuration of the VRTool
+    :param selected_year: Selected year by the user from the slider
+    :param selected_dike_section: Selected dike section by the user from the Dropdown
 
     :return:
     """
     if dike_traject_data is None:
         return plot_default_scatter_dummy()
+
+    if selected_dike_section == "":
+        return plot_default_scatter_dummy()
+
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
 
-        _section = _dike_traject.dike_sections[0]
+        _section = _dike_traject.get_section(selected_dike_section)
 
         _vr_config = VrtoolConfig()
         _vr_config.traject = vr_config["traject"]
@@ -230,9 +242,9 @@ def make_graph_measure_results_comparison(dike_traject_data: dict, vr_config: di
         _vr_config.output_directory = Path(vr_config["output_directory"])
         _vr_config.input_database_name = vr_config["input_database_name"]
 
-        # section_name = "WsNoo_Stab_004150_005000"
-        section_name = "1A"
+        # # section_name = "WsNoo_Stab_004150_005000"
+        # section_name = "1A"
         # mechanism = Mechanism.SECTION
-        res = get_all_measure_results(_vr_config, section_name)
+        res = get_all_measure_results(_vr_config, _section.name)
         _fig = plot_measure_results_graph(res, _section)
     return _fig
