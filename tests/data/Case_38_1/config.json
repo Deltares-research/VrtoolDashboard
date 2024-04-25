@@ -1,0 +1,18 @@
+{
+ "traject": "38-1",
+ "T": [
+  0,
+  20,
+  25,
+  50,
+  75,
+  100
+ ],
+ "excluded_mechanisms": [
+  "REVETMENT",
+  "HYDRAULIC_STRUCTURES"
+ ],
+ "input_database_name": "38-1_basis_main.db",
+ "input_directory": "C:/Users/hauth/bitbucket/VRtoolDashboard/tests/data/Case_38_1",
+ "output_directory": "Basisberekening"
+}

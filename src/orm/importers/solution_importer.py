@@ -100,6 +100,9 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             # find corresponding section in dike_section
             dike_section: DikeSection = self.dike_section_mapping[section.section_name]
 
+            if dike_section.name == "01A":
+                a =1
+
             # With this if statement, we avoid getting the combined measures multiple times
             if _optimization_step.step_number not in _iterated_step_number:
                 _iterated_step_number.append(_optimization_step.step_number)
@@ -151,6 +154,8 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         for _optimization_step in _optimization_steps:
             _step_number = _optimization_step.step_number
 
+
+
             # For combined steps sharing the same step number, skip the step if it has already been processed
             if _previous_step_number == _step_number:
                 continue
@@ -165,6 +170,8 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
 
             # find corresponding section in dike_section
             dike_section: DikeSection = self.dike_section_mapping[section.section_name]
+            if dike_section.name == "01A":
+                a =1
 
             # 2. Get all steps sharing the same step number (=combined steps)
             _optimum_section_optimization_steps = (OptimizationStep

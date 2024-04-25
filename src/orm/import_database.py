@@ -6,7 +6,7 @@ from peewee import JOIN
 from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.orm.orm_controllers import open_database
 
-from src.constants import conversion_dict_measure_names, GreedyOPtimizationCriteria
+from src.constants import conversion_dict_measure_names, GreedyOPtimizationCriteria, Mechanism
 from src.linear_objects.dike_traject import DikeTraject
 from src.orm.importers.dike_traject_importer import DikeTrajectImporter
 from src.orm import models as orm_model
@@ -14,13 +14,14 @@ from src.orm.importers.measures_importer import TrajectMeasureResultsImporter
 from src.orm.importers.optimization_run_importer import import_optimization_runs_name
 
 
-def get_all_measure_results(vr_config: VrtoolConfig, section_name: str) -> DataFrame:
+def get_all_measure_results(vr_config: VrtoolConfig, section_name: str, mechanism: Mechanism) -> DataFrame:
     _path_dir = Path(vr_config.input_directory)
     _path_database = _path_dir.joinpath(vr_config.input_database_name)
 
     open_database(_path_database)
     _meas_results = TrajectMeasureResultsImporter(vr_config=vr_config,
-                                                  section_name=section_name
+                                                  section_name=section_name,
+                                                  mechanism=mechanism,
   
                                         ).import_orm(orm_model)
 
