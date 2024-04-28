@@ -4,7 +4,7 @@ from typing import Optional
 import numpy as np
 import pandas as pd
 from geopandas import GeoDataFrame
-from peewee import JOIN
+from peewee import JOIN, DoesNotExist
 from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.orm.io.importers.optimization.optimization_step_importer import OptimizationStepImporter
 from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol
@@ -17,6 +17,7 @@ from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject, get_initial_assessment_df, get_traject_prob
 
 from src.orm.importers.dike_section_importer import DikeSectionImporter
+from src.orm.importers.importer_utils import _get_measure
 from src.orm.importers.optimization_step_importer import _get_final_measure_betas, _get_section_lcc
 from src.orm.importers.solution_importer import TrajectSolutionRunImporter
 from src.orm.models import OptimizationSelectedMeasure, OptimizationStep, MeasureResult
@@ -34,8 +35,10 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
         self.vr_config = vr_config
         self.section_name = section_name
         self.mechanism = mechanism
+        self.run_id_vr = 1
+        self.run_id_dsn = 2
 
-    def import_orm(self, orm_model):
+    def import_orm(self, orm_model) -> tuple:
         """
         Import the dike traject from the ORM database
 
@@ -43,6 +46,61 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
         :return: DikeTraject object
         """
 
+        _measures = self.import_measures()
+        _steps_vr = self.import_steps(self.run_id_vr)
+        _steps_dsn = self.import_steps(self.run_id_dsn)
+
+        return _measures, _steps_vr, _steps_dsn
+    def import_steps(self, run_id: int) -> list[dict]:
+
+        try:
+            _optimization_steps = get_optimization_steps_ordered(run_id)
+
+        except DoesNotExist:
+            return []
+
+        _previous_step_number = None
+        _iterated_step_number = []
+
+        _step_measures = []
+        for _optimization_step in _optimization_steps:
+            _step_number = _optimization_step.step_number
+
+            # For combined steps sharing the same step number, skip the step if it has already been processed
+            if _previous_step_number == _step_number:
+                continue
+            section = (SectionData
+                       .select()
+                       .join(MeasurePerSection)
+                       .join(MeasureResult)
+                       .join(OptimizationSelectedMeasure)
+                       .where(OptimizationSelectedMeasure.id == _optimization_step.optimization_selected_measure_id)
+                       ).get()
+            if section.section_name != self.section_name:
+                continue
+
+            # if _optimization_step.step_number not in _iterated_step_number:
+            _iterated_step_number.append(_optimization_step.step_number)
+
+            _optimum_section_optimization_steps = (OptimizationStep
+            .select()
+            .join(OptimizationSelectedMeasure)
+            .where(
+                (OptimizationSelectedMeasure.optimization_run == run_id)
+                & (OptimizationStep.step_number == _optimization_step.step_number)
+            )
+            )
+
+            # TODO include revetment
+            _measure = _get_measure(_optimum_section_optimization_steps, ["Piping", "StabilityInner",  "Overflow"])
+            _measure["LCC"] = _get_section_lcc(_optimization_step)
+            _step_measures.append(_measure)
+            _previous_step_number = _step_number
+
+        return _step_measures
+
+
+    def import_measures(self):
         _measure_results = (MeasureResult
         .select()
         .join(MeasurePerSection)
@@ -75,13 +133,13 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
 
                 # raise NotImplementedError("Mechanism not implemented")
 
-                # Get measure name/ measure type
-                measure = (Measure
-                           .select()
-                           .join(MeasurePerSection)
-                           .join(MeasureResult)
-                           .where(Measure.id == measure_result.measure_per_section.measure_id)
-                           .get())
+            # Get measure name/ measure type
+            measure = (Measure
+                       .select()
+                       .join(MeasurePerSection)
+                       .join(MeasureResult)
+                       .where(Measure.id == measure_result.measure_per_section.measure_id)
+                       .get())
 
             params_dberm = MeasureResultParameter.select().where(
                 (MeasureResultParameter.measure_result_id == measure_result.id) &
@@ -102,6 +160,5 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
 
             # transform list into a dataframe:
             df = pd.DataFrame(list_results)
-            print(df)
 
         return df
