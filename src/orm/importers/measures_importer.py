@@ -4,6 +4,7 @@ from typing import Optional
 import numpy as np
 import pandas as pd
 from geopandas import GeoDataFrame
+from pandas import DataFrame
 from peewee import JOIN, DoesNotExist
 from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.orm.io.importers.optimization.optimization_step_importer import OptimizationStepImporter
@@ -31,16 +32,17 @@ from src.utils.utils import get_signal_value
 
 class TrajectMeasureResultsImporter(OrmImporterProtocol):
 
-    def __init__(self, vr_config: VrtoolConfig, section_name: str, mechanism: Mechanism) -> None:
+    def __init__(self, vr_config: VrtoolConfig, section_name: str, mechanism: Mechanism, run_id_vr: int,
+                 run_id_dsn: int) -> None:
         self.vr_config = vr_config
         self.section_name = section_name
         self.mechanism = mechanism
-        self.run_id_vr = 1
-        self.run_id_dsn = 2
+        self.run_id_vr = run_id_vr
+        self.run_id_dsn = run_id_dsn
 
     def import_orm(self, orm_model) -> tuple:
         """
-        Import the dike traject from the ORM database
+        Import the single measures and the step measures.
 
         :param orm_model: ORM model
         :return: DikeTraject object
@@ -51,7 +53,13 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
         _steps_dsn = self.import_steps(self.run_id_dsn)
 
         return _measures, _steps_vr, _steps_dsn
+
     def import_steps(self, run_id: int) -> list[dict]:
+        """
+        Import all the measure steps for the filtered Optimization run and for the filtered dike section.
+        :param run_id: run_id of the OptimizationRun
+        :return:
+        """
 
         try:
             _optimization_steps = get_optimization_steps_ordered(run_id)
@@ -92,15 +100,20 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
             )
 
             # TODO include revetment
-            _measure = _get_measure(_optimum_section_optimization_steps, ["Piping", "StabilityInner",  "Overflow"])
+            _measure = _get_measure(_optimum_section_optimization_steps, ["Piping", "StabilityInner", "Overflow"])
             _measure["LCC"] = _get_section_lcc(_optimization_step)
             _step_measures.append(_measure)
             _previous_step_number = _step_number
 
         return _step_measures
 
+    def import_measures(self) -> DataFrame:
+        """
+        Import all the (single) measures for the considered dike section.
+        :return:
 
-    def import_measures(self):
+        Return a DataFrame with columns: beta, LCC, name, dberm, dcrest.
+        """
         _measure_results = (MeasureResult
         .select()
         .join(MeasurePerSection)

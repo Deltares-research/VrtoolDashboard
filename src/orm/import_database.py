@@ -16,6 +16,15 @@ from src.orm.importers.optimization_run_importer import import_optimization_runs
 
 def get_all_measure_results(vr_config: VrtoolConfig, section_name: str, mechanism: Mechanism) -> tuple[
     DataFrame, dict, dict]:
+    """
+    Import and return all the single measures and the steps measures of the GreedyOptimization for a given selected
+    dike section.
+
+    :param vr_config: vr config from the VRCore
+    :param section_name: name of the section for which the measures are filtered on
+    :param mechanism: mechanism for which the measure betas will be imported.
+    :return:
+    """
     _path_dir = Path(vr_config.input_directory)
     _path_database = _path_dir.joinpath(vr_config.input_database_name)
 
@@ -23,7 +32,8 @@ def get_all_measure_results(vr_config: VrtoolConfig, section_name: str, mechanis
     _meas_results, _vr_steps, _dsn_steps = TrajectMeasureResultsImporter(vr_config=vr_config,
                                                                          section_name=section_name,
                                                                          mechanism=mechanism,
-
+                                                                         run_id_vr=1,
+                                                                         run_id_dsn=2,
                                                                          ).import_orm(orm_model)
 
     return _meas_results, _vr_steps, _dsn_steps

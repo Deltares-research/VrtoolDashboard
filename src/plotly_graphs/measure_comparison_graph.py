@@ -25,7 +25,10 @@ def plot_measure_results_graph(measure_results: DataFrame, vr_steps: list[dict],
     fig = go.Figure()
 
     # Add traces for the measures (uncombined)
-    custom = np.stack((measure_results['measure'], measure_results['dberm'], measure_results['dcrest']), axis=-1)
+    custom = np.stack(
+        (measure_results['measure'], measure_results.get('dberm', None),
+         measure_results.get('dcrest', None)),
+        axis=-1)
 
     fig.add_trace(go.Scatter(
         name='Maatregelen',
@@ -124,4 +127,3 @@ def add_trace_run_results(fig: go.Figure, step_measures: list[dict], calc_type: 
             x=taken_measure['LCC'] / 1e6,
             y=taken_measure[meca_key][0],
         )
-        print(step_number, len(step_measures))
