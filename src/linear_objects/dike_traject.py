@@ -23,6 +23,8 @@ class DikeTraject(BaseLinearObject):
     reinforcement_order_vr: list[str]
     reinforcement_order_dsn: list[str]
     greedy_steps: list[dict]
+    _run_id_vr: int
+    _run_id_dsn: int
     run_name: str = None
 
     def serialize(self) -> dict:
@@ -35,7 +37,9 @@ class DikeTraject(BaseLinearObject):
             'signalering_value': self.signalering_value,
             'lower_bound_value': self.lower_bound_value,
             'greedy_steps': self.greedy_steps,
-            'run_name': self.run_name
+            'run_name': self.run_name,
+            '_run_id_vr': self._run_id_vr,
+            '_run_id_dsn': self._run_id_dsn
         }
 
     @staticmethod
@@ -52,7 +56,9 @@ class DikeTraject(BaseLinearObject):
                            signalering_value=data["signalering_value"],
                            lower_bound_value=data["lower_bound_value"],
                            greedy_steps=data["greedy_steps"],
-                           run_name=data["run_name"]
+                           run_name=data["run_name"],
+                           _run_id_vr=data["_run_id_vr"],
+                           _run_id_dsn=data["_run_id_dsn"]
                            )
 
     def get_section(self, section_name: str) -> DikeSection:

@@ -14,7 +14,7 @@ from src.orm.importers.measures_importer import TrajectMeasureResultsImporter
 from src.orm.importers.optimization_run_importer import import_optimization_runs_name
 
 
-def get_all_measure_results(vr_config: VrtoolConfig, section_name: str, mechanism: Mechanism) -> tuple[
+def get_all_measure_results(vr_config: VrtoolConfig, section_name: str, mechanism: Mechanism, run_id_vr: int, run_id_dsn: int) -> tuple[
     DataFrame, dict, dict]:
     """
     Import and return all the single measures and the steps measures of the GreedyOptimization for a given selected
@@ -32,8 +32,8 @@ def get_all_measure_results(vr_config: VrtoolConfig, section_name: str, mechanis
     _meas_results, _vr_steps, _dsn_steps = TrajectMeasureResultsImporter(vr_config=vr_config,
                                                                          section_name=section_name,
                                                                          mechanism=mechanism,
-                                                                         run_id_vr=1,
-                                                                         run_id_dsn=2,
+                                                                         run_id_vr=run_id_vr,
+                                                                         run_id_dsn=run_id_dsn,
                                                                          ).import_orm(orm_model)
 
     return _meas_results, _vr_steps, _dsn_steps

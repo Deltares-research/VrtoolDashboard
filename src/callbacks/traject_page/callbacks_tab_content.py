@@ -211,20 +211,27 @@ def fill_dike_section_selection(dike_traject_data: dict) -> list[dict]:
                Input(STORE_CONFIG, "data"),
                Input(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "value"),
                Input(SELECT_DIKE_SECTION_FOR_MEASURES_ID, "value"),
+               Input("select_mechanism_type", 'value'),
 
                ]
               )
 def make_graph_measure_results_comparison(dike_traject_data: dict, vr_config: dict, selected_year: float,
-                                          selected_dike_section: str) -> Figure:
+                                          selected_dike_section: str, selected_mechanism: str) -> Figure:
     """
 
     :param dike_traject_data: The data of the dike traject to be displayed.
     :param vr_config: Stored configuration of the VRTool
     :param selected_year: Selected year by the user from the slider
     :param selected_dike_section: Selected dike section by the user from the Dropdown
+    :param selected_mechanism: Selected mechanism to filter and display the betas.
 
     :return:
     """
+
+    # TODO: select year
+    # TODO: write tests
+    # TODO: pass run_id of vr and dsn.
+    # TODO: mechanisn selection might need adaptation with the Enum.
     if dike_traject_data is None:
         return plot_default_scatter_dummy()
 
@@ -244,7 +251,10 @@ def make_graph_measure_results_comparison(dike_traject_data: dict, vr_config: di
 
         # # section_name = "WsNoo_Stab_004150_005000"
         # section_name = "1A"
-        # mechanism = Mechanism.SECTION
-        res = get_all_measure_results(_vr_config, _section.name)
-        _fig = plot_measure_results_graph(res, _section)
+        _meas_results, _vr_steps, _dsn_steps = get_all_measure_results(_vr_config, _section.name, mechanism,
+                                                                       run_id_vr=1,
+                                                                       run_id_dsn=2)
+
+        _fig = plot_measure_results_graph(_meas_results, _vr_steps, _dsn_steps, mechanism)
+
     return _fig
