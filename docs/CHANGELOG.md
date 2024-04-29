@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased] [dd/mm/yyyy]
 
 ### Added
+None.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
+## v0.4.0 [29/04/2024]
+
+### Added
 - Acceptance test for DikeTraject importer
 - Acceptance test for DikeTraject faalkans matrix
 - New attribute greedy steps to DikeTraject
