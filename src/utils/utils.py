@@ -23,6 +23,30 @@ def pf_to_beta(pf):
     return -norm.ppf(pf)
 
 
+class CombinFunctions:
+    """Copy-pasted from Core v0.1.3 because it has been deprecated in Core v0.2.0"""
+    @staticmethod
+    def combine_probabilities(
+            prob_of_failure: dict[str, np.array], selection
+    ) -> np.array:
+
+        cnt = 0
+        for mechanism in selection:
+            if mechanism in prob_of_failure:
+                cnt += 1
+                p = prob_of_failure[mechanism]
+                if cnt == 1:
+                    product = 1 - p
+                else:
+                    product = np.multiply(product, 1 - p)
+
+        if cnt == 1:
+            # p is in this case almost equal to 1 - product, but p is more accurate
+            return p
+        else:
+            return 1 - product
+
+
 class MyEncoder(json.JSONEncoder):
     """Special encoder for numpy arrays to be able to write them to a json file."""
 
@@ -69,7 +93,6 @@ def get_WBI_category(P_f_dsn: float, traject_length: float, Pf_eis_sign: float, 
     :param Pf_eis_ond: Maximum probability of failure for a lower bound: ondergrens
     :return:
     """
-
 
     # Lengte-effect
     w = 0.24

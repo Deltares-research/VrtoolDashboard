@@ -7,10 +7,10 @@ from vrtool.orm.models import Mechanism, MechanismPerSection, ComputationScenari
     OptimizationStep, OptimizationRun, OptimizationStepResultMechanism, OptimizationStepResultSection, \
     OptimizationSelectedMeasure, OptimizationType, MeasureResult, MeasureResultParameter, MeasureResultSection, \
     StandardMeasure, MeasureType
-from vrtool.probabilistic_tools.combin_functions import CombinFunctions
 from vrtool.probabilistic_tools.probabilistic_functions import beta_to_pf, pf_to_beta
 
 from src.orm import models as orm
+from src.utils.utils import CombinFunctions
 
 
 def _get_section_lcc(optimization_step: OptimizationStep) -> float:
