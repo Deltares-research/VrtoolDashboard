@@ -1,0 +1,46 @@
+,ID,Section,LCC,name,year,yes/no,dcrest,dberm,transition_level,beta_target
+85,6,vak 01,2777580.77812656,Grondversterking met stabiliteitsscherm 2025,0,-999,0.0,0.0,-999,-999
+56,9,vak 02,1044964.1838000001,Verticaal Zanddicht Geotextiel,0,yes,-999.0,-999.0,-999,-999
+97,9+2,vak 03,2973775.124672,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025,"[0, 0]",yes,0.0,10.0,-999,-999
+48,9,vak 05,406032.80930000026,Verticaal Zanddicht Geotextiel,0,yes,-999.0,-999.0,-999,-999
+94,9+2,vak 06,418007.70487493527,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025,"[0, 0]",yes,0.0,5.0,-999,-999
+7,9,vak 07,693917.8830000003,Verticaal Zanddicht Geotextiel,0,yes,-999.0,-999.0,-999,-999
+98,9+2,vak 08,1558843.7245741256,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025,"[0, 0]",yes,0.0,5.0,-999,-999
+78,9+2,vak 09,493171.6817447039,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025,"[0, 0]",yes,0.0,8.0,-999,-999
+92,2,vak 10,358020.55128830706,Grondversterking binnenwaarts 2025,0,-999,0.0,12.0,-999,-999
+122,2,vak 12,85592.51142113398,Grondversterking binnenwaarts 2025,0,-999,0.5,0.0,-999,-999
+118,2,vak 13,1186244.157353561,Grondversterking binnenwaarts 2025,0,-999,0.0,20.0,-999,-999
+76,9,vak 14,326124.83629999915,Verticaal Zanddicht Geotextiel,0,yes,-999.0,-999.0,-999,-999
+0,0,vak 16,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+99,2,vak 17,373269.0000464969,Grondversterking binnenwaarts 2025,20,-999,0.5,0.0,-999,-999
+100,2,vak 19,307097.5892384471,Grondversterking binnenwaarts 2025,20,-999,0.5,0.0,-999,-999
+0,0,vak 20,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+82,2,vak 21,129877.71817857581,Grondversterking binnenwaarts 2025,0,-999,0.0,20.0,-999,-999
+117,2,vak 22,116016.65025313872,Grondversterking binnenwaarts 2025,0,-999,0.0,5.0,-999,-999
+119,2,vak 23,853138.3065096762,Grondversterking binnenwaarts 2025,0,-999,0.0,12.0,-999,-999
+95,2,vak 24,810120.1051246263,Grondversterking binnenwaarts 2025,0,-999,0.0,12.0,-999,-999
+116,2,vak 25,4193455.633649821,Grondversterking binnenwaarts 2025,0,-999,0.0,20.0,-999,-999
+88,2,vak 26,1794165.0181500486,Grondversterking binnenwaarts 2025,0,-999,0.5,20.0,-999,-999
+111,2,vak 27,487317.32454562315,Grondversterking binnenwaarts 2025,0,-999,0.0,15.0,-999,-999
+101,2,vak 28,955535.7648529984,Grondversterking binnenwaarts 2025,0,-999,1.0,10.0,-999,-999
+114,2,vak 29,1007992.4234228351,Grondversterking binnenwaarts 2025,0,-999,1.0,12.0,-999,-999
+89,2,vak 30,2534118.9576362846,Grondversterking binnenwaarts 2025,0,-999,0.5,12.0,-999,-999
+103,2,vak 31,236742.4968387667,Grondversterking binnenwaarts 2025,20,-999,0.5,0.0,-999,-999
+0,0,vak 32,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+0,0,vak 33,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+115,9,vak 34,1230050.7946999993,Verticaal Zanddicht Geotextiel,0,yes,-999.0,-999.0,-999,-999
+104,9+2,vak 35,229171.39885880367,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025,"[0, 0]",yes,0.5,5.0,-999,-999
+105,9+2,vak 37,286308.4240592737,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025,"[0, 0]",yes,0.5,5.0,-999,-999
+81,9,vak 38,713326.3580000008,Verticaal Zanddicht Geotextiel,0,yes,-999.0,-999.0,-999,-999
+123,2,vak 39,649759.7075863217,Grondversterking binnenwaarts 2025,0,-999,0.5,0.0,-999,-999
+107,9+2,vak 40,2424481.965260652,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts 2025,"[0, 0]",yes,1.0,0.0,-999,-999
+96,9,vak 41,489759.01800000283,Verticaal Zanddicht Geotextiel,0,yes,-999.0,-999.0,-999,-999
+110,2,vak 42,1594278.0108211003,Grondversterking binnenwaarts 2025,0,-999,1.0,0.0,-999,-999
+0,0,vak 43,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+120,2,vak 44,568343.7281309844,Grondversterking binnenwaarts 2025,0,-999,0.5,0.0,-999,-999
+121,2,vak 45,665068.9292093266,Grondversterking binnenwaarts 2025,0,-999,0.5,0.0,-999,-999
+46,2,vak 46,693421.3791359179,Grondversterking binnenwaarts 2025,0,-999,1.0,0.0,-999,-999
+109,2,vak 47,2526070.197894656,Grondversterking binnenwaarts 2025,0,-999,1.5,0.0,-999,-999
+0,0,vak 48,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+0,0,vak 49,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+0,0,vak 50,0,No measure,0,no,0.0,0.0,-999.0,-999.0

@@ -1,0 +1,11 @@
+,ID,Section,LCC,name,year,yes/no,dcrest,dberm,transition_level,beta_target
+43,5+2,1A,1326446.405965868,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[20, 20]",yes,1.0,10.0,-999,-999
+41,5+2,1B,767099.9053934121,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[20, 20]",yes,0.5,12.0,-999,-999
+29,5+2,4,2561760.06450303,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[20, 20]",yes,1.0,0.0,-999,-999
+38,5+2,12,3187081.0283857984,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[20, 20]",yes,1.0,10.0,-999,-999
+35,5+2,15,2615539.101169656,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[20, 20]",yes,1.0,10.0,-999,-999
+34,5+2,33A,1212133.0263989635,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[20, 20]",yes,1.0,12.0,-999,-999
+42,2,34,1685532.4157736213,Grondversterking binnenwaarts,20,-999,1.0,15.0,-999,-999
+40,5+2,37B,855488.2389838053,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[20, 20]",yes,1.5,0.0,-999,-999
+32,2,40,967665.5898719111,Grondversterking binnenwaarts,20,-999,1.0,8.0,-999,-999
+33,2,50,777376.7554785836,Grondversterking binnenwaarts,20,-999,1.0,0.0,-999,-999

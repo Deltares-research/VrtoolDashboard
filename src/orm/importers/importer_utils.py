@@ -1,5 +1,5 @@
 from vrtool.orm.models import OptimizationStep, OptimizationSelectedMeasure, Measure, MeasurePerSection, MeasureResult, \
-    MeasureResultParameter
+    MeasureResultParameter, MeasureResultSection
 
 from src.orm.importers.optimization_step_importer import _get_final_measure_betas
 from src.utils.utils import beta_to_pf
@@ -67,6 +67,15 @@ def _get_combined_measure_investment_year(optimization_step: OptimizationStep) -
         _year_3 = _get_investment_year(optimization_step[2])
         return [_year_1, _year_2, _year_3]
 
+def _get_measure_cost(optimization_steps: OptimizationStep) -> float:
+
+    cost = 0
+    for optimum_step in optimization_steps:
+        optimum_selected_measure = OptimizationSelectedMeasure.get(
+            OptimizationSelectedMeasure.id == optimum_step.optimization_selected_measure_id)
+        measure_result = MeasureResult.get(MeasureResult.id == optimum_selected_measure.measure_result_id)
+        cost += MeasureResultSection.get(MeasureResultSection.measure_result == measure_result).cost
+    return cost
 
 def _get_measure_parameters(optimization_steps: OptimizationStep) -> dict:
     _params = {}
@@ -142,6 +151,9 @@ def _get_measure(optimization_steps, active_mechanisms: list) -> dict:
     :return: dictionary with the followings keys: "name", "LCC", "Piping", "StabilityInner", "Overflow", "Revetment"
     , "Section"
     """
+    print("======")
+    for step in optimization_steps:
+        print(step, step.step_number)
 
     # Get the betas for the measure:
     _final_measure = _get_final_measure_betas(optimization_steps, active_mechanisms)
@@ -160,4 +172,5 @@ def _get_measure(optimization_steps, active_mechanisms: list) -> dict:
     else:
         raise ValueError(f"Unexpected number of optimum steps: {optimization_steps.count()}")
     _final_measure.update(_get_measure_parameters(optimization_steps))
+    print(_final_measure['name'])
     return _final_measure

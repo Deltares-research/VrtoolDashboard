@@ -1,0 +1,111 @@
+,Section,option_index,LCC,BC,ID,name,year,yes/no,dcrest,dberm,beta_target,transition_level
+0,,,0.0,0.0,,,,,,,,
+1,WsNoo_Stab_015400_016200,2723,3942272.000000001,2138.635755347149,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,0.0,20.0,3.924192142846635,6.43
+2,WsNoo_Stab_011600_012000,294,344296.1425284921,152.69340016744857,8,[],0,-999,-999.0,-999.0,3.5107421874992593,5.88
+3,WsNoo_Stab_014700_015400,441,787693.1343511317,28.0766376522974,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,0.25,0.0,4.82903779680805,6.42
+4,WsNoo_Stab_022600_024350,439,2106440.1881339643,28.0766376522974,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,0.25,0.0,4.592528926831833,6.69
+5,WsNoo_Stab_016200_017400,327,1008048.0,15.175865446905247,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.0,5.0,3.8852093989118854,6.22
+6,WsNoo_Stab_009300_010000,4915,1190000.0,9.292497512839647,5+8,['Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0]",yes,-999.0,-999.0,5.116772473652019,6.51
+7,WsNoo_Stab_018000_019000,315,831226.0000000013,6.724592851627154,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.0,5.0,5.2209483290847265,6.75
+8,WsNoo_Stab_005000_008800,2603,6460000.000000001,5.913454494327569,5+8,['Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0]",yes,-999.0,-999.0,5.231137000894817,7.18
+9,WsNoo_Stab_004150_005000,307,117915.4846677985,5.886582973217647,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,0.0,0.0,3.853880440467504,7.27
+10,WsNoo_Stab_014700_015400,563,284335.0705387201,5.27135109122023,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,0.5,0.0,3.7181384406537568,6.42
+11,WsNoo_Stab_017400_018000,510,707711.8055361615,5.27135109122023,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,0.25,0.0,4.088893057172378,6.33
+12,WsNoo_Stab_022600_024350,563,849628.2892685002,5.27135109122023,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,0.5,0.0,3.985720271470849,6.69
+13,WsNoo_Stab_021900_022600,327,989833.9862159104,5.158740405819062,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.0,5.0,4.412805484676812,6.8
+14,WsNoo_Stab_014700_015400,697,293519.08178262785,4.5133775016849915,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,0.75,0.0,4.82903779680805,6.42
+15,WsNoo_Stab_015400_016200,2857,1914845.6372450227,4.5133775016849915,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,0.25,20.0,4.880551222356271,6.43
+16,WsNoo_Stab_016200_017400,522,2252710.067652206,4.5133775016849915,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.25,5.0,4.213741444732118,6.22
+17,WsNoo_Stab_017400_018000,699,275040.85198584246,4.5133775016849915,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,0.5,0.0,3.718744882165565,6.33
+18,WsNoo_Stab_018000_019000,445,1846294.562975755,4.5133775016849915,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.25,5.0,5.2425590759766365,6.75
+19,WsNoo_Stab_019000_019800,441,968278.2641959548,4.5133775016849915,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,0.25,0.0,5.28310558204368,6.79
+20,WsNoo_Stab_014700_015400,707,227737.911211923,4.479589616266606,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,0.75,5.0,3.7181384406537568,6.42
+21,WsNoo_Stab_014700_015400,835,302703.0930265393,3.476920371661884,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,1.0,5.0,3.7181384406537568,6.42
+22,WsNoo_Stab_015400_016200,2979,577034.6080071144,3.476920371661884,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,0.5,20.0,3.924192142846635,6.43
+23,WsNoo_Stab_016200_017400,714,994377.8386065755,3.476920371661884,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.5,5.0,4.213741444732118,6.22
+24,WsNoo_Stab_017400_018000,891,281691.67705523653,3.476920371661884,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,0.75,0.0,3.718744882165565,6.33
+25,WsNoo_Stab_018000_019000,573,797002.2712047081,3.476920371661884,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.5,5.0,5.2425590759766365,6.75
+26,WsNoo_Stab_019000_019800,569,393471.29229889496,3.476920371661884,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,0.5,0.0,5.28310558204368,6.79
+27,WsNoo_Stab_022600_024350,819,1767350.9904523948,3.476920371661884,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,1.0,0.0,3.985720271470849,6.69
+28,WsNoo_Stab_016200_017400,735,423072.0,1.8652808259456626,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.5,8.0,3.8852093989118854,6.22
+29,WsNoo_Stab_004150_005000,435,856575.2275666585,1.2330524206771587,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,0.25,0.0,3.853880440467504,7.27
+30,WsNoo_Stab_014700_015400,827,1528377.462104973,1.2330524206771587,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,1.0,5.0,3.7181384406537568,6.42
+31,WsNoo_Stab_015400_016200,3111,595223.5787692042,1.2330524206771587,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,0.75,20.0,4.561764862519725,6.43
+32,WsNoo_Stab_016200_017400,933,1020045.6095609395,1.2330524206771587,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.75,8.0,4.542273490552351,6.22
+33,WsNoo_Stab_017400_018000,1467,884979.9815820451,1.2330524206771587,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,1.5,0.0,3.718744882165565,6.33
+34,WsNoo_Stab_018000_019000,699,817709.9794336394,1.2330524206771587,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.75,5.0,5.2209483290847265,6.75
+35,WsNoo_Stab_019000_019800,693,404426.6918947778,1.2330524206771587,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,0.75,0.0,5.241221582118248,6.79
+36,WsNoo_Stab_021200_021900,579,905612.4087644286,1.2330524206771587,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,0.25,0.0,4.415726057518662,6.95
+37,WsNoo_Stab_022600_024350,683,2191087.5789674995,1.2330524206771587,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.75,0.0,3.985720271470849,6.69
+38,WsNoo_Stab_017400_018000,1095,1055237.0346547328,8.682577495904438,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,1.0,5.0,3.718744882165565,6.33
+39,WsNoo_Stab_019000_019800,555,693294.9244018134,6.136561419484054,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.5,0.0,5.220279582155532,6.79
+40,WsNoo_Stab_021200_021900,563,730024.3369610362,1.823697274422723,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.25,0.0,4.415726057518662,6.95
+41,WsNoo_Stab_019800_020400,323,78946.23678928526,1.5256318615854172,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,0.0,0.0,4.505873391681398,6.95
+42,WsNoo_Stab_011600_012000,295,114765.3808428307,1.0762917938492744,8,[],0,-999,-999.0,-999.0,3.5107421874992593,6.88
+43,WsNoo_Stab_014700_015400,828,916289.5997481858,1.0762917938492744,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,1.0,5.0,3.7181384406537568,7.42
+44,WsNoo_Stab_017400_018000,1103,1524275.7725574523,1.0762917938492744,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,1.0,5.0,4.459041232179191,8.33
+45,WsNoo_Stab_014700_015400,960,563302.8029713677,1.0308250021081211,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,1.25,5.0,4.458738011423286,7.42
+46,WsNoo_Stab_022600_024350,811,1616513.9201265303,1.0308250021081211,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,1.0,0.0,3.985720271470849,6.69
+47,WsNoo_Stab_004150_005000,427,785547.9112131954,1.5140005458183263,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.25,0.0,3.853880440467504,7.27
+48,WsNoo_Stab_004150_005000,2755,1434188.0,0.9018832501024839,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,0.25,0.0,3.853880440467504,7.27
+49,WsNoo_Stab_019000_019800,683,730439.5918313442,0.8605188047194999,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.75,0.0,5.220279582155532,6.79
+50,WsNoo_Stab_005000_008800,2763,4183353.6657747505,1.2408922268140958,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 20, 0]",yes,0.25,0.0,5.231137000894817,7.18
+51,WsNoo_Stab_005000_008800,2779,1236291.518007582,1.0455433738298563,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 20, 0]",yes,0.25,5.0,5.231137000894817,7.18
+52,WsNoo_Stab_021200_021900,819,784016.2963942413,1.0091170349041922,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.5,0.0,4.415726057518662,6.95
+53,WsNoo_Stab_018000_019000,715,347271.5999999987,0.7191826559963816,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.75,8.0,5.2209483290847265,6.75
+54,WsNoo_Stab_015400_016200,3123,1440160.000000001,0.701030147393276,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,0.75,30.0,3.924192142846635,6.43
+55,WsNoo_Stab_011600_012000,745,449132.5007106211,0.6957028369995049,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,0.25,0.0,4.777188733519427,6.88
+56,WsNoo_Stab_015400_016200,3251,613412.5495312959,0.6957028369995049,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,1.0,30.0,3.924192142846635,6.43
+57,WsNoo_Stab_016200_017400,1125,1045713.380515297,0.6957028369995049,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,1.0,8.0,4.542273490552351,6.22
+58,WsNoo_Stab_017400_018000,1295,532790.7623976208,0.6957028369995049,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,1.25,5.0,4.459041232179191,8.33
+59,WsNoo_Stab_004150_005000,2883,664395.31490721,0.6234394054633984,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,0.5,0.0,3.853880440467504,7.27
+60,WsNoo_Stab_018000_019000,827,491146.08766259067,2.461441632222471,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,1.0,5.0,5.2209483290847265,6.75
+61,WsNoo_Stab_011600_012000,703,362050.7546780006,1.1658752331033428,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.25,0.0,3.5107421874992593,6.88
+62,WsNoo_Stab_018000_019000,843,347271.5999999987,0.7191826559963602,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,1.0,8.0,5.2209483290847265,6.75
+63,WsNoo_Stab_014700_015400,1088,579890.1488583237,0.6899356297960548,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,1.5,5.0,4.458738011423286,7.42
+64,WsNoo_Stab_022600_024350,943,1657509.2809194122,0.6899356297960548,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,1.25,0.0,4.592528926831833,6.69
+65,WsNoo_Stab_014100_014700,363,560433.6000000008,0.5314221963658197,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.0,5.0,5.019531249538552,3.02
+66,WsNoo_Stab_021900_022600,351,467670.83999999776,0.4817631344815437,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.0,8.0,4.412805484676812,6.8
+67,WsNoo_Stab_012000_014100,8383,3569999.9999999986,0.47304186080321686,5+8,['Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0]",yes,-999.0,-999.0,5.073242186894887,2.88
+68,WsNoo_Stab_017400_018000,4781,1020000.0,0.3910873096438965,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,1.25,5.0,3.718744882165565,8.33
+69,WsNoo_Stab_016200_017400,1143,282048.0,0.35993048698683205,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,1.0,10.0,3.8852093989118854,6.22
+70,WsNoo_Stab_014700_015400,1100,246792.0,0.30204004402083084,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,1.5,8.0,3.7181384406537568,7.42
+71,WsNoo_Stab_010000_011600,507,1873023.716538338,0.2788774562673497,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,0.25,0.0,3.987821944264864,6.71
+72,WsNoo_Stab_019000_019800,811,750226.2621217677,0.4905316359047464,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,1.0,0.0,5.220279582155532,6.79
+73,WsNoo_Stab_005000_008800,2907,1448555.5116317272,0.43827369651913783,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 20, 0]",yes,0.5,5.0,5.231137000894817,7.18
+74,WsNoo_Stab_011600_012000,1087,291260.5860249079,0.8397004150045582,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.5,0.0,3.5107421874992593,6.88
+75,WsNoo_Stab_005000_008800,2899,5536533.74253756,0.20772120470934902,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,0.5,5.0,5.231137000894817,7.18
+76,WsNoo_Stab_019800_020400,355,460599.59765006806,0.19586051005121108,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,0.0,5.0,4.505873391681398,6.95
+77,WsNoo_Stab_019800_020400,339,434933.95876064664,0.1845453040078528,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.0,5.0,4.505873391681398,6.95
+78,WsNoo_Stab_021200_021900,1075,800908.3170630112,0.1665772604498929,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.75,0.0,4.415726057518662,6.95
+79,WsNoo_Stab_010000_011600,495,1509865.4607038153,0.24091139729529557,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.25,0.0,3.987821944264864,6.71
+80,WsNoo_Stab_016200_017400,4635,2039999.999999999,0.13730918024388677,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,1.0,10.0,3.8852093989118854,6.22
+81,WsNoo_Stab_019800_020400,340,695250.2892228933,0.13303029238576958,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.0,5.0,4.505873391681398,7.95
+82,WsNoo_Stab_018000_019000,859,231514.39999999944,0.12740650996439953,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,1.0,10.0,5.2209483290847265,6.75
+83,WsNoo_Stab_018000_019000,3187,1700000.0,0.12028506947114626,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,1.0,10.0,5.2209483290847265,6.75
+84,WsNoo_Stab_017400_018000,4973,544802.8922752691,0.10302836873022968,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,1.5,5.0,3.718744882165565,8.33
+85,WsNoo_Stab_016200_017400,4827,1071381.151469674,0.13627677546099637,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,1.25,10.0,3.8852093989118854,6.22
+86,WsNoo_Stab_012000_014100,8943,2287799.289227109,0.13695115560534815,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 20, 0]",yes,0.25,0.0,5.073242186894887,2.88
+87,WsNoo_Stab_015400_016200,3379,631601.5202933885,1.5048732824747137,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,1.25,30.0,3.924192142846635,6.43
+88,WsNoo_Stab_018000_019000,1115,38958.50001200754,6.512955355614231,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,1.5,10.0,5.2209483290847265,6.75
+89,WsNoo_Stab_004150_005000,3011,684415.2879667715,0.8694738449259904,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,0.75,0.0,3.853880440467504,7.27
+90,WsNoo_Stab_014700_015400,1212,349685.4947452778,0.4213079183889122,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,1.75,5.0,3.7181384406537568,7.42
+91,WsNoo_Stab_014700_015400,1228,246792.0,0.30204004402083084,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,1.75,8.0,3.7181384406537568,7.42
+92,WsNoo_Stab_018000_019000,3299,588652.4958795272,0.2972690284930812,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,1.25,8.0,5.2209483290847265,6.75
+93,WsNoo_Stab_012000_014100,8915,1844220.7097146753,0.21390725711204414,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,0.25,0.0,5.073242186894887,2.88
+94,WsNoo_Stab_022600_024350,1067,1698504.6417122725,0.21154831629791954,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,1.5,0.0,3.985720271470849,6.69
+95,WsNoo_Stab_010000_011600,687,1305828.4945287546,0.34962707267988413,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.5,0.0,3.987821944264864,6.71
+96,WsNoo_Stab_014100_014700,771,389820.696947171,0.508699827139537,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[20, 0]",-999,0.25,5.0,5.019531249538552,3.02
+97,WsNoo_Stab_011600_012000,1471,300313.91666119546,0.3242542311951468,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.75,0.0,3.5107421874992593,6.88
+98,WsNoo_Stab_021200_021900,1331,817800.3377317898,0.24856965942691753,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,1.0,0.0,4.415726057518662,6.95
+99,WsNoo_Stab_014100_014700,747,766010.6645620012,0.18858979228969647,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,0.25,5.0,5.019531249538552,3.02
+100,WsNoo_Stab_012000_014100,9517,23892.886435307562,0.1301595790369861,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 20, 0]",yes,0.5,8.0,5.136289884543852,2.88
+101,WsNoo_Stab_015400_016200,3507,649790.4910554774,0.1301595790369861,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,1.5,30.0,3.924192142846635,6.43
+102,WsNoo_Stab_016200_017400,5028,1097048.9224240314,0.1301595790369861,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,1.5,10.0,4.870805536372584,6.22
+103,WsNoo_Stab_017400_018000,5174,556815.0221529128,0.1301595790369861,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,1.75,5.0,4.829189407186003,8.33
+104,WsNoo_Stab_019000_019800,945,770012.9324121773,0.1301595790369861,1+8,['Grondversterking binnenwaarts+Aanpassing bekleding'],"[0, 0]",-999,1.25,0.0,5.28310558204368,6.79
+105,WsNoo_Stab_012000_014100,9363,1375792.0672098566,0.7388476981574231,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,0.5,0.0,5.073242186894887,2.88
+106,WsNoo_Stab_009300_010000,5235,823343.9055846976,0.19614885906842017,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 20, 0]",yes,0.25,0.0,5.116772473652019,6.51
+107,WsNoo_Stab_018000_019000,3427,879833.1041204724,0.1631464702628614,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,1.5,8.0,5.2209483290847265,6.75
+108,WsNoo_Stab_005000_008800,3027,2702174.712849457,0.16643581420057646,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,0.75,5.0,5.231137000894817,7.18
+109,WsNoo_Stab_018000_019000,3443,231514.40000000037,0.12740659989535882,5+1+8,['Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding'],"[0, 0, 0]",yes,1.5,10.0,5.2209483290847265,6.75

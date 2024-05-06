@@ -1,0 +1,72 @@
+,ID,Section,LCC,name,year,yes/no,dcrest,dberm,transition_level,beta_target
+126,1,47-1_dp000+000-dp001+000,824363.8814053736,Grondversterking binnenwaarts,20,-999,0.25,0.0,-999,-999
+127,1,47-1_dp007+044-dp007+094,427209.47817956225,Grondversterking binnenwaarts,20,-999,0.25,0.0,-999,-999
+128,1,47-1_dp008+007-dp010+018,304357.7004459822,Grondversterking binnenwaarts,20,-999,0.25,0.0,-999,-999
+138,1,47-1_dp020+026-dp020+060,93401.01101086853,Grondversterking binnenwaarts,0,-999,0.5,0.0,-999,-999
+130,1,47-1_dp020+060-dp022+047,496906.72682297905,Grondversterking binnenwaarts,20,-999,0.25,0.0,-999,-999
+150,5+1,47-1_dp053+019-dp053+294,862800.7726181551,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.0,12.0,-999,-999
+149,5+1,47-1_dp053+294-dp054+254,1601258.0693935107,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.25,12.0,-999,-999
+115,5+1,47-1_dp054+254-dp055+099,425842.2416274509,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.0,8.0,-999,-999
+119,5+1,47-1_dp055+099-dp055+253,944380.6358090009,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.0,8.0,-999,-999
+0,0,47-1_dp055+253-dp056+008,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+0,0,47-1_dp056+008-dp056+091,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+0,0,47-1_dp056+116-dp056+208,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+157,1,47-1_dp056+234-dp057+010,424581.23068502557,Grondversterking binnenwaarts,0,-999,0.75,0.0,-999,-999
+0,0,47-1_dp057+035-dp058+014,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+0,0,47-1_dp058+014-dp059+011,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+0,0,47-1_dp059+011-dp060+017,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+158,5+1,47-1_dp061+082-dp063+043,449474.827611967,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 20]",yes,0.25,0.0,-999,-999
+142,5,47-1_dp063+043-dp065+000,262619.70770000055,Verticaal Zanddicht Geotextiel,0,yes,-999.0,-999.0,-999,-999
+161,1,47-1_dp065+000-dp065+040,34071.12271715984,Grondversterking binnenwaarts,0,-999,0.0,5.0,-999,-999
+131,1,47-1_dp065+040-dp067+002,147703.75634725645,Grondversterking binnenwaarts,20,-999,0.25,0.0,-999,-999
+164,1,47-1_dp067+002-dp067+065,81746.18761381674,Grondversterking binnenwaarts,20,-999,0.25,5.0,-999,-999
+155,1,47-1_dp067+065-dp068+087,118918.11238277167,Grondversterking binnenwaarts,20,-999,0.25,0.0,-999,-999
+0,0,47-1_dp068+087-dp070+002,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+0,0,47-1_dp070+002-dp071+050,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+0,0,47-1_dp071+050-dp072+098,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+0,0,47-1_dp072+098-dp074+039,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+154,5+1,47-1_dp074+039-dp075+080,399350.4417421991,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 20]",yes,0.25,5.0,-999,-999
+160,5,47-1_dp075+080-dp077+031,264817.0562999976,Verticaal Zanddicht Geotextiel,0,yes,-999.0,-999.0,-999,-999
+167,1,47-1_dp077+031-dp078+072,116362.38868227976,Grondversterking binnenwaarts,0,-999,0.0,5.0,-999,-999
+165,5+1,47-1_dp078+072-dp079+010,98163.12245160145,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.0,5.0,-999,-999
+84,5+1,47-1_dp079+010-dp079+077,290001.33444587805,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.0,20.0,-999,-999
+109,5+1,47-1_dp079+077-dp080+034,742586.8172805257,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.0,20.0,-999,-999
+107,5+1,47-1_dp080+034-dp081+067,1068876.4583680339,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.0,20.0,-999,-999
+162,5+1,47-1_dp081+067-dp083+038,1496441.1438399227,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.25,20.0,-999,-999
+125,5+1,47-1_dp084+011-dp085+044,357159.45013015706,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.0,8.0,-999,-999
+103,3,47-1_dp085+044-dp086+010,430096.96654960257,Grondversterking met stabiliteitsscherm,0,-999,0.0,0.0,-999,-999
+82,1,47-1_dp086+010-dp088+005,163178.77216772005,Grondversterking binnenwaarts,0,-999,0.0,5.0,-999,-999
+89,5+1,47-1_dp088+005-dp090+009,515837.7495011992,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.0,5.0,-999,-999
+151,5+1,47-1_dp090+009-dp091+055,421451.8257851987,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.0,8.0,-999,-999
+145,5+1,47-1_dp091+055-dp093+020,662315.634831397,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.25,5.0,-999,-999
+120,5+1,47-1_dp093+020-dp094+077,398837.2840032006,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.0,5.0,-999,-999
+104,5,47-1_dp094+077-dp095+076,168318.767999999,Verticaal Zanddicht Geotextiel,0,yes,-999.0,-999.0,-999,-999
+148,5+1,47-1_dp095+076-dp098+023,629765.0839049674,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 20]",yes,0.25,0.0,-999,-999
+153,5+1,47-1_dp098+023-dp098+110,248354.77769064775,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 20]",yes,0.25,0.0,-999,-999
+146,1,47-1_dp098+110-dp099+041,53494.76841073114,Grondversterking binnenwaarts,20,-999,0.25,0.0,-999,-999
+159,1,47-1_dp099+041-dp100+017,224246.0244353033,Grondversterking binnenwaarts,0,-999,0.5,8.0,-999,-999
+100,5,47-1_dp100+017-dp102+051,387133.7410000002,Verticaal Zanddicht Geotextiel,0,yes,-999.0,-999.0,-999,-999
+97,5,47-1_dp102+051-dp104+056,348709.4739999991,Verticaal Zanddicht Geotextiel,0,yes,-999.0,-999.0,-999,-999
+101,5,47-1_dp104+056-dp106+093,401858.9370000027,Verticaal Zanddicht Geotextiel,0,yes,-999.0,-999.0,-999,-999
+94,5,47-1_dp106+093-dp108+078,314269.0719999986,Verticaal Zanddicht Geotextiel,0,yes,-999.0,-999.0,-999,-999
+152,1,47-1_dp108+078-dp110+010,197833.95497420517,Grondversterking binnenwaarts,20,-999,0.25,5.0,-999,-999
+137,6,47-1_dp110+010-dp111+041,4502361.776899984,Zelfkerende constructie,0,yes,-999.0,-999.0,-999,-999
+0,0,47-1_dp111+041-dp113+082,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+111,5+1,47-1_dp113+082-dp115+040,443951.01239399944,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.0,8.0,-999,-999
+112,5+1,47-1_dp115+040-dp117+000,455960.13303600263,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.0,8.0,-999,-999
+163,5+1,47-1_dp117+000-dp117+089,281462.39122159965,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.0,10.0,-999,-999
+141,5+1,47-1_dp117+089-dp120+071,807126.8061600007,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.0,8.0,-999,-999
+140,5+1,47-1_dp120+071-dp123+048,806061.6351359962,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.0,8.0,-999,-999
+123,5+1,47-1_dp123+048-dp126+000,735987.7926899998,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.0,8.0,-999,-999
+117,5+1,47-1_dp126+000-dp128+057,700775.6599001281,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.0,8.0,-999,-999
+124,5+1,47-1_dp128+057-dp131+014,772006.5635940006,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.0,8.0,-999,-999
+166,6,47-1_dp131+014-dp132+052,4602202.047300035,Zelfkerende constructie,0,yes,-999.0,-999.0,-999,-999
+110,5+1,47-1_dp132+052-dp133+097,420172.88583599916,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.0,8.0,-999,-999
+105,5+1,47-1_dp133+097-dp135+038,624153.1032672012,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.0,20.0,-999,-999
+118,5+1,47-1_dp135+038-dp137+007,774057.809749195,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.0,20.0,-999,-999
+147,5+1,47-1_dp137+007-dp138+027,785892.847567663,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.25,20.0,-999,-999
+156,5+1,47-1_dp138+027-dp139+003,472525.94449287374,Verticaal Zanddicht Geotextiel+Grondversterking binnenwaarts,"[0, 0]",yes,0.25,20.0,-999,-999
+5,5,47-1_dp139+003-dp141+000,330352.5340000004,Verticaal Zanddicht Geotextiel,0,yes,-999.0,-999.0,-999,-999
+0,0,47-1_dp141+000-dp141+059,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+0,0,47-1_dp141+059-dp142+073,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+0,0,47-1_dp142+073-dp144+087,0,No measure,0,no,0.0,0.0,-999.0,-999.0

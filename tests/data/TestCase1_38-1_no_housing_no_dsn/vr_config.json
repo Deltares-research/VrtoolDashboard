@@ -1,0 +1,7 @@
+{
+    "traject": "38-1",
+    "input_directory": "C:/Users/hauth/bitbucket/VRtoolDashboard/tests/data/TestCase1_38-1_no_housing_no_dsn",
+    "output_directory": "C:/Users/hauth/bitbucket/VRtoolDashboard/tests/data/TestCase1_38-1_no_housing_no_dsn",
+    "excluded_mechanisms": [],
+    "input_database_name": "vrtool_input_assessment_only.db"
+}

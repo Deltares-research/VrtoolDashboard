@@ -1,0 +1,19 @@
+,ID,Section,LCC,name,year,yes/no,dcrest,dberm,transition_level,beta_target
+48,5+1+8,WsNoo_Stab_004150_005000,3194226.6234476524,Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding,"[0, 0, 0]",yes,0.25,0.0,7.27,3.853880440467504
+51,5+1+8,WsNoo_Stab_005000_008800,11879645.183782334,Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding,"[0, 20, 0]",yes,0.25,5.0,7.18,5.231137000894817
+0,0,WsNoo_Stab_008800_009300,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+6,5+8,WsNoo_Stab_009300_010000,1190000.0,Verticaal Zanddicht Geotextiel+Aanpassing bekleding,"[0, 0]",yes,-999.0,-999.0,6.51,5.116772473652019
+0,0,WsNoo_Stab_010000_011600,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+42,8,WsNoo_Stab_011600_012000,459061.5233713228,[],0,-999,-999.0,-999.0,6.88,3.5107421874992593
+0,0,WsNoo_Stab_012000_014100,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+0,0,WsNoo_Stab_014100_014700,0,No measure,0,no,0.0,0.0,-999.0,-999.0
+45,1+8,WsNoo_Stab_014700_015400,4903958.1557354685,Grondversterking binnenwaarts+Aanpassing bekleding,"[0, 0]",-999,1.25,5.0,7.42,4.458738011423286
+31,5+1+8,WsNoo_Stab_015400_016200,7029375.824021342,Grondversterking binnenwaarts+Verticaal Zanddicht Geotextiel+Aanpassing bekleding,"[0, 0, 0]",yes,0.75,20.0,6.43,4.561764862519725
+32,1+8,WsNoo_Stab_016200_017400,5698253.515819721,Grondversterking binnenwaarts+Aanpassing bekleding,"[0, 0]",-999,0.75,8.0,6.22,4.542273490552351
+44,1+8,WsNoo_Stab_017400_018000,4728937.123371471,Grondversterking binnenwaarts+Aanpassing bekleding,"[0, 0]",-999,1.0,5.0,8.33,4.459041232179191
+34,1+8,WsNoo_Stab_018000_019000,4292232.813614104,Grondversterking binnenwaarts+Aanpassing bekleding,"[0, 0]",-999,0.75,5.0,6.75,5.2209483290847265
+49,1+8,WsNoo_Stab_019000_019800,3189910.764622785,Grondversterking binnenwaarts+Aanpassing bekleding,"[0, 0]",-999,0.75,0.0,6.79,5.220279582155532
+41,1+8,WsNoo_Stab_019800_020400,78946.23678928526,Grondversterking binnenwaarts+Aanpassing bekleding,"[20, 0]",-999,0.0,0.0,6.95,4.505873391681398
+52,1+8,WsNoo_Stab_021200_021900,2419653.042119706,Grondversterking binnenwaarts+Aanpassing bekleding,"[0, 0]",-999,0.5,0.0,6.95,4.415726057518662
+13,1+8,WsNoo_Stab_021900_022600,989833.9862159104,Grondversterking binnenwaarts+Aanpassing bekleding,"[0, 0]",-999,0.0,5.0,6.8,4.412805484676812
+46,1+8,WsNoo_Stab_022600_024350,8531020.96694889,Grondversterking binnenwaarts+Aanpassing bekleding,"[0, 0]",-999,1.0,0.0,6.69,3.985720271470849
