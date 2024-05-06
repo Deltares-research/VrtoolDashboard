@@ -4,6 +4,7 @@ import time
 from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.orm.orm_controllers import open_database
 
+from src.callbacks.traject_page.callbacks_tab_content import make_graph_measure_results_comparison
 from src.constants import CalcType, ColorBarResultType, Mechanism, SubResultType, ResultType, get_mapbox_token
 from src.linear_objects.dike_traject import DikeTraject
 from src.orm.import_database import get_all_measure_results, get_dike_traject_from_config_ORM, \
@@ -38,5 +39,7 @@ _meas_results, _vr_steps, _dsn_steps = get_all_measure_results(_vr_config, secti
 #
 # _section = _dike_traject.get_section(section_name)
 
-fig = plot_measure_results_graph(_meas_results, _vr_steps, _dsn_steps, mechanism, section_name)
+# fig = plot_measure_results_graph(_meas_results, _vr_steps, _dsn_steps, mechanism, section_name)
+
+fig =  make_graph_measure_results_comparison()
 fig.show()

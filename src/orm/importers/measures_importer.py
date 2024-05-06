@@ -53,6 +53,7 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
         vr_config: VrtoolConfig,
         section_name: str,
         mechanism: Mechanism,
+        time: int,
         run_id_vr: int,
         run_id_dsn: int,
     ) -> None:
@@ -61,7 +62,7 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
         self.mechanism = mechanism
         self.run_id_vr = run_id_vr
         self.run_id_dsn = run_id_dsn
-        self.time = 0
+        self.time = time
 
     def import_orm(self, orm_model) -> tuple:
         """
@@ -162,7 +163,6 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
         list_results = []
         for measure_result in _measure_results:
             # select only the first occurence of the measure result section
-
             if self.mechanism == Mechanism.SECTION:
                 _measure_result = (
                     MeasureResultSection()
@@ -192,7 +192,10 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
                         JOIN.INNER,
                         on=(MechanismPerSection.mechanism_id == ORM_Mechanism.id),
                     )
-                    .where(MeasureResultMechanism.measure_result == measure_result.id)
+                    .where(
+                        MeasureResultMechanism.measure_result == measure_result.id,
+                        MeasureResultMechanism.time == self.time,
+                    )
                     .get()
                 )
 

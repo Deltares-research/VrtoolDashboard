@@ -21,6 +21,7 @@ def plot_measure_results_graph(
     dsn_steps: list[dict],
     mechanism: Mechanism,
     section_name: str,
+    year_index: int,
 ) -> go.Figure:
     """
     Make the plot Beta vs cost comparing all the measures for a dike section.
@@ -30,6 +31,7 @@ def plot_measure_results_graph(
     :param dsn_steps: the single step measure for Doorsnede-eis.
     :param mechanism: Mechanism for which to display the beta.
     :param section_name: name of the section
+    :param year_index: year index for the measures. Betas are stored in a list, to retrieve the correct beta for the selected year with th slider, it is necessary to provide the year index.
     :return: 
     """ ""
     fig = go.Figure()
@@ -64,8 +66,12 @@ def plot_measure_results_graph(
     )
 
     # # Add traces for the final measures
-    add_trace_run_results(fig, dsn_steps, CalcType.DOORSNEDE_EISEN, mechanism)
-    add_trace_run_results(fig, vr_steps, CalcType.VEILIGHEIDSRENDEMENT, mechanism)
+    add_trace_run_results(
+        fig, dsn_steps, CalcType.DOORSNEDE_EISEN, mechanism, year_index
+    )
+    add_trace_run_results(
+        fig, vr_steps, CalcType.VEILIGHEIDSRENDEMENT, mechanism, year_index
+    )
 
     ## Update layout
     fig.update_layout(
@@ -79,7 +85,11 @@ def plot_measure_results_graph(
 
 
 def add_trace_run_results(
-    fig: go.Figure, step_measures: list[dict], calc_type: CalcType, mechanism: Mechanism
+    fig: go.Figure,
+    step_measures: list[dict],
+    calc_type: CalcType,
+    mechanism: Mechanism,
+    year_index: int,
 ):
     """
     Add traces for the provided step_measures (either Veiligheidsrendement or doorsnede)
@@ -87,6 +97,7 @@ def add_trace_run_results(
     :param step_measures:
     :param calc_type:
     :param mechanism:
+    :param year_index:
     :return:
     """
     for step_number, taken_measure in enumerate(step_measures):
@@ -110,17 +121,17 @@ def add_trace_run_results(
             legendgroup = "Doorsnede"
         else:
             raise ValueError(f"CalcType {calc_type} not recognized")
-        
+
         if mechanism == Mechanism.SECTION.name:
-            meca_key = "Section"
+            mech_key = "Section"
         elif mechanism == Mechanism.STABILITY.name:
-            meca_key = "StabilityInner"
+            mech_key = "StabilityInner"
         elif mechanism == Mechanism.PIPING.name:
-            meca_key = "Piping"
+            mech_key = "Piping"
         elif mechanism == Mechanism.OVERFLOW.name:
-            meca_key = "Overflow"
+            mech_key = "Overflow"
         elif mechanism == Mechanism.REVETMENT.name:
-            meca_key = "Revetment"
+            mech_key = "Revetment"
         else:
             raise NotImplementedError(f"Mechanism {mechanism} not implemented")
         fig.add_trace(
@@ -129,7 +140,7 @@ def add_trace_run_results(
                 legendgroup=legendgroup,
                 showlegend=True if step_number == 0 else False,
                 x=[taken_measure["cost"] / 1e6],
-                y=[taken_measure[meca_key][0]],
+                y=[taken_measure[mech_key][year_index]],
                 mode="markers",
                 marker=dict(
                     size=10 if step_number == len(step_measures) - 1 else 8,
@@ -149,5 +160,5 @@ def add_trace_run_results(
         fig.add_annotation(
             text=f"{step_number}",
             x=taken_measure["cost"] / 1e6,
-            y=taken_measure[meca_key][0],
+            y=taken_measure[mech_key][year_index],
         )

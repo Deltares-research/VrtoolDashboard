@@ -151,10 +151,6 @@ def _get_measure(optimization_steps, active_mechanisms: list) -> dict:
     :return: dictionary with the followings keys: "name", "LCC", "Piping", "StabilityInner", "Overflow", "Revetment"
     , "Section"
     """
-    print("======")
-    for step in optimization_steps:
-        print(step, step.step_number)
-
     # Get the betas for the measure:
     _final_measure = _get_final_measure_betas(optimization_steps, active_mechanisms)
 
@@ -172,5 +168,4 @@ def _get_measure(optimization_steps, active_mechanisms: list) -> dict:
     else:
         raise ValueError(f"Unexpected number of optimum steps: {optimization_steps.count()}")
     _final_measure.update(_get_measure_parameters(optimization_steps))
-    print(_final_measure['name'])
     return _final_measure

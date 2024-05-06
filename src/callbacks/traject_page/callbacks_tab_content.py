@@ -1,3 +1,4 @@
+from bisect import bisect_right
 from pathlib import Path
 
 from dash import dcc, Output, Input
@@ -13,7 +14,7 @@ from src.component_ids import (
     GRAPG_MEASURE_COMPARISON_ID,
     STORE_CONFIG,
 )
-from src.constants import get_mapbox_token
+from src.constants import REFERENCE_YEAR, get_mapbox_token
 from src.linear_objects.dike_traject import DikeTraject
 from src.orm.import_database import get_all_measure_results
 from src.plotly_graphs.measure_comparison_graph import plot_measure_results_graph
@@ -311,7 +312,6 @@ def make_graph_measure_results_comparison(
     """
 
     # TODO: select year
-    # TODO: write tests
     # TODO: pass run_id of vr and dsn.
 
     if dike_traject_data is None:
@@ -324,6 +324,8 @@ def make_graph_measure_results_comparison(
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
 
         _section = _dike_traject.get_section(selected_dike_section)
+        _year_index = bisect_right(_section.years, selected_year - REFERENCE_YEAR) - 1
+        _time = _section.years[_year_index]
 
         _vr_config = VrtoolConfig()
         _vr_config.traject = vr_config["traject"]
@@ -332,11 +334,21 @@ def make_graph_measure_results_comparison(
         _vr_config.input_database_name = vr_config["input_database_name"]
 
         _meas_results, _vr_steps, _dsn_steps = get_all_measure_results(
-            _vr_config, _section.name, selected_mechanism, run_id_vr=1, run_id_dsn=2
+            _vr_config,
+            _section.name,
+            selected_mechanism,
+            _time,
+            run_id_vr=1,
+            run_id_dsn=2,
         )
 
         _fig = plot_measure_results_graph(
-            _meas_results, _vr_steps, _dsn_steps, selected_mechanism, _section.name
+            _meas_results,
+            _vr_steps,
+            _dsn_steps,
+            selected_mechanism,
+            _section.name,
+            _year_index,
         )
 
     return _fig

@@ -22,6 +22,7 @@ def get_all_measure_results(
     vr_config: VrtoolConfig,
     section_name: str,
     mechanism: Mechanism,
+    time: int,
     run_id_vr: int,
     run_id_dsn: int,
 ) -> tuple[DataFrame, dict, dict]:
@@ -32,6 +33,9 @@ def get_all_measure_results(
     :param vr_config: vr config from the VRCore
     :param section_name: name of the section for which the measures are filtered on
     :param mechanism: mechanism for which the measure betas will be imported.
+    :param time: time for which measures are evaluated and available in the database
+    :param run_id_vr: run id for the veiligheidsrendement optimization
+    :param run_id_dsn: run id for the doorsnede eisen optimization
     :return:
     """
     _path_dir = Path(vr_config.input_directory)
@@ -42,6 +46,7 @@ def get_all_measure_results(
         vr_config=vr_config,
         section_name=section_name,
         mechanism=mechanism,
+        time=time,
         run_id_vr=run_id_vr,
         run_id_dsn=run_id_dsn,
     ).import_orm(orm_model)
