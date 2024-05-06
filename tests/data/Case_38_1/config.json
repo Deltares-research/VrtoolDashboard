@@ -12,7 +12,7 @@
   "REVETMENT",
   "HYDRAULIC_STRUCTURES"
  ],
- "input_database_name": "38-1_basis_main.db",
+ "input_database_name": "38-1_basis_tested.db",
  "input_directory": "C:/Users/hauth/bitbucket/VRtoolDashboard/tests/data/Case_38_1",
  "output_directory": "Basisberekening"
 }

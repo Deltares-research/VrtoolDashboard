@@ -185,21 +185,21 @@ class TestCallbackTabContent:
         # 1. Define data
         _dike_data = json.load(
             open(
-                Path(__file__).parent.parent
-                / "data/Case_38_1_sterker_VZG2/reference"
-                / "dike_data.json"
+                Path(__file__).parent.parent / "data/Case_38_1/reference" / "data.json"
             )
         )
         _path_config = (
-            Path(__file__).parent.parent
-            / "data/TestCase1_38-1_no_housing_testingonly"
-            / "vr_config.json"
+            Path(__file__).parent.parent / "data/Case_38_1" / "config.json"
         )
 
         # load json:
         with open(_path_config, "r") as f:
             decoded = f.read()
             _vr_config = json.loads(decoded)
+
+        _vr_config["input_directory"] = (
+            Path(__file__).parent.parent / "data/Case_38_1"
+        )
 
         # 2. Define callback
         def run_callback():
