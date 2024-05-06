@@ -1,7 +1,7 @@
 from dash import dcc
 import dash_bootstrap_components as dbc
 
-from src.component_ids import SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA
+from src.component_ids import SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA, SELECT_DIKE_SECTION_FOR_MEASURES_ID
 from src.constants import ColorBarResultType, ResultType, CalcType, Mechanism, SubResultType, GreedyOPtimizationCriteria
 
 """
@@ -81,3 +81,5 @@ layout_radio_greedy_optimization_stop_criteria = dbc.RadioItems(
     value=GreedyOPtimizationCriteria.ECONOMIC_OPTIMAL.name,
 
 )
+
+

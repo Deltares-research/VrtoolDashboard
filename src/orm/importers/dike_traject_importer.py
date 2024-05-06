@@ -101,7 +101,10 @@ class DikeTrajectImporter(OrmImporterProtocol):
                                     reinforcement_order_dsn=[],
                                     greedy_steps=[],
                                     signalering_value=_traject_p_signal,
-                                    lower_bound_value=_traject_p_lower_bound)
+                                    lower_bound_value=_traject_p_lower_bound,
+                                    _run_id_vr=self.run_id_vr,
+                                    _run_id_dsn=self.run_id_dsn,
+                                    )
 
         _selected_sections = orm_model.SectionData.select().where(
             SectionData.dike_traject == _traject_id
