@@ -310,10 +310,6 @@ def make_graph_measure_results_comparison(
 
     :return:
     """
-
-    # TODO: select year
-    # TODO: pass run_id of vr and dsn.
-
     if dike_traject_data is None:
         return plot_default_scatter_dummy()
 
@@ -338,8 +334,8 @@ def make_graph_measure_results_comparison(
             _section.name,
             selected_mechanism,
             _time,
-            run_id_vr=1,
-            run_id_dsn=2,
+            run_id_vr=dike_traject_data["_run_id_vr"],
+            run_id_dsn=dike_traject_data["_run_id_dsn"],
         )
 
         _fig = plot_measure_results_graph(

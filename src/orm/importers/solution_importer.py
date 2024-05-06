@@ -4,17 +4,38 @@ from typing import Optional
 import numpy as np
 import pandas as pd
 from peewee import JOIN, ModelBase, DoesNotExist
-from vrtool.orm.io.importers.optimization.optimization_step_importer import OptimizationStepImporter
+from vrtool.orm.io.importers.optimization.optimization_step_importer import (
+    OptimizationStepImporter,
+)
 from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol
-from vrtool.orm.models import OptimizationStep, SectionData, MeasurePerSection, MeasureResult, \
-    OptimizationSelectedMeasure, Measure, MeasureResultParameter
+from vrtool.orm.models import (
+    OptimizationStep,
+    SectionData,
+    MeasurePerSection,
+    MeasureResult,
+    OptimizationSelectedMeasure,
+    Measure,
+    MeasureResultParameter,
+)
 
 from src.constants import REFERENCE_YEAR, GreedyOPtimizationCriteria
 from src.linear_objects.dike_section import DikeSection
-from src.linear_objects.dike_traject import DikeTraject, get_initial_assessment_df, get_traject_prob
-from src.orm.importers.importer_utils import _get_single_measure, _get_investment_year, _get_combined_measure_name, \
-    _get_combined_measure_investment_year, _get_measure_parameters
-from src.orm.importers.optimization_step_importer import _get_section_lcc, _get_final_measure_betas
+from src.linear_objects.dike_traject import (
+    DikeTraject,
+    get_initial_assessment_df,
+    get_traject_prob,
+)
+from src.orm.importers.importer_utils import (
+    _get_single_measure,
+    _get_investment_year,
+    _get_combined_measure_name,
+    _get_combined_measure_investment_year,
+    _get_measure_parameters,
+)
+from src.orm.importers.optimization_step_importer import (
+    _get_section_lcc,
+    _get_final_measure_betas,
+)
 from src.orm.orm_controller_custom import get_optimization_steps_ordered
 from src.utils.utils import beta_to_pf, pf_to_beta
 
@@ -28,13 +49,19 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
     greedy_criteria_beta: Optional[float]
     economic_optimal_final_step_id: int
 
-    def __init__(self, dike_traject: DikeTraject,
-                 run_id_vr: int, run_id_dsn: int, greedy_optimization_criteria: str,
-                 greedy_criteria_year: Optional[int] = None,
-                 greedy_criteria_beta: Optional[float] = None
-                 ):
+    def __init__(
+        self,
+        dike_traject: DikeTraject,
+        run_id_vr: int,
+        run_id_dsn: int,
+        greedy_optimization_criteria: str,
+        greedy_criteria_year: Optional[int] = None,
+        greedy_criteria_beta: Optional[float] = None,
+    ):
         self.dike_traject = dike_traject
-        self.dike_section_mapping = {section.name: section for section in dike_traject.dike_sections}
+        self.dike_section_mapping = {
+            section.name: section for section in dike_traject.dike_sections
+        }
         self.assessment_time = self.dike_traject.dike_sections[0].years
         self.run_id_dsn = run_id_dsn
         self.run_id_vr = run_id_vr
@@ -91,13 +118,16 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         _ordered_reinforced_sections = []
         for _optimization_step in _optimization_steps:
 
-            section = (SectionData
-                       .select()
-                       .join(MeasurePerSection)
-                       .join(MeasureResult)
-                       .join(OptimizationSelectedMeasure)
-                       .where(OptimizationSelectedMeasure.id == _optimization_step.optimization_selected_measure_id)
-                       ).get()
+            section = (
+                SectionData.select()
+                .join(MeasurePerSection)
+                .join(MeasureResult)
+                .join(OptimizationSelectedMeasure)
+                .where(
+                    OptimizationSelectedMeasure.id
+                    == _optimization_step.optimization_selected_measure_id
+                )
+            ).get()
 
             # find corresponding section in dike_section
             dike_section: DikeSection = self.dike_section_mapping[section.section_name]
@@ -106,24 +136,35 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             if _optimization_step.step_number not in _iterated_step_number:
                 _iterated_step_number.append(_optimization_step.step_number)
 
-                _optimum_section_optimization_steps = (OptimizationStep
-                .select()
-                .join(OptimizationSelectedMeasure)
-                .where(
-                    (OptimizationSelectedMeasure.optimization_run == self.run_id_dsn)
-                    & (OptimizationStep.step_number == _optimization_step.step_number)
-                )
+                _optimum_section_optimization_steps = (
+                    OptimizationStep.select()
+                    .join(OptimizationSelectedMeasure)
+                    .where(
+                        (
+                            OptimizationSelectedMeasure.optimization_run
+                            == self.run_id_dsn
+                        )
+                        & (
+                            OptimizationStep.step_number
+                            == _optimization_step.step_number
+                        )
+                    )
                 )
                 # 3. Get all information into a dict based on the optimum optimization steps.
 
-                _step_measure = self._get_measure(_optimum_section_optimization_steps,
-                                                  active_mechanisms=dike_section.active_mechanisms)
-                _step_measure["LCC"] = dike_section.final_measure_doorsnede["LCC"] = _get_section_lcc(
-                    _optimization_step)
+                _step_measure = self._get_measure(
+                    _optimum_section_optimization_steps,
+                    active_mechanisms=dike_section.active_mechanisms,
+                )
+                _step_measure["LCC"] = dike_section.final_measure_doorsnede["LCC"] = (
+                    _get_section_lcc(_optimization_step)
+                )
                 dike_section.final_measure_doorsnede = _step_measure
 
                 # 5. Append the reinforcement order dsn:
-                self._get_reinforced_section_order(_optimization_step, _ordered_reinforced_sections)
+                self._get_reinforced_section_order(
+                    _optimization_step, _ordered_reinforced_sections
+                )
         self.dike_traject.reinforcement_order_dsn = _ordered_reinforced_sections
 
     def get_final_measure_vr(self):
@@ -144,8 +185,10 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         # 0. Initialize vars
         _previous_step_number = None
         _beta_df = get_initial_assessment_df(list(self.dike_section_mapping.values()))
-        _traject_pf, _ = get_traject_prob(_beta_df, ['StabilityInner', 'Piping', 'Overflow', "Revetment"])
-        _greedy_steps_res = [{"pf": _traject_pf[0].tolist(), 'LCC': 0}]
+        _traject_pf, _ = get_traject_prob(
+            _beta_df, ["StabilityInner", "Piping", "Overflow", "Revetment"]
+        )
+        _greedy_steps_res = [{"pf": _traject_pf[0].tolist(), "LCC": 0}]
         _ordered_reinforced_sections = []
 
         _recorded__previous_section_LCC = {}
@@ -157,42 +200,57 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             if _previous_step_number == _step_number:
                 continue
 
-            section = (SectionData
-                       .select()
-                       .join(MeasurePerSection)
-                       .join(MeasureResult)
-                       .join(OptimizationSelectedMeasure)
-                       .where(OptimizationSelectedMeasure.id == _optimization_step.optimization_selected_measure_id)
-                       ).get()
+            section = (
+                SectionData.select()
+                .join(MeasurePerSection)
+                .join(MeasureResult)
+                .join(OptimizationSelectedMeasure)
+                .where(
+                    OptimizationSelectedMeasure.id
+                    == _optimization_step.optimization_selected_measure_id
+                )
+            ).get()
 
             # find corresponding section in dike_section
             dike_section: DikeSection = self.dike_section_mapping[section.section_name]
 
             # 2. Get all steps sharing the same step number (=combined steps)
-            _optimum_section_optimization_steps = (OptimizationStep
-            .select()
-            .join(OptimizationSelectedMeasure)
-            .where(
-                (OptimizationSelectedMeasure.optimization_run == self.run_id_vr)
-                & (OptimizationStep.step_number == _optimization_step.step_number)
-            )
+            _optimum_section_optimization_steps = (
+                OptimizationStep.select()
+                .join(OptimizationSelectedMeasure)
+                .where(
+                    (OptimizationSelectedMeasure.optimization_run == self.run_id_vr)
+                    & (OptimizationStep.step_number == _optimization_step.step_number)
+                )
             )
 
             # 3. Get all information into a dict based on the optimum optimization steps.
-            _step_measure = self._get_measure(_optimum_section_optimization_steps,
-                                              active_mechanisms=dike_section.active_mechanisms)
+            _step_measure = self._get_measure(
+                _optimum_section_optimization_steps,
+                active_mechanisms=dike_section.active_mechanisms,
+            )
             _step_measure["LCC"] = _get_section_lcc(_optimization_step)
 
             dike_section.final_measure_veiligheidsrendement = _step_measure
 
             # 4. Calculate the traject probability of failure for the current step
-            self._add_greedy_step(dike_section, _optimization_step, _beta_df, _greedy_steps_res, _step_measure,
-                                  _recorded__previous_section_LCC)
+            self._add_greedy_step(
+                dike_section,
+                _optimization_step,
+                _beta_df,
+                _greedy_steps_res,
+                _step_measure,
+                _recorded__previous_section_LCC,
+            )
 
             # 5. Append the reinforcement order vr:
-            self._get_reinforced_section_order(_optimization_step, _ordered_reinforced_sections)
+            self._get_reinforced_section_order(
+                _optimization_step, _ordered_reinforced_sections
+            )
 
-            status_step = self.continue_next_step(_optimization_step, _greedy_steps_res[-1]['pf'])
+            status_step = self.continue_next_step(
+                _optimization_step, _greedy_steps_res[-1]["pf"]
+            )
             _previous_step_number = _step_number
             _recorded__previous_section_LCC[dike_section.name] = _step_measure["LCC"]
 
@@ -203,8 +261,9 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         self.dike_traject.greedy_steps = _greedy_steps_res
         self.dike_traject.reinforcement_order_vr = _ordered_reinforced_sections
 
-    def continue_next_step(self, optimization_step: OptimizationStep,
-                           traject_pf: list[float]) -> bool:
+    def continue_next_step(
+        self, optimization_step: OptimizationStep, traject_pf: list[float]
+    ) -> bool:
         """
         This function determines whether the next OptimizationStep should be imported/processed or not.
             - If criteria is Economic Optimal, the loop should be stop when the id of the economic optimal is reached
@@ -219,24 +278,40 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
 
         """
 
-        if self.greedy_optimization_criteria == GreedyOPtimizationCriteria.ECONOMIC_OPTIMAL.name:
+        if (
+            self.greedy_optimization_criteria
+            == GreedyOPtimizationCriteria.ECONOMIC_OPTIMAL.name
+        ):
             if optimization_step.id + 1 > self.economic_optimal_final_step_id:
                 return False
             return True
 
-        elif self.greedy_optimization_criteria == GreedyOPtimizationCriteria.TARGET_PF.name:
+        elif (
+            self.greedy_optimization_criteria
+            == GreedyOPtimizationCriteria.TARGET_PF.name
+        ):
 
-            _year_step_index = bisect_right(self.assessment_time,
-                                            self.greedy_criteria_year - REFERENCE_YEAR) - 1
+            _year_step_index = (
+                bisect_right(
+                    self.assessment_time, self.greedy_criteria_year - REFERENCE_YEAR
+                )
+                - 1
+            )
             pf_traject_stop = traject_pf[_year_step_index]
             beta_traject_stop = pf_to_beta(pf_traject_stop)
             if beta_traject_stop > self.greedy_criteria_beta:
                 return False
             return True
 
-    def _add_greedy_step(self, dike_section: DikeSection, optimization_step: OptimizationStep, _beta_df: pd.DataFrame,
-                         greedy_steps_res: list[dict], step_measure: dict,
-                         recorded__previous_section_LCC: dict[str, float]):
+    def _add_greedy_step(
+        self,
+        dike_section: DikeSection,
+        optimization_step: OptimizationStep,
+        _beta_df: pd.DataFrame,
+        greedy_steps_res: list[dict],
+        step_measure: dict,
+        recorded__previous_section_LCC: dict[str, float],
+    ):
         """
         Add the results of the step to the list greedy_steps_list
 
@@ -253,27 +328,45 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
 
         """
         for mechanism in dike_section.active_mechanisms:
-            mask = (_beta_df['name'] == dike_section.name) & (_beta_df['mechanism'] == mechanism)
+            mask = (_beta_df["name"] == dike_section.name) & (
+                _beta_df["mechanism"] == mechanism
+            )
             # replace the row in the dataframe with the betas of the section if both the name and mechanism match
-            d = {"name": dike_section.name, "mechanism": mechanism, "Length": dike_section.length}
+            d = {
+                "name": dike_section.name,
+                "mechanism": mechanism,
+                "Length": dike_section.length,
+            }
 
             for year, beta in zip(dike_section.years, step_measure[mechanism]):
                 d[year] = beta
             _beta_df.loc[mask, dike_section.years] = d
 
         # Calculate traject faalkans
-        _reinforced_traject_pf, _ = get_traject_prob(_beta_df, dike_section.active_mechanisms)
+        _reinforced_traject_pf, _ = get_traject_prob(
+            _beta_df, dike_section.active_mechanisms
+        )
 
         # Get step LCC:
-        LCC = _get_section_lcc(optimization_step) - recorded__previous_section_LCC.get(dike_section.name, 0)
-        greedy_steps_res.append({"pf": _reinforced_traject_pf[0].tolist(), 'LCC': LCC})
+        LCC = _get_section_lcc(optimization_step) - recorded__previous_section_LCC.get(
+            dike_section.name, 0
+        )
+        greedy_steps_res.append({"pf": _reinforced_traject_pf[0].tolist(), "LCC": LCC})
 
-    def _get_reinforced_section_order(self, optimization_step: OptimizationStep, section_ordered_list: list[str]):
-        """ Add in place the section name to the list of reinforced sections if it is not already in the list."""
+    def _get_reinforced_section_order(
+        self, optimization_step: OptimizationStep, section_ordered_list: list[str]
+    ):
+        """Add in place the section name to the list of reinforced sections if it is not already in the list."""
         optimization_selected_measure = OptimizationSelectedMeasure.get(
-            OptimizationSelectedMeasure.id == optimization_step.optimization_selected_measure_id)
-        measure_result = MeasureResult.get(MeasureResult.id == optimization_selected_measure.measure_result_id)
-        measure_per_section = MeasurePerSection.get(MeasurePerSection.id == measure_result.measure_per_section_id)
+            OptimizationSelectedMeasure.id
+            == optimization_step.optimization_selected_measure_id
+        )
+        measure_result = MeasureResult.get(
+            MeasureResult.id == optimization_selected_measure.measure_result_id
+        )
+        measure_per_section = MeasurePerSection.get(
+            MeasurePerSection.id == measure_result.measure_per_section_id
+        )
         section = SectionData.get(SectionData.id == measure_per_section.section_id)
         if section.section_name not in section_ordered_list:
             section_ordered_list.append(section.section_name)
@@ -294,15 +387,21 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         # Get the extra information measure name and the corresponding parameter values for the most (combined or not) optimal step
         if optimization_steps.count() == 1:
             _final_measure["name"] = _get_single_measure(optimization_steps[0]).name
-            _final_measure['investment_year'] = [_get_investment_year(optimization_steps[0])]
+            _final_measure["investment_year"] = [
+                _get_investment_year(optimization_steps[0])
+            ]
 
         elif optimization_steps.count() in [2, 3]:
             _final_measure["name"] = _get_combined_measure_name(optimization_steps)
             _year_1 = _get_investment_year(optimization_steps[0])
             _year_2 = _get_investment_year(optimization_steps[1])
-            _final_measure['investment_year'] = _get_combined_measure_investment_year(optimization_steps)
+            _final_measure["investment_year"] = _get_combined_measure_investment_year(
+                optimization_steps
+            )
 
         else:
-            raise ValueError(f"Unexpected number of optimum steps: {optimization_steps.count()}")
+            raise ValueError(
+                f"Unexpected number of optimum steps: {optimization_steps.count()}"
+            )
         _final_measure.update(_get_measure_parameters(optimization_steps))
         return _final_measure

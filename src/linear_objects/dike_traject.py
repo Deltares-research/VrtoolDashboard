@@ -30,41 +30,45 @@ class DikeTraject(BaseLinearObject):
     def serialize(self) -> dict:
         """Serialize the DikeTraject object to a dict, in order to be saved in dcc.Store"""
         return {
-            'name': self.name,
-            'dike_sections': [section.serialize() for section in self.dike_sections],
-            'reinforcement_order_vr': self.reinforcement_order_vr,
-            'reinforcement_order_dsn': self.reinforcement_order_dsn,
-            'signalering_value': self.signalering_value,
-            'lower_bound_value': self.lower_bound_value,
-            'greedy_steps': self.greedy_steps,
-            'run_name': self.run_name,
-            '_run_id_vr': self._run_id_vr,
-            '_run_id_dsn': self._run_id_dsn
+            "name": self.name,
+            "dike_sections": [section.serialize() for section in self.dike_sections],
+            "reinforcement_order_vr": self.reinforcement_order_vr,
+            "reinforcement_order_dsn": self.reinforcement_order_dsn,
+            "signalering_value": self.signalering_value,
+            "lower_bound_value": self.lower_bound_value,
+            "greedy_steps": self.greedy_steps,
+            "run_name": self.run_name,
+            "_run_id_vr": self._run_id_vr,
+            "_run_id_dsn": self._run_id_dsn,
         }
 
     @staticmethod
-    def deserialize(data: dict) -> 'DikeTraject':
+    def deserialize(data: dict) -> "DikeTraject":
         """
         Deserialize the DikeTraject object from a dict, in order to be loaded from dcc.Store
         :param data: serialized dict with the data of the DikeTraject object
         """
-        sections = [DikeSection.deserialize(section_data) for section_data in data['dike_sections']]
-        return DikeTraject(name=data['name'],
-                           dike_sections=sections,
-                           reinforcement_order_vr=data['reinforcement_order_vr'],
-                           reinforcement_order_dsn=data['reinforcement_order_dsn'],
-                           signalering_value=data["signalering_value"],
-                           lower_bound_value=data["lower_bound_value"],
-                           greedy_steps=data["greedy_steps"],
-                           run_name=data["run_name"],
-                           _run_id_vr=data["_run_id_vr"],
-                           _run_id_dsn=data["_run_id_dsn"]
-                           )
+        sections = [
+            DikeSection.deserialize(section_data)
+            for section_data in data["dike_sections"]
+        ]
+        return DikeTraject(
+            name=data["name"],
+            dike_sections=sections,
+            reinforcement_order_vr=data["reinforcement_order_vr"],
+            reinforcement_order_dsn=data["reinforcement_order_dsn"],
+            signalering_value=data["signalering_value"],
+            lower_bound_value=data["lower_bound_value"],
+            greedy_steps=data["greedy_steps"],
+            run_name=data["run_name"],
+            _run_id_vr=data["_run_id_vr"],
+            _run_id_dsn=data["_run_id_dsn"],
+        )
 
     def get_section(self, section_name: str) -> DikeSection:
         """Get the section object by name"""
         for section in self.dike_sections:
-            if (section.name == section_name):
+            if section.name == section_name:
                 return section
         raise ValueError(f"Section with name {section_name} not found")
 
@@ -74,15 +78,23 @@ class DikeTraject(BaseLinearObject):
         """
         _geojson = {
             "type": "FeatureCollection",
-            "crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:EPSG::28992"}},
-            "features": [section.export_as_geojson_feature(params) for section in self.dike_sections]
+            "crs": {
+                "type": "name",
+                "properties": {"name": "urn:ogc:def:crs:EPSG::28992"},
+            },
+            "features": [
+                section.export_as_geojson_feature(params)
+                for section in self.dike_sections
+            ],
         }
         return json.dumps(_geojson)
 
     def calc_traject_probability_array(self, calc_type: str) -> np.array:
 
         _beta_df = get_initial_assessment_df(self.dike_sections)
-        _traject_pf, _ = get_traject_prob(_beta_df, ["Overflow", "Piping", "StabilityInner", "Revetment"])
+        _traject_pf, _ = get_traject_prob(
+            _beta_df, ["Overflow", "Piping", "StabilityInner", "Revetment"]
+        )
         years = self.dike_sections[0].years
 
         if calc_type == "vr":
@@ -102,23 +114,33 @@ class DikeTraject(BaseLinearObject):
             if not section.in_analyse:  # skip if the section is not reinforced
                 continue
 
-            if (calc_type == 'doorsnede') and (
-                    not section.is_reinforced_doorsnede):  # skip if the section is not reinforced
+            if (calc_type == "doorsnede") and (
+                not section.is_reinforced_doorsnede
+            ):  # skip if the section is not reinforced
                 continue
 
-            if (calc_type == 'veiligheidsrendement') and (
-                    not section.is_reinforced_veiligheidsrendement):  # skip if the section is not reinforced
+            if (calc_type == "veiligheidsrendement") and (
+                not section.is_reinforced_veiligheidsrendement
+            ):  # skip if the section is not reinforced
                 continue
             _active_mechanisms = ["Overflow", "Piping", "StabilityInner"]
             if section.revetment:
                 _active_mechanisms.append("Revetment")
             # add a row to the dataframe with the initial assessment of the section
             for mechanism in _active_mechanisms:
-                mask = (_beta_df['name'] == section.name) & (_beta_df['mechanism'] == mechanism)
+                mask = (_beta_df["name"] == section.name) & (
+                    _beta_df["mechanism"] == mechanism
+                )
                 # replace the row in the dataframe with the betas of the section if both the name and mechanism match
-                d = {"name": section.name, "mechanism": mechanism, "Length": section.length}
+                d = {
+                    "name": section.name,
+                    "mechanism": mechanism,
+                    "Length": section.length,
+                }
 
-                for year, beta in zip(years, getattr(section, _section_measure)[mechanism]):
+                for year, beta in zip(
+                    years, getattr(section, _section_measure)[mechanism]
+                ):
                     d[year] = beta
                 _beta_df.loc[mask, years] = d
             _reinforced_traject_pf, _ = get_traject_prob(_beta_df, _active_mechanisms)
@@ -130,7 +152,7 @@ class DikeTraject(BaseLinearObject):
     def get_section(self, name: str) -> DikeSection:
         """Get the section object by name"""
         for section in self.dike_sections:
-            if (section.name == name):
+            if section.name == name:
                 return section
         raise ValueError(f"Section with name {name} not found")
 
@@ -144,7 +166,10 @@ class DikeTraject(BaseLinearObject):
         for section in sections:
             if not section.in_analyse:
                 continue
-            if not section.is_reinforced_doorsnede and not section.is_reinforced_veiligheidsrendement:
+            if (
+                not section.is_reinforced_doorsnede
+                and not section.is_reinforced_veiligheidsrendement
+            ):
                 continue
             # add a row to the dataframe with the initial assessment of the section
             mechanisms = ["Overflow", "StabilityInner", "Piping"]
@@ -152,9 +177,11 @@ class DikeTraject(BaseLinearObject):
                 mechanisms.append("Revetment")
 
             for mechanism in mechanisms:
-                d = {"name": section.name, "mechanism": mechanism, "Length": section.length
-
-                     }
+                d = {
+                    "name": section.name,
+                    "mechanism": mechanism,
+                    "Length": section.length,
+                }
 
                 for year, beta in zip(years, section.initial_assessment[mechanism]):
                     d[year] = beta
@@ -190,18 +217,24 @@ class DikeTraject(BaseLinearObject):
             section = self.get_section(section_name)
             if not (section.in_analyse):
                 continue
-            if (calc_type == 'doorsnede') and (
-                    not section.is_reinforced_doorsnede):  # skip if the section is not reinforced
+            if (calc_type == "doorsnede") and (
+                not section.is_reinforced_doorsnede
+            ):  # skip if the section is not reinforced
                 continue
-            if (calc_type == 'veiligheidsrendement') and (
-                    not section.is_reinforced_veiligheidsrendement):  # skip if the section is not reinforced
+            if (calc_type == "veiligheidsrendement") and (
+                not section.is_reinforced_veiligheidsrendement
+            ):  # skip if the section is not reinforced
                 continue
 
             try:
-                cost_list.append(getattr(section, _section_measure)['LCC'])
+                cost_list.append(getattr(section, _section_measure)["LCC"])
             except:
                 # temporary print for debugging
-                print('Geen maatregel op dijkvak {} voor {}'.format(section.name, calc_type))
+                print(
+                    "Geen maatregel op dijkvak {} voor {}".format(
+                        section.name, calc_type
+                    )
+                )
 
         return np.cumsum(cost_list) / 1e6
 
@@ -222,18 +255,22 @@ class DikeTraject(BaseLinearObject):
 
             if not (section.in_analyse):
                 continue
-            if (calc_type == 'doorsnede') and (
-                    not section.is_reinforced_doorsnede):  # skip if the section is not reinforced
+            if (calc_type == "doorsnede") and (
+                not section.is_reinforced_doorsnede
+            ):  # skip if the section is not reinforced
                 continue
-            if (calc_type == 'veiligheidsrendement') and (
-                    not section.is_reinforced_veiligheidsrendement):  # skip if the section is not reinforced
+            if (calc_type == "veiligheidsrendement") and (
+                not section.is_reinforced_veiligheidsrendement
+            ):  # skip if the section is not reinforced
                 continue
 
             length_list.append(section.length)
 
         return np.cumsum(length_list)
 
-    def _get_greedy_optimization_step_from_speficiations(self, target_year: int, target_beta: float) -> int:
+    def _get_greedy_optimization_step_from_speficiations(
+        self, target_year: int, target_beta: float
+    ) -> int:
         """Get the optimization step number for the greedy optimization algorithm based on the specifications
 
         :param target_year: the year for which the reliability should be met
@@ -241,8 +278,9 @@ class DikeTraject(BaseLinearObject):
         :return: the optimization step number
         """
         # find for which optimization step_number the criteria 'reliability in year' is met
-        _year_step_index = bisect_right(self.dike_sections[0].years,
-                                        target_year - REFERENCE_YEAR) - 1
+        _year_step_index = (
+            bisect_right(self.dike_sections[0].years, target_year - REFERENCE_YEAR) - 1
+        )
         _target_pf = beta_to_pf(target_beta)
         _step_pf_array = get_step_traject_pf(self)[:, _year_step_index]
         _step_index = np.argmax(_step_pf_array < _target_pf)
@@ -252,18 +290,18 @@ class DikeTraject(BaseLinearObject):
 def get_traject_prob(beta_df: DataFrame, mechanisms: list) -> tuple[np.array, dict]:
     """Determines the probability of failure for a traject based on the standardized beta input"""
 
-    beta_df = beta_df.reset_index().set_index('mechanism').drop(columns=['name'])
-    beta_df = beta_df.drop(columns=['Length', "index"])
+    beta_df = beta_df.reset_index().set_index("mechanism").drop(columns=["name"])
+    beta_df = beta_df.drop(columns=["Length", "index"])
 
     traject_probs = dict((el, []) for el in mechanisms)
     total_traject_prob = np.empty((1, beta_df.shape[1]))
     for mechanism in mechanisms:
-        if mechanism == 'Revetment':
+        if mechanism == "Revetment":
             # check is mechanism is in the index
             if not mechanism in beta_df.index:
                 continue
 
-        if mechanism == 'Overflow':
+        if mechanism == "Overflow":
             # take min beta in each column
             traject_probs[mechanism] = beta_to_pf(beta_df.loc[mechanism].min().values)
         else:
@@ -285,7 +323,10 @@ def get_initial_assessment_df(sections: list[DikeSection]) -> DataFrame:
     for section in sections:
         if not section.in_analyse:
             continue
-        if not section.is_reinforced_doorsnede and not section.is_reinforced_veiligheidsrendement:
+        if (
+            not section.is_reinforced_doorsnede
+            and not section.is_reinforced_veiligheidsrendement
+        ):
             continue
         # add a row to the dataframe with the initial assessment of the section
         mechanisms = ["Overflow", "StabilityInner", "Piping"]
@@ -293,9 +334,7 @@ def get_initial_assessment_df(sections: list[DikeSection]) -> DataFrame:
             mechanisms.append("Revetment")
 
         for mechanism in mechanisms:
-            d = {"name": section.name, "mechanism": mechanism, "Length": section.length
-
-                 }
+            d = {"name": section.name, "mechanism": mechanism, "Length": section.length}
 
             for year, beta in zip(years, section.initial_assessment[mechanism]):
                 d[year] = beta
