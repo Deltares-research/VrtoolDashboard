@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased] [dd/mm/yyyy]
 
 ### Added
-None.
+- Graph comparison measures
 
 ### Changed
 None.
@@ -14,7 +14,7 @@ None.
 None.
 
 ### Removed
-None.
+- tests with deprecated databases
 
 ### Fixed
 None.
