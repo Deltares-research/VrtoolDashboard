@@ -7,10 +7,10 @@ from vrtool.orm.models import Mechanism, MechanismPerSection, ComputationScenari
     OptimizationStep, OptimizationRun, OptimizationStepResultMechanism, OptimizationStepResultSection, \
     OptimizationSelectedMeasure, OptimizationType, MeasureResult, MeasureResultParameter, MeasureResultSection, \
     StandardMeasure, MeasureType
-from vrtool.probabilistic_tools.combin_functions import CombinFunctions
 from vrtool.probabilistic_tools.probabilistic_functions import beta_to_pf, pf_to_beta
 
 from src.orm import models as orm
+from src.utils.utils import CombinFunctions
 
 
 def _get_section_lcc(optimization_step: OptimizationStep) -> float:
@@ -144,15 +144,10 @@ def _get_final_measure_combined_betas(optimization_steps: OptimizationStep, acti
             continue  # don't need to go further
 
         if mechanism == "Piping" and vzg_step is not None and soil_reinforcement_step is not None:
-            _pf_solution_failure, _pf_with_solution = _get_vzg_parameters()
-            _betas_soil_reinforcement = np.array(
-                [row.beta for row in _get_mechanism_beta(soil_reinforcement_step, mechanism)])
-            _pf_soil_reinforcement = beta_to_pf(_betas_soil_reinforcement)
-            _pf_combined_solutions = _pf_solution_failure * _pf_soil_reinforcement + (
-                    1 - _pf_solution_failure) * _pf_with_solution
-            _beta_combined_solutions = pf_to_beta(_pf_combined_solutions)
-            _final_measure[mechanism] = _beta_combined_solutions
-            _dict_probabilities[mechanism] = _pf_combined_solutions
+            # Previously the combination was performed here but has been shifted to VRCore
+            _betas = np.array([row.beta for row in _get_mechanism_beta(soil_reinforcement_step, mechanism)])
+            _final_measure[mechanism] = _betas
+            _dict_probabilities[mechanism] = beta_to_pf(_betas)
             continue
 
         if vzg_step is not None and soil_reinforcement_step is not None:

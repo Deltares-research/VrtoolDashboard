@@ -81,7 +81,7 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
     This function plots a Map displaying the initial reliability of the dike traject.
     :param dike_traject:
     :param selected_year: selected year by the user for which results must be displayed
-    :param result_type: one of "Reliability" or "Probability"
+    :param result_type: one of "Reliability" or "Probability" or "InterpretationClass"
     :param mechanism_type: Selected mechanism type by the user from the OptionField, one of "PIPING", "STABILITY",
     "OVERFLOW", "REVETMENT" or "SECTION"
 
@@ -107,14 +107,21 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
                                  f'Beta: NO DATA<br>' + "<extra></extra>"
             else:
                 _year_index = bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
-                _beta_section = get_beta(_initial_results, _year_index, mechanism_type)
+                _beta = get_beta(_initial_results, _year_index, mechanism_type)
                 _beta_dict = {meca: beta[_year_index] for meca, beta in _initial_results.items() if meca != "Section"}
-                _color = get_reliability_color(_beta_section, dike_traject.lower_bound_value)
+                _color = get_reliability_color(_beta, dike_traject.lower_bound_value)
 
                 if result_type == ResultType.RELIABILITY.name:
-                    _hover_res = f'Beta sectie: {_beta_section:.2}<br>'
+                    _hover_res = f'Beta sectie: {_beta:.2}<br>'
+                elif result_type == ResultType.PROBABILITY.name:
+                    _hover_res = f'Pf sectie: {beta_to_pf(_beta):.2e}<br>'
+                elif result_type == ResultType.INTERPRETATION_CLASS.name:
+                    _color, _class = get_color_class_WBI(_beta)
+                    _hover_res = f'WBI klass: {_class}<br>'
+                    # _color = get_interpretation_class_color(_beta, dike_traject.signalering_value,
+                    #                                         dike_traject.lower_bound_value)
                 else:
-                    _hover_res = f'Pf sectie: {beta_to_pf(_beta_section):.2e}<br>'
+                    raise ValueError("Unrecognized result type")
 
                 _hovertemplate = f'Vaknaam {section.name}<br>' + _hover_res + "<extra></extra>"
 
@@ -129,7 +136,6 @@ def plot_dike_traject_reliability_initial_assessment_map(dike_traject: DikeTraje
                              f'Beta: NO DATA<br>' + "<extra></extra>"
 
         add_section_trace(fig, section, name=dike_traject.name, color=_color, hovertemplate=_hovertemplate)
-
     add_colorscale_bar(fig, result_type, ColorBarResultType.RELIABILITY.name, SubResultType.ABSOLUTE.name,
                        dike_traject.lower_bound_value)
 
@@ -187,7 +193,7 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
                 if _beta_section is None:
                     _color, _hovertemplate = get_no_data_info(section)
 
-                elif colorbar_result_type == ColorBarResultType.RELIABILITY.name and sub_result_type == SubResultType.ABSOLUTE.name:
+                elif colorbar_result_type == ColorBarResultType.RELIABILITY.name and sub_result_type == SubResultType.ABSOLUTE.name and result_type != ResultType.INTERPRETATION_CLASS.name:
                     _color, _hovertemplate = get_color_hover_absolute_reliability(section, _beta_section,
                                                                                   _measure_results,
                                                                                   dike_traject.lower_bound_value)
@@ -200,6 +206,11 @@ def plot_dike_traject_reliability_measures_assessment_map(dike_traject: DikeTraj
 
                 elif colorbar_result_type == ColorBarResultType.COST.name and sub_result_type == SubResultType.DIFFERENCE.name:
                     _color, _hovertemplate = get_color_hover_difference_cost(section)
+
+                elif colorbar_result_type == ColorBarResultType.RELIABILITY.name and result_type == ResultType.INTERPRETATION_CLASS.name and sub_result_type == SubResultType.ABSOLUTE.name:
+                    _color, _class = get_color_class_WBI(_beta_section)
+                    _hovertemplate = f'Vaknaam {section.name}<br>' \
+                                     f'WBI klasse: {_class}<br>' + "<extra></extra>"
 
                 else:
                     raise ValueError("Wrong combination of settings? or not implemented yet")
@@ -559,7 +570,8 @@ def add_measure_investment_year_trace(fig: go.Figure, section: DikeSection, meas
     :return:
     """
     _group = str(max(measure_results['investment_year']) + REFERENCE_YEAR)
-    _color = get_color(max(measure_results['investment_year']) + REFERENCE_YEAR, cmap=plt.cm.Dark2, vmin=2025, vmax=2075)
+    _color = get_color(max(measure_results['investment_year']) + REFERENCE_YEAR, cmap=plt.cm.Dark2, vmin=2025,
+                       vmax=2075)
     _hovertemplate = ""
 
     if _group in legend_display.keys():
@@ -767,10 +779,33 @@ def add_colorscale_bar(fig: go.Figure, result_type: str, colorbar_result_type: s
             cmax=7,
         )
 
+    elif result_type == ResultType.INTERPRETATION_CLASS.name:
+        names = ["I", "II", "III", "IV", "V", "VI"]
+        colors = ["#800000", "#FF6347", "#FFA500", "#FFD700", "#98FB98", "#7FFF00"]
+        for name, color in zip(names, colors):
+            fig.add_trace(
+                go.Scatter(
+                    x=[None],
+                    y=[None],
+                    mode='markers',
+                    marker=dict(color=color),
+                    name=name,
+                    hoverinfo='none',
+                    showlegend=True
+                )
+            )
+            fig.update_layout(legend=dict(title="WBI klasse"))
+
+        # remove ticks from dummy scatter plot
+        fig.update_xaxes(showticklabels=False)
+        fig.update_yaxes(showticklabels=False)
+
+        return
+
     fig.add_trace(
         go.Scatter(
-            x=[None],
-            y=[None],
+            x=[None, None],
+            y=[None, None],
             mode='markers',
             showlegend=False,
             marker=marker,
@@ -845,6 +880,46 @@ def add_colorscale_bar_berm_widening(fig: go.Figure):
     # remove ticks from dummy scatter plot
     fig.update_xaxes(showticklabels=False)
     fig.update_yaxes(showticklabels=False)
+
+
+def get_interpretation_class_color(beta_value: float, p_signal: float, p_lower_bound: float) -> str:
+    """
+
+    :param beta_value: reliability index for the selected mechanism (or section)
+    :param p_signal: signaleringswaarde for the dijktraject
+    :param p_lower_bound: ondergrens for the dijktraject (pmax in the database)
+    :return:
+    """
+    pf_value = beta_to_pf(beta_value)
+    if pf_value < 1 / 1000 * p_signal:
+        return '#006400'  # dark green
+    elif 1 / 1000 * p_signal < pf_value < 1 / 100 * p_signal:
+        return '#7FFF00'  # lawn green
+    elif 1 / 100 * p_signal < pf_value < 1 / 10 * p_signal:
+        return '#98FB98'  # pale green
+    elif 1 / 10 * p_signal < pf_value < p_signal:
+        return '#FFD700'  # gold
+    elif p_signal < pf_value < p_lower_bound:
+        return '#FFA500'  # orange
+    elif p_lower_bound < pf_value < 10 * p_lower_bound:
+        return '#FF6347'  # tomato
+    elif 10 * p_lower_bound < pf_value:
+        return '#800000'  # scarlet
+
+
+def get_color_class_WBI(beta_values) -> tuple[str, str]:
+    if beta_values < 2.75:
+        return 'purple', 'IV'
+    elif 2.75 <= beta_values < 3.72:
+        return 'red', "V"
+    elif 3.72 <= beta_values < 4.78:
+        return 'orange', "IV"
+    elif 4.78 <= beta_values < 5:
+        return 'yellow', "III"
+    elif 5 <= beta_values < 5.62:
+        return 'lightgreen', "II"
+    elif beta_values >= 5.62:
+        return 'green', "I"
 
 
 def get_color(value: float, cmap, vmin: float, vmax: float) -> str:

@@ -16,6 +16,7 @@ class ResultType(Enum):
     PROBABILITY = "Faalkans"
     COST = "Kosten"
     MEASURE = "Maatregel"
+    INTERPRETATION_CLASS = "Duidingsklassen"
 
 
 class SubResultType(Enum):

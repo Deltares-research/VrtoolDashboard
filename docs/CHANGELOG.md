@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased] [dd/mm/yyyy]
 
 ### Added
+None.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
+## v0.4.0 [29/04/2024]
+
+### Added
 - Acceptance test for DikeTraject importer
 - Acceptance test for DikeTraject faalkans matrix
 - New attribute greedy steps to DikeTraject
@@ -12,15 +29,22 @@ All notable changes to this project will be documented in this file.
 - Display greedy steps on graph beta vs cost along vr and dsn
 - Button recompute to generate a new vr line with specification year/beta
 - new buttons to download geojson content of the diketraject.
+- Database without doorsnede results can be imported
+- Database without any optimization results can be imported
+- Added link to the documentation
+- Added WBI classes to result maps
 
 ### Changed
+- Optimize callacbk switched to background callback
 - Refactor import od DikeTraject from database
+- LCC from database is now already accumulated
 
 ### Deprecated
 None.
 
 ### Removed
-None.
+-  Custom VRtool logger
+- Remove combination of betas for piping VZG+Soil
 
 ### Fixed
 - Fixed measure name for 3 combined measures

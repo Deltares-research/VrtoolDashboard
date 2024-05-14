@@ -3,7 +3,7 @@ from typing import Optional
 
 import numpy as np
 import pandas as pd
-from peewee import JOIN
+from peewee import JOIN, ModelBase, DoesNotExist
 from vrtool.orm.io.importers.optimization.optimization_step_importer import OptimizationStepImporter
 from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol
 from vrtool.orm.models import OptimizationStep, SectionData, MeasurePerSection, MeasureResult, \
@@ -54,8 +54,11 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         """
 
         _results = []
-
-        _optimization_steps = get_optimization_steps_ordered(self.run_id_vr)
+        try:
+            _optimization_steps = get_optimization_steps_ordered(self.run_id_vr)
+        except DoesNotExist:
+            print("Warning: No optimization steps found for run_id: {self.run_id_vr}")
+            return
 
         for _optimization_step in _optimization_steps:
             _as_df = OptimizationStepImporter.import_optimization_step_results_df(
@@ -74,7 +77,13 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             - import the final measure (beta, lcc, params, ...) for each dike section
 
         """
-        _optimization_steps = get_optimization_steps_ordered(self.run_id_dsn)
+
+        try:
+            _optimization_steps = get_optimization_steps_ordered(self.run_id_dsn)
+
+        except DoesNotExist:
+            print(f"No optimization steps found for run_id: {self.run_id_dsn}")
+            return
 
         _iterated_step_number = []
         _ordered_reinforced_sections = []
@@ -124,7 +133,11 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
 
         """
 
-        _optimization_steps = get_optimization_steps_ordered(self.run_id_vr)
+        try:
+            _optimization_steps = get_optimization_steps_ordered(self.run_id_vr)
+
+        except DoesNotExist:
+            return
 
         # 0. Initialize vars
         _previous_step_number = None
@@ -132,6 +145,8 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         _traject_pf, _ = get_traject_prob(_beta_df, ['StabilityInner', 'Piping', 'Overflow', "Revetment"])
         _greedy_steps_res = [{"pf": _traject_pf[0].tolist(), 'LCC': 0}]
         _ordered_reinforced_sections = []
+
+        _recorded__previous_section_LCC = {}
 
         for _optimization_step in _optimization_steps:
             _step_number = _optimization_step.step_number
@@ -151,9 +166,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             # find corresponding section in dike_section
             dike_section: DikeSection = self.dike_section_mapping[section.section_name]
 
-            # 1. Add and accumulate LCC for the final measure of the section
-            dike_section.final_measure_veiligheidsrendement["LCC"] += _get_section_lcc(_optimization_step)
-
             # 2. Get all steps sharing the same step number (=combined steps)
             _optimum_section_optimization_steps = (OptimizationStep
             .select()
@@ -167,18 +179,20 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             # 3. Get all information into a dict based on the optimum optimization steps.
             _step_measure = self._get_measure(_optimum_section_optimization_steps,
                                               active_mechanisms=dike_section.active_mechanisms)
-            _step_measure["LCC"] = dike_section.final_measure_veiligheidsrendement["LCC"]  # reassign correct LCC
+            _step_measure["LCC"] = _get_section_lcc(_optimization_step)
 
             dike_section.final_measure_veiligheidsrendement = _step_measure
 
             # 4. Calculate the traject probability of failure for the current step
-            self._add_greedy_step(dike_section, _optimization_step, _beta_df, _greedy_steps_res, _step_measure)
+            self._add_greedy_step(dike_section, _optimization_step, _beta_df, _greedy_steps_res, _step_measure,
+                                  _recorded__previous_section_LCC)
 
             # 5. Append the reinforcement order vr:
             self._get_reinforced_section_order(_optimization_step, _ordered_reinforced_sections)
 
             status_step = self.continue_next_step(_optimization_step, _greedy_steps_res[-1]['pf'])
             _previous_step_number = _step_number
+            _recorded__previous_section_LCC[dike_section.name] = _step_measure["LCC"]
 
             if status_step == False:
                 _the_final_step = _optimization_step.step_number
@@ -219,7 +233,8 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             return True
 
     def _add_greedy_step(self, dike_section: DikeSection, optimization_step: OptimizationStep, _beta_df: pd.DataFrame,
-                         greedy_steps_res: list[dict], step_measure):
+                         greedy_steps_res: list[dict], step_measure: dict,
+                         recorded__previous_section_LCC: dict[str, float]):
         """
         Add the results of the step to the list greedy_steps_list
 
@@ -227,6 +242,11 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         :param optimization_step: optimization step to be iterated from the osm table
         :param _beta_df: dataframe with beta of all mechanism and all sections. The dataframe is modified in place here!
         :param greedy_steps_res: result list to be appended. Element have the following structure:
+        :param step_measure: current state of the measure dictionary. it contains the beta for the considered
+        mechanisms
+        :param recorded__previous_section_LCC: dictionary that stores the previous LCC of the section. This is needed
+        because the LCC stored in the database is the accumulated LCC for the measure of the section. To retrieve the
+        incremental increase from the step, it is required to keep the LCC of the previous step of the same section.
         {"LCC": xxx, "pf": [X,Y,Z]}
 
         """
@@ -243,7 +263,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         _reinforced_traject_pf, _ = get_traject_prob(_beta_df, dike_section.active_mechanisms)
 
         # Get step LCC:
-        LCC = _get_section_lcc(optimization_step)
+        LCC = _get_section_lcc(optimization_step) - recorded__previous_section_LCC.get(dike_section.name, 0)
         greedy_steps_res.append({"pf": _reinforced_traject_pf[0].tolist(), 'LCC': LCC})
 
     def _get_reinforced_section_order(self, optimization_step: OptimizationStep, section_ordered_list: list[str]):
@@ -330,8 +350,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             _year_2 = self._get_investment_year(optimization_step[1])
             _year_3 = self._get_investment_year(optimization_step[2])
             return [_year_1, _year_2, _year_3]
-
-
 
     def _get_measure_parameters(self, optimization_steps: OptimizationStep) -> dict:
         _params = {}
