@@ -8,7 +8,7 @@ from src.constants import ResultType, CalcType, ColorBarResultType, Mechanism, S
 from src.linear_objects.dike_traject import DikeTraject
 from src.plotly_graphs.pf_length_cost import plot_pf_length_cost
 from src.plotly_graphs.plotly_maps import plot_dike_traject_reliability_measures_assessment_map, \
-    plot_dike_traject_reliability_initial_assessment_map, plot_overview_map
+    plot_dike_traject_reliability_initial_assessment_map, plot_overview_map, plot_dike_traject_urgency
 
 pf = beta_to_pf(3.87676607842221)
 _dike_data = json.load(
@@ -24,7 +24,7 @@ _dike_traject = DikeTraject.deserialize(_dike_data)
 result_type = ResultType.RELIABILITY
 cost_length_switch = "COST"
 # _fig = plot_overview_map(_dike_traject)
-_fig = plot_pf_length_cost(_dike_traject, 2025, result_type.name, cost_length_switch)
+# _fig = plot_pf_length_cost(_dike_traject, 2025, result_type.name, cost_length_switch)
 
 # _fig = plot_dike_traject_reliability_measures_assessment_map(_dike_traject, 2026, result_type.name,
 #                                                              calc_type=CalcType.VEILIGHEIDSRENDEMENT.name,
@@ -34,6 +34,8 @@ _fig = plot_pf_length_cost(_dike_traject, 2025, result_type.name, cost_length_sw
 # #
 # _fig = plot_dike_traject_reliability_initial_assessment_map(_dike_traject, 2025, result_type.name,
 #                                                             mechanism_type=Mechanism.REVETMENT.name, )
+
+_fig = plot_dike_traject_urgency(_dike_traject, 2025, 10, CalcType.VEILIGHEIDSRENDEMENT.name)
 _fig.update_layout(mapbox=dict(accesstoken=get_mapbox_token()))
 _fig.show()
 

@@ -10,7 +10,7 @@ from src.plotly_graphs.plotly_maps import plot_overview_map, plot_default_overvi
     plot_dike_traject_reliability_initial_assessment_map, plot_dike_traject_reliability_measures_assessment_map, \
     plot_dike_traject_urgency, dike_traject_pf_cost_helping_map
 from src.app import app
-from src.utils.utils import export_to_json
+from src.utils.utils import export_to_json, get_default_plotly_config
 
 
 @app.callback(Output('overview_map_div', 'children'),
@@ -156,7 +156,8 @@ def make_graph_map_urgency(dike_traject_data: dict, selected_year: float, length
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
         _fig = plot_dike_traject_urgency(_dike_traject, selected_year, length_urgency, calc_type)
     return dcc.Graph(figure=_fig, style={'width': '100%', 'height': '100%'},
-                     config={'mapboxAccessToken': get_mapbox_token()})
+                     # config={'mapboxAccessToken': get_mapbox_token()})
+                     config=get_default_plotly_config("urgency_map"))
 
 
 @app.callback(Output("dike_traject_pf_cost_helping_map", "figure"), Input('stored-data', 'data'),

@@ -297,6 +297,21 @@ def plot_dike_traject_urgency(dike_traject: DikeTraject, selected_year: float, l
     _middle_point = get_middle_point(dike_traject.dike_sections)
     update_layout_map_box(fig, _middle_point)
 
+    # increase size label of legend
+    fig.update_layout(legend=dict(
+        font=dict(size=40),
+        itemwidth=40,
+
+    ))
+    # place legend on top of figrue:
+    fig.update_layout(legend=dict(
+        yanchor="top",
+        y=0.99,
+        xanchor="left",
+        x=0.01
+    ))
+
+
     return fig
 
 
@@ -597,7 +612,7 @@ def add_section_trace(fig: go.Figure, section: DikeSection, name: str, color: st
         lat=[x[0] for x in _coordinates_wgs],
         lon=[x[1] for x in _coordinates_wgs],
         marker={'size': 10, 'color': color},
-        line={'width': 5, 'color': color},
+        line={'width': 10, 'color': color},
         name=name,
         opacity=opacity,
         legendgroup=legendgroup,

@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 from plotly.graph_objs import Figure
 
-from src.constants import ResultType, Mechanism, SubResultType, ColorBarResultType, CalcType
+from src.constants import ResultType, Mechanism, SubResultType, ColorBarResultType, CalcType, get_mapbox_token
 from src.linear_objects.dike_traject import DikeTraject
 from src.plotly_graphs.plotly_maps import plot_dike_traject_reliability_initial_assessment_map, \
     plot_dike_traject_reliability_measures_assessment_map, plot_dike_traject_urgency, dike_traject_pf_cost_helping_map, \
@@ -125,7 +125,11 @@ class TestPlotlyScatterMapBox():
 
         # 2. Call
         _fig = plot_dike_traject_urgency(_dike_traject, 2025, 20, calc_type.name)
+        # change config with config=get_default_plotly_config("urgency_map")
+        _fig.update_layout(mapbox=dict(accesstoken=get_mapbox_token()))
+        _fig.show()
 
+        stop
         # 3. Assert
         assert isinstance(_fig, Figure)
 
