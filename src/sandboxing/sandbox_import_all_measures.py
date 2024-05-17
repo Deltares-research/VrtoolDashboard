@@ -1,4 +1,5 @@
 import json
+from bisect import bisect_right
 from pathlib import Path
 import time
 from vrtool.defaults.vrtool_config import VrtoolConfig
@@ -20,26 +21,28 @@ from src.utils.utils import export_to_json
 # _vr_config = VrtoolConfig().from_json(Path(__file__).parent.parent / "tests/data/Case_24_3/config.json")
 # _vr_config = VrtoolConfig().from_json(Path(r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\TestCase1_38-1_no_housing_testingonly\vr_config.json"))
 _vr_config = VrtoolConfig().from_json(Path(
-    r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\38-1 base river case\config.json"))
+    r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\figure_DPI\config.json"))
 # _vr_config = VrtoolConfig().from_json(Path(__file__).parent.parent / "tests/data/TestCase1_38-1_no_housing/vr_config.json")
 t0 = time.time()
-section_name = "2"
-mechanism = Mechanism.SECTION
+section_name = "vak 22"
+mechanism = Mechanism.PIPING
+
+_year_index = bisect_right([0, 19, 29, 50, 75, 100], 2080 - 2025) - 1
+_time = [0, 19, 29, 50, 75, 100][_year_index]
 _meas_results, _vr_steps, _dsn_steps = get_all_measure_results(_vr_config, section_name, mechanism, run_id_vr=1,
-                                                               run_id_dsn=2)
+                                                               run_id_dsn=2, time=_time)
 
-# _dike_data = json.load(
-#     open(Path(
-#         r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\TestCase1_38-1_no_housing\reference\dike_traject_data.json"
-#         # r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_38_1\reference\data.json"
-#     )))
-# _dike_traject = DikeTraject.deserialize(_dike_data)
-# #
-# # _dike_traject = get_dike_traject_from_config_ORM(vr_config=_vr_config, run_is_vr=1, run_id_dsn=2)
+_dike_data = json.load(
+    open(Path(
+        r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\TestCase1_38-1_no_housing\reference\dike_traject_data.json"
+        # r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_38_1\reference\data.json"
+    )))
+_dike_traject = DikeTraject.deserialize(_dike_data)
 #
-# _section = _dike_traject.get_section(section_name)
+# _dike_traject = get_dike_traject_from_config_ORM(vr_config=_vr_config, run_is_vr=1, run_id_dsn=2)
 
-# fig = plot_measure_results_graph(_meas_results, _vr_steps, _dsn_steps, mechanism, section_name)
+_section = _dike_traject.get_section(section_name)
+fig = plot_measure_results_graph(_meas_results, _vr_steps, _dsn_steps, mechanism, section_name, _year_index)
 
-fig =  make_graph_measure_results_comparison()
+# fig = make_graph_measure_results_comparison()
 fig.show()

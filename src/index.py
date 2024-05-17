@@ -57,25 +57,23 @@ nav_bar_layout_1 = html.Div([
     ),
 ])
 
+from src.callbacks.traject_page import callbacks_main_page
+from src.callbacks.traject_page import callback_tabs_switch
+from src.callbacks.traject_page import callbacks_tab_content
+# from src.callbacks.traject_page import callback_optim ize
+from src.callbacks.traject_page import callback_download_geojson
+from src.callbacks.traject_page import callback_renderer
+
 # Define the app layout
 app.layout = dbc.Container(
     id="app-container",
     children=
     [
         dcc.Location(id='url', pathname='welcome', refresh=False),
-        dcc.Store(id='stored-data', data=None),
+        dcc.Store(id='stored-data', data=None, storage_type="local"),
         dcc.Store(id=STORE_CONFIG, data=None),
         nav_bar_layout_1,
-        # # make_layout_main_page(),
         modal_optimize,  # keep this line to import the modal as closed to the app by default
-        # # sidebar
-
-        # html.H1('Multi-page app with Dash Pages'),
-        # html.Div([
-        #     html.Div(
-        #         dcc.Link(f"{page['name']} - {page['path']}", href=page["relative_path"])
-        #     ) for page in dash.page_registry.values()
-        # ]),
         dash.page_container
     ],
     fluid=True,

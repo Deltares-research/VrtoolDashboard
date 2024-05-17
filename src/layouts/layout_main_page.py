@@ -46,11 +46,11 @@ def make_layout_main_page() -> dbc.Row:
                                              collapse_id=2,
                                              inner_layouts=[dike_settings_layout]),
 
-                        make_collapsing_menu(menu_name="Maatregelen optimalisatie",
-                                             collapse_id=3,
-                                             # inner_layouts=[dike_vr_optimization_layout],
-                                             inner_layouts=[dike_vr_optimization_layout_ag_grid],
-                                             is_open=False),
+                        # make_collapsing_menu(menu_name="Maatregelen optimalisatie",
+                        #                      collapse_id=3,
+                        #                      # inner_layouts=[dike_vr_optimization_layout],
+                        #                      inner_layouts=[dike_vr_optimization_layout_ag_grid],
+                        #                      is_open=False),
 
                     ]
                 ),
