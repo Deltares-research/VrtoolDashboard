@@ -1,7 +1,7 @@
 from bisect import bisect_right
 from pathlib import Path
 
-from dash import dcc, Output, Input
+from dash import dcc, Output, Input, callback
 from plotly.graph_objs import Figure
 from vrtool.defaults.vrtool_config import VrtoolConfig
 
@@ -30,11 +30,10 @@ from src.plotly_graphs.plotly_maps import (
     plot_dike_traject_urgency,
     dike_traject_pf_cost_helping_map,
 )
-from src.app import app
 from src.utils.utils import export_to_json
 
 
-@app.callback(Output("overview_map_div", "children"), [Input("stored-data", "data")])
+@callback(Output("overview_map_div", "children"), [Input("stored-data", "data")])
 def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
@@ -57,7 +56,7 @@ def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
     )
 
 
-@app.callback(
+@callback(
     Output("dike_traject_reliability_map_initial", "children"),
     [
         Input("stored-data", "data"),
@@ -95,7 +94,7 @@ def make_graph_map_initial_assessment(
     )
 
 
-@app.callback(
+@callback(
     Output("dike_traject_reliability_map_measures", "children"),
     [
         Input("stored-data", "data"),
@@ -152,7 +151,7 @@ def make_graph_map_measures(
     )
 
 
-@app.callback(
+@callback(
     Output("dike_traject_pf_cost_graph", "figure"),
     [
         Input("stored-data", "data"),
@@ -186,7 +185,7 @@ def make_graph_pf_vs_cost(
     return _fig
 
 
-@app.callback(
+@callback(
     Output("dike_traject_urgency_map", "children"),
     [
         Input("stored-data", "data"),
@@ -224,7 +223,7 @@ def make_graph_map_urgency(
     )
 
 
-@app.callback(
+@callback(
     Output("dike_traject_pf_cost_helping_map", "figure"),
     Input("stored-data", "data"),
     Input("dike_traject_pf_cost_graph", "clickData"),
@@ -263,7 +262,7 @@ def update_click(dike_traject_data: dict, click_data: dict) -> Figure:
 ### TAB Maatregelen ###
 
 
-@app.callback(
+@callback(
     Output(SELECT_DIKE_SECTION_FOR_MEASURES_ID, "options"),
     Input("stored-data", "data"),
 )
@@ -283,7 +282,7 @@ def fill_dike_section_selection(dike_traject_data: dict) -> list[dict]:
     return _option_list
 
 
-@app.callback(
+@callback(
     Output(GRAPG_MEASURE_COMPARISON_ID, "figure"),
     [
         Input("stored-data", "data"),

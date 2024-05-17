@@ -1,6 +1,5 @@
-from dash import html, Output, Input
+from dash import html, Output, Input, callback
 
-from src.app import app
 from src.layouts.layout_main_page import (
     layout_tab_one,
     layout_tab_two,
@@ -16,7 +15,7 @@ from src.layouts.layout_radio_items import (
 )
 
 
-@app.callback(
+@callback(
     [
         Output("content_tab", "children"),
         Output("select_calculation_type", "options"),

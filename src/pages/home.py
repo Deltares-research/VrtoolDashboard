@@ -5,7 +5,7 @@ dash.register_page(__name__, path='/')
 
 layout = html.Div([
     html.H1('This is our Home page'),
-    html.Div('This is our Home page content.'),
+    html.Div('This is our Home page content. Lorem ipsum dolor sit amet, consectetur adipiscing elit. '),
 
     # html.Div([
     #     html.Div(
