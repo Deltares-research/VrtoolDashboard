@@ -17,8 +17,8 @@ nav_bar_layout_1 = html.Div([
         children=[
             dbc.NavItem(dbc.NavLink("Home", href="/")),
             dbc.DropdownMenu([
-                dbc.DropdownMenuItem("traject_page", href="/traject-page"),
-                # dbc.DropdownMenuItem("database", href="/database_interaction")
+                dbc.DropdownMenuItem("Traject", href="/traject-page"),
+                dbc.DropdownMenuItem("Optimization run", href="/database-interaction-page")
             ],
 
                 nav=True,

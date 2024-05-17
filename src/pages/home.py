@@ -12,8 +12,11 @@ layout = html.Div([
     #         dcc.Link(f"{page['name']} - {page['path']}", href=page["relative_path"])
     #     ) for page in dash.page_registry.values()
     # ]),
+
+
     dcc.Link("Go to traject page", href="/traject-page"),
-    # dcc.Link("Go to database interaction page", href="/traject-page")
+    html.Br(),
+    dcc.Link("Go to database interaction page", href="/database-interaction-page")
     # dcc.Link("Go to region page", href="/traject-page")
 
 ])
