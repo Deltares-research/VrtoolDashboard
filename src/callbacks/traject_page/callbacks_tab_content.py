@@ -7,14 +7,11 @@ from vrtool.defaults.vrtool_config import VrtoolConfig
 
 from src.component_ids import (
     SLIDER_YEAR_RELIABILITY_RESULTS_ID,
-    GREEDY_OPTIMIZATION_CRITERIA_BETA,
-    GREEDY_OPTIMIZATION_CRITERIA_YEAR,
-    SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA,
     SELECT_DIKE_SECTION_FOR_MEASURES_ID,
     GRAPG_MEASURE_COMPARISON_ID,
     STORE_CONFIG,
 )
-from src.constants import REFERENCE_YEAR, get_mapbox_token
+from src.constants import REFERENCE_YEAR, get_mapbox_token, Mechanism
 from src.linear_objects.dike_traject import DikeTraject
 from src.orm.import_database import get_all_measure_results
 from src.plotly_graphs.measure_comparison_graph import plot_measure_results_graph
@@ -332,7 +329,7 @@ def make_graph_measure_results_comparison(
         _meas_results, _vr_steps, _dsn_steps = get_all_measure_results(
             _vr_config,
             _section.name,
-            selected_mechanism,
+            get_mechanism_name_ORM(selected_mechanism),
             _time,
             run_id_vr=dike_traject_data["_run_id_vr"],
             run_id_dsn=dike_traject_data["_run_id_dsn"],
@@ -348,3 +345,24 @@ def make_graph_measure_results_comparison(
         )
 
     return _fig
+
+
+def get_mechanism_name_ORM(mechanism: str) -> str:
+    """
+    Get the Mechanism object from the string representation of the mechanism.
+
+    :param mechanism: String representation of the mechanism.
+    :return: Mechanism object.
+    """
+
+    if mechanism == Mechanism.PIPING.name:
+        return "Piping"
+    elif mechanism == Mechanism.STABILITY.name:
+        return "StabilityInner"
+    elif mechanism == Mechanism.OVERFLOW.name:
+        return "Overflow"
+    elif mechanism == Mechanism.REVETMENT.name:
+        return "Revetment"
+    elif mechanism == Mechanism.SECTION.name:
+        return "Section"
+

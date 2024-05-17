@@ -21,7 +21,7 @@ from src.orm.importers.optimization_run_importer import import_optimization_runs
 def get_all_measure_results(
     vr_config: VrtoolConfig,
     section_name: str,
-    mechanism: Mechanism,
+    mechanism: str,
     time: int,
     run_id_vr: int,
     run_id_dsn: int,

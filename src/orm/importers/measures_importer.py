@@ -22,28 +22,16 @@ from vrtool.orm.models import (
 )
 from vrtool.orm.models import Mechanism as ORM_Mechanism
 
-from src.constants import GreedyOPtimizationCriteria, Mechanism
-from src.linear_objects.dike_section import DikeSection
-from src.linear_objects.dike_traject import (
-    DikeTraject,
-    get_initial_assessment_df,
-    get_traject_prob,
-)
+from src.constants import Mechanism
 
-from src.orm.importers.dike_section_importer import DikeSectionImporter
 from src.orm.importers.importer_utils import _get_measure, _get_measure_cost
 from src.orm.importers.optimization_step_importer import (
-    _get_final_measure_betas,
     _get_section_lcc,
 )
-from src.orm.importers.solution_importer import TrajectSolutionRunImporter
 from src.orm.models import OptimizationSelectedMeasure, OptimizationStep, MeasureResult
-from src.orm.models.dike_traject_info import DikeTrajectInfo
 
-import geopandas as gpd
 
 from src.orm.orm_controller_custom import get_optimization_steps_ordered
-from src.utils.utils import get_signal_value
 
 
 class TrajectMeasureResultsImporter(OrmImporterProtocol):
@@ -52,7 +40,7 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
         self,
         vr_config: VrtoolConfig,
         section_name: str,
-        mechanism: Mechanism,
+        mechanism: str,
         time: int,
         run_id_vr: int,
         run_id_dsn: int,
@@ -127,7 +115,7 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
                 )
             )
 
-            # TODO include revetment
+            # TODO include revetment/bekleding
             _measure = _get_measure(
                 _optimum_section_optimization_steps,
                 ["Piping", "StabilityInner", "Overflow"],
@@ -161,9 +149,10 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
             )
         )
         list_results = []
+
         for measure_result in _measure_results:
             # select only the first occurence of the measure result section
-            if self.mechanism == Mechanism.SECTION:
+            if self.mechanism == "Section":
                 _measure_result = (
                     MeasureResultSection()
                     .select()
@@ -195,6 +184,7 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
                     .where(
                         MeasureResultMechanism.measure_result == measure_result.id,
                         MeasureResultMechanism.time == self.time,
+                        ORM_Mechanism.name == self.mechanism
                     )
                     .get()
                 )

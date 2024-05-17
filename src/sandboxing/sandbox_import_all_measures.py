@@ -4,7 +4,8 @@ import time
 from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.orm.orm_controllers import open_database
 
-from src.callbacks.traject_page.callbacks_tab_content import make_graph_measure_results_comparison
+from src.callbacks.traject_page.callbacks_tab_content import make_graph_measure_results_comparison, \
+    get_mechanism_name_ORM
 from src.constants import CalcType, ColorBarResultType, Mechanism, SubResultType, ResultType, get_mapbox_token
 from src.linear_objects.dike_traject import DikeTraject
 from src.orm.import_database import get_all_measure_results, get_dike_traject_from_config_ORM, \
@@ -20,13 +21,15 @@ from src.utils.utils import export_to_json
 # _vr_config = VrtoolConfig().from_json(Path(__file__).parent.parent / "tests/data/Case_24_3/config.json")
 # _vr_config = VrtoolConfig().from_json(Path(r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\TestCase1_38-1_no_housing_testingonly\vr_config.json"))
 _vr_config = VrtoolConfig().from_json(Path(
-    r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\38-1 base river case\config.json"))
+    r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\figure_DPI\config.json"))
 # _vr_config = VrtoolConfig().from_json(Path(__file__).parent.parent / "tests/data/TestCase1_38-1_no_housing/vr_config.json")
 t0 = time.time()
-section_name = "2"
-mechanism = Mechanism.SECTION
+section_name = "vak 22"
+mechanism = Mechanism.SECTION.name
+mechanism = get_mechanism_name_ORM(mechanism)
 _meas_results, _vr_steps, _dsn_steps = get_all_measure_results(_vr_config, section_name, mechanism, run_id_vr=1,
-                                                               run_id_dsn=2)
+                                                               run_id_dsn=2, time=0)
+
 
 # _dike_data = json.load(
 #     open(Path(
@@ -41,5 +44,5 @@ _meas_results, _vr_steps, _dsn_steps = get_all_measure_results(_vr_config, secti
 
 # fig = plot_measure_results_graph(_meas_results, _vr_steps, _dsn_steps, mechanism, section_name)
 
-fig =  make_graph_measure_results_comparison()
-fig.show()
+# fig =  make_graph_measure_results_comparison()
+# fig.show()
