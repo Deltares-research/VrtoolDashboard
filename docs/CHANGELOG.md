@@ -2,7 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] [dd/mm/yyyy]
+
+## v0.0.0 [##/##/####]
+
+### Added
+None.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
+## v0.4.1 [21/05/2024]
 
 ### Added
 None.
