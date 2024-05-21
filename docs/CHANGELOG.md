@@ -17,7 +17,7 @@ None.
 None.
 
 ### Fixed
-None.
+- HotFix for Revetment probability of traject failure
 
 ## v0.4.0 [29/04/2024]
 
