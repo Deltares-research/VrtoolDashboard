@@ -136,7 +136,6 @@ def selection_traject_run(name: str, vr_config: dict) -> dict:
         Input(GREEDY_OPTIMIZATION_CRITERIA_YEAR, "value"),
         Input(BUTTON_RECOMPUTE_GREEDY_STEPS, "n_clicks"),
         Input(BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, 'value')
-
     ],
     State(STORE_CONFIG, "data"),
     prevent_initial_call=True,
@@ -284,36 +283,36 @@ def update_radio_sub_result_type(result_type: str) -> tuple[list, str]:
     return options, value
 
 
-@callback(
-    Output(EDITABLE_TRAJECT_TABLE_ID, "rowData"),
-    Input('stored-data', 'data'),
-)
-def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
-    """
-    This is a callback to fill the editable table with the data from the database for the selected database.
-    By default all toggle are set to True.
-    :param dike_traject_data: the data of the dike traject
-
-    :return:
-    """
-
-    df = pd.DataFrame(columns=["section_col", "reinforcement_col"])
-
-    if dike_traject_data is not None:
-        _dike_traject = DikeTraject.deserialize(dike_traject_data)
-
-        for section in _dike_traject.dike_sections:
-            df = df.append({"section_col": section.name,
-                            "reinforcement_col": True,
-                            "reference_year": 2045,
-                            Measures.GROUND_IMPROVEMENT.name: True,
-                            Measures.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.name: True,
-                            Measures.GEOTEXTILE.name: True,
-                            Measures.DIAPHRAGM_WALL.name: True,
-                            Measures.STABILITY_SCREEN.name: True,
-                            }, ignore_index=True)
-
-        return df.to_dict('records')
+# @callback(
+#     Output(EDITABLE_TRAJECT_TABLE_ID, "rowData"),
+#     Input('stored-data', 'data'),
+# )
+# def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
+#     """
+#     This is a callback to fill the editable table with the data from the database for the selected database.
+#     By default all toggle are set to True.
+#     :param dike_traject_data: the data of the dike traject
+#
+#     :return:
+#     """
+#
+#     df = pd.DataFrame(columns=["section_col", "reinforcement_col"])
+#
+#     if dike_traject_data is not None:
+#         _dike_traject = DikeTraject.deserialize(dike_traject_data)
+#
+#         for section in _dike_traject.dike_sections:
+#             df = df.append({"section_col": section.name,
+#                             "reinforcement_col": True,
+#                             "reference_year": 2045,
+#                             Measures.GROUND_IMPROVEMENT.name: True,
+#                             Measures.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.name: True,
+#                             Measures.GEOTEXTILE.name: True,
+#                             Measures.DIAPHRAGM_WALL.name: True,
+#                             Measures.STABILITY_SCREEN.name: True,
+#                             }, ignore_index=True)
+#
+#         return df.to_dict('records')
 
 
 @callback(
