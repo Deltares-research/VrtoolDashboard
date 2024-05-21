@@ -245,12 +245,11 @@ def get_traject_prob(beta_df: DataFrame, mechanisms: list) -> tuple[np.array, di
     traject_probs = dict((el, []) for el in mechanisms)
     total_traject_prob = np.empty((1, beta_df.shape[1]))
     for mechanism in mechanisms:
-        if mechanism == 'Revetment':
+
+        if mechanism in ['Overflow', 'Revetment']:
             # check is mechanism is in the index
             if not mechanism in beta_df.index:
                 continue
-
-        if mechanism == 'Overflow':
             # take min beta in each column
             traject_probs[mechanism] = beta_to_pf(beta_df.loc[mechanism].min().values)
         else:
