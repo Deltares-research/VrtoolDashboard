@@ -1,7 +1,7 @@
 import dash_bootstrap_components as dbc
-from dash import dcc, html
-from src.component_ids import OPTIMIZE_MODAL_ID, CLOSE_OPTIMAL_MODAL_BUTTON_ID, CLOSE_OPTIMAL_MEASURE_BUTTON_ID, \
-    OPTIMIZE_MEASURE_ID
+from dash import html
+
+from src.component_ids import MEASURE_MODAL_ID, CLOSE_MEASURE_MODAL_BUTTON_ID
 
 modal_optimize = dbc.Modal(
     [
@@ -12,9 +12,9 @@ modal_optimize = dbc.Modal(
         ),
         dbc.ModalFooter(
             # add a button to close the modal
-            dbc.Button("Close", id=CLOSE_OPTIMAL_MEASURE_BUTTON_ID, className="ml-auto")
+            dbc.Button("Close", id=CLOSE_MEASURE_MODAL_BUTTON_ID, className="ml-auto")
         ),
     ],
-    id=OPTIMIZE_MEASURE_ID,
+    id=MEASURE_MODAL_ID,
     is_open=False,
 )

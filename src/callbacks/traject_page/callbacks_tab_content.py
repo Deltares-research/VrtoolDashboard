@@ -9,7 +9,7 @@ from src.component_ids import (
     SLIDER_YEAR_RELIABILITY_RESULTS_ID,
     SELECT_DIKE_SECTION_FOR_MEASURES_ID,
     GRAPG_MEASURE_COMPARISON_ID,
-    STORE_CONFIG, CLOSE_OPTIMAL_MEASURE_BUTTON_ID, OPTIMIZE_MEASURE_ID,
+    STORE_CONFIG, MEASURE_MODAL_ID, CLOSE_MEASURE_MODAL_BUTTON_ID
 )
 from src.constants import REFERENCE_YEAR, get_mapbox_token, Mechanism
 from src.linear_objects.dike_traject import DikeTraject
@@ -345,25 +345,25 @@ def make_graph_measure_results_comparison(
     return _fig
 
 
-# @callback(
-#     output=[
-#         Output(OPTIMIZE_MEASURE_ID, "is_open", allow_duplicate=True),
-#         Output(CLOSE_OPTIMAL_MEASURE_BUTTON_ID, "n_clicks"),
-#     ],
-#     inputs=[
-#         Input(CLOSE_OPTIMAL_MEASURE_BUTTON_ID, "n_clicks"),
-#     ],
-#     prevent_initial_call=True,
-# )
-# def close_modal_measure_reliability_time(close_n_click: int
-#                                          ) -> tuple[bool, int]:
-#     """
-#     Dummy call to trigger the opening of the canvas so the `update_timestamp`
-#     can output the vrtool logging.
-#     """
-#     if close_n_click and close_n_click > 0:
-#         return False, 0
-#     return True, 0
+@callback(
+    output=[
+        Output(MEASURE_MODAL_ID, "is_open", allow_duplicate=True),
+        Output(CLOSE_MEASURE_MODAL_BUTTON_ID, "n_clicks"),
+    ],
+    inputs=[
+        Input(CLOSE_MEASURE_MODAL_BUTTON_ID, "n_clicks"),
+    ],
+    prevent_initial_call=True,
+)
+def close_modal_measure_reliability_time(close_n_click: int
+                                         ) -> tuple[bool, int]:
+    """
+    Dummy call to trigger the opening of the canvas so the `update_timestamp`
+    can output the vrtool logging.
+    """
+    if close_n_click and close_n_click > 0:
+        return False, 0
+    return True, 0
 
 
 def get_mechanism_name_ORM(mechanism: str) -> str:

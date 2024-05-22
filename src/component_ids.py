@@ -42,5 +42,5 @@ SELECT_DIKE_SECTION_FOR_MEASURES_ID = "select_dike_section_id"
 GRAPG_MEASURE_COMPARISON_ID = "graph_measure_comparison_id"
 
 
-OPTIMIZE_MEASURE_ID = "optimize_modal_id"
-CLOSE_OPTIMAL_MEASURE_BUTTON_ID = "close-modal-optimize"
+MEASURE_MODAL_ID = "measure_modal_id"
+CLOSE_MEASURE_MODAL_BUTTON_ID = "close-modal-measure"
