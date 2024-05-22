@@ -374,17 +374,18 @@ def close_modal_measure_reliability_time(close_n_click: int
     inputs=[Input(GRAPH_MEASURE_COMPARISON_ID, "clickData"),
             ],
     state=[State("select_mechanism_type", "value"),
-           State(STORE_CONFIG, "data")]
+           State(STORE_CONFIG, "data"),
+           State("stored-data", "data"),
+           State(SELECT_DIKE_SECTION_FOR_MEASURES_ID, "value"),
+           ]
     ,
     prevent_initial_call=True,
 )
-def open_modal_measure_reliability_time(click_data: dict, selected_mechanism, vr_config) -> tuple[bool, Figure]:
+def open_modal_measure_reliability_time(click_data: dict, selected_mechanism, vr_config, dike_traject_data: dict,
+                                        section_name: str) -> tuple[bool, Figure]:
     """
 
     """
-    print(click_data)
-    print(selected_mechanism)
-    print(vr_config)
     if click_data is None:
         return False, plot_default_scatter_dummy()
 
@@ -398,10 +399,17 @@ def open_modal_measure_reliability_time(click_data: dict, selected_mechanism, vr
         _vr_config.output_directory = Path(vr_config["output_directory"])
         _vr_config.input_database_name = vr_config["input_database_name"]
 
-        print(_clicked_measure_result_id)
-        a = get_measure_reliability_over_time(_vr_config, _clicked_measure_result_id, get_mechanism_name_ORM(selected_mechanism))
-        print(a)
-        return True, plot_measure_results_over_time_graph()
+        _mechanism_name = get_mechanism_name_ORM(selected_mechanism)
+
+        betas_meas = get_measure_reliability_over_time(_vr_config, _clicked_measure_result_id,
+                                                       _mechanism_name)
+
+        _dike_traject = DikeTraject.deserialize(dike_traject_data)
+        years = _dike_traject.get_section(section_name).years
+
+        betas_ini = _dike_traject.get_section(section_name).initial_assessment[_mechanism_name]
+        print(betas_ini, 9999)
+        return True, plot_measure_results_over_time_graph(betas_meas, betas_ini, selected_mechanism, section_name, years)
     else:
         return True, plot_default_scatter_dummy()
 
