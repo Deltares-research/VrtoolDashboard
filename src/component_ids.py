@@ -39,7 +39,8 @@ DOWNLOAD_REINFORCED_SECTIONS_ID = "download_reinforced_sections_id"
 BUTTON_DOWNLOAD_REINFORCED_SECTIONS_NB_CLICKS = "button_download_reinforced_sections_nb_clicks"
 
 SELECT_DIKE_SECTION_FOR_MEASURES_ID = "select_dike_section_id"
-GRAPG_MEASURE_COMPARISON_ID = "graph_measure_comparison_id"
+GRAPH_MEASURE_COMPARISON_ID = "graph_measure_comparison_id"
+DIKE_TRAJECT_PF_COST_GRAPH_ID = "dike_traject_pf_cost_graph"
 
 
 MEASURE_MODAL_ID = "measure_modal_id"

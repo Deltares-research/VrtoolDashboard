@@ -8,8 +8,8 @@ from vrtool.defaults.vrtool_config import VrtoolConfig
 from src.component_ids import (
     SLIDER_YEAR_RELIABILITY_RESULTS_ID,
     SELECT_DIKE_SECTION_FOR_MEASURES_ID,
-    GRAPG_MEASURE_COMPARISON_ID,
-    STORE_CONFIG, MEASURE_MODAL_ID, CLOSE_MEASURE_MODAL_BUTTON_ID
+    GRAPH_MEASURE_COMPARISON_ID,
+    STORE_CONFIG, MEASURE_MODAL_ID, CLOSE_MEASURE_MODAL_BUTTON_ID, DIKE_TRAJECT_PF_COST_GRAPH_ID
 )
 from src.constants import REFERENCE_YEAR, get_mapbox_token, Mechanism
 from src.linear_objects.dike_traject import DikeTraject
@@ -149,7 +149,7 @@ def make_graph_map_measures(
 
 
 @callback(
-    Output("dike_traject_pf_cost_graph", "figure"),
+    Output(DIKE_TRAJECT_PF_COST_GRAPH_ID, "figure"),
     [
         Input("stored-data", "data"),
         Input(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "value"),
@@ -223,7 +223,7 @@ def make_graph_map_urgency(
 @callback(
     Output("dike_traject_pf_cost_helping_map", "figure"),
     Input("stored-data", "data"),
-    Input("dike_traject_pf_cost_graph", "clickData"),
+    Input(DIKE_TRAJECT_PF_COST_GRAPH_ID, "clickData"),
 )
 def update_click(dike_traject_data: dict, click_data: dict) -> Figure:
     """
@@ -280,7 +280,7 @@ def fill_dike_section_selection(dike_traject_data: dict) -> list[dict]:
 
 
 @callback(
-    Output(GRAPG_MEASURE_COMPARISON_ID, "figure"),
+    Output(GRAPH_MEASURE_COMPARISON_ID, "figure"),
     [
         Input("stored-data", "data"),
         Input(STORE_CONFIG, "data"),
@@ -364,6 +364,22 @@ def close_modal_measure_reliability_time(close_n_click: int
     if close_n_click and close_n_click > 0:
         return False, 0
     return True, 0
+
+
+@callback(
+    Output(MEASURE_MODAL_ID, "is_open"),
+    Input(GRAPH_MEASURE_COMPARISON_ID, "clickData"),
+    prevent_initial_call=True,
+)
+def open_modal_measure_reliability_time(click_data: dict):
+    """
+
+    """
+    print(click_data)
+    if click_data is None:
+        return False
+
+    return True
 
 
 def get_mechanism_name_ORM(mechanism: str) -> str:

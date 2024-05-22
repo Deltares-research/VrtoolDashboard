@@ -3,7 +3,7 @@ from dash import html
 
 from src.component_ids import MEASURE_MODAL_ID, CLOSE_MEASURE_MODAL_BUTTON_ID
 
-modal_optimize = dbc.Modal(
+modal_measure_reliability = dbc.Modal(
     [
         dbc.ModalBody("Maateregelen"),
 
