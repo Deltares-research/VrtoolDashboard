@@ -48,7 +48,6 @@ def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
         - boolean indicating if the upload was successful.
         - value of the dropdown selection run id.
     """
-
     if contents is not None:
         try:
 
@@ -81,7 +80,7 @@ def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
         except:
             return html.Div("Geen bestand geüpload"), False, {}, "", []
     else:
-        return html.Div("Geen bestand geüpload"), False, {}, "", []
+        return html.Div("Geen bestand geüpload"), False, dash.no_update, "", []
 
 
 @callback(
@@ -108,6 +107,9 @@ def selection_traject_run(name: str, vr_config: dict) -> dict:
     _vr_config.output_directory = Path(vr_config['output_directory'])
     _vr_config.input_database_name = vr_config['input_database_name']
     _vr_config.excluded_mechanisms = [MechanismEnum.REVETMENT, MechanismEnum.HYDRAULIC_STRUCTURES]
+
+    if name == '':
+        return dash.no_update
 
     if name == "Basisberekening":
         _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=2, run_is_vr=1)

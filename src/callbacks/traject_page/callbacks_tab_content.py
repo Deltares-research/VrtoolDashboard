@@ -78,7 +78,6 @@ def make_graph_map_initial_assessment(test_store,
     :return: dcc.Graph with the plotly figure
 
     """
-    print('test_store, page traject:',test_store)
     if dike_traject_data is None:
         _fig = plot_default_overview_map_dummy()
     else:
@@ -320,7 +319,6 @@ def make_graph_measure_results_comparison(
         _section = _dike_traject.get_section(selected_dike_section)
         _year_index = bisect_right(_section.years, selected_year - REFERENCE_YEAR) - 1
         _time = _section.years[_year_index]
-
         _vr_config = VrtoolConfig()
         _vr_config.traject = vr_config["traject"]
         _vr_config.input_directory = Path(vr_config["input_directory"])
