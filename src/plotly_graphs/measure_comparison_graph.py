@@ -1,18 +1,11 @@
-from bisect import bisect_right
-from typing import Optional
+
 
 import numpy as np
 import plotly.graph_objects as go
 from pandas import DataFrame
 
-from src.constants import REFERENCE_YEAR, ResultType, CalcType, Mechanism
-from src.linear_objects.dike_section import DikeSection
-from src.linear_objects.dike_traject import (
-    DikeTraject,
-    cum_cost_steps,
-    get_step_traject_pf,
-)
-from src.utils.utils import pf_to_beta, beta_to_pf
+from src.constants import CalcType, Mechanism
+
 
 
 def plot_measure_results_graph(
