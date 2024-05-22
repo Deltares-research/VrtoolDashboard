@@ -56,7 +56,14 @@ def get_all_measure_results(
 
 
 def get_measure_reliability_over_time(vr_config: VrtoolConfig,
-                                      measure_result_id: int, mechanism: str):
+                                      measure_result_id: int, mechanism: str) -> list[float]:
+    """
+    Return a list of betas for the specified measure result id and mechanism over time.
+    :param vr_config:
+    :param measure_result_id:
+    :param mechanism:
+    :return:
+    """
     _path_dir = Path(vr_config.input_directory)
     _path_database = _path_dir.joinpath(vr_config.input_database_name)
 

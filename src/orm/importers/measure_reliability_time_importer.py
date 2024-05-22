@@ -1,36 +1,19 @@
-from pathlib import Path
-from typing import Optional, Any, Iterator
+from typing import Any, Iterator
 
-import numpy as np
-import pandas as pd
-from geopandas import GeoDataFrame
-from pandas import DataFrame
-from peewee import JOIN, DoesNotExist
+
+from peewee import JOIN
 from vrtool.defaults.vrtool_config import VrtoolConfig
-from vrtool.orm.io.importers.optimization.optimization_step_importer import (
-    OptimizationStepImporter,
-)
+
 from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol
 from vrtool.orm.models import (
-    SectionData,
-    MeasurePerSection,
     MeasureResultSection,
-    Measure,
-    MeasureResultParameter,
     MeasureResultMechanism,
     MechanismPerSection,
 )
 from vrtool.orm.models import Mechanism as ORM_Mechanism
 
-from src.constants import Mechanism
+from src.orm.models import MeasureResult
 
-from src.orm.importers.importer_utils import _get_measure, _get_measure_cost
-from src.orm.importers.optimization_step_importer import (
-    _get_section_lcc,
-)
-from src.orm.models import OptimizationSelectedMeasure, OptimizationStep, MeasureResult
-
-from src.orm.orm_controller_custom import get_optimization_steps_ordered
 
 from src.orm import models as orm
 
@@ -50,7 +33,7 @@ class TrajectMeasureResultsTimeImporter(OrmImporterProtocol):
 
     def import_orm(self, orm_model) -> Any:
         """
-        Import the single measures and the step measures.
+        Import the betas for the considered measure result and mechanism.
 
         :param orm_model: ORM model
         :return: DikeTraject object
@@ -59,12 +42,12 @@ class TrajectMeasureResultsTimeImporter(OrmImporterProtocol):
         _measures = self.import_measures()
         return _measures
 
-    def import_measures(self) -> DataFrame:
+    def import_measures(self) -> list[float]:
         """
         Import all the (single) measures for the considered dike section.
         :return:
 
-        Return a DataFrame with columns: beta, LCC, name, dberm, dcrest.
+        Return a list of betas for the specified measure result id and mechanism over time.
         """
         _measure_results = (
             MeasureResult.select()
@@ -73,7 +56,6 @@ class TrajectMeasureResultsTimeImporter(OrmImporterProtocol):
                 MeasureResult.id == self.measure_result_id
             )
         )
-        print(_measure_results, 9999)
 
         for measure_result in _measure_results:
             # select only the first occurence of the measure result section

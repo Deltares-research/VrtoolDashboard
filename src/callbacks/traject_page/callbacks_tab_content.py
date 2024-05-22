@@ -385,6 +385,14 @@ def open_modal_measure_reliability_time(click_data: dict, selected_mechanism, vr
                                         section_name: str) -> tuple[bool, Figure]:
     """
 
+    :param click_data:
+    :param selected_mechanism:
+    :param vr_config:
+    :param dike_traject_data:
+    :param section_name:
+    :return:
+
+
     """
     if click_data is None:
         return False, plot_default_scatter_dummy()
@@ -405,11 +413,11 @@ def open_modal_measure_reliability_time(click_data: dict, selected_mechanism, vr
                                                        _mechanism_name)
 
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
-        years = _dike_traject.get_section(section_name).years
+        _years = _dike_traject.get_section(section_name).years
 
-        betas_ini = _dike_traject.get_section(section_name).initial_assessment[_mechanism_name]
-        print(betas_ini, 9999)
-        return True, plot_measure_results_over_time_graph(betas_meas, betas_ini, selected_mechanism, section_name, years)
+        _betas_ini = _dike_traject.get_section(section_name).initial_assessment[_mechanism_name]
+        return True, plot_measure_results_over_time_graph(betas_meas, _betas_ini, selected_mechanism, section_name,
+                                                          _years)
     else:
         return True, plot_default_scatter_dummy()
 
