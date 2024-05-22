@@ -56,14 +56,13 @@ def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
 @callback(
     Output("dike_traject_reliability_map_initial", "children"),
     [
-        Input("test_store", "data"),
         Input("stored-data", "data"),
         Input(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "value"),
         Input("select_result_type", "value"),
         Input("select_mechanism_type", "value"),
     ],
 )
-def make_graph_map_initial_assessment(test_store,
+def make_graph_map_initial_assessment(
     dike_traject_data: dict, selected_year: float, result_type: str, mechanism_type: str
 ) -> dcc.Graph:
     """
