@@ -23,7 +23,6 @@ def make_test(dike_traject_data: dict) -> dcc.Graph:
 
     :param dike_traject_data: The data of the dike traject to be displayed.
     """
-
-    print(dike_traject_data)
+    print("this is a test")
 
     return False

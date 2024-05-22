@@ -72,7 +72,6 @@ app.layout = dbc.Container(
         nav_bar_layout_1,
         modal_optimize,  # keep this line to import the modal as closed to the app by default
         dash.page_container,
-        # html.Div(id='stored-data', style={'display': 'none'})  # Add this line
     ],
     fluid=True,
 )
