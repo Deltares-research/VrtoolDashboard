@@ -2,7 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] [dd/mm/yyyy]
+
+## v0.0.0 [##/##/####]
 
 ### Added
 - Graph comparison measures
@@ -18,6 +19,23 @@ None.
 
 ### Fixed
 None.
+
+## v0.4.1 [21/05/2024]
+
+### Added
+None.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+- HotFix for Revetment probability of traject failure
 
 ## v0.4.0 [29/04/2024]
 
