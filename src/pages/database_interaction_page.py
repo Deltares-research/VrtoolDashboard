@@ -2,13 +2,11 @@ import dash
 from dash import html, dcc, callback, Output, Input
 
 from src.component_ids import OPTIMIZE_MODAL_ID
-from src.layouts.layout_vr_optimalization import dike_vr_optimization_layout_ag_grid
-from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
+from src.layouts.layout_database_interaction.layout_vr_optimalization import dike_vr_optimization_layout_ag_grid
 
 dash.register_page(__name__)
 
 layout = html.Div([dike_vr_optimization_layout_ag_grid,
-                   # dcc.Store(id='stored-data', data=None, storage_type="local"),
                    ],
                   )
 

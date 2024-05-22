@@ -4,8 +4,6 @@ from pathlib import Path
 import pytest
 import json
 
-from src.callbacks.traject_page.callback_optimize import run_optimize_algorithm
-
 optimization_table_1 = [{'section_col': '1A', 'reinforcement_col': 'yes', 'measure_col': 'GROUND_IMPROVEMENT',
                          'reference_year_col': '2025'},
                         {'section_col': '1B', 'reinforcement_col': 'yes', 'measure_col': 'GROUND_IMPROVEMENT',
