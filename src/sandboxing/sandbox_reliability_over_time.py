@@ -30,7 +30,6 @@ mechanism = Mechanism.SECTION.name
 mechanism = get_mechanism_name_ORM(mechanism)
 
 res = get_measure_reliability_over_time(_vr_config,
-                                        section_name,
-                                        mechanism)
+                                        measure_result_id=190, mechanism=mechanism)
 
 print(res)

@@ -40,13 +40,12 @@ class TrajectMeasureResultsTimeImporter(OrmImporterProtocol):
     def __init__(
             self,
             vr_config: VrtoolConfig,
-            section_name: str,
+            measure_result_id: int,
             mechanism: str,
-            # run_id_vr: int,
-            # run_id_dsn: int,
+
     ) -> None:
         self.vr_config = vr_config
-        self.section_name = section_name
+        self.measure_result_id = measure_result_id
         self.mechanism = mechanism
 
     def import_orm(self, orm_model) -> Any:
@@ -69,18 +68,12 @@ class TrajectMeasureResultsTimeImporter(OrmImporterProtocol):
         """
         _measure_results = (
             MeasureResult.select()
-            .join(MeasurePerSection)
-            .join(
-                SectionData,
-                JOIN.INNER,
-                on=(SectionData.section_name == self.section_name),
-            )
+
             .where(
-                # MeasurePerSection.measure_id.in_([measure.id for measure in _measure]),
-                MeasurePerSection.section_id
-                == SectionData.id
+                MeasureResult.id == self.measure_result_id
             )
         )
+        print(_measure_results, 9999)
 
         for measure_result in _measure_results:
             # select only the first occurence of the measure result section

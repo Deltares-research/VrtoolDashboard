@@ -4,7 +4,7 @@ from pandas import DataFrame
 from src.constants import Mechanism
 
 
-def plot_measure_results_graph(
+def plot_measure_results_over_time_graph(
         # measure_results: DataFrame,
         vr_steps: list[dict],
         dsn_steps: list[dict],

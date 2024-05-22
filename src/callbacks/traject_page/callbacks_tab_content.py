@@ -1,7 +1,7 @@
 from bisect import bisect_right
 from pathlib import Path
 
-from dash import dcc, Output, Input, callback
+from dash import dcc, Output, Input, callback, State
 from plotly.graph_objs import Figure
 from vrtool.defaults.vrtool_config import VrtoolConfig
 
@@ -14,8 +14,9 @@ from src.component_ids import (
 )
 from src.constants import REFERENCE_YEAR, get_mapbox_token, Mechanism
 from src.linear_objects.dike_traject import DikeTraject
-from src.orm.import_database import get_all_measure_results
+from src.orm.import_database import get_all_measure_results, get_measure_reliability_over_time
 from src.plotly_graphs.measure_comparison_graph import plot_measure_results_graph
+from src.plotly_graphs.measure_reliability_time import plot_measure_results_over_time_graph
 from src.plotly_graphs.pf_length_cost import (
     plot_pf_length_cost,
     plot_default_scatter_dummy,
@@ -370,18 +371,39 @@ def close_modal_measure_reliability_time(close_n_click: int
 @callback(output=[
     Output(MEASURE_MODAL_ID, "is_open"),
     Output(GRAPH_MEASURE_RELIABILITY_TIME_ID, "figure"), ],
-    inputs=Input(GRAPH_MEASURE_COMPARISON_ID, "clickData"),
+    inputs=[Input(GRAPH_MEASURE_COMPARISON_ID, "clickData"),
+            ],
+    state=[State("select_mechanism_type", "value"),
+           State(STORE_CONFIG, "data")]
+    ,
     prevent_initial_call=True,
 )
-def open_modal_measure_reliability_time(click_data: dict):
+def open_modal_measure_reliability_time(click_data: dict, selected_mechanism, vr_config) -> tuple[bool, Figure]:
     """
 
     """
     print(click_data)
+    print(selected_mechanism)
+    print(vr_config)
     if click_data is None:
         return False, plot_default_scatter_dummy()
 
-    return True, plot_default_scatter_dummy()
+    if click_data["points"][0]["curveNumber"] == 0:
+        _clicked_measure_result_id = click_data["points"][0]["customdata"][
+            3]  # fourth position is the measure_result_id
+
+        _vr_config = VrtoolConfig()
+        _vr_config.traject = vr_config["traject"]
+        _vr_config.input_directory = Path(vr_config["input_directory"])
+        _vr_config.output_directory = Path(vr_config["output_directory"])
+        _vr_config.input_database_name = vr_config["input_database_name"]
+
+        print(_clicked_measure_result_id)
+        a = get_measure_reliability_over_time(_vr_config, _clicked_measure_result_id, get_mechanism_name_ORM(selected_mechanism))
+        print(a)
+        return True, plot_measure_results_over_time_graph()
+    else:
+        return True, plot_default_scatter_dummy()
 
 
 def get_mechanism_name_ORM(mechanism: str) -> str:

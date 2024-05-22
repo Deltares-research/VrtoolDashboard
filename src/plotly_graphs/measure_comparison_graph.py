@@ -35,6 +35,7 @@ def plot_measure_results_graph(
             measure_results["measure"],
             measure_results.get("dberm", None),
             measure_results.get("dcrest", None),
+            measure_results.get("measure_result_id", None) # keep this for the clickData event
         ),
         axis=-1,
     )
