@@ -4,55 +4,12 @@ import dash_bootstrap_components as dbc
 
 from src.component_ids import STORE_CONFIG
 from src.layouts.layout_modal_optimize import modal_optimize
-from src.layouts.layout_navigation_bar import nav_bar_layout
 from src.layouts.layout_main_page import make_layout_main_page
 
 from src.app import app
 
-nav_bar_layout_1 = html.Div([
-    dbc.NavbarSimple(
-        children=[
-            dbc.NavItem(dbc.NavLink("Home", href="/")),
-            dbc.DropdownMenu([
-                dbc.DropdownMenuItem("Traject", href="/traject-page"),
-                dbc.DropdownMenuItem("Optimization run", href="/database-interaction-page")
-            ],
+# The navbar must be defined in this file, otherwise the page_registry of the app will not be able to find the pages?
 
-                nav=True,
-                label="More Pages",
-            ),
-            # dbc.DropdownMenu(
-            #     children=[
-            #         dbc.DropdownMenuItem("Page 1", href="/page-1"),
-            #         dbc.DropdownMenuItem("Page 2", href="/page-2"),
-            #     ],
-            #     nav=True,
-            #     in_navbar=True,
-            #     label="Menu",
-            # ),
-            # dbc.NavItem(dbc.NavLink("Page 1", href="/page1")),
-            # dbc.NavItem(dbc.NavLink("Page 2", href="/page2")),
-            # DashIconify(icon="oui:documentation", width=30, color='White'),  #https://icon-sets.iconify.design/
-            dbc.NavLink("", href="https://deltares-research.github.io/VrtoolDocumentation/",
-                        external_link=True, target="_blank",
-                        class_name="fa-solid fa-book",
-                        style={"color": "white", 'text-transform': 'lowercase'}
-                        ),
-            dbc.NavLink(" Documentatie", href="https://deltares-research.github.io/VrtoolDocumentation/",
-                        external_link=True, target="_blank",
-                        style={"color": "white"}
-                        ),
-
-        ],
-        brand="Dashboard Veiligheidsrendement",
-        brand_style={'font-size': '30px', "color": 'white'},
-        brand_href="/",
-        color="#141e95",  # this is Deltares color
-        links_left=True,
-        sticky='Top'
-        # color='primary'
-    ),
-])
 
 from src.callbacks.traject_page import callbacks_main_page
 from src.callbacks.traject_page import callback_tabs_switch
@@ -60,6 +17,7 @@ from src.callbacks.traject_page import callbacks_tab_content
 from src.callbacks.traject_page import callback_optimize
 from src.callbacks.traject_page import callback_download_geojson
 from src.callbacks.traject_page import callback_renderer
+from src.layouts.layout_navigation_bar import nav_bar_layout_1
 
 # Define the app layout
 app.layout = dbc.Container(
