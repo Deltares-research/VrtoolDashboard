@@ -9,7 +9,8 @@ from src.component_ids import (
     SLIDER_YEAR_RELIABILITY_RESULTS_ID,
     SELECT_DIKE_SECTION_FOR_MEASURES_ID,
     GRAPH_MEASURE_COMPARISON_ID,
-    STORE_CONFIG, MEASURE_MODAL_ID, CLOSE_MEASURE_MODAL_BUTTON_ID, DIKE_TRAJECT_PF_COST_GRAPH_ID
+    STORE_CONFIG, MEASURE_MODAL_ID, CLOSE_MEASURE_MODAL_BUTTON_ID, DIKE_TRAJECT_PF_COST_GRAPH_ID,
+    GRAPH_MEASURE_RELIABILITY_TIME_ID
 )
 from src.constants import REFERENCE_YEAR, get_mapbox_token, Mechanism
 from src.linear_objects.dike_traject import DikeTraject
@@ -366,9 +367,10 @@ def close_modal_measure_reliability_time(close_n_click: int
     return True, 0
 
 
-@callback(
+@callback(output=[
     Output(MEASURE_MODAL_ID, "is_open"),
-    Input(GRAPH_MEASURE_COMPARISON_ID, "clickData"),
+    Output(GRAPH_MEASURE_RELIABILITY_TIME_ID, "figure"), ],
+    inputs=Input(GRAPH_MEASURE_COMPARISON_ID, "clickData"),
     prevent_initial_call=True,
 )
 def open_modal_measure_reliability_time(click_data: dict):
@@ -377,9 +379,9 @@ def open_modal_measure_reliability_time(click_data: dict):
     """
     print(click_data)
     if click_data is None:
-        return False
+        return False, plot_default_scatter_dummy()
 
-    return True
+    return True, plot_default_scatter_dummy()
 
 
 def get_mechanism_name_ORM(mechanism: str) -> str:
