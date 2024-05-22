@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import dash
-from dash import html, dcc, Output, Input, State
+from dash import html, dcc, Output, Input, State, callback
 import dash_bootstrap_components as dbc
 from vrtool.common.enums import MechanismEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
@@ -13,8 +13,6 @@ from src.component_ids import STORE_CONFIG, DROPDOWN_SELECTION_RUN_ID, EDITABLE_
 from src.constants import ColorBarResultType, SubResultType, Measures, REFERENCE_YEAR
 from src.linear_objects.dike_traject import DikeTraject
 
-from src.app import app
-
 import base64
 import json
 
@@ -22,17 +20,17 @@ from src.orm.import_database import get_dike_traject_from_config_ORM, get_name_o
     get_run_optimization_ids
 
 
-@app.callback([Output('dummy_upload_id', 'children'),
-               Output("upload-toast", "is_open"),
-               Output(STORE_CONFIG, "data"),
-               Output(DROPDOWN_SELECTION_RUN_ID, "value"),
-               Output(DROPDOWN_SELECTION_RUN_ID, "options")
-               ],
-              [Input('upload-data-config-json', 'contents')],
-              [State('upload-data-config-json', 'filename')],
-              allow_duplicate=True,
-              prevent_initial_call=True,
-              )
+@callback([Output('dummy_upload_id', 'children'),
+           Output("upload-toast", "is_open"),
+           Output(STORE_CONFIG, "data"),
+           Output(DROPDOWN_SELECTION_RUN_ID, "value"),
+           Output(DROPDOWN_SELECTION_RUN_ID, "options"),
+           ],
+          [Input('upload-data-config-json', 'contents')],
+          [State('upload-data-config-json', 'filename')],
+          allow_duplicate=True,
+          prevent_initial_call=True,
+          )
 def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
     """This is the callback for the upload of the config.json file.
 
@@ -50,7 +48,6 @@ def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
         - boolean indicating if the upload was successful.
         - value of the dropdown selection run id.
     """
-
     if contents is not None:
         try:
 
@@ -79,16 +76,14 @@ def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
             _names_optimization_run = get_name_optimization_runs(vr_config)
             _options = [{"label": name, "value": name} for name in _names_optimization_run]
 
-            return html.Div(
-                dcc.Store(id='stored-data',
-                          data={})), True, json_content, _value_selection_run_dropwdown, _options
+            return html.Div(), True, json_content, _value_selection_run_dropwdown, _options,
         except:
             return html.Div("Geen bestand geüpload"), False, {}, "", []
     else:
-        return html.Div("Geen bestand geüpload"), False, {}, "", []
+        return html.Div("Geen bestand geüpload"), False, dash.no_update, "", []
 
 
-@app.callback(
+@callback(
     Output('stored-data', 'data'),
     [Input(DROPDOWN_SELECTION_RUN_ID, "value")],
     State(STORE_CONFIG, "data"),
@@ -113,6 +108,9 @@ def selection_traject_run(name: str, vr_config: dict) -> dict:
     _vr_config.input_database_name = vr_config['input_database_name']
     _vr_config.excluded_mechanisms = [MechanismEnum.REVETMENT, MechanismEnum.HYDRAULIC_STRUCTURES]
 
+    if name == '':
+        return dash.no_update
+
     if name == "Basisberekening":
         _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=2, run_is_vr=1)
 
@@ -126,7 +124,7 @@ def selection_traject_run(name: str, vr_config: dict) -> dict:
     return _dike_traject.serialize()
 
 
-@app.callback(
+@callback(
 
     [Output('stored-data', 'data', allow_duplicate=True),
      Output(BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, 'value')],
@@ -137,7 +135,6 @@ def selection_traject_run(name: str, vr_config: dict) -> dict:
         Input(GREEDY_OPTIMIZATION_CRITERIA_YEAR, "value"),
         Input(BUTTON_RECOMPUTE_GREEDY_STEPS, "n_clicks"),
         Input(BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, 'value')
-
     ],
     State(STORE_CONFIG, "data"),
     prevent_initial_call=True,
@@ -190,7 +187,7 @@ def recompute_dike_traject_with_new_greedy_criteria(name: str, name_type: str, b
     return _dike_traject.serialize(), n_click
 
 
-@app.callback(
+@callback(
     Output("collapse_1", "is_open"),
     [Input("collapse_button_1", "n_clicks")],
     [State("collapse_1", "is_open")],
@@ -207,7 +204,7 @@ def toggle_collapse(n: int, is_open: bool) -> bool:
     return is_open
 
 
-@app.callback(
+@callback(
     Output("collapse_2", "is_open"),
     [Input("collapse_button_2", "n_clicks")],
     [State("collapse_2", "is_open")],
@@ -224,7 +221,7 @@ def toggle_collapse2(n: int, is_open: bool) -> bool:
     return is_open
 
 
-@app.callback(
+@callback(
     Output("collapse_3", "is_open"),
     Output("left-column", 'md'),
     Output("right-column", 'md'),
@@ -245,7 +242,7 @@ def toggle_collapse3(n: int, is_open: bool):
     return is_open, 4, 8
 
 
-@app.callback(
+@callback(
     [Output('select_sub_result_type_measure_map', 'options'),
      Output('select_sub_result_type_measure_map', 'value')],
     Input('select_measure_map_result_type', 'value'),
@@ -285,7 +282,7 @@ def update_radio_sub_result_type(result_type: str) -> tuple[list, str]:
     return options, value
 
 
-@app.callback(
+@callback(
     Output(EDITABLE_TRAJECT_TABLE_ID, "rowData"),
     Input('stored-data', 'data'),
 )
@@ -317,7 +314,7 @@ def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
         return df.to_dict('records')
 
 
-@app.callback(
+@callback(
     Output(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "marks"),
     Input('stored-data', 'data'),
 )

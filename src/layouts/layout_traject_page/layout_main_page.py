@@ -9,13 +9,12 @@ from .layout_download_buttons import layout_download_overview, layout_download_a
 from .layout_radio_items import layout_radio_color_bar_result_type, layout_radio_sub_type_result, \
     layout_radio_length_switch
 from .layout_sliders import layout_urgency_length_slider
-from .layout_traject_page.layout_tabs.layout_tab_measures import layout_radio_dike_section_selection
+from src.layouts.layout_traject_page.layout_tabs.layout_tab_measures import layout_radio_dike_section_selection
 from .layout_upload_dike_files import layout_traject_select
-from .layout_vr_optimalization import dike_vr_optimization_layout_ag_grid
-from ..component_ids import GRAPG_MEASURE_COMPARISON_ID
-from ..constants import get_mapbox_token
-from ..plotly_graphs.pf_length_cost import plot_default_scatter_dummy
-from ..plotly_graphs.plotly_maps import plot_default_overview_map_dummy
+from src.component_ids import GRAPG_MEASURE_COMPARISON_ID
+from src.constants import get_mapbox_token
+from src.plotly_graphs.pf_length_cost import plot_default_scatter_dummy
+from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
 
 
 def make_layout_main_page() -> dbc.Row:
@@ -46,11 +45,11 @@ def make_layout_main_page() -> dbc.Row:
                                              collapse_id=2,
                                              inner_layouts=[dike_settings_layout]),
 
-                        make_collapsing_menu(menu_name="Maatregelen optimalisatie",
-                                             collapse_id=3,
-                                             # inner_layouts=[dike_vr_optimization_layout],
-                                             inner_layouts=[dike_vr_optimization_layout_ag_grid],
-                                             is_open=False),
+                        # make_collapsing_menu(menu_name="Maatregelen optimalisatie",
+                        #                      collapse_id=3,
+                        #                      # inner_layouts=[dike_vr_optimization_layout],
+                        #                      inner_layouts=[dike_vr_optimization_layout_ag_grid],
+                        #                      is_open=False),
 
                     ]
                 ),

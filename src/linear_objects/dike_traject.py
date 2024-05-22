@@ -65,13 +65,6 @@ class DikeTraject(BaseLinearObject):
             _run_id_dsn=data["_run_id_dsn"],
         )
 
-    def get_section(self, section_name: str) -> DikeSection:
-        """Get the section object by name"""
-        for section in self.dike_sections:
-            if section.name == section_name:
-                return section
-        raise ValueError(f"Section with name {section_name} not found")
-
     def export_to_geojson(self, params: dict) -> str:
         """
         Export the dike traject to a geojson format
@@ -87,6 +80,7 @@ class DikeTraject(BaseLinearObject):
                 for section in self.dike_sections
             ],
         }
+
         return json.dumps(_geojson)
 
     def calc_traject_probability_array(self, calc_type: str) -> np.array:
@@ -115,12 +109,12 @@ class DikeTraject(BaseLinearObject):
                 continue
 
             if (calc_type == "doorsnede") and (
-                not section.is_reinforced_doorsnede
+                    not section.is_reinforced_doorsnede
             ):  # skip if the section is not reinforced
                 continue
 
             if (calc_type == "veiligheidsrendement") and (
-                not section.is_reinforced_veiligheidsrendement
+                    not section.is_reinforced_veiligheidsrendement
             ):  # skip if the section is not reinforced
                 continue
             _active_mechanisms = ["Overflow", "Piping", "StabilityInner"]
@@ -129,7 +123,7 @@ class DikeTraject(BaseLinearObject):
             # add a row to the dataframe with the initial assessment of the section
             for mechanism in _active_mechanisms:
                 mask = (_beta_df["name"] == section.name) & (
-                    _beta_df["mechanism"] == mechanism
+                        _beta_df["mechanism"] == mechanism
                 )
                 # replace the row in the dataframe with the betas of the section if both the name and mechanism match
                 d = {
@@ -139,7 +133,7 @@ class DikeTraject(BaseLinearObject):
                 }
 
                 for year, beta in zip(
-                    years, getattr(section, _section_measure)[mechanism]
+                        years, getattr(section, _section_measure)[mechanism]
                 ):
                     d[year] = beta
                 _beta_df.loc[mask, years] = d
@@ -167,8 +161,8 @@ class DikeTraject(BaseLinearObject):
             if not section.in_analyse:
                 continue
             if (
-                not section.is_reinforced_doorsnede
-                and not section.is_reinforced_veiligheidsrendement
+                    not section.is_reinforced_doorsnede
+                    and not section.is_reinforced_veiligheidsrendement
             ):
                 continue
             # add a row to the dataframe with the initial assessment of the section
@@ -218,11 +212,11 @@ class DikeTraject(BaseLinearObject):
             if not (section.in_analyse):
                 continue
             if (calc_type == "doorsnede") and (
-                not section.is_reinforced_doorsnede
+                    not section.is_reinforced_doorsnede
             ):  # skip if the section is not reinforced
                 continue
             if (calc_type == "veiligheidsrendement") and (
-                not section.is_reinforced_veiligheidsrendement
+                    not section.is_reinforced_veiligheidsrendement
             ):  # skip if the section is not reinforced
                 continue
 
@@ -256,11 +250,11 @@ class DikeTraject(BaseLinearObject):
             if not (section.in_analyse):
                 continue
             if (calc_type == "doorsnede") and (
-                not section.is_reinforced_doorsnede
+                    not section.is_reinforced_doorsnede
             ):  # skip if the section is not reinforced
                 continue
             if (calc_type == "veiligheidsrendement") and (
-                not section.is_reinforced_veiligheidsrendement
+                    not section.is_reinforced_veiligheidsrendement
             ):  # skip if the section is not reinforced
                 continue
 
@@ -269,7 +263,7 @@ class DikeTraject(BaseLinearObject):
         return np.cumsum(length_list)
 
     def _get_greedy_optimization_step_from_speficiations(
-        self, target_year: int, target_beta: float
+            self, target_year: int, target_beta: float
     ) -> int:
         """Get the optimization step number for the greedy optimization algorithm based on the specifications
 
@@ -279,7 +273,7 @@ class DikeTraject(BaseLinearObject):
         """
         # find for which optimization step_number the criteria 'reliability in year' is met
         _year_step_index = (
-            bisect_right(self.dike_sections[0].years, target_year - REFERENCE_YEAR) - 1
+                bisect_right(self.dike_sections[0].years, target_year - REFERENCE_YEAR) - 1
         )
         _target_pf = beta_to_pf(target_beta)
         _step_pf_array = get_step_traject_pf(self)[:, _year_step_index]
@@ -323,8 +317,8 @@ def get_initial_assessment_df(sections: list[DikeSection]) -> DataFrame:
         if not section.in_analyse:
             continue
         if (
-            not section.is_reinforced_doorsnede
-            and not section.is_reinforced_veiligheidsrendement
+                not section.is_reinforced_doorsnede
+                and not section.is_reinforced_veiligheidsrendement
         ):
             continue
         # add a row to the dataframe with the initial assessment of the section
