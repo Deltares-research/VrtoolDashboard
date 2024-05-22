@@ -80,6 +80,7 @@ class DikeTraject(BaseLinearObject):
                 for section in self.dike_sections
             ],
         }
+
         return json.dumps(_geojson)
 
     def calc_traject_probability_array(self, calc_type: str) -> np.array:

@@ -37,7 +37,7 @@ from src.orm.import_database import (
     prevent_initial_call=True,
 )
 def open_canvas_logging_and_cancel(
-    optimize_n_click: int, close_n_click: int
+        optimize_n_click: int, close_n_click: int
 ) -> tuple[bool]:
     """
     Dummy call to trigger the opening of the canvas so the `update_timestamp`
@@ -156,7 +156,7 @@ def open_canvas_logging_and_cancel(
 
 
 def run_vrtool_optimization(
-    _vr_config: VrtoolConfig, optimization_run_name: str, selected_measures: list[tuple]
+        _vr_config: VrtoolConfig, optimization_run_name: str, selected_measures: list[tuple]
 ):
     """Runs the optimization algorithm in a separate thread of the VRTool core"""
 
@@ -165,7 +165,7 @@ def run_vrtool_optimization(
 
 
 def get_selected_measure(
-    vr_config: VrtoolConfig, dike_traject_table: list
+        vr_config: VrtoolConfig, dike_traject_table: list
 ) -> list[tuple[int, int]]:
     """Returns the input selected measures for the optimization algorithm as a list of tuples
     (measure_result_id, investment_year).

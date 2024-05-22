@@ -39,7 +39,6 @@ def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
     """
 
     export_to_json(dike_traject_data)
-    print(dike_traject_data)
 
     if dike_traject_data is None or dike_traject_data == {}:
         _fig = plot_default_overview_map_dummy()
@@ -57,13 +56,14 @@ def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
 @callback(
     Output("dike_traject_reliability_map_initial", "children"),
     [
+        Input("test_store", "data"),
         Input("stored-data", "data"),
         Input(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "value"),
         Input("select_result_type", "value"),
         Input("select_mechanism_type", "value"),
     ],
 )
-def make_graph_map_initial_assessment(
+def make_graph_map_initial_assessment(test_store,
     dike_traject_data: dict, selected_year: float, result_type: str, mechanism_type: str
 ) -> dcc.Graph:
     """
@@ -78,6 +78,7 @@ def make_graph_map_initial_assessment(
     :return: dcc.Graph with the plotly figure
 
     """
+    print('test_store, page traject:',test_store)
     if dike_traject_data is None:
         _fig = plot_default_overview_map_dummy()
     else:

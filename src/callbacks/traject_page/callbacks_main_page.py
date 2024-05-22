@@ -13,7 +13,6 @@ from src.component_ids import STORE_CONFIG, DROPDOWN_SELECTION_RUN_ID, EDITABLE_
 from src.constants import ColorBarResultType, SubResultType, Measures, REFERENCE_YEAR
 from src.linear_objects.dike_traject import DikeTraject
 
-
 import base64
 import json
 
@@ -22,16 +21,16 @@ from src.orm.import_database import get_dike_traject_from_config_ORM, get_name_o
 
 
 @callback([Output('dummy_upload_id', 'children'),
-               Output("upload-toast", "is_open"),
-               Output(STORE_CONFIG, "data"),
-               Output(DROPDOWN_SELECTION_RUN_ID, "value"),
-               Output(DROPDOWN_SELECTION_RUN_ID, "options")
-               ],
-              [Input('upload-data-config-json', 'contents')],
-              [State('upload-data-config-json', 'filename')],
-              allow_duplicate=True,
-              prevent_initial_call=True,
-              )
+           Output("upload-toast", "is_open"),
+           Output(STORE_CONFIG, "data"),
+           Output(DROPDOWN_SELECTION_RUN_ID, "value"),
+           Output(DROPDOWN_SELECTION_RUN_ID, "options"),
+           ],
+          [Input('upload-data-config-json', 'contents')],
+          [State('upload-data-config-json', 'filename')],
+          allow_duplicate=True,
+          prevent_initial_call=True,
+          )
 def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
     """This is the callback for the upload of the config.json file.
 
@@ -78,9 +77,7 @@ def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
             _names_optimization_run = get_name_optimization_runs(vr_config)
             _options = [{"label": name, "value": name} for name in _names_optimization_run]
 
-            return html.Div(
-                dcc.Store(id='stored-data',
-                          data={})), True, json_content, _value_selection_run_dropwdown, _options
+            return html.Div(), True, json_content, _value_selection_run_dropwdown, _options,
         except:
             return html.Div("Geen bestand geüpload"), False, {}, "", []
     else:

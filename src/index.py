@@ -68,11 +68,11 @@ app.layout = dbc.Container(
     [
         # dcc.Location(id='url', pathname='welcome', refresh=False),
         dcc.Store(id='stored-data', data=None, storage_type="session"),
-        dcc.Store(id=STORE_CONFIG, data=None),
+        dcc.Store(id=STORE_CONFIG, data=None, storage_type="session"),
         nav_bar_layout_1,
         modal_optimize,  # keep this line to import the modal as closed to the app by default
         dash.page_container,
-        html.Div(id='stored-data', style={'display': 'none'})  # Add this line
+        # html.Div(id='stored-data', style={'display': 'none'})  # Add this line
     ],
     fluid=True,
 )
