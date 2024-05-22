@@ -9,7 +9,7 @@ from src.component_ids import (
     SLIDER_YEAR_RELIABILITY_RESULTS_ID,
     SELECT_DIKE_SECTION_FOR_MEASURES_ID,
     GRAPG_MEASURE_COMPARISON_ID,
-    STORE_CONFIG,
+    STORE_CONFIG, CLOSE_OPTIMAL_MEASURE_BUTTON_ID, OPTIMIZE_MEASURE_ID,
 )
 from src.constants import REFERENCE_YEAR, get_mapbox_token, Mechanism
 from src.linear_objects.dike_traject import DikeTraject
@@ -63,7 +63,7 @@ def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
     ],
 )
 def make_graph_map_initial_assessment(
-    dike_traject_data: dict, selected_year: float, result_type: str, mechanism_type: str
+        dike_traject_data: dict, selected_year: float, result_type: str, mechanism_type: str
 ) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
@@ -104,13 +104,13 @@ def make_graph_map_initial_assessment(
     ],
 )
 def make_graph_map_measures(
-    dike_traject_data: dict,
-    selected_year: float,
-    result_type: str,
-    calc_type: str,
-    color_bar_result_type: str,
-    mechanism_type: str,
-    sub_result_type: str,
+        dike_traject_data: dict,
+        selected_year: float,
+        result_type: str,
+        calc_type: str,
+        color_bar_result_type: str,
+        mechanism_type: str,
+        sub_result_type: str,
 ) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
@@ -158,10 +158,10 @@ def make_graph_map_measures(
     ],
 )
 def make_graph_pf_vs_cost(
-    dike_traject_data: dict,
-    selected_year: float,
-    result_type: str,
-    cost_length_switch: str,
+        dike_traject_data: dict,
+        selected_year: float,
+        result_type: str,
+        cost_length_switch: str,
 ):
     """
     Call to display the graph of the plot of the probability of failure vs the cost of the measures.
@@ -192,7 +192,7 @@ def make_graph_pf_vs_cost(
     ],
 )
 def make_graph_map_urgency(
-    dike_traject_data: dict, selected_year: float, length_urgency: float, calc_type: str
+        dike_traject_data: dict, selected_year: float, length_urgency: float, calc_type: str
 ) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
@@ -290,11 +290,11 @@ def fill_dike_section_selection(dike_traject_data: dict) -> list[dict]:
     ],
 )
 def make_graph_measure_results_comparison(
-    dike_traject_data: dict,
-    vr_config: dict,
-    selected_year: float,
-    selected_dike_section: str,
-    selected_mechanism: str,
+        dike_traject_data: dict,
+        vr_config: dict,
+        selected_year: float,
+        selected_dike_section: str,
+        selected_mechanism: str,
 ) -> Figure:
     """
 
@@ -345,6 +345,27 @@ def make_graph_measure_results_comparison(
     return _fig
 
 
+# @callback(
+#     output=[
+#         Output(OPTIMIZE_MEASURE_ID, "is_open", allow_duplicate=True),
+#         Output(CLOSE_OPTIMAL_MEASURE_BUTTON_ID, "n_clicks"),
+#     ],
+#     inputs=[
+#         Input(CLOSE_OPTIMAL_MEASURE_BUTTON_ID, "n_clicks"),
+#     ],
+#     prevent_initial_call=True,
+# )
+# def close_modal_measure_reliability_time(close_n_click: int
+#                                          ) -> tuple[bool, int]:
+#     """
+#     Dummy call to trigger the opening of the canvas so the `update_timestamp`
+#     can output the vrtool logging.
+#     """
+#     if close_n_click and close_n_click > 0:
+#         return False, 0
+#     return True, 0
+
+
 def get_mechanism_name_ORM(mechanism: str) -> str:
     """
     Get the Mechanism object from the string representation of the mechanism.
@@ -363,4 +384,3 @@ def get_mechanism_name_ORM(mechanism: str) -> str:
         return "Revetment"
     elif mechanism == Mechanism.SECTION.name:
         return "Section"
-
