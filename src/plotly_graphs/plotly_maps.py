@@ -813,13 +813,13 @@ def dike_traject_pf_cost_helping_map(
             continue
 
         if section.name == reinforced_sections[-1]:
-            _color = "blue" if curve_number == 0 else "#cc8400"  # orange-ish
+            _color = "blue" if curve_number == 0 else "green"
             _opacity = 1
         elif (
             section.name in reinforced_sections
             and section.name != reinforced_sections[-1]
         ):
-            _color = "blue" if curve_number == 0 else "#cc8400"
+            _color = "blue" if curve_number == 0 else "green"
             _opacity = 0.4
         else:
             _color = "grey"
