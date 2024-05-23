@@ -228,6 +228,7 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
                     "measure": measure.name,
                     "dberm": dberm,
                     "dcrest": dcrest,
+                    "measure_result_id": measure_result.id
                 }
             )
 

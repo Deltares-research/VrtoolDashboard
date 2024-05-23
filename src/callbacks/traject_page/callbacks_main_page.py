@@ -301,7 +301,7 @@ def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
 
         for section in _dike_traject.dike_sections:
-            df = df.append({"section_col": section.name,
+            df_add = pd.DataFrame.from_records([{"section_col": section.name,
                             "reinforcement_col": True,
                             "reference_year": 2045,
                             Measures.GROUND_IMPROVEMENT.name: True,
@@ -309,7 +309,15 @@ def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
                             Measures.GEOTEXTILE.name: True,
                             Measures.DIAPHRAGM_WALL.name: True,
                             Measures.STABILITY_SCREEN.name: True,
-                            }, ignore_index=True)
+                            }])
+            df = pd.concat([df, df_add], ignore_index=True)
+
+        bool_columns = ["reinforcement_col", Measures.GROUND_IMPROVEMENT.name,
+                        Measures.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.name,
+                        Measures.GEOTEXTILE.name, Measures.DIAPHRAGM_WALL.name,
+                        Measures.STABILITY_SCREEN.name]
+        df[bool_columns] = df[bool_columns].astype(bool)
+
 
         return df.to_dict('records')
 

@@ -5,7 +5,7 @@ import numpy as np
 from scipy.stats import norm
 import json
 
-from src.constants import SIGNALERING, ONDERGRENS, Mechanism
+from src.constants import Mechanism
 
 
 def to_million_euros(cost: float) -> float:
