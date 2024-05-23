@@ -2,8 +2,6 @@ from enum import Enum
 from pathlib import Path
 
 REFERENCE_YEAR = 2025  # Reference year for the reliability analysis
-ONDERGRENS = 1. / 10000
-SIGNALERING = 1. / 30000
 
 
 class CalcType(Enum):
@@ -54,8 +52,6 @@ class Measures(Enum):
 class GreedyOPtimizationCriteria(Enum):
     ECONOMIC_OPTIMAL = "Economisch optimaal (standaard)"
     TARGET_PF = "Faalkans"
-
-
 
 
 def get_mapbox_token() -> str:

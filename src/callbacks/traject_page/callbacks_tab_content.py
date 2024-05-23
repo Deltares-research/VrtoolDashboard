@@ -394,12 +394,16 @@ def open_modal_measure_reliability_time(click_data: dict, selected_mechanism, vr
 
 
     """
+    print(click_data)
     if click_data is None:
         return False, plot_default_scatter_dummy()
 
     if click_data["points"][0]["curveNumber"] == 0:
         _clicked_measure_result_id = click_data["points"][0]["customdata"][
             3]  # fourth position is the measure_result_id
+        _measure_data = {"measure_name": click_data["points"][0]["customdata"][0],
+                         "dberm": click_data["points"][0]["customdata"][1],
+                         "dcrest": click_data["points"][0]["customdata"][2]}
 
         _vr_config = VrtoolConfig()
         _vr_config.traject = vr_config["traject"]
@@ -417,7 +421,7 @@ def open_modal_measure_reliability_time(click_data: dict, selected_mechanism, vr
 
         _betas_ini = _dike_traject.get_section(section_name).initial_assessment[_mechanism_name]
         return True, plot_measure_results_over_time_graph(betas_meas, _betas_ini, selected_mechanism, section_name,
-                                                          _years)
+                                                          _years, _measure_data)
     else:
         return True, plot_default_scatter_dummy()
 
