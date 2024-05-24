@@ -65,3 +65,37 @@ def plot_measure_results_over_time_graph(
     )
 
     return _fig
+
+
+def update_measure_results_over_time_graph(fig: dict, click_data: dict) -> go.Figure:
+    """Update the plotly figure of the measure results over time with the clicked measure results to
+    highlight the combined measures. The opacity of the other measures is reduced.
+
+    :param fig: plotly figure object saved as a dict
+    :param click_data: click event data
+
+    :return: updated plotly figure object
+
+    """
+    _fig = go.Figure(fig)
+    # update the opacity of the first trace :
+    _fig.update_traces(marker=dict(opacity=0.3))
+
+    click_custom_data = click_data["points"][0]["customdata"]
+    measure_results_ids = list(map(int, click_custom_data.split(" + ")))
+
+    measure_fig_data = fig["data"][0]
+    for id, point in enumerate(measure_fig_data['customdata']):
+        if point[3] in measure_results_ids:
+            _fig.add_trace(go.Scatter(
+                name='clicked',
+                x=[measure_fig_data['x'][id]],
+                y=[measure_fig_data['y'][id]],
+                mode='markers',
+                marker=dict(size=10, color='black'),
+                showlegend=False,
+                hovertemplate=f"{point[0]}  <br>"
+                              f"Dberm: {point[1]}m <br>"
+                              f"Dcrest: {point[2]}m <br>")
+            )
+    return _fig

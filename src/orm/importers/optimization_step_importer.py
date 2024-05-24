@@ -229,3 +229,19 @@ def _get_single_measure(optimization_step: OptimizationStep) -> Measure:
                .get())
 
     return measure
+
+
+def _get_measure_result_ids(optimization_steps: OptimizationStep) -> list[int]:
+    """
+    Get the measure result id of the optimization step.
+    :param optimization_step: optimization step for which the measure result id is retrieved.
+    :return: measure result id
+    """
+    id_list = []
+    for optimization_step in optimization_steps:
+        _selected_optimization_measure = OptimizationSelectedMeasure.select().where(
+            OptimizationSelectedMeasure.id == optimization_step.optimization_selected_measure_id).get()
+        id_list.append(_selected_optimization_measure.measure_result_id)
+
+
+    return id_list

@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Graph comparison measures
+- Click event to display measure reliability over time
+- click event to highlight combined measures
 
 ### Changed
 None.

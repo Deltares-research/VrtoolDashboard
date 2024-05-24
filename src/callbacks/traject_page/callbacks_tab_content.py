@@ -1,6 +1,7 @@
 from bisect import bisect_right
 from pathlib import Path
 
+import dash
 from dash import dcc, Output, Input, callback, State
 from plotly.graph_objs import Figure
 from vrtool.defaults.vrtool_config import VrtoolConfig
@@ -16,7 +17,8 @@ from src.constants import REFERENCE_YEAR, get_mapbox_token, Mechanism
 from src.linear_objects.dike_traject import DikeTraject
 from src.orm.import_database import get_all_measure_results, get_measure_reliability_over_time
 from src.plotly_graphs.measure_comparison_graph import plot_measure_results_graph
-from src.plotly_graphs.measure_reliability_time import plot_measure_results_over_time_graph
+from src.plotly_graphs.measure_reliability_time import plot_measure_results_over_time_graph, \
+    update_measure_results_over_time_graph
 from src.plotly_graphs.pf_length_cost import (
     plot_pf_length_cost,
     plot_default_scatter_dummy,
@@ -370,19 +372,24 @@ def close_modal_measure_reliability_time(close_n_click: int
 
 @callback(output=[
     Output(MEASURE_MODAL_ID, "is_open"),
-    Output(GRAPH_MEASURE_RELIABILITY_TIME_ID, "figure"), ],
+    Output(GRAPH_MEASURE_RELIABILITY_TIME_ID, "figure"),
+    Output(GRAPH_MEASURE_COMPARISON_ID, "figure", allow_duplicate=True)
+],
     inputs=[Input(GRAPH_MEASURE_COMPARISON_ID, "clickData"),
             ],
     state=[State("select_mechanism_type", "value"),
            State(STORE_CONFIG, "data"),
            State("stored-data", "data"),
            State(SELECT_DIKE_SECTION_FOR_MEASURES_ID, "value"),
+           State(GRAPH_MEASURE_COMPARISON_ID, "figure"),
+           State(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "value"),
+
            ]
     ,
     prevent_initial_call=True,
 )
 def open_modal_measure_reliability_time(click_data: dict, selected_mechanism, vr_config, dike_traject_data: dict,
-                                        section_name: str) -> tuple[bool, Figure]:
+                                        section_name: str, fig, selected_year) -> tuple:
     """
 
     :param click_data:
@@ -394,11 +401,11 @@ def open_modal_measure_reliability_time(click_data: dict, selected_mechanism, vr
 
 
     """
-    print(click_data)
     if click_data is None:
-        return False, plot_default_scatter_dummy()
+        return False, plot_default_scatter_dummy(), dash.no_update
 
     if click_data["points"][0]["curveNumber"] == 0:
+
         _clicked_measure_result_id = click_data["points"][0]["customdata"][
             3]  # fourth position is the measure_result_id
         _measure_data = {"measure_name": click_data["points"][0]["customdata"][0],
@@ -421,9 +428,11 @@ def open_modal_measure_reliability_time(click_data: dict, selected_mechanism, vr
 
         _betas_ini = _dike_traject.get_section(section_name).initial_assessment[_mechanism_name]
         return True, plot_measure_results_over_time_graph(betas_meas, _betas_ini, selected_mechanism, section_name,
-                                                          _years, _measure_data)
+                                                          _years, _measure_data), dash.no_update
     else:
-        return True, plot_default_scatter_dummy()
+        _fig = update_measure_results_over_time_graph(fig, click_data)
+
+        return False, plot_default_scatter_dummy(), _fig
 
 
 def get_mechanism_name_ORM(mechanism: str) -> str:
