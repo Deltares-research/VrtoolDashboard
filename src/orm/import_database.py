@@ -77,7 +77,6 @@ def get_measure_reliability_over_time(vr_config: VrtoolConfig,
     return _res
 
 
-
 def get_dike_traject_from_config_ORM(
         vr_config: VrtoolConfig,
         run_id_dsn: int,

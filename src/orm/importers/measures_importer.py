@@ -26,7 +26,7 @@ from src.constants import Mechanism
 
 from src.orm.importers.importer_utils import _get_measure, _get_measure_cost
 from src.orm.importers.optimization_step_importer import (
-    _get_section_lcc,
+    _get_section_lcc,  _get_measure_result_ids,
 )
 from src.orm.models import OptimizationSelectedMeasure, OptimizationStep, MeasureResult
 
@@ -122,6 +122,7 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
             )
             _measure["LCC"] = _get_section_lcc(_optimization_step)
             _measure["cost"] = _get_measure_cost(_optimum_section_optimization_steps)
+            _measure["measure_results_ids"] = _get_measure_result_ids(_optimum_section_optimization_steps)
             _step_measures.append(_measure)
             _previous_step_number = _step_number
 
