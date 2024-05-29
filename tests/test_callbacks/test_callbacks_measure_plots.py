@@ -30,7 +30,6 @@ class TestCallbackMeasurePlot():
         Mechanism.REVETMENT.name
     ])
     def test_make_graph_measure_results_comparison_callback(self, mechanism):
-
         # 1. Define data
         _dike_data = json.load(
             open(
@@ -90,7 +89,8 @@ class TestCallbackMeasurePlot():
             # section_name: str, fig: dict
 
             return open_modal_measure_reliability_time(
-                click_data, Mechanism.SECTION.name, _vr_config, _dike_traject_data, "WsNoo_Stab_011600_012000", _figure_dict
+                click_data, Mechanism.SECTION.name, _vr_config, _dike_traject_data, "WsNoo_Stab_011600_012000",
+                _figure_dict
             )
 
         ctx = copy_context()
@@ -98,4 +98,3 @@ class TestCallbackMeasurePlot():
 
         # 3. Assert
         assert isinstance(output, tuple)
-
