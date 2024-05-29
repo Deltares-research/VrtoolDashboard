@@ -1008,7 +1008,7 @@ def add_colorscale_bar(
         )
 
     elif result_type == ResultType.INTERPRETATION_CLASS.name:
-        names = ["I", "II", "III", "IV", "V", "VI"]
+        names = ["VI", "V", "IV", "III", "II", "I"]
         colors = ["#800000", "#FF6347", "#FFA500", "#FFD700", "#98FB98", "#7FFF00"]
         for name, color in zip(names, colors):
             fig.add_trace(
