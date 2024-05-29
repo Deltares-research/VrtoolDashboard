@@ -335,6 +335,7 @@ def make_graph_measure_results_comparison(
             _time,
             run_id_vr=dike_traject_data["_run_id_vr"],
             run_id_dsn=dike_traject_data["_run_id_dsn"],
+            active_mechanisms=_section.active_mechanisms
         )
 
         _fig = plot_measure_results_graph(
@@ -382,25 +383,26 @@ def close_modal_measure_reliability_time(close_n_click: int
            State("stored-data", "data"),
            State(SELECT_DIKE_SECTION_FOR_MEASURES_ID, "value"),
            State(GRAPH_MEASURE_COMPARISON_ID, "figure"),
-           State(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "value"),
-
            ]
     ,
     prevent_initial_call=True,
 )
 def open_modal_measure_reliability_time(click_data: dict, selected_mechanism, vr_config, dike_traject_data: dict,
-                                        section_name: str, fig, selected_year) -> tuple:
+                                        section_name: str, fig: dict) -> tuple:
     """
 
-    :param click_data:
+    :param click_data: data clicked from the figure showing beta vs cost of all measures for a selected dike section.
     :param selected_mechanism:
     :param vr_config:
     :param dike_traject_data:
     :param section_name:
+    :param fig: plotly figure object as a dict to which we want to modify
+
     :return:
 
 
     """
+
     if click_data is None:
         return False, plot_default_scatter_dummy(), dash.no_update
 
