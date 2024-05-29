@@ -77,6 +77,12 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
         y_ondergrens = dike_traject.lower_bound_value
         y_signalering = dike_traject.signalering_value
 
+    elif result_type == ResultType.INTERPRETATION_CLASS.name:
+        # Add annotation: Geen grafiek voor duidingsklassen
+        fig.update_layout(template='plotly_white')
+        fig.add_annotation(x=0.5, y=0.5, text="Geen grafiek voor duidingsklassen", showarrow=False, font=dict(size=20))
+
+        return fig
     else:
         raise ValueError("Wrong result_type value")
 
