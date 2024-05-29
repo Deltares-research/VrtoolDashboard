@@ -47,6 +47,7 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
         title_x_axis = "Kosten (mln €)"
         max_x = max(x_vr[-1], x_dsn[-1])
         hover_extra = "Kosten: €%{x:.2f} mln<br>"
+        title_extra = "Faalkans i.r.t. kosten"
 
     elif cost_length_switch == "LENGTH":
         x_vr = dike_traject.get_cum_length("vr")
@@ -55,6 +56,7 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
         title_x_axis = "Lengte (km)"
         max_x = max(x_vr[-1], x_dsn[-1])
         hover_extra = "Lengte: %{x:.2f} m<br>"
+        title_extra = "Faalkans i.r.t. lengte"
     else:
         raise ValueError("Wrong cost_length_switch value")
 
@@ -155,7 +157,7 @@ def plot_pf_length_cost(dike_traject: DikeTraject, selected_year: float, result_
 
     x_max = np.max([np.max(x_vr), np.max(x_dsn)])
     fig.update_xaxes(range=[0, x_max], title=title_x_axis)
-    fig.update_layout(title=f'Faalkans i.r.t. kosten ({selected_year})', yaxis_title=title_y_axis)
+    fig.update_layout(title=title_extra + f' ({selected_year})', yaxis_title=title_y_axis)
 
     if result_type == ResultType.RELIABILITY.name:
         fig.update_yaxes(range=[None, 6])
