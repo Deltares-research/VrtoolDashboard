@@ -162,5 +162,5 @@ class DikeSection(BaseLinearObject):
                 _year_index = bisect_right(self.years, params['selected_year'] - REFERENCE_YEAR) - 1
                 _beta_meca = get_beta(_final_measure, _year_index, mechanism.upper())
 
-                feat['properties'][f'beta_{mechanism}_veiligheidsrendement'] = _beta_meca
+                feat['properties'][f'beta_{mechanism}_{params["calculation_type"]}'] = _beta_meca
         return feat

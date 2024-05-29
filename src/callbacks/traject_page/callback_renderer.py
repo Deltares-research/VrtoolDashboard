@@ -13,5 +13,5 @@ from src.constants import GreedyOPtimizationCriteria
 )
 def render_tab_map_content(type_analysis: str) -> tuple[bool, bool]:
     if type_analysis == GreedyOPtimizationCriteria.ECONOMIC_OPTIMAL.name:
-        return True, True
+        return True, False
     return False, False

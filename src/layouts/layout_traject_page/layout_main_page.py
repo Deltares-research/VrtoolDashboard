@@ -155,7 +155,7 @@ def layout_tab_four() -> html.Div:
         children=[
             html.H2("Optimalisatie"),
             html.Div(
-                "Onderstaande figuur toont de relatie tussen de trajectfaalkans en de kosten van de versterking voor het geselecteerde referentiejaar."),
+                "Onderstaande figuur toont de relatie tussen de trajectfaalkans en de kosten of lengte van de versterking voor het geselecteerde referentiejaar."),
 
             dbc.Row([
 
