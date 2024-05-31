@@ -85,6 +85,8 @@ class TestCallbackMeasurePlot():
             decoded = f.read()
             _figure_dict = json.loads(decoded)
 
+        _vr_config["input_directory"] = Path(__file__).parent.parent / 'data/31-1 base coastal case'
+
         # 2. Define callback
         def run_callback():
             # click_data: dict, selected_mechanism, vr_config, dike_traject_data: dict,
