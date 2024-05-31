@@ -46,6 +46,8 @@ class TestCallbackMeasurePlot():
             decoded = f.read()
             _vr_config = json.loads(decoded)
 
+        _vr_config["input_directory"] = Path(__file__).parent.parent / 'data/31-1 base coastal case'
+
         # 2. Define callback
         def run_callback():
             return make_graph_measure_results_comparison(
