@@ -26,6 +26,7 @@ def get_all_measure_results(
         time: int,
         run_id_vr: int,
         run_id_dsn: int,
+        active_mechanisms: Optional[list[str]] = None,
 ) -> tuple[DataFrame, dict, dict]:
     """
     Import and return all the single measures and the steps measures of the GreedyOptimization for a given selected
@@ -50,6 +51,7 @@ def get_all_measure_results(
         time=time,
         run_id_vr=run_id_vr,
         run_id_dsn=run_id_dsn,
+        active_mechanisms=active_mechanisms,
     ).import_orm(orm_model)
 
     return _meas_results, _vr_steps, _dsn_steps
