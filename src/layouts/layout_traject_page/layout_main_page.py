@@ -213,6 +213,7 @@ def layout_tab_six() -> html.Div:
             layout_radio_dike_section_selection,
             # html.Div(id=GRAPH_MEASURE_COMPARISON_ID,
             #          style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
+            html.Div("U kunt op een maatregel bolletje kliken om de betrouwbaarheid van de maatregel over tijd te bekijken."),
 
             html.Div(
                 style={'width': '130vh', 'height': '60vh', 'border': "2px solid black"},
