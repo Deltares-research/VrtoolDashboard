@@ -8,9 +8,9 @@ from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.orm.orm_controllers import clear_assessment_results, clear_measure_results, clear_optimization_results, \
     open_database
 
-from src.callbacks.traject_page.callback_optimize import get_selected_measure
+from src.callbacks.database_interaction_page.callback_optimize import get_selected_measure
 from src.orm.import_database import get_name_optimization_runs
-from tests.test_callbacks.test_callback_optimize import optimization_table_1
+from tests.test_callbacks.test_callback_optimize import optimization_table_1, optimization_table_2
 from src.orm import models as orm_model
 
 
@@ -29,15 +29,16 @@ def custom_selected_measure(_vr_config: VrtoolConfig) -> list[tuple]:
     return _meas_list
 
 ### Load data
-_path_config = Path(r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\TestCase1_38-1_no_housing_testingonly/vr_config.json")
+# _path_config = Path(r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\TestCase1_38-1_no_housing_testingonly/vr_config.json")
+_path_config = Path(r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\test_run_optimize/config38.json")
 
 # load json:
 with open(_path_config, 'r') as f:
     decoded = f.read()
     vr_config = json.loads(decoded)
 
-traject_optimization_table = optimization_table_1
-optimization_run_name = 'test_optimization_run'
+traject_optimization_table = optimization_table_2
+optimization_run_name = 'test_optimization_run11111'
 
 ### run_optimize_algorithm
 
@@ -50,10 +51,10 @@ _vr_config.excluded_mechanisms = [MechanismEnum.REVETMENT, MechanismEnum.HYDRAUL
 
 # 2. Get all selected measures ids from optimization table in the dashboard
 selected_measures = get_selected_measure(_vr_config, traject_optimization_table)
-print(selected_measures)
+print(len(selected_measures), selected_measures)
 # stop
-selected_measures = custom_selected_measure(_vr_config)
-print(selected_measures)
+selected_measures2 = custom_selected_measure(_vr_config)
+print(len(selected_measures2), selected_measures2)
 
 
 # 3. Run optimization
