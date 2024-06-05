@@ -85,7 +85,7 @@ def run_optimize_algorithm(
         stored_data: dict,
         vr_config: dict,
         traject_optimization_table: list[dict],
-) -> tuple:
+):
     """
     This is a callback to run the optimization algorithm when the user clicks on the "Optimaliseer" button.
 
@@ -119,7 +119,7 @@ def run_optimize_algorithm(
         _vr_config.input_directory = Path(vr_config["input_directory"])
         _vr_config.output_directory = Path(vr_config["output_directory"])
         _vr_config.input_database_name = vr_config["input_database_name"]
-        _vr_config.excluded_mechanisms = [MechanismEnum.HYDRAULIC_STRUCTURES]
+        _vr_config.excluded_mechanisms = [MechanismEnum.HYDRAULIC_STRUCTURES, MechanismEnum.REVETMENT]
 
         class ModalPopupLogHandler(logging.StreamHandler):
             """
@@ -169,7 +169,7 @@ def run_optimize_algorithm(
 
         _options = [{"label": name, "value": name} for name in _names_optimization_run]
 
-        return [], _options, False
+        return _options
 
 
 def run_vrtool_optimization(

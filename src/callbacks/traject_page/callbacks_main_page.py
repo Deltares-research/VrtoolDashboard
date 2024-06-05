@@ -303,7 +303,7 @@ def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
         for section in _dike_traject.dike_sections:
             df_add = pd.DataFrame.from_records([{"section_col": section.name,
                             "reinforcement_col": True,
-                            "reference_year": 2045,
+                            "reference_year": 2025,
                             Measures.GROUND_IMPROVEMENT.name: True,
                             Measures.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.name: True,
                             Measures.GEOTEXTILE.name: True,
