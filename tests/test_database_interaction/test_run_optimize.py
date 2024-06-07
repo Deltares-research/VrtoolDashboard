@@ -82,7 +82,7 @@ class TestRunOptimize:
 
         _vr_config = VrtoolConfig()
         _vr_config.traject = vr_config['traject']
-        _vr_config.input_directory = Path.joinpath(test_data, "38-1 base river case")
+        _vr_config.input_directory = Path.joinpath(test_data, "31-1 base coastal case")
         _vr_config.output_directory = Path(vr_config['output_directory'])
         _vr_config.input_database_name = "copy_" + vr_config['input_database_name']
 
