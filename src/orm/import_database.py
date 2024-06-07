@@ -198,7 +198,6 @@ def get_measure_result_ids_per_section(
     _measure_type = orm_model.MeasureType.select().where(
         orm_model.MeasureType.name == _measure_type_name_orm
     )
-    print(_measure_type)
 
     if len(_measure_type) == 0:  # this checks if a measure type from the optimization table is indeed present in the ORM Table Measure.
         # If not, len= 0 and return empty list
