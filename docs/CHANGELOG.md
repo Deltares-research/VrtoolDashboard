@@ -23,6 +23,7 @@ None.
 ### Fixed
 - legend duidingsklassen
 - Various UI string fixes
+- fix run optimize for revetment case
 
 ## v0.4.1 [21/05/2024]
 
