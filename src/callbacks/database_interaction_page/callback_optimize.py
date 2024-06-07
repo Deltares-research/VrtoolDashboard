@@ -119,7 +119,7 @@ def run_optimize_algorithm(
         _vr_config.input_directory = Path(vr_config["input_directory"])
         _vr_config.output_directory = Path(vr_config["output_directory"])
         _vr_config.input_database_name = vr_config["input_database_name"]
-        _vr_config.excluded_mechanisms = [MechanismEnum.HYDRAULIC_STRUCTURES, MechanismEnum.REVETMENT]
+        _vr_config.excluded_mechanisms = vr_config["excluded_mechanisms"]
 
         class ModalPopupLogHandler(logging.StreamHandler):
             """
@@ -148,7 +148,7 @@ def run_optimize_algorithm(
 
         # Wrap al `VrtoolCore` calls into the logging handler so any logging message
         # is redirected to our html modal (the pop-up logging window).
-        with ModalPopupLogHandler():
+        with ModalPopupLogHandler() as handler:
             # 2. Get all selected measures ids from optimization table in the dashboard
             print(2222)
             print(traject_optimization_table)
@@ -163,6 +163,7 @@ def run_optimize_algorithm(
                 _vr_config, optimization_run_name, selected_measures
             )
             print(33333)
+            handler.emit(logging.INFO("Optimization is completed, you can close this window."))
 
             # 4. Update the selection Dropwdown with all the names of the optimization runs
             _names_optimization_run = get_name_optimization_runs(_vr_config)

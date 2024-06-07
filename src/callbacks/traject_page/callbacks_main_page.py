@@ -106,7 +106,8 @@ def selection_traject_run(name: str, vr_config: dict) -> dict:
     _vr_config.input_directory = Path(vr_config['input_directory'])
     _vr_config.output_directory = Path(vr_config['output_directory'])
     _vr_config.input_database_name = vr_config['input_database_name']
-    _vr_config.excluded_mechanisms = [MechanismEnum.REVETMENT, MechanismEnum.HYDRAULIC_STRUCTURES]
+    _vr_config.excluded_mechanisms = vr_config["excluded_mechanisms"]
+
 
     if name == '':
         return dash.no_update
@@ -168,7 +169,8 @@ def recompute_dike_traject_with_new_greedy_criteria(name: str, name_type: str, b
     _vr_config.input_directory = Path(vr_config['input_directory'])
     _vr_config.output_directory = Path(vr_config['output_directory'])
     _vr_config.input_database_name = vr_config['input_database_name']
-    _vr_config.excluded_mechanisms = [MechanismEnum.REVETMENT, MechanismEnum.HYDRAULIC_STRUCTURES]
+    _vr_config.excluded_mechanisms = vr_config["excluded_mechanisms"]
+
 
     if name == "Basisberekening":
         _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=2, run_is_vr=1,
