@@ -30,7 +30,7 @@ from src.orm.importers.importer_utils import (
     _get_investment_year,
     _get_combined_measure_name,
     _get_combined_measure_investment_year,
-    _get_measure_parameters,
+    _get_measure_parameters, _get_single_measure_type, _get_combined_measure_type,
 )
 from src.orm.importers.optimization_step_importer import (
     _get_section_lcc,
@@ -391,6 +391,8 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             _final_measure["investment_year"] = [
                 _get_investment_year(optimization_steps[0])
             ]
+            _final_measure["type"] = [_get_single_measure_type(optimization_steps[0]).name]
+            print(_final_measure["type"])
 
         elif optimization_steps.count() in [2, 3]:
             _final_measure["name"] = _get_combined_measure_name(optimization_steps)
@@ -399,6 +401,8 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             _final_measure["investment_year"] = _get_combined_measure_investment_year(
                 optimization_steps
             )
+            _final_measure["type"] = _get_combined_measure_type(optimization_steps)
+            print(_final_measure["type"])
 
         else:
             raise ValueError(

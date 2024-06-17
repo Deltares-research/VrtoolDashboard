@@ -1,5 +1,5 @@
 from vrtool.orm.models import OptimizationStep, OptimizationSelectedMeasure, Measure, MeasurePerSection, MeasureResult, \
-    MeasureResultParameter, MeasureResultSection
+    MeasureResultParameter, MeasureResultSection, MeasureType
 
 from src.orm.importers.optimization_step_importer import _get_final_measure_betas
 from src.utils.utils import beta_to_pf
@@ -31,6 +31,18 @@ def _get_single_measure(optimization_step: OptimizationStep) -> Measure:
     return measure
 
 
+def _get_single_measure_type(opt_step: OptimizationStep) -> str:
+    measure_type = (MeasureType
+                    .select()
+                    .join(Measure)
+                    .join(MeasurePerSection)
+                    .join(MeasureResult)
+                    .join(OptimizationSelectedMeasure)
+                    .where(OptimizationSelectedMeasure.id == opt_step.optimization_selected_measure_id)
+                    .get())
+    return measure_type
+
+
 def _get_combined_measure_name(optimization_step: OptimizationStep) -> str:
     if optimization_step.count() == 2:
         name = _get_single_measure(optimization_step[0]).name + " + " + _get_single_measure(
@@ -42,6 +54,18 @@ def _get_combined_measure_name(optimization_step: OptimizationStep) -> str:
         raise ValueError()
 
     return name
+
+
+def _get_combined_measure_type(optimum_step: OptimizationStep) -> list:
+    if optimum_step.count() == 2:
+        measure_type = [_get_single_measure_type(optimum_step[0]).name, _get_single_measure_type(optimum_step[1]).name]
+    elif optimum_step.count() == 3:
+        measure_type = [_get_single_measure_type(optimum_step[0]).name, _get_single_measure_type(optimum_step[1]).name,
+                        _get_single_measure_type(optimum_step[2]).name]
+    else:
+        raise ValueError()
+
+    return measure_type
 
 
 def _get_investment_year(optimization_step: OptimizationStep) -> int:
@@ -67,8 +91,8 @@ def _get_combined_measure_investment_year(optimization_step: OptimizationStep) -
         _year_3 = _get_investment_year(optimization_step[2])
         return [_year_1, _year_2, _year_3]
 
-def _get_measure_cost(optimization_steps: OptimizationStep) -> float:
 
+def _get_measure_cost(optimization_steps: OptimizationStep) -> float:
     cost = 0
     for optimum_step in optimization_steps:
         optimum_selected_measure = OptimizationSelectedMeasure.get(
@@ -76,6 +100,7 @@ def _get_measure_cost(optimization_steps: OptimizationStep) -> float:
         measure_result = MeasureResult.get(MeasureResult.id == optimum_selected_measure.measure_result_id)
         cost += MeasureResultSection.get(MeasureResultSection.measure_result == measure_result).cost
     return cost
+
 
 def _get_measure_parameters(optimization_steps: OptimizationStep) -> dict:
     _params = {}

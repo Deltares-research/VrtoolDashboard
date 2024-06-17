@@ -62,8 +62,8 @@ _traject_db = get_dike_traject_from_config_ORM(vr_config=_vr_config, run_is_vr=1
 data = _traject_db.serialize()
 export_to_json(data)
 t1 = time.time()
-print(data)
-# stop
+# print(data)
+stop
 print(f"Time to get dike traject from ORM: {t1 - t0}")
 # _fig = plot_overview_map(_traject_db)
 
@@ -82,9 +82,9 @@ print(f"Time to get dike traject from ORM: {t1 - t0}")
 
 _fig = plot_dike_traject_reliability_measures_assessment_map(_traject_db, 2025, ResultType.RELIABILITY.name,
                                                              calc_type=CalcType.VEILIGHEIDSRENDEMENT.name,
-                                                             colorbar_result_type=ColorBarResultType.RELIABILITY.name,
+                                                             colorbar_result_type=ColorBarResultType.MEASURE.name,
                                                              mechanism_type=Mechanism.SECTION.name,
-                                                             sub_result_type=SubResultType.ABSOLUTE.name, )
+                                                             sub_result_type=SubResultType.MEASURE_TYPE.name, )
 # _fig = plot_pf_length_cost(_traject_db, 2025, result_type=ResultType.RELIABILITY.name, cost_length_switch="COST")
 t2 = time.time()
 print(f"Time to plot: {t2 - t1}")
