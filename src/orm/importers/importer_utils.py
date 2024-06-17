@@ -5,18 +5,6 @@ from src.orm.importers.optimization_step_importer import _get_final_measure_beta
 from src.utils.utils import beta_to_pf
 
 
-def _get_investment_year(optimization_step: OptimizationStep) -> int:
-    """
-    Get the investment year of the optimization step.
-    :param optimization_step: optimization step for which the investment year is retrieved.
-    :return: investment year
-    """
-    _selected_optimization_measure = OptimizationSelectedMeasure.select().where(
-        OptimizationSelectedMeasure.id == optimization_step.optimization_selected_measure_id).get()
-
-    return _selected_optimization_measure.investment_year
-
-
 def _get_single_measure(optimization_step: OptimizationStep) -> Measure:
     """Return the measure associated with a given single optimization step"""
 
