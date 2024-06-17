@@ -654,6 +654,9 @@ def add_measure_type_trace(
 
         legend_display["revetment"] = False
 
+    else:
+        print("prout", measure_results["name"])
+
 
 def add_measure_crest_heightening_trace(
     fig: go.Figure, section: DikeSection, measure_results: dict

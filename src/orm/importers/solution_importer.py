@@ -194,6 +194,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         _recorded__previous_section_LCC = {}
 
         for _optimization_step in _optimization_steps:
+            print(_optimization_step.step_number)
             _step_number = _optimization_step.step_number
 
             # For combined steps sharing the same step number, skip the step if it has already been processed
