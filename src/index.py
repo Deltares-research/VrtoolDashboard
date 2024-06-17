@@ -3,6 +3,7 @@ from dash import dcc
 import dash_bootstrap_components as dbc
 
 from src.component_ids import STORE_CONFIG
+from src.layouts.layout_traject_page.layout_modal_measure import modal_measure_reliability
 from src.layouts.layout_traject_page.layout_modal_optimize import modal_optimize
 
 from src.app import app
@@ -17,7 +18,6 @@ import src.callbacks.traject_page.callbacks_main_page
 import src.callbacks.traject_page.callbacks_tab_content
 import src.callbacks.database_interaction_page.callback_optimize
 
-
 # Define the app layout
 app.layout = dbc.Container(
     id="app-container",
@@ -27,6 +27,7 @@ app.layout = dbc.Container(
         dcc.Store(id=STORE_CONFIG, data=None, storage_type="session"),
         nav_bar_layout_1,
         modal_optimize,  # keep this line to import the modal as closed to the app by default
+        modal_measure_reliability,
         dash.page_container,
     ],
     fluid=True,

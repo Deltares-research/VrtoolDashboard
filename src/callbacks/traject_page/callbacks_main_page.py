@@ -106,7 +106,8 @@ def selection_traject_run(name: str, vr_config: dict) -> dict:
     _vr_config.input_directory = Path(vr_config['input_directory'])
     _vr_config.output_directory = Path(vr_config['output_directory'])
     _vr_config.input_database_name = vr_config['input_database_name']
-    _vr_config.excluded_mechanisms = [MechanismEnum.REVETMENT, MechanismEnum.HYDRAULIC_STRUCTURES]
+    _vr_config.excluded_mechanisms = vr_config["excluded_mechanisms"]
+
 
     if name == '':
         return dash.no_update
@@ -168,7 +169,8 @@ def recompute_dike_traject_with_new_greedy_criteria(name: str, name_type: str, b
     _vr_config.input_directory = Path(vr_config['input_directory'])
     _vr_config.output_directory = Path(vr_config['output_directory'])
     _vr_config.input_database_name = vr_config['input_database_name']
-    _vr_config.excluded_mechanisms = [MechanismEnum.REVETMENT, MechanismEnum.HYDRAULIC_STRUCTURES]
+    _vr_config.excluded_mechanisms = vr_config["excluded_mechanisms"]
+
 
     if name == "Basisberekening":
         _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=2, run_is_vr=1,
@@ -301,15 +303,23 @@ def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
 
         for section in _dike_traject.dike_sections:
-            df = df.append({"section_col": section.name,
+            df_add = pd.DataFrame.from_records([{"section_col": section.name,
                             "reinforcement_col": True,
-                            "reference_year": 2045,
+                            "reference_year": 2025,
                             Measures.GROUND_IMPROVEMENT.name: True,
                             Measures.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.name: True,
                             Measures.GEOTEXTILE.name: True,
                             Measures.DIAPHRAGM_WALL.name: True,
                             Measures.STABILITY_SCREEN.name: True,
-                            }, ignore_index=True)
+                            }])
+            df = pd.concat([df, df_add], ignore_index=True)
+
+        bool_columns = ["reinforcement_col", Measures.GROUND_IMPROVEMENT.name,
+                        Measures.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.name,
+                        Measures.GEOTEXTILE.name, Measures.DIAPHRAGM_WALL.name,
+                        Measures.STABILITY_SCREEN.name]
+        df[bool_columns] = df[bool_columns].astype(bool)
+
 
         return df.to_dict('records')
 

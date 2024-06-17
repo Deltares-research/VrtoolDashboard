@@ -11,7 +11,7 @@ from .layout_radio_items import layout_radio_color_bar_result_type, layout_radio
 from .layout_sliders import layout_urgency_length_slider
 from src.layouts.layout_traject_page.layout_tabs.layout_tab_measures import layout_radio_dike_section_selection
 from .layout_upload_dike_files import layout_traject_select
-from src.component_ids import GRAPG_MEASURE_COMPARISON_ID
+from src.component_ids import GRAPH_MEASURE_COMPARISON_ID
 from src.constants import get_mapbox_token
 from src.plotly_graphs.pf_length_cost import plot_default_scatter_dummy
 from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
@@ -155,7 +155,7 @@ def layout_tab_four() -> html.Div:
         children=[
             html.H2("Optimalisatie"),
             html.Div(
-                "Onderstaande figuur toont de relatie tussen de trajectfaalkans en de kosten van de versterking voor het geselecteerde referentiejaar."),
+                "Onderstaande figuur toont de relatie tussen de trajectfaalkans en de kosten of lengte van de versterking voor het geselecteerde referentiejaar."),
 
             dbc.Row([
 
@@ -211,13 +211,14 @@ def layout_tab_six() -> html.Div:
             html.H2("Maatregelen"),
             html.Div("Selecteer een dijkvak om de resultaten van de maatregelen te bekijken:"),
             layout_radio_dike_section_selection,
-            # html.Div(id=GRAPG_MEASURE_COMPARISON_ID,
+            # html.Div(id=GRAPH_MEASURE_COMPARISON_ID,
             #          style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
+            html.Div("U kunt op een maatregel bolletje kliken om de betrouwbaarheid van de maatregel over tijd te bekijken."),
 
             html.Div(
                 style={'width': '130vh', 'height': '60vh', 'border': "2px solid black"},
                 children=[
-                    dcc.Graph(id=GRAPG_MEASURE_COMPARISON_ID, figure=plot_default_scatter_dummy(),
+                    dcc.Graph(id=GRAPH_MEASURE_COMPARISON_ID, figure=plot_default_scatter_dummy(),
                               style={'width': '100%', 'height': '100%'},
                               ),
                 ],

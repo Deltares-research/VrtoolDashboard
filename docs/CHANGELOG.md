@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Graph comparison measures
+- Click event to display measure reliability over time
+- click event to highlight combined measures
+- Switch back to economic optimal possible
 
 ### Changed
 None.
@@ -18,7 +21,9 @@ None.
 - tests with deprecated databases
 
 ### Fixed
-None.
+- legend duidingsklassen
+- Various UI string fixes
+- fix run optimize for revetment case
 
 ## v0.4.1 [21/05/2024]
 

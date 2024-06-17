@@ -14,21 +14,23 @@ from src.constants import (
 from src.linear_objects.dike_traject import DikeTraject
 from src.orm.importers.dike_traject_importer import DikeTrajectImporter
 from src.orm import models as orm_model
+from src.orm.importers.measure_reliability_time_importer import TrajectMeasureResultsTimeImporter
 from src.orm.importers.measures_importer import TrajectMeasureResultsImporter
 from src.orm.importers.optimization_run_importer import import_optimization_runs_name
 
 
 def get_all_measure_results(
-    vr_config: VrtoolConfig,
-    section_name: str,
-    mechanism: str,
-    time: int,
-    run_id_vr: int,
-    run_id_dsn: int,
+        vr_config: VrtoolConfig,
+        section_name: str,
+        mechanism: str,
+        time: int,
+        run_id_vr: int,
+        run_id_dsn: int,
+        active_mechanisms: Optional[list[str]] = None,
 ) -> tuple[DataFrame, dict, dict]:
     """
     Import and return all the single measures and the steps measures of the GreedyOptimization for a given selected
-    dike section.
+    dike section and for a single selected time.
 
     :param vr_config: vr config from the VRCore
     :param section_name: name of the section for which the measures are filtered on
@@ -49,18 +51,41 @@ def get_all_measure_results(
         time=time,
         run_id_vr=run_id_vr,
         run_id_dsn=run_id_dsn,
+        active_mechanisms=active_mechanisms,
     ).import_orm(orm_model)
 
     return _meas_results, _vr_steps, _dsn_steps
 
 
+def get_measure_reliability_over_time(vr_config: VrtoolConfig,
+                                      measure_result_id: int, mechanism: str) -> list[float]:
+    """
+    Return a list of betas for the specified measure result id and mechanism over time.
+    :param vr_config:
+    :param measure_result_id:
+    :param mechanism:
+    :return:
+    """
+    _path_dir = Path(vr_config.input_directory)
+    _path_database = _path_dir.joinpath(vr_config.input_database_name)
+
+    open_database(_path_database)
+    _res = TrajectMeasureResultsTimeImporter(
+        vr_config=vr_config,
+        measure_result_id=measure_result_id,
+        mechanism=mechanism,
+
+    ).import_orm(orm_model)
+    return _res
+
+
 def get_dike_traject_from_config_ORM(
-    vr_config: VrtoolConfig,
-    run_id_dsn: int,
-    run_is_vr: int,
-    greedy_optimization_criteria: str = GreedyOPtimizationCriteria.ECONOMIC_OPTIMAL.name,
-    greedy_criteria_year: Optional[int] = None,
-    greedy_criteria_beta: Optional[float] = None,
+        vr_config: VrtoolConfig,
+        run_id_dsn: int,
+        run_is_vr: int,
+        greedy_optimization_criteria: str = GreedyOPtimizationCriteria.ECONOMIC_OPTIMAL.name,
+        greedy_criteria_year: Optional[int] = None,
+        greedy_criteria_beta: Optional[float] = None,
 ) -> DikeTraject:
     """
     Returns a DikeTraject object with all the required data from the ORM for the specified traject via a provided
@@ -153,7 +178,7 @@ def get_run_optimization_ids(vr_config, optimization_run_name: str) -> tuple[int
 
 
 def get_measure_result_ids_per_section(
-    vr_config: VrtoolConfig, section_name: str, selected_measure_type: str
+        vr_config: VrtoolConfig, section_name: str, selected_measure_type: str
 ):
     """Returns a list of measure result ids for the specified section and measure type.
 
@@ -173,6 +198,10 @@ def get_measure_result_ids_per_section(
     _measure_type = orm_model.MeasureType.select().where(
         orm_model.MeasureType.name == _measure_type_name_orm
     )
+
+    if len(_measure_type) == 0:  # this checks if a measure type from the optimization table is indeed present in the ORM Table Measure.
+        # If not, len= 0 and return empty list
+        return []
 
     _measure = orm_model.Measure.select().where(
         orm_model.Measure.measure_type_id == _measure_type[0].id

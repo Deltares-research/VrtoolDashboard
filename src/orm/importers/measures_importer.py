@@ -26,10 +26,9 @@ from src.constants import Mechanism
 
 from src.orm.importers.importer_utils import _get_measure, _get_measure_cost
 from src.orm.importers.optimization_step_importer import (
-    _get_section_lcc,
+    _get_section_lcc, _get_measure_result_ids,
 )
 from src.orm.models import OptimizationSelectedMeasure, OptimizationStep, MeasureResult
-
 
 from src.orm.orm_controller_custom import get_optimization_steps_ordered
 
@@ -37,13 +36,14 @@ from src.orm.orm_controller_custom import get_optimization_steps_ordered
 class TrajectMeasureResultsImporter(OrmImporterProtocol):
 
     def __init__(
-        self,
-        vr_config: VrtoolConfig,
-        section_name: str,
-        mechanism: str,
-        time: int,
-        run_id_vr: int,
-        run_id_dsn: int,
+            self,
+            vr_config: VrtoolConfig,
+            section_name: str,
+            mechanism: str,
+            time: int,
+            run_id_vr: int,
+            run_id_dsn: int,
+            active_mechanisms: Optional[list[str]] = None,
     ) -> None:
         self.vr_config = vr_config
         self.section_name = section_name
@@ -51,6 +51,7 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
         self.run_id_vr = run_id_vr
         self.run_id_dsn = run_id_dsn
         self.time = time
+        self.active_mechanisms = active_mechanisms # used for section only
 
     def import_orm(self, orm_model) -> tuple:
         """
@@ -115,13 +116,10 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
                 )
             )
 
-            # TODO include revetment/bekleding
-            _measure = _get_measure(
-                _optimum_section_optimization_steps,
-                ["Piping", "StabilityInner", "Overflow"],
-            )
+            _measure = _get_measure(_optimum_section_optimization_steps, self.active_mechanisms)
             _measure["LCC"] = _get_section_lcc(_optimization_step)
             _measure["cost"] = _get_measure_cost(_optimum_section_optimization_steps)
+            _measure["measure_results_ids"] = _get_measure_result_ids(_optimum_section_optimization_steps)
             _step_measures.append(_measure)
             _previous_step_number = _step_number
 
@@ -172,8 +170,8 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
                         MechanismPerSection,
                         JOIN.INNER,
                         on=(
-                            MeasureResultMechanism.mechanism_per_section
-                            == MechanismPerSection.id
+                                MeasureResultMechanism.mechanism_per_section
+                                == MechanismPerSection.id
                         ),
                     )
                     .join(
@@ -228,6 +226,7 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
                     "measure": measure.name,
                     "dberm": dberm,
                     "dcrest": dcrest,
+                    "measure_result_id": measure_result.id
                 }
             )
 

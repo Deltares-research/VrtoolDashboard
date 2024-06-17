@@ -1,27 +1,17 @@
-from bisect import bisect_right
-from typing import Optional
-
 import numpy as np
 import plotly.graph_objects as go
 from pandas import DataFrame
 
-from src.constants import REFERENCE_YEAR, ResultType, CalcType, Mechanism
-from src.linear_objects.dike_section import DikeSection
-from src.linear_objects.dike_traject import (
-    DikeTraject,
-    cum_cost_steps,
-    get_step_traject_pf,
-)
-from src.utils.utils import pf_to_beta, beta_to_pf
+from src.constants import CalcType, Mechanism
 
 
 def plot_measure_results_graph(
-    measure_results: DataFrame,
-    vr_steps: list[dict],
-    dsn_steps: list[dict],
-    mechanism: Mechanism,
-    section_name: str,
-    year_index: int,
+        measure_results: DataFrame,
+        vr_steps: list[dict],
+        dsn_steps: list[dict],
+        mechanism: Mechanism,
+        section_name: str,
+        year_index: int,
 ) -> go.Figure:
     """
     Make the plot Beta vs cost comparing all the measures for a dike section.
@@ -42,6 +32,7 @@ def plot_measure_results_graph(
             measure_results["measure"],
             measure_results.get("dberm", None),
             measure_results.get("dcrest", None),
+            measure_results.get("measure_result_id", None)  # keep this for the clickData event
         ),
         axis=-1,
     )
@@ -58,10 +49,10 @@ def plot_measure_results_graph(
                 color="black",
             ),
             hovertemplate="<b>%{customdata[0]}</b><br><br>"
-            + "Dberm: %{customdata[1]}m<br>"
-            + "Dcrest: %{customdata[2]}m<br>"
-            + "Beta: %{y:.2f}<br>"
-            + "LCC: €%{x:.2f} mln<br>",
+                          + "Dberm: %{customdata[1]}m<br>"
+                          + "Dcrest: %{customdata[2]}m<br>"
+                          + "Beta: %{y:.2f}<br>"
+                          + "LCC: €%{x:.2f} mln<br>",
         )
     )
 
@@ -85,11 +76,11 @@ def plot_measure_results_graph(
 
 
 def add_trace_run_results(
-    fig: go.Figure,
-    step_measures: list[dict],
-    calc_type: CalcType,
-    mechanism: Mechanism,
-    year_index: int,
+        fig: go.Figure,
+        step_measures: list[dict],
+        calc_type: CalcType,
+        mechanism: Mechanism,
+        year_index: int,
 ):
     """
     Add traces for the provided step_measures (either Veiligheidsrendement or doorsnede)
@@ -100,14 +91,21 @@ def add_trace_run_results(
     :param year_index:
     :return:
     """
+
     for step_number, taken_measure in enumerate(step_measures):
+
+        # add to custom data the measure_results_ids as a concatenated string "54 + 535 + 23" so that the data can be
+        # retrieved in the clickData event
+        concatenated_ids = " + ".join(map(str, taken_measure["measure_results_ids"]))
+        custom_data = np.stack((concatenated_ids,), axis=-1)
+
 
         if taken_measure["name"] == "Geen maatregel":
             hover_extra = ""
         else:
             hover_extra = (
-                f"Dberm: {taken_measure.get('dberm', None)}m<br>"
-                + f"Dcrest: {taken_measure.get('dcrest', None)}m<br>"
+                    f"Dberm: {taken_measure.get('dberm', None)}m<br>"
+                    + f"Dcrest: {taken_measure.get('dcrest', None)}m<br>"
             )
 
         if calc_type == CalcType.VEILIGHEIDSRENDEMENT:
@@ -141,6 +139,7 @@ def add_trace_run_results(
                 showlegend=True if step_number == 0 else False,
                 x=[taken_measure["cost"] / 1e6],
                 y=[taken_measure[mech_key][year_index]],
+                customdata=custom_data,
                 mode="markers",
                 marker=dict(
                     size=10 if step_number == len(step_measures) - 1 else 8,
@@ -150,10 +149,10 @@ def add_trace_run_results(
                     ),
                 ),
                 hovertemplate=f"<b>Stap {step_number} {taken_measure['name']}</b><br><br>"
-                + f"Investment year: {taken_measure['investment_year']}<br>"
-                + "Beta: %{y:.2f}<br>"
-                + "Cost: €%{x:.2f} mln<br>"
-                + hover_extra,
+                              + f"Investment year: {taken_measure['investment_year']}<br>"
+                              + "Beta: %{y:.2f}<br>"
+                              + "Cost: €%{x:.2f} mln<br>"
+                              + hover_extra,
             )
         )
 
