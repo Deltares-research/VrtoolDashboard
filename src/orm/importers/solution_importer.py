@@ -392,7 +392,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
                 _get_investment_year(optimization_steps[0])
             ]
             _final_measure["type"] = [_get_single_measure_type(optimization_steps[0]).name]
-            print(_final_measure["type"])
 
         elif optimization_steps.count() in [2, 3]:
             _final_measure["name"] = _get_combined_measure_name(optimization_steps)
@@ -402,7 +401,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
                 optimization_steps
             )
             _final_measure["type"] = _get_combined_measure_type(optimization_steps)
-            print(_final_measure["type"])
 
         else:
             raise ValueError(

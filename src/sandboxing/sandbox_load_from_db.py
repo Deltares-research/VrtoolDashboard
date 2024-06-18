@@ -47,6 +47,7 @@ _vr_config = VrtoolConfig().from_json(Path(
     # r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\38-1 base river case/config.json"
     # r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\38-1 base river case\config.json"
     r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\van Karolina\config.json"
+    # r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\38-1 custom measures\config.json"
 
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\38-1 test/config.json"
     # r"N:\Projects\11209000\11209353\B. Measurements and calculations\008 - Resultaten Proefvlucht\WDOD\10-3\database_vrtool_0_1_3_no_stix/config.json"
@@ -63,7 +64,6 @@ data = _traject_db.serialize()
 export_to_json(data)
 t1 = time.time()
 # print(data)
-stop
 print(f"Time to get dike traject from ORM: {t1 - t0}")
 # _fig = plot_overview_map(_traject_db)
 
