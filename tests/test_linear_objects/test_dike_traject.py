@@ -13,7 +13,7 @@ class TestDikeTraject:
 
         # 2. Define test
         _dike_traject = DikeTraject.deserialize(_dike_data)
-        _dike_section_1 = _dike_traject.dike_sections[10]
+        _dike_section_1 = _dike_traject.dike_sections[0]
 
         # 3. Assert
         assert isinstance(_dike_traject, DikeTraject)
