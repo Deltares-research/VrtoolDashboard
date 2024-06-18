@@ -17,6 +17,7 @@ import src.callbacks.traject_page.callback_download_geojson
 import src.callbacks.traject_page.callbacks_main_page
 import src.callbacks.traject_page.callbacks_tab_content
 import src.callbacks.database_interaction_page.callback_optimize
+import src.callbacks.database_interaction_page.callback_tabs_switch_database
 
 # Define the app layout
 app.layout = dbc.Container(
