@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Click event to display measure reliability over time
 - click event to highlight combined measures
 - Switch back to economic optimal possible
+- Custom measures can be imported & displayed in Dashboard.
 
 ### Changed
 None.

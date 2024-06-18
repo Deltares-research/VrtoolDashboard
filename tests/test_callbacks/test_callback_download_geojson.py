@@ -16,7 +16,7 @@ class TestCallbackDownloadGeojson:
     def test_download_overview_geojson(self):
         # 1. Define data
         _dike_data = json.load(
-            open(Path(__file__).parent.parent / 'data/Case_38_1_sterker_VZG2/reference' / 'dike_data.json'))
+            open(Path(__file__).parent.parent / 'data/31-1 base coastal case/reference' / 'dike_data.json'))
 
         # 2. Define callback
         def run_callback():
@@ -31,7 +31,7 @@ class TestCallbackDownloadGeojson:
     def test_download_assessment_geojson(self):
         # 1. Define data
         _dike_data = json.load(
-            open(Path(__file__).parent.parent / 'data/Case_38_1_sterker_VZG2/reference' / 'dike_data.json'))
+            open(Path(__file__).parent.parent / 'data/31-1 base coastal case/reference' / 'dike_data.json'))
 
         # 2. Define callback
         def run_callback():
@@ -47,7 +47,7 @@ class TestCallbackDownloadGeojson:
     def test_download_reinforced_sections_geojson(self):
         # 1. Define data
         _dike_data = json.load(
-            open(Path(__file__).parent.parent / 'data/Case_38_1_sterker_VZG2/reference' / 'dike_data.json'))
+            open(Path(__file__).parent.parent / 'data/31-1 base coastal case/reference' / 'dike_data.json'))
 
         # 2. Define callback
         def run_callback():

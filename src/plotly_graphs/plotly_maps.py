@@ -5,6 +5,7 @@ import numpy as np
 import plotly.graph_objects as go
 from matplotlib import pyplot as plt, colors
 from shapely import Polygon, MultiPolygon, LineString
+from vrtool.common.enums import MeasureTypeEnum
 
 from src.constants import (
     REFERENCE_YEAR,
@@ -50,7 +51,7 @@ def plot_overview_map(dike_traject: DikeTraject) -> go.Figure:
 
         # if a section is not in analyse, skip it, and it turns blank on the map.
         _hovertemplate = (
-            f"Vaknaam {section.name}<br>" + f"Lengte: {section.length}m <extra></extra>"
+                f"Vaknaam {section.name}<br>" + f"Lengte: {section.length}m <extra></extra>"
         )
 
         if not section.in_analyse:
@@ -75,10 +76,10 @@ def plot_overview_map(dike_traject: DikeTraject) -> go.Figure:
 
 
 def plot_dike_traject_reliability_initial_assessment_map(
-    dike_traject: DikeTraject,
-    selected_year: float,
-    result_type: str,
-    mechanism_type: str,
+        dike_traject: DikeTraject,
+        selected_year: float,
+        result_type: str,
+        mechanism_type: str,
 ) -> go.Figure:
     """
     This function plots a Map displaying the initial reliability of the dike traject.
@@ -108,12 +109,12 @@ def plot_dike_traject_reliability_initial_assessment_map(
             if mechanism_type == Mechanism.REVETMENT.name and not section.revetment:
                 _color = "grey"
                 _hovertemplate = (
-                    f"Vaknaam {section.name}<br>"
-                    f"Beta: NO DATA<br>" + "<extra></extra>"
+                        f"Vaknaam {section.name}<br>"
+                        f"Beta: NO DATA<br>" + "<extra></extra>"
                 )
             else:
                 _year_index = (
-                    bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
+                        bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
                 )
                 _beta = get_beta(_initial_results, _year_index, mechanism_type)
                 _beta_dict = {
@@ -136,7 +137,7 @@ def plot_dike_traject_reliability_initial_assessment_map(
                     raise ValueError("Unrecognized result type")
 
                 _hovertemplate = (
-                    f"Vaknaam {section.name}<br>" + _hover_res + "<extra></extra>"
+                        f"Vaknaam {section.name}<br>" + _hover_res + "<extra></extra>"
                 )
 
                 if mechanism_type == Mechanism.SECTION.name:
@@ -144,15 +145,15 @@ def plot_dike_traject_reliability_initial_assessment_map(
                         _beta_dict, key=_beta_dict.get
                     )  # mechanism with lowest beta
                     _hovertemplate = (
-                        _hovertemplate[:-15]
-                        + f"Laagste beta: {_mechanism}<br>"
-                        + "<extra></extra>"
+                            _hovertemplate[:-15]
+                            + f"Laagste beta: {_mechanism}<br>"
+                            + "<extra></extra>"
                     )  # :-15 to remove <extra></extra> from string
 
         else:
             _color = "grey"
             _hovertemplate = (
-                f"Vaknaam {section.name}<br>" f"Beta: NO DATA<br>" + "<extra></extra>"
+                    f"Vaknaam {section.name}<br>" f"Beta: NO DATA<br>" + "<extra></extra>"
             )
 
         add_section_trace(
@@ -178,13 +179,13 @@ def plot_dike_traject_reliability_initial_assessment_map(
 
 
 def plot_dike_traject_reliability_measures_assessment_map(
-    dike_traject: DikeTraject,
-    selected_year: float,
-    result_type: str,
-    calc_type: str,
-    colorbar_result_type: str,
-    mechanism_type: str,
-    sub_result_type: str,
+        dike_traject: DikeTraject,
+        selected_year: float,
+        result_type: str,
+        calc_type: str,
+        colorbar_result_type: str,
+        mechanism_type: str,
+        sub_result_type: str,
 ) -> go.Figure:
     """
     This function plots a Map displaying the reliability of the dike traject after measures.
@@ -227,22 +228,22 @@ def plot_dike_traject_reliability_measures_assessment_map(
             if mechanism_type == Mechanism.REVETMENT.name and not section.revetment:
                 _color = "grey"
                 _hovertemplate = (
-                    f"Vaknaam {section.name}<br>"
-                    f"Beta: NO DATA<br>" + "<extra></extra>"
+                        f"Vaknaam {section.name}<br>"
+                        f"Beta: NO DATA<br>" + "<extra></extra>"
                 )
             else:
 
                 _year_index = (
-                    bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
+                        bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
                 )
                 _beta_section = get_beta(_measure_results, _year_index, mechanism_type)
                 if _beta_section is None:
                     _color, _hovertemplate = get_no_data_info(section)
 
                 elif (
-                    colorbar_result_type == ColorBarResultType.RELIABILITY.name
-                    and sub_result_type == SubResultType.ABSOLUTE.name
-                    and result_type != ResultType.INTERPRETATION_CLASS.name
+                        colorbar_result_type == ColorBarResultType.RELIABILITY.name
+                        and sub_result_type == SubResultType.ABSOLUTE.name
+                        and result_type != ResultType.INTERPRETATION_CLASS.name
                 ):
                     _color, _hovertemplate = get_color_hover_absolute_reliability(
                         section,
@@ -252,36 +253,36 @@ def plot_dike_traject_reliability_measures_assessment_map(
                     )
 
                 elif (
-                    colorbar_result_type == ColorBarResultType.RELIABILITY.name
-                    and sub_result_type == SubResultType.RATIO.name
+                        colorbar_result_type == ColorBarResultType.RELIABILITY.name
+                        and sub_result_type == SubResultType.RATIO.name
                 ):
                     _color, _hovertemplate = get_color_hover_prob_ratio(
                         section, _year_index, mechanism_type
                     )
 
                 elif (
-                    colorbar_result_type == ColorBarResultType.COST.name
-                    and sub_result_type == SubResultType.ABSOLUTE.name
+                        colorbar_result_type == ColorBarResultType.COST.name
+                        and sub_result_type == SubResultType.ABSOLUTE.name
                 ):
                     _color, _hovertemplate = get_color_hover_absolute_cost(
                         section, _beta_section, _measure_results
                     )
 
                 elif (
-                    colorbar_result_type == ColorBarResultType.COST.name
-                    and sub_result_type == SubResultType.DIFFERENCE.name
+                        colorbar_result_type == ColorBarResultType.COST.name
+                        and sub_result_type == SubResultType.DIFFERENCE.name
                 ):
                     _color, _hovertemplate = get_color_hover_difference_cost(section)
 
                 elif (
-                    colorbar_result_type == ColorBarResultType.RELIABILITY.name
-                    and result_type == ResultType.INTERPRETATION_CLASS.name
-                    and sub_result_type == SubResultType.ABSOLUTE.name
+                        colorbar_result_type == ColorBarResultType.RELIABILITY.name
+                        and result_type == ResultType.INTERPRETATION_CLASS.name
+                        and sub_result_type == SubResultType.ABSOLUTE.name
                 ):
                     _color, _class = get_color_class_WBI(_beta_section)
                     _hovertemplate = (
-                        f"Vaknaam {section.name}<br>"
-                        f"WBI klasse: {_class}<br>" + "<extra></extra>"
+                            f"Vaknaam {section.name}<br>"
+                            f"WBI klasse: {_class}<br>" + "<extra></extra>"
                     )
 
                 else:
@@ -290,8 +291,8 @@ def plot_dike_traject_reliability_measures_assessment_map(
                     )
 
                 if (
-                    mechanism_type == Mechanism.SECTION.name
-                    and sub_result_type == SubResultType.ABSOLUTE.name
+                        mechanism_type == Mechanism.SECTION.name
+                        and sub_result_type == SubResultType.ABSOLUTE.name
                 ):
                     _beta_dict = {
                         key: value[_year_index]
@@ -302,16 +303,16 @@ def plot_dike_traject_reliability_measures_assessment_map(
                         _beta_dict, key=_beta_dict.get
                     )  # mechanism with lowest beta
                     _hovertemplate = (
-                        _hovertemplate[:-15]
-                        + f"Laagste beta: {_mechanism}<br>"
-                        + "<extra></extra>"
+                            _hovertemplate[:-15]
+                            + f"Laagste beta: {_mechanism}<br>"
+                            + "<extra></extra>"
                     )
 
         # If no results are available for the dijkvak, return blank data.
         else:
             _color = "grey"
             _hovertemplate = (
-                f"Vaknaam {section.name}<br>" f"Beta: NO DATA<br>" + "<extra></extra>"
+                    f"Vaknaam {section.name}<br>" f"Beta: NO DATA<br>" + "<extra></extra>"
             )
 
         add_section_trace(
@@ -338,10 +339,10 @@ def plot_dike_traject_reliability_measures_assessment_map(
 
 
 def plot_dike_traject_urgency(
-    dike_traject: DikeTraject,
-    selected_year: float,
-    length_urgency: float,
-    calc_type: str,
+        dike_traject: DikeTraject,
+        selected_year: float,
+        length_urgency: float,
+        calc_type: str,
 ) -> go.Figure:
     """
     This function plots a Map displaying the urgency of the dike traject after measures based on the length of the dijvak.
@@ -355,10 +356,10 @@ def plot_dike_traject_urgency(
     fig = go.Figure()
 
     _year_index = (
-        bisect_right(
-            dike_traject.dike_sections[0].years, selected_year - REFERENCE_YEAR
-        )
-        - 1
+            bisect_right(
+                dike_traject.dike_sections[0].years, selected_year - REFERENCE_YEAR
+            )
+            - 1
     )
 
     if calc_type == CalcType.VEILIGHEIDSRENDEMENT.name:
@@ -395,8 +396,8 @@ def plot_dike_traject_urgency(
             _group = ">15km"
 
         _hovertemplate = (
-            f"Vaknaam {section.name}<br>"
-            f"Length: {section.length}m <br>" + "<extra></extra>"
+                f"Vaknaam {section.name}<br>"
+                f"Length: {section.length}m <br>" + "<extra></extra>"
         )
 
         showlegend = _group not in added_to_legend
@@ -422,7 +423,7 @@ def plot_dike_traject_urgency(
 
 
 def plot_dike_traject_measures_map(
-    dike_traject: DikeTraject, subresult_type: str, calc_type: str, selected_year: float
+        dike_traject: DikeTraject, subresult_type: str, calc_type: str, selected_year: float
 ):
     """
     This function plots a Map displaying the types of measures of the dike traject.
@@ -442,6 +443,7 @@ def plot_dike_traject_measures_map(
         "crest_heightening": True,
         "berm_widening": True,
         "revetment": True,
+        "custom": True,
     }
 
     for section in dike_traject.dike_sections:
@@ -458,8 +460,8 @@ def plot_dike_traject_measures_map(
         if _measure_results is not None:
             if _measure_results["investment_year"] is not None:
                 if (
-                    _measure_results["investment_year"][0] + REFERENCE_YEAR
-                    <= selected_year
+                        _measure_results["investment_year"][0] + REFERENCE_YEAR
+                        <= selected_year
                 ):  # only show measures that are implemented in the selected year
 
                     if subresult_type == SubResultType.MEASURE_TYPE.name:
@@ -493,7 +495,7 @@ def plot_dike_traject_measures_map(
 
 
 def add_measure_type_trace(
-    fig: go.Figure, section: DikeSection, measure_results: dict, legend_display: dict
+        fig: go.Figure, section: DikeSection, measure_results: dict, legend_display: dict
 ):
     """
     This function adds a trace to the figure for the measure type.
@@ -502,9 +504,9 @@ def add_measure_type_trace(
     :param measure_results:
     :param legend_display: dict to avoid double legend entries
     """
-    # TODO measure types should be based on MeasureType from the database and not the arbitrary (Dutch) names
-
-    if "Grondversterking" in measure_results["name"]:
+    print(section.name, measure_results['type'])
+    if MeasureTypeEnum.SOIL_REINFORCEMENT.name in measure_results[
+        "type"] or MeasureTypeEnum.SOIL_REINFORCEMENT.get_old_name() in measure_results["type"]:
         # convert in GWS coordinates:
         _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(
             section.coordinates_rd, buffersize=60
@@ -547,15 +549,16 @@ def add_measure_type_trace(
                 showlegend=_showlegend,
                 visible=_visible,
                 hovertemplate=f"Vaknaam {section.name}<br>"
-                f"Maatregel: {measure_results['name']} <br>"
-                f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>"
-                f"Kruinverhoging: {measure_results['dcrest']}m <br>"
-                f"Bermverbreding: {measure_results['dberm']}m <br>"
-                f"<extra></extra>",
+                              f"Maatregel: {measure_results['name']} <br>"
+                              f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>"
+                              f"Kruinverhoging: {measure_results['dcrest']}m <br>"
+                              f"Bermverbreding: {measure_results['dberm']}m <br>"
+                              f"<extra></extra>",
             )
         )
 
-    if "Verticaal Zanddicht Geotextiel" in measure_results["name"]:
+    if MeasureTypeEnum.VERTICAL_PIPING_SOLUTION.name in measure_results[
+        "type"] or MeasureTypeEnum.VERTICAL_PIPING_SOLUTION.get_old_name() in measure_results["type"]:
         _color = "red"
         _coordinates_wgs = [
             GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in section.coordinates_rd
@@ -570,14 +573,15 @@ def add_measure_type_trace(
                 line={"color": _color, "width": 4},
                 showlegend=legend_display.get("VZG"),
                 hovertemplate=f"Vaknaam {section.name}<br>"
-                f"{measure_results['name']}<br>"
-                f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>"
-                f"<extra></extra>",
+                              f"{measure_results['name']}<br>"
+                              f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>"
+                              f"<extra></extra>",
             )
         )
         legend_display["VZG"] = False
 
-    if "stabiliteitsscherm" in measure_results["name"]:
+    if MeasureTypeEnum.STABILITY_SCREEN.name in measure_results[
+        "type"] or MeasureTypeEnum.STABILITY_SCREEN.get_old_name() in measure_results["type"]:
         _color = "blue"
         _coordinates_wgs = [
             GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in section.coordinates_rd
@@ -592,14 +596,15 @@ def add_measure_type_trace(
                 line={"color": _color, "width": 4},
                 showlegend=legend_display.get("screen"),
                 hovertemplate=f"Vaknaam {section.name}<br>"
-                f"{measure_results['name']} <br>"
-                f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>"
-                f"<extra></extra>",
+                              f"{measure_results['name']} <br>"
+                              f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>"
+                              f"<extra></extra>",
             )
         )
         legend_display["screen"] = False
 
-    if "Zelfkerende constructie" in measure_results["name"]:
+    if MeasureTypeEnum.DIAPHRAGM_WALL.name in measure_results[
+        "type"] or MeasureTypeEnum.DIAPHRAGM_WALL.get_old_name() in measure_results["type"]:
         _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(
             section.coordinates_rd, buffersize=60
         )
@@ -615,15 +620,16 @@ def add_measure_type_trace(
                 line={"width": 1, "color": "black"},
                 fill="toself",
                 showlegend=legend_display.get("diaphram wall"),
-                hovertemplate=f"Vaknaam {section.name}<br>"
-                f"{measure_results['name']} <br>"
-                f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>"
-                f"<extra></extra>",
+                hovertemplate=f"Vaknaam: {section.name}<br>"
+                              f"Custom maatregel: {measure_results['name']} <br>"
+                              f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>"
+                              f"<extra></extra>",
             )
         )
         legend_display["diaphram wall"] = False
 
-    if "bekleding" in measure_results["name"]:
+    if MeasureTypeEnum.REVETMENT.name in measure_results["type"] or MeasureTypeEnum.REVETMENT.get_old_name() in \
+            measure_results["type"]:
         _ls = LineString(section.coordinates_rd)
         _offset_ls = _ls.parallel_offset(20, "left")
 
@@ -644,19 +650,44 @@ def add_measure_type_trace(
                 opacity=1,
                 showlegend=legend_display.get("revetment"),
                 hovertemplate=f"Vaknaam {section.name}<br>"
-                f"{measure_results['name']} <br>"
-                f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>"
-                f"Factor veiliger bekleding {measure_results['pf_target_ratio']} <br>"
-                f"Verhoging overgang {measure_results['diff_transition_level']}m <br>"
-                f"<extra></extra>",
+                              f"{measure_results['name']} <br>"
+                              f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>"
+                              f"Factor veiliger bekleding {measure_results['pf_target_ratio']} <br>"
+                              f"Verhoging overgang {measure_results['diff_transition_level']}m <br>"
+                              f"<extra></extra>",
             )
         )
 
         legend_display["revetment"] = False
 
+    if MeasureTypeEnum.CUSTOM.name in measure_results["type"] or MeasureTypeEnum.CUSTOM.get_old_name() in \
+            measure_results["type"]:
+        _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(
+            section.coordinates_rd, buffersize=60
+        )
+
+        fig.add_trace(
+            go.Scattermapbox(
+                name="Custom",
+                legendgroup="custom",
+                mode="lines",
+                lat=[x[0] for x in _coordinates_wgs],
+                lon=[x[1] for x in _coordinates_wgs],
+                fillcolor="grey",
+                line={"width": 1, "color": "grey"},
+                fill="toself",
+                showlegend=legend_display.get("custom"),
+                hovertemplate=f"Vaknaam {section.name}<br>"
+                              f"{measure_results['name']} <br>"
+                              f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>"
+                              f"<extra></extra>",
+            )
+        )
+        legend_display["custom"] = False
+
 
 def add_measure_crest_heightening_trace(
-    fig: go.Figure, section: DikeSection, measure_results: dict
+        fig: go.Figure, section: DikeSection, measure_results: dict
 ):
     if "Grondversterking" in measure_results["name"]:
         if measure_results["dcrest"] > 0:
@@ -681,18 +712,18 @@ def add_measure_crest_heightening_trace(
                     fill="toself",
                     showlegend=False,
                     hovertemplate=f"Vaknaam {section.name}<br>"
-                    f"Maatregel: {measure_results['name']} <br>"
-                    f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>"
-                    f"Kruin verhoging: {measure_results['dcrest']}m <br>"
-                    f"Bermverbreding: {measure_results['dberm']}m <br>"
-                    f"<extra></extra>",
+                                  f"Maatregel: {measure_results['name']} <br>"
+                                  f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>"
+                                  f"Kruin verhoging: {measure_results['dcrest']}m <br>"
+                                  f"Bermverbreding: {measure_results['dberm']}m <br>"
+                                  f"<extra></extra>",
                 )
             )
             add_colorscale_bar_crest_heigtening(fig)
 
 
 def add_measure_berm_widening_trace(
-    fig: go.Figure, section: DikeSection, measure_results: dict
+        fig: go.Figure, section: DikeSection, measure_results: dict
 ):
     if "Grondversterking" in measure_results["name"]:
         if measure_results["dberm"] > 0:
@@ -714,18 +745,18 @@ def add_measure_berm_widening_trace(
                     fill="toself",
                     showlegend=False,
                     hovertemplate=f"Vaknaam {section.name}<br>"
-                    f"Maatregel: {measure_results['name']} <br>"
-                    f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>"
-                    f"Kruin verhoging: {measure_results['dcrest']}m <br>"
-                    f"Bermverbreding: {measure_results['dberm']}m <br>"
-                    f"<extra></extra>",
+                                  f"Maatregel: {measure_results['name']} <br>"
+                                  f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>"
+                                  f"Kruin verhoging: {measure_results['dcrest']}m <br>"
+                                  f"Bermverbreding: {measure_results['dberm']}m <br>"
+                                  f"<extra></extra>",
                 )
             )
             add_colorscale_bar_berm_widening(fig)
 
 
 def add_measure_investment_year_trace(
-    fig: go.Figure, section: DikeSection, measure_results: dict, legend_display: dict
+        fig: go.Figure, section: DikeSection, measure_results: dict, legend_display: dict
 ):
     """
     This function adds a trace to the figure for the investment year.
@@ -762,14 +793,14 @@ def add_measure_investment_year_trace(
 
 
 def add_section_trace(
-    fig: go.Figure,
-    section: DikeSection,
-    name: str,
-    color: str,
-    hovertemplate: str,
-    showlegend: bool = False,
-    legendgroup: str = None,
-    opacity: float = 1,
+        fig: go.Figure,
+        section: DikeSection,
+        name: str,
+        color: str,
+        hovertemplate: str,
+        showlegend: bool = False,
+        legendgroup: str = None,
+        opacity: float = 1,
 ):
     """
     Add a trace of a section to the figure which the given specifications for color and hover, etc...
@@ -795,7 +826,7 @@ def add_section_trace(
 
 
 def dike_traject_pf_cost_helping_map(
-    dike_traject: DikeTraject, curve_number: int, reinforced_sections: list[str]
+        dike_traject: DikeTraject, curve_number: int, reinforced_sections: list[str]
 ) -> go.Figure:
     """
 
@@ -816,8 +847,8 @@ def dike_traject_pf_cost_helping_map(
             _color = "blue" if curve_number == 0 else "green"
             _opacity = 1
         elif (
-            section.name in reinforced_sections
-            and section.name != reinforced_sections[-1]
+                section.name in reinforced_sections
+                and section.name != reinforced_sections[-1]
         ):
             _color = "blue" if curve_number == 0 else "green"
             _opacity = 0.4
@@ -881,11 +912,11 @@ def update_layout_map_box(fig: go.Figure, center: tuple[float, float], zoom: int
 
 
 def add_colorscale_bar(
-    fig: go.Figure,
-    result_type: str,
-    colorbar_result_type: str,
-    sub_result_type: str,
-    lower_bound_pf: float,
+        fig: go.Figure,
+        result_type: str,
+        colorbar_result_type: str,
+        sub_result_type: str,
+        lower_bound_pf: float,
 ):
     """Add a dummy scatter trace to the figure to show the colorscale bar
 
@@ -895,9 +926,9 @@ def add_colorscale_bar(
     """
 
     if (
-        colorbar_result_type == ColorBarResultType.RELIABILITY.name
-        and result_type == ResultType.PROBABILITY.name
-        and sub_result_type == SubResultType.ABSOLUTE.name
+            colorbar_result_type == ColorBarResultType.RELIABILITY.name
+            and result_type == ResultType.PROBABILITY.name
+            and sub_result_type == SubResultType.ABSOLUTE.name
     ):
         beta_ondergrsns = pf_to_beta(lower_bound_pf)
         # This colorbar is centered around pf 1/10000
@@ -923,9 +954,9 @@ def add_colorscale_bar(
             cmax=beta_ondergrsns + 1.5,
         )
     elif (
-        colorbar_result_type == ColorBarResultType.RELIABILITY.name
-        and result_type == ResultType.RELIABILITY.name
-        and sub_result_type == SubResultType.ABSOLUTE.name
+            colorbar_result_type == ColorBarResultType.RELIABILITY.name
+            and result_type == ResultType.RELIABILITY.name
+            and sub_result_type == SubResultType.ABSOLUTE.name
     ):
         beta_ondergrsns = pf_to_beta(lower_bound_pf)
 
@@ -945,8 +976,8 @@ def add_colorscale_bar(
             cmax=beta_ondergrsns + 1.5,
         )
     elif (
-        colorbar_result_type == ColorBarResultType.RELIABILITY.name
-        and sub_result_type == SubResultType.RATIO.name
+            colorbar_result_type == ColorBarResultType.RELIABILITY.name
+            and sub_result_type == SubResultType.RATIO.name
     ):
         marker = dict(
             colorscale="BrBG",
@@ -966,8 +997,8 @@ def add_colorscale_bar(
         )
 
     elif (
-        colorbar_result_type == ColorBarResultType.COST.name
-        and sub_result_type == SubResultType.ABSOLUTE.name
+            colorbar_result_type == ColorBarResultType.COST.name
+            and sub_result_type == SubResultType.ABSOLUTE.name
     ):
         marker = dict(
             colorscale="RdYlGn",
@@ -987,8 +1018,8 @@ def add_colorscale_bar(
         )
 
     elif (
-        colorbar_result_type == ColorBarResultType.COST.name
-        and sub_result_type == SubResultType.DIFFERENCE.name
+            colorbar_result_type == ColorBarResultType.COST.name
+            and sub_result_type == SubResultType.DIFFERENCE.name
     ):
         marker = dict(
             colorscale="RdYlGn",
@@ -1111,7 +1142,7 @@ def add_colorscale_bar_berm_widening(fig: go.Figure):
 
 
 def get_interpretation_class_color(
-    beta_value: float, p_signal: float, p_lower_bound: float
+        beta_value: float, p_signal: float, p_lower_bound: float
 ) -> str:
     """
 
@@ -1232,11 +1263,11 @@ def get_berm_widening_color(berm_widening_value: float) -> str:
 
 
 def get_color_hover_prob_ratio(
-    section: DikeSection, year_index: int, mechanism_type: str
+        section: DikeSection, year_index: int, mechanism_type: str
 ) -> Tuple[str, str]:
     if (
-        section.final_measure_veiligheidsrendement is None
-        or section.final_measure_doorsnede is None
+            section.final_measure_veiligheidsrendement is None
+            or section.final_measure_doorsnede is None
     ):
         _color = "grey"
         _hovertemplate = f"Vaknaam {section.name}<br>" f"Beta: NO DATA<br>"
@@ -1262,10 +1293,10 @@ def get_color_hover_prob_ratio(
 
 
 def get_color_hover_absolute_reliability(
-    section: DikeSection,
-    beta_section: float,
-    measure_results: dict,
-    pf_lower_bound: float,
+        section: DikeSection,
+        beta_section: float,
+        measure_results: dict,
+        pf_lower_bound: float,
 ) -> Tuple[str, str]:
     _color = get_reliability_color(beta_section, pf_lower_bound)
 
@@ -1282,7 +1313,7 @@ def get_color_hover_absolute_reliability(
 
 
 def get_color_hover_absolute_cost(
-    section: DikeSection, beta_section: float, measure_results: dict
+        section: DikeSection, beta_section: float, measure_results: dict
 ) -> Tuple[str, str]:
     _cost_per_kilometer = to_million_euros(
         measure_results["LCC"] / (section.length / 1e3)
@@ -1304,8 +1335,8 @@ def get_color_hover_absolute_cost(
 
 def get_color_hover_difference_cost(section: DikeSection) -> Tuple[str, str]:
     if (
-        section.final_measure_veiligheidsrendement is None
-        or section.final_measure_doorsnede is None
+            section.final_measure_veiligheidsrendement is None
+            or section.final_measure_doorsnede is None
     ):
         _color = "grey"
         _hovertemplate = (
@@ -1334,7 +1365,7 @@ def get_color_hover_difference_cost(section: DikeSection) -> Tuple[str, str]:
 def get_no_data_info(section: DikeSection) -> Tuple[str, str]:
     _color = "grey"
     _hovertemplate = (
-        f"Vaknaam {section.name}<br>" f"Beta: NO DATA<br>" + "<extra></extra>"
+            f"Vaknaam {section.name}<br>" f"Beta: NO DATA<br>" + "<extra></extra>"
     )
     return _color, _hovertemplate
 

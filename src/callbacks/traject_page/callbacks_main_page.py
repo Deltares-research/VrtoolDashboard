@@ -73,7 +73,9 @@ def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
             _value_selection_run_dropwdown = "Basisberekening"
 
             # Update the selection Dropwdown with all the names of the optimization runs
+            print(1111)
             _names_optimization_run = get_name_optimization_runs(vr_config)
+            print(_names_optimization_run)
             _options = [{"label": name, "value": name} for name in _names_optimization_run]
 
             return html.Div(), True, json_content, _value_selection_run_dropwdown, _options,

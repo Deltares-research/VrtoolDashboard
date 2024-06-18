@@ -64,7 +64,7 @@ class TestCallback:
         :return:
         """
         _dike_data = json.load(
-            open(Path(__file__).parent.parent / 'data/Case_38_1_sterker_VZG2/reference' / 'dike_data.json'))
+            open(Path(__file__).parent.parent / 'data/31-1 base coastal case/reference' / 'dike_data.json'))
 
         def run_callback():
             return fill_traject_table_from_database(_dike_data)
@@ -81,7 +81,7 @@ class TestCallback:
         """
 
         _dike_data = json.load(
-            open(Path(__file__).parent.parent / 'data/Case_38_1_sterker_VZG2/reference' / 'dike_data.json'))
+            open(Path(__file__).parent.parent / 'data/31-1 base coastal case/reference' / 'dike_data.json'))
 
         def run_callback():
             return update_slider_years_from_database(_dike_data)

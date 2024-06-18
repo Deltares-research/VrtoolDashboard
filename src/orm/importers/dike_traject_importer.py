@@ -111,6 +111,7 @@ class DikeTrajectImporter(OrmImporterProtocol):
         )
         _traject_gdf = self.parse_geo_dataframe(_traject_name)
         _dike_traject.dike_sections = self._import_dike_section_list(_selected_sections, _traject_gdf)
+        print(1)
 
         # import solution: both
         _solution_importer = TrajectSolutionRunImporter(dike_traject=_dike_traject,

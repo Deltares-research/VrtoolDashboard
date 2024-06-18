@@ -272,6 +272,10 @@
           0,
           0
         ],
+        "type": [
+          "Soil reinforcement",
+          "Revetment"
+        ],
         "dberm": 0,
         "dcrest": 0.5,
         "pf_target_ratio": 1,
@@ -330,6 +334,10 @@
         "investment_year": [
           0,
           0
+        ],
+        "type": [
+          "Soil reinforcement",
+          "Revetment"
         ],
         "dberm": 0,
         "dcrest": 1.5,
@@ -976,6 +984,10 @@
           0,
           0
         ],
+        "type": [
+          "Diaphragm Wall",
+          "Revetment"
+        ],
         "pf_target_ratio": 1,
         "diff_transition_level": 0,
         "beta_target": 8,
@@ -1237,6 +1249,10 @@
           0,
           0
         ],
+        "type": [
+          "Soil reinforcement",
+          "Revetment"
+        ],
         "dberm": 5,
         "dcrest": 0,
         "pf_target_ratio": 1,
@@ -1295,6 +1311,10 @@
         "investment_year": [
           0,
           0
+        ],
+        "type": [
+          "Soil reinforcement",
+          "Revetment"
         ],
         "dberm": 5,
         "dcrest": 0.5,
@@ -1763,6 +1783,10 @@
           0,
           0
         ],
+        "type": [
+          "Soil reinforcement",
+          "Revetment"
+        ],
         "dberm": 5,
         "dcrest": 1.5,
         "pf_target_ratio": 1,
@@ -1821,6 +1845,10 @@
         "investment_year": [
           0,
           0
+        ],
+        "type": [
+          "Diaphragm Wall",
+          "Revetment"
         ],
         "pf_target_ratio": 1,
         "diff_transition_level": 0,
@@ -2151,6 +2179,10 @@
           0,
           0
         ],
+        "type": [
+          "Soil reinforcement",
+          "Revetment"
+        ],
         "dberm": 30,
         "dcrest": 1,
         "pf_target_ratio": 1,
@@ -2209,6 +2241,10 @@
         "investment_year": [
           0,
           0
+        ],
+        "type": [
+          "Diaphragm Wall",
+          "Revetment"
         ],
         "pf_target_ratio": 1,
         "diff_transition_level": 0,
@@ -2743,6 +2779,10 @@
           0,
           0
         ],
+        "type": [
+          "Soil reinforcement",
+          "Revetment"
+        ],
         "dberm": 8,
         "dcrest": 1,
         "pf_target_ratio": 1,
@@ -2801,6 +2841,10 @@
         "investment_year": [
           0,
           0
+        ],
+        "type": [
+          "Diaphragm Wall",
+          "Revetment"
         ],
         "pf_target_ratio": 1,
         "diff_transition_level": 0,
@@ -3151,6 +3195,10 @@
           0,
           0
         ],
+        "type": [
+          "Soil reinforcement",
+          "Revetment"
+        ],
         "dberm": 5,
         "dcrest": 1.5,
         "pf_target_ratio": 1,
@@ -3209,6 +3257,10 @@
         "investment_year": [
           0,
           0
+        ],
+        "type": [
+          "Diaphragm Wall",
+          "Revetment"
         ],
         "pf_target_ratio": 1,
         "diff_transition_level": 0,
