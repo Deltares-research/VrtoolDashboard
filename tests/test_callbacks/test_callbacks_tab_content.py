@@ -33,7 +33,7 @@ class TestCallbackTabContent:
         _dike_data = json.load(
             open(
                 Path(__file__).parent.parent
-                / "data/Case_38_1_sterker_VZG2/reference"
+                / "data/31-1 base coastal case/reference"
                 / "dike_data.json"
             )
         )
@@ -54,7 +54,7 @@ class TestCallbackTabContent:
         _dike_data = json.load(
             open(
                 Path(__file__).parent.parent
-                / "data/Case_38_1_sterker_VZG2/reference"
+                / "data/31-1 base coastal case/reference"
                 / "dike_data.json"
             )
         )
@@ -77,7 +77,7 @@ class TestCallbackTabContent:
         _dike_data = json.load(
             open(
                 Path(__file__).parent.parent
-                / "data/Case_38_1_sterker_VZG2/reference"
+                / "data/31-1 base coastal case/reference"
                 / "dike_data.json"
             )
         )
@@ -105,7 +105,7 @@ class TestCallbackTabContent:
         _dike_data = json.load(
             open(
                 Path(__file__).parent.parent
-                / "data/Case_38_1_sterker_VZG2/reference"
+                / "data/31-1 base coastal case/reference"
                 / "dike_data.json"
             )
         )
@@ -128,7 +128,7 @@ class TestCallbackTabContent:
         _dike_data = json.load(
             open(
                 Path(__file__).parent.parent
-                / "data/Case_38_1_sterker_VZG2/reference"
+                / "data/31-1 base coastal case/reference"
                 / "dike_data.json"
             )
         )
@@ -153,7 +153,7 @@ class TestCallbackTabContent:
         _dike_data = json.load(
             open(
                 Path(__file__).parent.parent
-                / "data/Case_38_1_sterker_VZG2/reference"
+                / "data/31-1 base coastal case/reference"
                 / "dike_data.json"
             )
         )

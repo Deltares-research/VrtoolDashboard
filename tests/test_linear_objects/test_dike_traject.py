@@ -9,7 +9,7 @@ class TestDikeTraject:
     def test_deserialize(self):
         """ Test if the DikeTraject object can be deserialized from a dict correctly"""
         # 1. Define data
-        _dike_data = json.load(open(Path(__file__).parent.parent / 'data/Case_38_1_sterker_VZG2/reference' / 'dike_data.json'))
+        _dike_data = json.load(open(Path(__file__).parent.parent / 'data/31-1 base coastal case/reference' / 'dike_data.json'))
 
         # 2. Define test
         _dike_traject = DikeTraject.deserialize(_dike_data)

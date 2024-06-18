@@ -16,7 +16,7 @@ class TestPlotlyScatter:
     def test_plot_pf_length_cost_economic_optimum(self, result_type: Enum, cost_length_switch: str):
         # 1. Define data
         _dike_data = json.load(
-            open(Path(__file__).parent.parent / 'data/Case_38_1_sterker_VZG2/reference' / 'dike_data.json'))
+            open(Path(__file__).parent.parent / 'data/31-1 base coastal case/reference' / 'dike_data.json'))
         _dike_traject = DikeTraject.deserialize(_dike_data)
 
         # 2. Call
