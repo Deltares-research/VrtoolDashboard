@@ -19,6 +19,5 @@ layout = html.Div([
     ),
     html.Div(id="content_tab_database_interaction"),
 
-    # dike_vr_optimization_layout_ag_grid,
 ],
 )

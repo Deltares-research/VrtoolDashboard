@@ -1,5 +1,6 @@
 from dash import callback, Output, Input, html
 
+from src.layouts.layout_database_interaction.layout_custom_measures_table import custom_measure_tab_layout
 from src.layouts.layout_database_interaction.layout_vr_optimalization import dike_vr_optimization_layout_ag_grid
 
 
@@ -19,7 +20,7 @@ def render_tab_map_content(active_tab: str) -> html.Div:
         return dike_vr_optimization_layout_ag_grid
 
     if active_tab == "tab-12":
-        return html.Div("Custom maatregelen")
+        return custom_measure_tab_layout
 
     else:
         return html.Div("Invalid tab selected")
