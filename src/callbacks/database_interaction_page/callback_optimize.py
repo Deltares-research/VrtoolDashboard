@@ -94,7 +94,6 @@ def run_optimize_algorithm(
 
     :return:
     """
-    print(traject_optimization_table)
 
     if stored_data is None:
         return dash.no_update, dash.no_update

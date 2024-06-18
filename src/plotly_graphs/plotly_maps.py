@@ -504,7 +504,6 @@ def add_measure_type_trace(
     :param measure_results:
     :param legend_display: dict to avoid double legend entries
     """
-    print(section.name, measure_results['type'])
     if MeasureTypeEnum.SOIL_REINFORCEMENT.name in measure_results[
         "type"] or MeasureTypeEnum.SOIL_REINFORCEMENT.get_old_name() in measure_results["type"]:
         # convert in GWS coordinates:
