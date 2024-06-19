@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - click event to highlight combined measures
 - Switch back to economic optimal possible
 - Custom measures can be imported & displayed in Dashboard.
+- Custom measures table and connection with the database.
 
 ### Changed
 None.
