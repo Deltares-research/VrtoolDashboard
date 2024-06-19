@@ -10,6 +10,7 @@ OPTIMIZATION_NEW_RUN_NAME_ID = "name_new_optimization_run"
 DROPDOWN_SELECTION_RUN_ID = "dropdown_selection_run_id"
 DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID = "dummy_optimize_button_output_id"
 EDITABLE_TRAJECT_TABLE_ID = "editable_traject_table_id"
+EDITABLE_CUSTOM_MEASURE_TABLE_ID = "editable_custom_measure_table_id"
 
 STORE_CONFIG = "stored-config"
 NAME_NEW_OPTIMIZATION_RUN_ID = "name_new_optimization_run"
@@ -46,3 +47,5 @@ DIKE_TRAJECT_PF_COST_GRAPH_ID = "dike_traject_pf_cost_graph"
 MEASURE_MODAL_ID = "measure_modal_id"
 CLOSE_MEASURE_MODAL_BUTTON_ID = "close-modal-measure"
 GRAPH_MEASURE_RELIABILITY_TIME_ID = "graph_measure_reliability_time_id"
+
+ADD_CUSTOM_MEASURE_BUTTON_ID = "add_custom_measure_button_id"

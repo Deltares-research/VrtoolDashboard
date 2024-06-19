@@ -504,9 +504,8 @@ def add_measure_type_trace(
     :param measure_results:
     :param legend_display: dict to avoid double legend entries
     """
-    print(section.name, measure_results['type'])
     if MeasureTypeEnum.SOIL_REINFORCEMENT.name in measure_results[
-        "type"] or MeasureTypeEnum.SOIL_REINFORCEMENT.get_old_name() in measure_results["type"]:
+        "type"] or MeasureTypeEnum.SOIL_REINFORCEMENT.legacy_name in measure_results["type"]:
         # convert in GWS coordinates:
         _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(
             section.coordinates_rd, buffersize=60
@@ -558,7 +557,7 @@ def add_measure_type_trace(
         )
 
     if MeasureTypeEnum.VERTICAL_PIPING_SOLUTION.name in measure_results[
-        "type"] or MeasureTypeEnum.VERTICAL_PIPING_SOLUTION.get_old_name() in measure_results["type"]:
+        "type"] or MeasureTypeEnum.VERTICAL_PIPING_SOLUTION.legacy_name in measure_results["type"]:
         _color = "red"
         _coordinates_wgs = [
             GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in section.coordinates_rd
@@ -581,7 +580,7 @@ def add_measure_type_trace(
         legend_display["VZG"] = False
 
     if MeasureTypeEnum.STABILITY_SCREEN.name in measure_results[
-        "type"] or MeasureTypeEnum.STABILITY_SCREEN.get_old_name() in measure_results["type"]:
+        "type"] or MeasureTypeEnum.STABILITY_SCREEN.legacy_name in measure_results["type"]:
         _color = "blue"
         _coordinates_wgs = [
             GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in section.coordinates_rd
@@ -604,7 +603,7 @@ def add_measure_type_trace(
         legend_display["screen"] = False
 
     if MeasureTypeEnum.DIAPHRAGM_WALL.name in measure_results[
-        "type"] or MeasureTypeEnum.DIAPHRAGM_WALL.get_old_name() in measure_results["type"]:
+        "type"] or MeasureTypeEnum.DIAPHRAGM_WALL.legacy_name in measure_results["type"]:
         _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(
             section.coordinates_rd, buffersize=60
         )
@@ -628,7 +627,7 @@ def add_measure_type_trace(
         )
         legend_display["diaphram wall"] = False
 
-    if MeasureTypeEnum.REVETMENT.name in measure_results["type"] or MeasureTypeEnum.REVETMENT.get_old_name() in \
+    if MeasureTypeEnum.REVETMENT.name in measure_results["type"] or MeasureTypeEnum.REVETMENT.legacy_name in \
             measure_results["type"]:
         _ls = LineString(section.coordinates_rd)
         _offset_ls = _ls.parallel_offset(20, "left")
@@ -660,7 +659,7 @@ def add_measure_type_trace(
 
         legend_display["revetment"] = False
 
-    if MeasureTypeEnum.CUSTOM.name in measure_results["type"] or MeasureTypeEnum.CUSTOM.get_old_name() in \
+    if MeasureTypeEnum.CUSTOM.name in measure_results["type"] or MeasureTypeEnum.CUSTOM.legacy_name in \
             measure_results["type"]:
         _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(
             section.coordinates_rd, buffersize=60
