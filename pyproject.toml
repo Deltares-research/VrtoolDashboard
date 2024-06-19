@@ -23,7 +23,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.9, <3.11"
-dash = { extras = ["diskcache"], version = "^2.16.1" }
+dash = { extras = ["diskcache"], version = "^2.17.0" }
 dash-bootstrap-components = "^1.4.1"
 geopandas = "^0.13.2"
 vrtool = { path = "externals/vrtool/vrtool-0.3.0.tar.gz" }
