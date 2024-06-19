@@ -18,6 +18,7 @@ import src.callbacks.traject_page.callbacks_main_page
 import src.callbacks.traject_page.callbacks_tab_content
 import src.callbacks.database_interaction_page.callback_optimize
 import src.callbacks.database_interaction_page.callback_tabs_switch_database
+import src.callbacks.database_interaction_page.callback_custom_measure
 
 # Define the app layout
 app.layout = dbc.Container(
