@@ -56,7 +56,8 @@ custom_measure_tab_layout = html.Div([
     ),
     dbc.Row([
         dbc.Col([html.Button("Add Row", id="add-row-button")], md=1),
-        dbc.Col([html.Button("Copy Row", id="copy-row-button")]),
+        dbc.Col([html.Button("Copy Row", id="copy-row-button")], md=1),
+        dbc.Col([html.Button("Del Row", id="delete-row-button")]),
     ]),
 
     dag.AgGrid(

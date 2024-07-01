@@ -24,7 +24,7 @@ def update_rowdata(_):
 
 
 @callback(
-    Output(EDITABLE_CUSTOM_MEASURE_TABLE_ID, "rowData"),
+    Output(EDITABLE_CUSTOM_MEASURE_TABLE_ID, "rowData", allow_duplicate=True),
     Input("copy-row-button", "n_clicks"),
     State(EDITABLE_CUSTOM_MEASURE_TABLE_ID, 'selectedRows'),
     State(EDITABLE_CUSTOM_MEASURE_TABLE_ID, 'rowData'),
@@ -35,6 +35,22 @@ def copy_row(n_click, selected_row, row_data):
         row_data.append(selected_row[0])
 
         return row_data
+    return dash.no_update
+
+
+@callback(
+    Output(EDITABLE_CUSTOM_MEASURE_TABLE_ID, "rowData", allow_duplicate=True),
+    Input("delete-row-button", "n_clicks"),
+    State(EDITABLE_CUSTOM_MEASURE_TABLE_ID, 'selectedRows'),
+    State(EDITABLE_CUSTOM_MEASURE_TABLE_ID, 'rowData'),
+    prevent_initial_call=True,
+)
+def delete_row(n_click, selected_row, row_data):
+    for row in row_data:
+        if row == selected_row[0]:
+            row_data.remove(row)
+            return row_data
+
     return dash.no_update
 
 
