@@ -22,7 +22,7 @@ columns_defs = [
      "editable": True,
      'cellEditor': 'agSelectCellEditor',
      'cellEditorParams': {
-         'values': [mecha.value for mecha in Mechanism],
+         'values': [mecha.value for mecha in Mechanism if mecha != Mechanism.SECTION],
      },
      "initialWidth": 140, },
 

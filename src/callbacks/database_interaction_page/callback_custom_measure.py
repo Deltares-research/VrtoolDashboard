@@ -8,6 +8,7 @@ from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.orm.orm_controllers import add_custom_measures
 
 from src.component_ids import EDITABLE_CUSTOM_MEASURE_TABLE_ID, ADD_CUSTOM_MEASURE_BUTTON_ID, STORE_CONFIG
+from src.constants import Mechanism
 
 
 @callback(
@@ -83,14 +84,27 @@ def convert_custom_table_to_input(row_data: list[dict]) -> list[dict]:
     for row in row_data:
         if row == {}:
             continue
+
+        # Convert into mechanism enum of VRTool
+        if row["mechanism"] == Mechanism.STABILITY.value:
+            _mechanism = MechanismEnum.STABILITY_INNER.name
+        elif row["mechanism"] == Mechanism.PIPING.value:
+            _mechanism = MechanismEnum.PIPING.name
+        elif row["mechanism"] == Mechanism.OVERFLOW.value:
+            _mechanism = MechanismEnum.OVERFLOW.name
+        elif row["mechanism"] == Mechanism.REVETMENT.value:
+            _mechanism = MechanismEnum.REVETMENT.name
+        else:
+            raise ValueError(f"Mechanism {row['mechanism']} is not recognized")
+
         converted_row = {
             "MEASURE_NAME": row["measure_name"],
             "COMBINABLE_TYPE": CombinableTypeEnum.FULL.name,
             "SECTION_NAME": row["section_name"],
-            "MECHANISM_NAME": row["mechanism"],
-            "TIME": row["time"],
-            "COST": row["cost"],
-            "BETA": row["beta"],
+            "MECHANISM_NAME": _mechanism,
+            "TIME": float(row["time"]),
+            "COST": float(row["cost"]),
+            "BETA": float(row["beta"]),
         }
         converted_input.append(converted_row)
 
