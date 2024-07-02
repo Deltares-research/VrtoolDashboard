@@ -48,4 +48,4 @@ if __name__ == '__main__':
     """
     print("============================= RERUN THE APP ====================================")
     print(ascii_art)
-    app.run_server(debug=True)
+    app.run_server(debug=False)

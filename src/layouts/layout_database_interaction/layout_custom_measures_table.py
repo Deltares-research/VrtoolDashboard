@@ -51,7 +51,7 @@ custom_measure_tab_layout = html.Div([
         '''
         Met de onderstaande tabel, kunt u custom maatregelen aan de database toevoegen.
 
-        Geef een naam voor de optimizatie run en klik op de knop "Optimize" om de optimalisatie te starten.
+        Geef een naam voor de optimizatie run en klik op de knop "Custom maatregel toevoegen" om de optimalisatie te starten.
         '''
     ),
     dbc.Row([
@@ -71,7 +71,7 @@ custom_measure_tab_layout = html.Div([
 
     ),
 
-    dbc.Button("Add custom measure", id=ADD_CUSTOM_MEASURE_BUTTON_ID, color="primary", className="mr-1"),
+    dbc.Button("Custom maatregel toevoegen", id=ADD_CUSTOM_MEASURE_BUTTON_ID, color="primary", className="mr-1"),
     # dash_table.DataTable(
     #     columns=[
     #         {"name": ["", "Year"], "id": "year" },
