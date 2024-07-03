@@ -2147,13 +2147,13 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [[package]]
 name = "vrtool"
-version = "0.3.0"
+version = "0.3.1"
 description = "veiligheidsrendement tool (core and orm)"
 category = "main"
 optional = false
 python-versions = ">=3.9,<3.11"
 files = [
-    {file = "vrtool-0.3.0.tar.gz", hash = "sha256:862e750eeb00284a8695b3a898da9edebb43c5bac60f1710fc253030610e604a"},
+    {file = "vrtool-0.3.1.tar.gz", hash = "sha256:45c9dfff270fda14257df75ec0599df60fe46cd5b8e5efeceb285b34ed4fe0e9"},
 ]
 
 [package.dependencies]
@@ -2171,7 +2171,7 @@ tqdm = ">=4.66.2,<5.0.0"
 
 [package.source]
 type = "file"
-url = "externals/vrtool/vrtool-0.3.0.tar.gz"
+url = "externals/vrtool/vrtool-0.3.1.tar.gz"
 
 [[package]]
 name = "wcwidth"
@@ -2222,4 +2222,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9, <3.11"
-content-hash = "e1b079a74cee850c181b63ec6fd58c7389e88bb35851ee4bc2d7f94b050e2c65"
+content-hash = "1759f8b6ef90e22c087bcf8e1fb92b0362253b8762c4e39c45056694ff912dcb"
