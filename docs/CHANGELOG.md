@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
 - Custom measures table and connection with the database.
 
 ### Changed
-None.
+- vrtool 0.3.1
 
 ### Deprecated
 None.
