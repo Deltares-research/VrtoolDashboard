@@ -29,7 +29,18 @@ def _get_section_lcc(optimization_step: OptimizationStep) -> float:
 
     return _query.lcc
 
-def _get_final_measure_betas(optimization_steps: OptimizationStep, active_mechanisms: list[str]) -> dict:
+
+def _get_final_measure_betas(optimization_steps: OptimizationStep, active_mechanisms: list[str],
+                             assessment_time: list[int]) -> dict:
+    """
+
+    :param optimization_steps: Optimization steps for which the betas are retrieved. Differentiation is made between
+    single measure (optimization_steps.count() == 1) and combined measure (optimization_steps.count() > 1).
+    :param active_mechanisms: mechanism for which the measure betas will be imported.
+    :param assessment_time: time for which optimization results are evaluated and available in the database. Currently
+    this corresponds to the assessment time (config.T).
+    :return:
+    """
     _final_measure = {}
     _dict_probabilities = {}
 
@@ -38,9 +49,11 @@ def _get_final_measure_betas(optimization_steps: OptimizationStep, active_mechan
         # for mechanism_per_section in mechanisms_per_section:
         for mechanism in active_mechanisms:
             _final_measure[mechanism] = [row.beta for row in
-                                         _get_mechanism_beta(optimization_steps[0], mechanism)]
+                                         _get_mechanism_beta(optimization_steps[0], mechanism) if
+                                         row.time in assessment_time]
         # Add section betas as well:
-        _final_measure["Section"] = [row.beta for row in _get_section_betas(optimization_steps[0])]
+        _final_measure["Section"] = [row.beta for row in _get_section_betas(optimization_steps[0]) if
+                                     row.time in assessment_time]
 
         return _final_measure
 
@@ -242,6 +255,5 @@ def _get_measure_result_ids(optimization_steps: OptimizationStep) -> list[int]:
         _selected_optimization_measure = OptimizationSelectedMeasure.select().where(
             OptimizationSelectedMeasure.id == optimization_step.optimization_selected_measure_id).get()
         id_list.append(_selected_optimization_measure.measure_result_id)
-
 
     return id_list

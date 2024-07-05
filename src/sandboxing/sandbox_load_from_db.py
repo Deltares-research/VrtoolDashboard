@@ -60,6 +60,7 @@ _vr_config = VrtoolConfig().from_json(Path(
 ))
 # _vr_config = VrtoolConfig().from_json(Path(__file__).parent.parent / "tests/data/TestCase1_38-1_no_housing/vr_config.json")
 t0 = time.time()
+print(_vr_config)
 _traject_db = get_dike_traject_from_config_ORM(vr_config=_vr_config, run_is_vr=1, run_id_dsn=2)
 data = _traject_db.serialize()
 export_to_json(data)
@@ -82,12 +83,12 @@ print(f"Time to get dike traject from ORM: {t1 - t0}")
 
 # add token of the mapbox account
 
-_fig = plot_dike_traject_reliability_measures_assessment_map(_traject_db, 2025, ResultType.MEASURE.name,
-                                                             calc_type=CalcType.VEILIGHEIDSRENDEMENT.name,
-                                                             colorbar_result_type=ColorBarResultType.MEASURE.name,
-                                                             mechanism_type=Mechanism.SECTION.name,
-                                                             sub_result_type=SubResultType.MEASURE_TYPE.name, )
-# _fig = plot_pf_length_cost(_traject_db, 2025, result_type=ResultType.RELIABILITY.name, cost_length_switch="COST")
+# _fig = plot_dike_traject_reliability_measures_assessment_map(_traject_db, 2025, ResultType.MEASURE.name,
+#                                                              calc_type=CalcType.VEILIGHEIDSRENDEMENT.name,
+#                                                              colorbar_result_type=ColorBarResultType.MEASURE.name,
+#                                                              mechanism_type=Mechanism.SECTION.name,
+#                                                              sub_result_type=SubResultType.MEASURE_TYPE.name, )
+_fig = plot_pf_length_cost(_traject_db, 2025, result_type=ResultType.RELIABILITY.name, cost_length_switch="COST")
 t2 = time.time()
 print(f"Time to plot: {t2 - t1}")
 

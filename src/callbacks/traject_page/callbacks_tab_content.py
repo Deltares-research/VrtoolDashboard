@@ -327,6 +327,7 @@ def make_graph_measure_results_comparison(
         _vr_config.input_directory = Path(vr_config["input_directory"])
         _vr_config.output_directory = Path(vr_config["output_directory"])
         _vr_config.input_database_name = vr_config["input_database_name"]
+        _vr_config.T = vr_config["T"]
 
         _meas_results, _vr_steps, _dsn_steps = get_all_measure_results(
             _vr_config,
@@ -419,6 +420,7 @@ def open_modal_measure_reliability_time(click_data: dict, selected_mechanism, vr
         _vr_config.input_directory = Path(vr_config["input_directory"])
         _vr_config.output_directory = Path(vr_config["output_directory"])
         _vr_config.input_database_name = vr_config["input_database_name"]
+        _vr_config.T = vr_config["T"]
 
         _mechanism_name = get_mechanism_name_ORM(selected_mechanism)
 
