@@ -68,7 +68,7 @@ def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
             vr_config.input_directory = json_content['input_directory']
             vr_config.input_database_name = json_content['input_database_name']
             vr_config.excluded_mechanisms = json_content['excluded_mechanisms']
-            vr_config.T = vr_config["T"]
+            vr_config.T = json_content["T"]
 
             # _dike_traject = get_dike_traject_from_config_ORM(vr_config, run_id_dsn=2, run_is_vr=1)
             _value_selection_run_dropwdown = "Basisberekening"
