@@ -6,6 +6,23 @@ All notable changes to this project will be documented in this file.
 ## v0.0.0 [##/##/####]
 
 ### Added
+None.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
+## v0.5.0 [08/07/2024]
+
+### Added
 - Graph comparison measures
 - Click event to display measure reliability over time
 - click event to highlight combined measures
@@ -15,6 +32,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - vrtool 0.3.1
+- use times in config.T across the whole dashboard instead of first section times. 
 
 ### Deprecated
 None.
@@ -26,6 +44,8 @@ None.
 - legend duidingsklassen
 - Various UI string fixes
 - fix run optimize for revetment case
+- fix various bugs with mechanism strings
+- fix visualisation bug for maatregel Grondversterkingmetstabiliteitscherm.
 
 ## v0.4.1 [21/05/2024]
 
