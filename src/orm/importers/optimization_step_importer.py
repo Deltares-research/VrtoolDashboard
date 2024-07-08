@@ -78,7 +78,7 @@ def _get_mechanism_beta(optimization_step: OptimizationStep, mechanism: str) -> 
 
     """
     _query = (OptimizationStepResultMechanism
-              .select(OptimizationStepResultMechanism.beta)
+              .select(OptimizationStepResultMechanism.beta, OptimizationStepResultMechanism.time)
               .join(MechanismPerSection, JOIN.INNER,
                     on=(OptimizationStepResultMechanism.mechanism_per_section == MechanismPerSection.id))
               .join(Mechanism, JOIN.INNER,
