@@ -278,7 +278,8 @@ def fill_dike_section_selection(dike_traject_data: dict) -> list[dict]:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
 
         for section in _dike_traject.dike_sections:
-            _option_list.append({"label": section.name, "value": section.name})
+            if section.in_analyse:
+                _option_list.append({"label": section.name, "value": section.name})
 
     return _option_list
 
