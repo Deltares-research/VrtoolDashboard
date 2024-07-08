@@ -52,6 +52,7 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
         self.run_id_dsn = run_id_dsn
         self.time = time
         self.active_mechanisms = active_mechanisms # used for section only
+        self.assessment_time = vr_config.T
 
     def import_orm(self, orm_model) -> tuple:
         """
@@ -116,7 +117,7 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
                 )
             )
 
-            _measure = _get_measure(_optimum_section_optimization_steps, self.active_mechanisms)
+            _measure = _get_measure(_optimum_section_optimization_steps, self.active_mechanisms, self.assessment_time)
             _measure["LCC"] = _get_section_lcc(_optimization_step)
             _measure["cost"] = _get_measure_cost(_optimum_section_optimization_steps)
             _measure["measure_results_ids"] = _get_measure_result_ids(_optimum_section_optimization_steps)
@@ -141,7 +142,7 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
                 on=(SectionData.section_name == self.section_name),
             )
             .where(
-                # MeasurePerSection.measure_id.in_([measure.id for measure in _measure]),
+            #     MeasurePerSection.measure_id.in_([measure.id for measure in _measure]),
                 MeasurePerSection.section_id
                 == SectionData.id
             )

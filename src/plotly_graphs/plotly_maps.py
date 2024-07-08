@@ -463,7 +463,6 @@ def plot_dike_traject_measures_map(
                         _measure_results["investment_year"][0] + REFERENCE_YEAR
                         <= selected_year
                 ):  # only show measures that are implemented in the selected year
-
                     if subresult_type == SubResultType.MEASURE_TYPE.name:
                         add_measure_type_trace(
                             fig, section, _measure_results, _legend_display
@@ -504,8 +503,11 @@ def add_measure_type_trace(
     :param measure_results:
     :param legend_display: dict to avoid double legend entries
     """
+
     if MeasureTypeEnum.SOIL_REINFORCEMENT.name in measure_results[
-        "type"] or MeasureTypeEnum.SOIL_REINFORCEMENT.legacy_name in measure_results["type"]:
+        "type"] or MeasureTypeEnum.SOIL_REINFORCEMENT.legacy_name in measure_results[
+        "type"] or MeasureTypeEnum.SOIL_REINFORCEMENT_WITH_STABILITY_SCREEN.name in measure_results[
+        "type"] or MeasureTypeEnum.SOIL_REINFORCEMENT_WITH_STABILITY_SCREEN.legacy_name in measure_results["type"]:
         # convert in GWS coordinates:
         _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(
             section.coordinates_rd, buffersize=60
@@ -580,7 +582,9 @@ def add_measure_type_trace(
         legend_display["VZG"] = False
 
     if MeasureTypeEnum.STABILITY_SCREEN.name in measure_results[
-        "type"] or MeasureTypeEnum.STABILITY_SCREEN.legacy_name in measure_results["type"]:
+        "type"] or MeasureTypeEnum.STABILITY_SCREEN.legacy_name in measure_results[
+        "type"] or MeasureTypeEnum.SOIL_REINFORCEMENT_WITH_STABILITY_SCREEN.name in measure_results[
+        "type"] or MeasureTypeEnum.SOIL_REINFORCEMENT_WITH_STABILITY_SCREEN.legacy_name in measure_results["type"]:
         _color = "blue"
         _coordinates_wgs = [
             GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in section.coordinates_rd

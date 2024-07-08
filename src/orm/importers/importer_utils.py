@@ -156,16 +156,19 @@ def _get_measure_parameters(optimization_steps: OptimizationStep) -> dict:
     return _params
 
 
-def _get_measure(optimization_steps, active_mechanisms: list) -> dict:
+def _get_measure(optimization_steps, active_mechanisms: list, assessment_time: list[int]) -> dict:
     """
     Retrieve from the database the information related to the selected optimization steps: betas, name, measure
     paramaters.
     :param optimization_steps:
+    :param active_mechanisms:
+    :param assessment_time:
+
     :return: dictionary with the followings keys: "name", "LCC", "Piping", "StabilityInner", "Overflow", "Revetment"
     , "Section"
     """
     # Get the betas for the measure:
-    _final_measure = _get_final_measure_betas(optimization_steps, active_mechanisms)
+    _final_measure = _get_final_measure_betas(optimization_steps, active_mechanisms, assessment_time)
 
     # Get the extra information measure name and the corresponding parameter values for the most (combined or not) optimal step
     if optimization_steps.count() == 1:

@@ -113,6 +113,7 @@ def run_optimize_algorithm(
         _vr_config.input_directory = Path(vr_config["input_directory"])
         _vr_config.output_directory = Path(vr_config["output_directory"])
         _vr_config.input_database_name = vr_config["input_database_name"]
+        _vr_config.T = vr_config["T"]
 
         for meca in MechanismEnum:
             if meca.name in vr_config["excluded_mechanisms"]:

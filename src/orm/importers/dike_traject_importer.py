@@ -62,11 +62,7 @@ class DikeTrajectImporter(OrmImporterProtocol):
         :param run_id: id of the optimization run for veiligheidsrendement (default 1)
         :param final_greedy_step_id: id of the final step of the greedy optimization
         """
-        _ds_importer = DikeSectionImporter(traject_gdf,
-                                           # run_id_dsn=self.run_id_dsn,
-                                           # run_id_vr=self.run_id_vr,
-                                           # final_greedy_step_id=final_greedy_step_i
-                                           )
+        _ds_importer = DikeSectionImporter(traject_gdf, self.vr_config.T)
 
         return list(map(_ds_importer.import_orm_without_measure, orm_dike_section_list))
 
@@ -118,7 +114,8 @@ class DikeTrajectImporter(OrmImporterProtocol):
                                                         run_id_dsn=self.run_id_dsn,
                                                         greedy_optimization_criteria=self.greedy_optimization_criteria,
                                                         greedy_criteria_beta=self.greedy_criteria_beta,
-                                                        greedy_criteria_year=self.greedy_criteria_year
+                                                        greedy_criteria_year=self.greedy_criteria_year,
+                                                        assessment_years=self.vr_config.T
                                                         )
         _solution_importer.import_orm()
 

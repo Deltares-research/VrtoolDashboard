@@ -120,15 +120,15 @@ def add_trace_run_results(
         else:
             raise ValueError(f"CalcType {calc_type} not recognized")
 
-        if mechanism == Mechanism.SECTION.name:
+        if mechanism.upper() == Mechanism.SECTION.name:
             mech_key = "Section"
-        elif mechanism == Mechanism.STABILITY.name:
+        elif mechanism.upper() == Mechanism.STABILITY.name:
             mech_key = "StabilityInner"
-        elif mechanism == Mechanism.PIPING.name:
+        elif mechanism.upper() == Mechanism.PIPING.name:
             mech_key = "Piping"
-        elif mechanism == Mechanism.OVERFLOW.name:
+        elif mechanism.upper() == Mechanism.OVERFLOW.name:
             mech_key = "Overflow"
-        elif mechanism == Mechanism.REVETMENT.name:
+        elif mechanism.upper() == Mechanism.REVETMENT.name:
             mech_key = "Revetment"
         else:
             raise NotImplementedError(f"Mechanism {mechanism} not implemented")
