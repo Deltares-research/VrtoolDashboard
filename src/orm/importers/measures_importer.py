@@ -52,7 +52,7 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
         self.run_id_dsn = run_id_dsn
         self.time = time
         self.active_mechanisms = active_mechanisms # used for section only
-        self.assessment_year = vr_config.T
+        self.assessment_time = vr_config.T
 
     def import_orm(self, orm_model) -> tuple:
         """
