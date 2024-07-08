@@ -142,7 +142,7 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
                 on=(SectionData.section_name == self.section_name),
             )
             .where(
-                # MeasurePerSection.measure_id.in_([measure.id for measure in _measure]),
+            #     MeasurePerSection.measure_id.in_([measure.id for measure in _measure]),
                 MeasurePerSection.section_id
                 == SectionData.id
             )

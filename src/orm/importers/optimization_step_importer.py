@@ -96,7 +96,7 @@ def _get_section_betas(optimization_step: OptimizationStep) -> Iterator[orm.Opti
     :return:
     """
     _query = (OptimizationStepResultSection
-              .select(OptimizationStepResultSection.beta)
+              .select(OptimizationStepResultSection.beta, OptimizationStepResultSection.time)
               .where(OptimizationStepResultSection.optimization_step_id == optimization_step.id))
     return _query
 
