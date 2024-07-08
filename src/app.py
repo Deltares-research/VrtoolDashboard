@@ -16,6 +16,7 @@ app = Dash(
     meta_tags=[{"name": "viewport", "content": "width=device-width"}],
     background_callback_manager=background_callback_manager,
     suppress_callback_exceptions=True,
+    use_pages=True,
 )
 
 

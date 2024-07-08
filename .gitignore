@@ -59,5 +59,8 @@ __pycache__/
 .pytest_cache/
 **/__pycache__/**
 /tests/test_results/
+/cache/
 /src/utils/data.json
+/src/sandboxing/cache/
+/cache/
 /cache/cache.db

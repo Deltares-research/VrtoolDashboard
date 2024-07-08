@@ -12,13 +12,11 @@ from src.orm.models import AssessmentMechanismResult, AssessmentSectionResult
 
 class DikeSectionImporter(OrmImporterProtocol):
     traject_gdf: GeoDataFrame
-    run_id_dsn: int  # run_id of the OptimizationRun for Doorsnede Eisen
-    run_id_vr: int  # run_id of the OptimizationRun for Veiligheidsrendement
-    final_greedy_step_id: int  # id of the final step of the greedy optimization
     assessment_time: list[int]
 
-    def __init__(self, traject_gdf: GeoDataFrame):
+    def __init__(self, traject_gdf: GeoDataFrame, assessment_time: list[int]):
         self.traject_gdf = traject_gdf
+        self.assessment_time = assessment_time
 
     def _get_initial_assessment(self,
                                 section_id: int,
@@ -44,7 +42,7 @@ class DikeSectionImporter(OrmImporterProtocol):
                             .where(AssessmentMechanismResult.mechanism_per_section == _mechanism_per_section_id)
                             .order_by(AssessmentMechanismResult.time))
 
-            _initial_assessment[mechanism] = [row.beta for row in _query_betas]
+            _initial_assessment[mechanism] = [row.beta for row in _query_betas if row.time in self.assessment_time]
 
         # Add section results
         _query_betas = (AssessmentSectionResult
@@ -52,9 +50,10 @@ class DikeSectionImporter(OrmImporterProtocol):
                         .where(AssessmentSectionResult.section_data == section_id)
                         .order_by(AssessmentSectionResult.time))
 
-        _initial_assessment["Section"] = [row.beta for row in _query_betas]
+        # checking if the section has a beta value for the assessment time should not be necessary in theory if the
+        # data in the database is consistent with assessment_time (config.T) but it is not often the case.
+        _initial_assessment["Section"] = [row.beta for row in _query_betas if row.time in self.assessment_time]
 
-        self.__setattr__("assessment_time", [row.time for row in _query_betas])
         return _initial_assessment
 
     def _get_no_measure_case(self, initial_assessment: dict) -> dict:

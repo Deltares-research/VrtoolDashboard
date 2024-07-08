@@ -24,7 +24,7 @@ class TestPlotlyScatterMapBox():
     def test_plot_overview_map(self):
         # 1. Define data
         _dike_data = json.load(
-            open(Path(__file__).parent.parent / 'data/Case_38_1_sterker_VZG2/reference' / 'dike_data.json'))
+            open(Path(__file__).parent.parent / 'data/31-1 base coastal case/reference' / 'dike_data.json'))
         _dike_traject = DikeTraject.deserialize(_dike_data)
 
         # 2. Call
@@ -40,7 +40,7 @@ class TestPlotlyScatterMapBox():
     def test_plot_dike_traject_reliability_initial_assessment_map(self, result_type: Enum, mechanism: Enum):
         # 1. Define data
         _dike_data = json.load(
-            open(Path(__file__).parent.parent / 'data/Case_38_1_sterker_VZG2/reference' / 'dike_data.json'))
+            open(Path(__file__).parent.parent / 'data/31-1 base coastal case/reference' / 'dike_data.json'))
         _dike_traject = DikeTraject.deserialize(_dike_data)
 
         # 2. Call
@@ -58,7 +58,7 @@ class TestPlotlyScatterMapBox():
                                                                                sub_result_type: Enum):
         # 1. Define data
         _dike_data = json.load(
-            open(Path(__file__).parent.parent / 'data/Case_38_1_sterker_VZG2/reference' / 'dike_data.json'))
+            open(Path(__file__).parent.parent / 'data/31-1 base coastal case/reference' / 'dike_data.json'))
         _dike_traject = DikeTraject.deserialize(_dike_data)
 
         # 2. Call
@@ -80,7 +80,7 @@ class TestPlotlyScatterMapBox():
                                                                         sub_result_type: Enum):
         # 1. Define data
         _dike_data = json.load(
-            open(Path(__file__).parent.parent / 'data/Case_38_1_sterker_VZG2/reference' / 'dike_data.json'))
+            open(Path(__file__).parent.parent / 'data/31-1 base coastal case/reference' / 'dike_data.json'))
         _dike_traject = DikeTraject.deserialize(_dike_data)
 
         # 2. Call
@@ -101,7 +101,7 @@ class TestPlotlyScatterMapBox():
                                                                         sub_result_type: Enum):
         # 1. Define data
         _dike_data = json.load(
-            open(Path(__file__).parent.parent / 'data/Case_38_1_sterker_VZG2/reference' / 'dike_data.json'))
+            open(Path(__file__).parent.parent / 'data/31-1 base coastal case/reference' / 'dike_data.json'))
         _dike_traject = DikeTraject.deserialize(_dike_data)
 
         # 2. Call
@@ -120,7 +120,7 @@ class TestPlotlyScatterMapBox():
     def test_plot_dike_traject_urgency(self, calc_type: Enum):
         # 1. Define data
         _dike_data = json.load(
-            open(Path(__file__).parent.parent / 'data/Case_38_1_sterker_VZG2/reference' / 'dike_data.json'))
+            open(Path(__file__).parent.parent / 'data/31-1 base coastal case/reference' / 'dike_data.json'))
         _dike_traject = DikeTraject.deserialize(_dike_data)
 
         # 2. Call
@@ -132,7 +132,7 @@ class TestPlotlyScatterMapBox():
     def test_dike_traject_pf_cost_helping_map(self):
         # 1. Define data
         _dike_data = json.load(
-            open(Path(__file__).parent.parent / 'data/Case_38_1_sterker_VZG2/reference' / 'dike_data.json'))
+            open(Path(__file__).parent.parent / 'data/31-1 base coastal case/reference' / 'dike_data.json'))
         _dike_traject = DikeTraject.deserialize(_dike_data)
 
         # 2. Call

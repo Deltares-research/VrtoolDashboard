@@ -2,8 +2,6 @@ from enum import Enum
 from pathlib import Path
 
 REFERENCE_YEAR = 2025  # Reference year for the reliability analysis
-ONDERGRENS = 1. / 10000
-SIGNALERING = 1. / 30000
 
 
 class CalcType(Enum):
@@ -46,16 +44,17 @@ class Mechanism(Enum):
 class Measures(Enum):
     GROUND_IMPROVEMENT = "Grondversterking"
     GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN = "Grondversterking met stabiliteitsscherm"
+    STABILITY_SCREEN = "Stabiliteitsscherm"
     GEOTEXTILE = "VZG"
     DIAPHRAGM_WALL = "Zelfkerende constructie"
-    STABILITY_SCREEN = "Stabiliteitsscherm"
+    ANCHORED_SHEETPILE = "Verankerde damwand"
+    # REVETMENT = "Bekleding"
+    # CUSTOM = "Custom"
 
 
 class GreedyOPtimizationCriteria(Enum):
     ECONOMIC_OPTIMAL = "Economisch optimaal (standaard)"
     TARGET_PF = "Faalkans"
-
-
 
 
 def get_mapbox_token() -> str:
@@ -65,6 +64,7 @@ def get_mapbox_token() -> str:
 
 conversion_dict_measure_names = {"GROUND_IMPROVEMENT": "Soil reinforcement",
                                  "GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN": "Soil reinforcement with stability screen",
-                                 "GEOTEXTILE": "Vertical Geotextile",
+                                 "GEOTEXTILE": "Vertical Piping Solution",
                                  "DIAPHRAGM_WALL": "Diaphragm Wall",
-                                 "STABILITY_SCREEN": "Stability Screen"}
+                                 "STABILITY_SCREEN": "Stability Screen",
+                                 "ANCHORED_SHEETPILE": "Anchored sheetpile"}

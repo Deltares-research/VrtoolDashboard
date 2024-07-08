@@ -6,19 +6,26 @@ All notable changes to this project will be documented in this file.
 ## v0.0.0 [##/##/####]
 
 ### Added
-None.
+- Graph comparison measures
+- Click event to display measure reliability over time
+- click event to highlight combined measures
+- Switch back to economic optimal possible
+- Custom measures can be imported & displayed in Dashboard.
+- Custom measures table and connection with the database.
 
 ### Changed
-None.
+- vrtool 0.3.1
 
 ### Deprecated
 None.
 
 ### Removed
-None.
+- tests with deprecated databases
 
 ### Fixed
-None.
+- legend duidingsklassen
+- Various UI string fixes
+- fix run optimize for revetment case
 
 ## v0.4.1 [21/05/2024]
 
