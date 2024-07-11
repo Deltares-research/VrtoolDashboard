@@ -63,3 +63,4 @@ __pycache__/
 /src/utils/data.json
 /src/sandboxing/cache/
 /cache/
+/cache/cache.db

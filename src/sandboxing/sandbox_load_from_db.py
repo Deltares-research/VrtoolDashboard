@@ -48,8 +48,8 @@ _vr_config = VrtoolConfig().from_json(Path(
     # r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\38-1 base river case\config.json"
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\van Karolina\config.json"
     # r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\38-1 custom measures\config.json"
-    # r"C:\Users\hauth\OneDrive - Stichting Deltares\Desktop\projects\VRTools\database\24-3\config.json"
-    r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\COP demo\38-1 base river case\config.json"
+    r"C:\Users\hauth\OneDrive - Stichting Deltares\Desktop\projects\VRTools\database\24-3\config.json"
+    # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\COP demo\38-1 base river case\config.json"
 
 
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\38-1 test/config.json"
@@ -85,12 +85,12 @@ print(f"Time to get dike traject from ORM: {t1 - t0}")
 
 # add token of the mapbox account
 
-# _fig = plot_dike_traject_reliability_measures_assessment_map(_traject_db, 2025, ResultType.MEASURE.name,
-#                                                              calc_type=CalcType.VEILIGHEIDSRENDEMENT.name,
-#                                                              colorbar_result_type=ColorBarResultType.MEASURE.name,
-#                                                              mechanism_type=Mechanism.SECTION.name,
-#                                                              sub_result_type=SubResultType.MEASURE_TYPE.name, )
-_fig = plot_pf_length_cost(_traject_db, 2025, result_type=ResultType.RELIABILITY.name, cost_length_switch="COST")
+_fig = plot_dike_traject_reliability_measures_assessment_map(_traject_db, 2025, ResultType.MEASURE.name,
+                                                             calc_type=CalcType.VEILIGHEIDSRENDEMENT.name,
+                                                             colorbar_result_type=ColorBarResultType.MEASURE.name,
+                                                             mechanism_type=Mechanism.SECTION.name,
+                                                             sub_result_type=SubResultType.MEASURE_TYPE.name, )
+# _fig = plot_pf_length_cost(_traject_db, 2025, result_type=ResultType.RELIABILITY.name, cost_length_switch="COST")
 t2 = time.time()
 print(f"Time to plot: {t2 - t1}")
 
