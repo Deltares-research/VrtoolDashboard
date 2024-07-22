@@ -27,32 +27,30 @@ def plot_measure_results_graph(
     fig = go.Figure()
 
     # Add traces for the measures (uncombined)
-    custom = np.stack(
-        (
-            measure_results["measure"],
-            measure_results.get("dberm", None),
-            measure_results.get("dcrest", None),
-            measure_results.get("measure_result_id", None)  # keep this for the clickData event
-        ),
-        axis=-1,
-    )
+    text_list = []
+    for _, row in measure_results.iterrows():
+        text = f"<b>{row['measure']}<b><br>"
+        if row["dberm"] >= 0:
+            text += f"Dberm: {row['dberm']}m<br>"
+        if row["dcrest"] >= 0:
+            text += f"Dcrest: {row['dcrest']}m<br>"
+
+        text += f"Beta: {row['beta']:.2f}<br>"
+        text += f"LCC: €{row['LCC']:.2f} mln<br>"
+
+        text_list.append(text)
 
     fig.add_trace(
         go.Scatter(
             name="Maatregelen",
             x=measure_results["LCC"] / 1e6,
             y=measure_results["beta"],
-            customdata=custom,
             mode="markers",
             marker=dict(
                 size=8,
                 color="black",
             ),
-            hovertemplate="<b>%{customdata[0]}</b><br><br>"
-                          + "Dberm: %{customdata[1]}m<br>"
-                          + "Dcrest: %{customdata[2]}m<br>"
-                          + "Beta: %{y:.2f}<br>"
-                          + "LCC: €%{x:.2f} mln<br>",
+            text=text_list,
         )
     )
 
@@ -98,7 +96,6 @@ def add_trace_run_results(
         # retrieved in the clickData event
         concatenated_ids = " + ".join(map(str, taken_measure["measure_results_ids"]))
         custom_data = np.stack((concatenated_ids,), axis=-1)
-
 
         if taken_measure["name"] == "Geen maatregel":
             hover_extra = ""
