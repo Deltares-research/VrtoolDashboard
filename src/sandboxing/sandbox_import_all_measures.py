@@ -22,12 +22,13 @@ from src.utils.utils import export_to_json
 # _vr_config = VrtoolConfig().from_json(Path(r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\TestCase1_38-1_no_housing_testingonly\vr_config.json"))
 _vr_config = VrtoolConfig().from_json(Path(
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\figure_DPI\config.json"
-    r"C:\Users\hauth\OneDrive - Stichting Deltares\Desktop\projects\VRTools\database\24-3\config.json"
+    # r"C:\Users\hauth\OneDrive - Stichting Deltares\Desktop\projects\VRTools\database\24-3\config.json"
+    r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\stephan_debug\config.json"
 
 ))
 # _vr_config = VrtoolConfig().from_json(Path(__file__).parent.parent / "tests/data/TestCase1_38-1_no_housing/vr_config.json")
 t0 = time.time()
-section_name = "vak 23"
+section_name = "13-6_D9B_1"
 mechanism = Mechanism.SECTION.name
 mechanism = get_mechanism_name_ORM(mechanism)
 _meas_results, _vr_steps, _dsn_steps = get_all_measure_results(_vr_config, section_name, mechanism, run_id_vr=1,
@@ -47,4 +48,4 @@ _meas_results, _vr_steps, _dsn_steps = get_all_measure_results(_vr_config, secti
 fig = plot_measure_results_graph(_meas_results, _vr_steps, _dsn_steps, mechanism, section_name, year_index=0)
 
 # fig =  make_graph_measure_results_comparison()
-# fig.show()
+fig.show()
