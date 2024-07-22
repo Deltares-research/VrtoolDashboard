@@ -11,7 +11,7 @@ from src.constants import REFERENCE_YEAR, Mechanism
 from src.linear_objects.base_linear import BaseLinearObject
 from src.linear_objects.dike_section import DikeSection
 
-from src.utils.utils import beta_to_pf
+from src.utils.utils import beta_to_pf, pf_to_beta
 
 
 @dataclass
@@ -86,9 +86,7 @@ class DikeTraject(BaseLinearObject):
     def calc_traject_probability_array(self, calc_type: str) -> np.array:
 
         _beta_df = get_initial_assessment_df(self.dike_sections)
-        _traject_pf, _ = get_traject_prob(
-            _beta_df, ["Overflow", "Piping", "StabilityInner", "Revetment"]
-        )
+        _traject_pf, _ = get_traject_prob(_beta_df)
         years = self.dike_sections[0].years
 
         if calc_type == "vr":
@@ -132,12 +130,15 @@ class DikeTraject(BaseLinearObject):
                     "Length": section.length,
                 }
 
+
+
                 for year, beta in zip(
                         years, getattr(section, _section_measure)[mechanism]
                 ):
                     d[year] = beta
                 _beta_df.loc[mask, years] = d
-            _reinforced_traject_pf, _ = get_traject_prob(_beta_df, _active_mechanisms)
+
+            _reinforced_traject_pf, _ = get_traject_prob(_beta_df)
 
             _traject_pf = np.concatenate((_traject_pf, _reinforced_traject_pf), axis=0)
 
@@ -281,14 +282,15 @@ class DikeTraject(BaseLinearObject):
         return int(_step_index)
 
 
-def get_traject_prob(beta_df: DataFrame, mechanisms: list) -> tuple[np.array, dict]:
+def get_traject_prob(beta_df: DataFrame) -> tuple[np.array, dict]:
     """Determines the probability of failure for a traject based on the standardized beta input"""
 
     beta_df = beta_df.reset_index().set_index("mechanism").drop(columns=["name"])
     beta_df = beta_df.drop(columns=["Length", "index"])
-
+    mechanisms = ['Overflow', 'Piping', 'StabilityInner', 'Revetment']
     traject_probs = dict((el, []) for el in mechanisms)
     total_traject_prob = np.empty((1, beta_df.shape[1]))
+    # You need to loop over Revetment here even if it is not an active mechanism of the current section
     for mechanism in mechanisms:
 
         if mechanism in ['Overflow', 'Revetment']:
