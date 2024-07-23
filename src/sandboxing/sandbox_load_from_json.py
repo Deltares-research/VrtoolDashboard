@@ -15,10 +15,10 @@ _dike_data = json.load(
     # open(Path(r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_16_1\reference\dike_data_16_1.json")))
     open(Path(
         # r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_38_1_sterker_VZG2\reference\dike_data.json"
-        r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_24_3\reference\dike_data_24_3.json"
+        r"N:\Projects\11209000\11209353\B. Measurements and calculations\008 - Resultaten Proefvlucht\HHNK\HHNK_20240528\vrtool_database/data.json"
          # r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_31_1\config.json"
     )))
-print(_dike_data)
+# print(_dike_data)
 _dike_traject = DikeTraject.deserialize(_dike_data)
 
 result_type = ResultType.RELIABILITY
