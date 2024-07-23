@@ -18,7 +18,9 @@ None.
 None.
 
 ### Fixed
-None.
+-  Bug traject faalkans with bekleding
+-  Bug traject faalkans with years 
+- Visualisation maatregel vertical oplossing piping
 
 ## v0.5.0 [08/07/2024]
 
