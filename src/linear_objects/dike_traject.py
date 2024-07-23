@@ -84,6 +84,12 @@ class DikeTraject(BaseLinearObject):
         return json.dumps(_geojson)
 
     def calc_traject_probability_array(self, calc_type: str) -> np.array:
+        """
+        Return an array of the traject probability of failure for year year and each step. Columns are the years and
+        rows are the steps. The first row is the probability of failure of the unreinforced dike traject.
+        :param calc_type:
+        :return:
+        """
 
         _beta_df = get_initial_assessment_df(self.dike_sections)
         _traject_pf, _ = get_traject_prob(_beta_df)
@@ -124,24 +130,15 @@ class DikeTraject(BaseLinearObject):
                         _beta_df["mechanism"] == mechanism
                 )
                 # replace the row in the dataframe with the betas of the section if both the name and mechanism match
-                d = {
-                    "name": section.name,
-                    "mechanism": mechanism,
-                    "Length": section.length,
-                }
-
-
 
                 for year, beta in zip(
                         years, getattr(section, _section_measure)[mechanism]
                 ):
-                    d[year] = beta
-                _beta_df.loc[mask, years] = d
+                    _beta_df.loc[mask, year] = beta
 
             _reinforced_traject_pf, _ = get_traject_prob(_beta_df)
 
             _traject_pf = np.concatenate((_traject_pf, _reinforced_traject_pf), axis=0)
-
         return np.array(_traject_pf)
 
     def get_section(self, name: str) -> DikeSection:

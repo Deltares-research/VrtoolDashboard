@@ -332,16 +332,9 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             mask = (_beta_df["name"] == dike_section.name) & (
                     _beta_df["mechanism"] == mechanism
             )
-            # replace the row in the dataframe with the betas of the section if both the name and mechanism match
-            d = {
-                "name": dike_section.name,
-                "mechanism": mechanism,
-                "Length": dike_section.length,
-            }
 
             for year, beta in zip(dike_section.years, step_measure[mechanism]):
-                d[year] = beta
-            _beta_df.loc[mask, dike_section.years] = d
+                _beta_df.loc[mask, year] = beta
 
         # Calculate traject faalkans
         _reinforced_traject_pf, _ = get_traject_prob(_beta_df)
