@@ -293,8 +293,6 @@ def fill_dike_section_selection(dike_traject_data: dict) -> list[dict]:
         Input(SELECT_DIKE_SECTION_FOR_MEASURES_ID, "value"),
         Input("select_mechanism_type", "value"),
     ],
-    state=[State("stored-data", "data")]
-
 )
 def make_graph_measure_results_comparison(
         dike_traject_data: dict,
@@ -302,7 +300,6 @@ def make_graph_measure_results_comparison(
         selected_year: float,
         selected_dike_section: str,
         selected_mechanism: str,
-        dike_data: dict
 ) -> Figure:
     """
 
@@ -334,7 +331,7 @@ def make_graph_measure_results_comparison(
         _vr_config.input_database_name = vr_config["input_database_name"]
         _vr_config.T = vr_config["T"]
 
-        _final_step_number = dike_data["final_step_number"]
+        _final_step_number = dike_traject_data["final_step_number"]
         _meas_results, _vr_steps, _dsn_steps = get_all_measure_results(
             _vr_config,
             _section.name,

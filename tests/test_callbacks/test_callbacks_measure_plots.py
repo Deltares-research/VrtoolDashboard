@@ -51,7 +51,7 @@ class TestCallbackMeasurePlot():
         # 2. Define callback
         def run_callback():
             return make_graph_measure_results_comparison(
-                _dike_data, _vr_config, 2025, "WsNoo_Stab_011600_012000", mechanism
+                _dike_data, _vr_config, 2025, "WsNoo_Stab_011600_012000", mechanism,
             )
 
         ctx = copy_context()
