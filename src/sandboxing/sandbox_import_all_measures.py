@@ -23,16 +23,17 @@ from src.utils.utils import export_to_json
 _vr_config = VrtoolConfig().from_json(Path(
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\figure_DPI\config.json"
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Desktop\projects\VRTools\database\24-3\config.json"
-    r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\eduard_debug\optimized_results\optimized_results\config.json"
+    # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\eduard_debug\optimized_results\optimized_results\config.json"
+    r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\test_lisa_24_07\config.json"
 
 ))
 # _vr_config = VrtoolConfig().from_json(Path(__file__).parent.parent / "tests/data/TestCase1_38-1_no_housing/vr_config.json")
 t0 = time.time()
-section_name = "13-6_D9B_1"
+section_name = "19"
 mechanism = Mechanism.SECTION.name
 mechanism = get_mechanism_name_ORM(mechanism)
-_meas_results, _vr_steps, _dsn_steps = get_all_measure_results(_vr_config, section_name, mechanism, run_id_vr=7,
-                                                               run_id_dsn=8, time=0, active_mechanisms=["Piping", "Overflow"])
+_meas_results, _vr_steps, _dsn_steps = get_all_measure_results(_vr_config, section_name, mechanism, run_id_vr=1,
+                                                               run_id_dsn=2, time=0, active_mechanisms=["Piping", "Overflow", "StabilityInner"])
 
 # _dike_data = json.load(
 #     open(Path(

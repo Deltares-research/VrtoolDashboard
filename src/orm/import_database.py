@@ -27,6 +27,7 @@ def get_all_measure_results(
         run_id_vr: int,
         run_id_dsn: int,
         active_mechanisms: Optional[list[str]] = None,
+        final_step_number: Optional[int] = None,
 ) -> tuple[DataFrame, dict, dict]:
     """
     Import and return all the single measures and the steps measures of the GreedyOptimization for a given selected
@@ -38,6 +39,9 @@ def get_all_measure_results(
     :param time: time for which measures are evaluated and available in the database
     :param run_id_vr: run id for the veiligheidsrendement optimization
     :param run_id_dsn: run id for the doorsnede eisen optimization
+    :param active_mechanisms: list of active mechanisms for the section
+    :param final_step_number: number of the final step for which the measures must be imported. If None, all steps are
+        imported.
     :return:
     """
     _path_dir = Path(vr_config.input_directory)
@@ -52,6 +56,7 @@ def get_all_measure_results(
         run_id_vr=run_id_vr,
         run_id_dsn=run_id_dsn,
         active_mechanisms=active_mechanisms,
+        final_step_number=final_step_number,
     ).import_orm(orm_model)
 
     return _meas_results, _vr_steps, _dsn_steps

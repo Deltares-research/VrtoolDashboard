@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 None.
 
 ### Changed
-None.
+_ Maatregelen tab only shows measures before the final optimization step (eco optimum)
 
 ### Deprecated
 None.

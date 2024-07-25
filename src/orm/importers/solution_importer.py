@@ -48,6 +48,8 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
     greedy_criteria_year: Optional[int]
     greedy_criteria_beta: Optional[float]
     economic_optimal_final_step_id: int
+    final_step: int  # this is the step number of the last optimization step (either from the economic optimal or
+    # the target beta/year, this needs to be returned to DikeTraject object)
 
     def __init__(
             self,
@@ -75,6 +77,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         """Import the final measures for both Veiligheidsrendement and Doorsnede"""
         self.get_final_measure_vr()
         self.get_final_measure_dsn()
+        self.dike_traject.final_step_number = self.final_step
 
     def set_economic_optimal_final_step_id(self):
         """Get the final step id of the optimization run.
@@ -257,6 +260,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
 
             if status_step == False:
                 _the_final_step = _optimization_step.step_number
+                self.__setattr__("final_step", _the_final_step)
                 break
 
         self.dike_traject.greedy_steps = _greedy_steps_res

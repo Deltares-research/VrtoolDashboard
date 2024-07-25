@@ -49,7 +49,8 @@ _vr_config = VrtoolConfig().from_json(Path(
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\van Karolina\config.json"
     # r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\38-1 custom measures\config.json"
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Desktop\projects\VRTools\database\24-3\config.json"
-    r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\eduard_debug\optimized_results\optimized_results\config.json"
+    # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\eduard_debug\optimized_results\optimized_results\config.json"
+    r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\test_lisa_24_07\config.json"
 
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\COP demo\38-1 base river case\config.json"
 
@@ -65,10 +66,10 @@ _vr_config = VrtoolConfig().from_json(Path(
 # _vr_config = VrtoolConfig().from_json(Path(__file__).parent.parent / "tests/data/TestCase1_38-1_no_housing/vr_config.json")
 t0 = time.time()
 print(_vr_config)
-_traject_db = get_dike_traject_from_config_ORM(vr_config=_vr_config, run_is_vr=7, run_id_dsn=8)
+_traject_db = get_dike_traject_from_config_ORM(vr_config=_vr_config, run_is_vr=1, run_id_dsn=2)
 data = _traject_db.serialize()
 export_to_json(data)
-print(data)
+# print(data)
 t1 = time.time()
 # print(data)
 print(f"Time to get dike traject from ORM: {t1 - t0}")

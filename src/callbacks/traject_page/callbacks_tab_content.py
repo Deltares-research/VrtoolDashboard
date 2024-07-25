@@ -286,13 +286,15 @@ def fill_dike_section_selection(dike_traject_data: dict) -> list[dict]:
 
 @callback(
     Output(GRAPH_MEASURE_COMPARISON_ID, "figure"),
-    [
+    inputs=[
         Input("stored-data", "data"),
         Input(STORE_CONFIG, "data"),
         Input(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "value"),
         Input(SELECT_DIKE_SECTION_FOR_MEASURES_ID, "value"),
         Input("select_mechanism_type", "value"),
     ],
+    state=[State("stored-data", "data")]
+
 )
 def make_graph_measure_results_comparison(
         dike_traject_data: dict,
@@ -300,6 +302,7 @@ def make_graph_measure_results_comparison(
         selected_year: float,
         selected_dike_section: str,
         selected_mechanism: str,
+        dike_data: dict
 ) -> Figure:
     """
 
@@ -308,6 +311,7 @@ def make_graph_measure_results_comparison(
     :param selected_year: Selected year by the user from the slider
     :param selected_dike_section: Selected dike section by the user from the Dropdown
     :param selected_mechanism: Selected mechanism to filter and display the betas.
+    :param dike_data: The data of the dike traject to be displayed.
 
     :return:
     """
@@ -330,6 +334,7 @@ def make_graph_measure_results_comparison(
         _vr_config.input_database_name = vr_config["input_database_name"]
         _vr_config.T = vr_config["T"]
 
+        _final_step_number = dike_data["final_step_number"]
         _meas_results, _vr_steps, _dsn_steps = get_all_measure_results(
             _vr_config,
             _section.name,
@@ -337,7 +342,8 @@ def make_graph_measure_results_comparison(
             _time,
             run_id_vr=dike_traject_data["_run_id_vr"],
             run_id_dsn=dike_traject_data["_run_id_dsn"],
-            active_mechanisms=_section.active_mechanisms
+            active_mechanisms=_section.active_mechanisms,
+            final_step_number=_final_step_number,
         )
 
         _fig = plot_measure_results_graph(
