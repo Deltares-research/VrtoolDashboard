@@ -49,7 +49,10 @@ _vr_config = VrtoolConfig().from_json(Path(
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\van Karolina\config.json"
     # r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\38-1 custom measures\config.json"
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Desktop\projects\VRTools\database\24-3\config.json"
-    r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\COP demo\38-1 base river case\config.json"
+    # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\eduard_debug\optimized_results\optimized_results\config.json"
+    r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\test_lisa_24_07\config.json"
+
+    # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\COP demo\38-1 base river case\config.json"
 
 
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\38-1 test/config.json"
@@ -66,7 +69,7 @@ print(_vr_config)
 _traject_db = get_dike_traject_from_config_ORM(vr_config=_vr_config, run_is_vr=1, run_id_dsn=2)
 data = _traject_db.serialize()
 export_to_json(data)
-print(data)
+# print(data)
 t1 = time.time()
 # print(data)
 print(f"Time to get dike traject from ORM: {t1 - t0}")
@@ -90,7 +93,7 @@ print(f"Time to get dike traject from ORM: {t1 - t0}")
 #                                                              colorbar_result_type=ColorBarResultType.MEASURE.name,
 #                                                              mechanism_type=Mechanism.SECTION.name,
 #                                                              sub_result_type=SubResultType.MEASURE_TYPE.name, )
-_fig = plot_pf_length_cost(_traject_db, 2025, result_type=ResultType.RELIABILITY.name, cost_length_switch="COST")
+_fig = plot_pf_length_cost(_traject_db, 2047, result_type=ResultType.RELIABILITY.name, cost_length_switch="COST")
 t2 = time.time()
 print(f"Time to plot: {t2 - t1}")
 

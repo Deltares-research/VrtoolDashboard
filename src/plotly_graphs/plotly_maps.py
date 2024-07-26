@@ -513,6 +513,7 @@ def add_measure_type_trace(
             section.coordinates_rd, buffersize=60
         )
         _visible = True
+        print(measure_results.get("L_stab_screen"))
         if measure_results["dcrest"] == 0 and measure_results["dberm"] > 0:
             _name = "Bermverbreding"
             _color = "#9ACD32"
@@ -537,6 +538,15 @@ def add_measure_type_trace(
             legend_display["ground_reinforcement"] = False
             _visible = False
 
+        _hovertext = f"Vaknaam {section.name}<br>"
+        _hovertext += f"Maatregel: {measure_results['name']} <br>"
+        _hovertext += f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>"
+        _hovertext += f"Kruinverhoging: {measure_results['dcrest']}m <br>"
+        _hovertext += f"Bermverbreding: {measure_results['dberm']}m <br>"
+        if measure_results.get("L_stab_screen") is not None:
+            _hovertext += f"Stabiliteitsscherm: {measure_results['L_stab_screen']}m <br>"
+        _hovertext += "<extra></extra>"
+
         fig.add_trace(
             go.Scattermapbox(
                 name=_name,
@@ -549,12 +559,7 @@ def add_measure_type_trace(
                 fill="toself",
                 showlegend=_showlegend,
                 visible=_visible,
-                hovertemplate=f"Vaknaam {section.name}<br>"
-                              f"Maatregel: {measure_results['name']} <br>"
-                              f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>"
-                              f"Kruinverhoging: {measure_results['dcrest']}m <br>"
-                              f"Bermverbreding: {measure_results['dberm']}m <br>"
-                              f"<extra></extra>",
+                hovertemplate=_hovertext,
             )
         )
 
@@ -601,6 +606,7 @@ def add_measure_type_trace(
                 hovertemplate=f"Vaknaam {section.name}<br>"
                               f"{measure_results['name']} <br>"
                               f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>"
+                              f"Stabiliteitsscherm: {measure_results['L_stab_screen']}m <br>"
                               f"<extra></extra>",
             )
         )

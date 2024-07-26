@@ -44,6 +44,7 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
             run_id_vr: int,
             run_id_dsn: int,
             active_mechanisms: Optional[list[str]] = None,
+            final_step_number: Optional[int] = None,
     ) -> None:
         self.vr_config = vr_config
         self.section_name = section_name
@@ -51,8 +52,9 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
         self.run_id_vr = run_id_vr
         self.run_id_dsn = run_id_dsn
         self.time = time
-        self.active_mechanisms = active_mechanisms # used for section only
+        self.active_mechanisms = active_mechanisms  # used for section only
         self.assessment_time = vr_config.T
+        self.final_step_number = final_step_number
 
     def import_orm(self, orm_model) -> tuple:
         """
@@ -91,6 +93,9 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
             # For combined steps sharing the same step number, skip the step if it has already been processed
             if _previous_step_number == _step_number:
                 continue
+            if self.final_step_number is not None and _step_number > self.final_step_number:
+                break
+
             section = (
                 SectionData.select()
                 .join(MeasurePerSection)
@@ -142,7 +147,7 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
                 on=(SectionData.section_name == self.section_name),
             )
             .where(
-            #     MeasurePerSection.measure_id.in_([measure.id for measure in _measure]),
+                #     MeasurePerSection.measure_id.in_([measure.id for measure in _measure]),
                 MeasurePerSection.section_id
                 == SectionData.id
             )

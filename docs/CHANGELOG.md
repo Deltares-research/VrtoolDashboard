@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 None.
 
 ### Changed
-None.
+_ Maatregelen tab only shows measures before the final optimization step (eco optimum)
 
 ### Deprecated
 None.
@@ -18,7 +18,9 @@ None.
 None.
 
 ### Fixed
-None.
+-  Bug traject faalkans with bekleding
+-  Bug traject faalkans with years 
+- Visualisation maatregel vertical oplossing piping
 
 ## v0.5.0 [08/07/2024]
 

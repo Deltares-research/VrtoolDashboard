@@ -117,6 +117,11 @@ def _get_measure_parameters(optimization_steps: OptimizationStep) -> dict:
             (MeasureResultParameter.name == "TRANSITION_LEVEL")
         )
 
+        params_L_stab_screen = MeasureResultParameter.select().where(
+            (MeasureResultParameter.measure_result_id == measure_result.id) &
+            (MeasureResultParameter.name == "L_STAB_SCREEN")
+        )
+
         if _params.get('dberm') is None and params_dberm.count() > 0:
             _params['dberm'] = params_dberm[0].value
         if _params.get('dcrest') is None and params_dcrest.count() > 0:
@@ -125,6 +130,8 @@ def _get_measure_parameters(optimization_steps: OptimizationStep) -> dict:
             _params['beta_target'] = params_beta_target[0].value
         if _params.get('transition_level') is None and params_transition_level.count() > 0:
             _params['transition_level'] = params_transition_level[0].value
+        if _params.get('L_stab_screen') is None and params_L_stab_screen.count() > 0:
+            _params['L_stab_screen'] = params_L_stab_screen[0].value
 
         _params['pf_target_ratio'] = None
         _params['diff_transition_level'] = None
