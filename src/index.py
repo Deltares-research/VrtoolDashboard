@@ -54,4 +54,4 @@ if __name__ == '__main__':
     log = logging.getLogger('werkzeug')
     log.setLevel(logging.ERROR)
 
-    app.run_server(debug=False)
+    app.run_server(debug=True)

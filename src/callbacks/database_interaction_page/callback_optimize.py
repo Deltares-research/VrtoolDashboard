@@ -94,7 +94,6 @@ def run_optimize_algorithm(
 
     :return:
     """
-
     if stored_data is None:
         return dash.no_update, dash.no_update
 
@@ -196,7 +195,7 @@ def get_selected_measure(
             _investment_year = int(section_row["reference_year"]) - REFERENCE_YEAR
 
             # if the section is not reinforced, don't add the corresponding MeasureResult for the optimization
-            if section_row["reinforcement_col"] == "no":
+            if not section_row["reinforcement_col"]:
                 continue
             # for measure in Measures:
             for measure in Measures:
@@ -213,5 +212,4 @@ def get_selected_measure(
 
                 for measure_result_id in _measure_result_ids:
                     list_selected_measures.append((measure_result_id, _investment_year))
-
         return list_selected_measures

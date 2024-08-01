@@ -315,7 +315,7 @@ def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
                             Measures.DIAPHRAGM_WALL.name: True,
                             Measures.STABILITY_SCREEN.name: True,
                             }])
-            df = pd.concat([df, df_add], ignore_index=True)
+            df = pd.concat([df.infer_objects(), df_add], ignore_index=True)
 
         bool_columns = ["reinforcement_col", Measures.GROUND_IMPROVEMENT.name,
                         Measures.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.name,
