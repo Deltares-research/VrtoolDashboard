@@ -17,7 +17,6 @@ class TestRunOptimize:
         traject_optimization_table = optimization_table_38_1
 
         row_1 = traject_optimization_table[0]
-        print(row_1)
         expected_keys = ["section_col", 'reinforcement_col', 'reference_year', "GROUND_IMPROVEMENT",
                          "GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN", "GEOTEXTILE", "DIAPHRAGM_WALL", "STABILITY_SCREEN"]
         assert isinstance(traject_optimization_table, list)

@@ -94,6 +94,7 @@ def run_optimize_algorithm(
 
     :return:
     """
+    set_progress("Starting a new Optimization run...")
     if stored_data is None:
         return dash.no_update, dash.no_update
 
@@ -147,12 +148,14 @@ def run_optimize_algorithm(
         # is redirected to our html modal (the pop-up logging window).
         with ModalPopupLogHandler() as handler:
             # 2. Get all selected measures ids from optimization table in the dashboard
+            set_progress("Geselecteerde maatregelen worden opgehaald...")
             selected_measures = get_selected_measure(
                 _vr_config, traject_optimization_table
             )
 
             # 3. Run optimization in a separate thread, so that the user can continue using the app while the optimization
             # is running.
+            set_progress("VRTool optimalisatie wordt uitgevoerd...")
             run_vrtool_optimization(
                 _vr_config, optimization_run_name, selected_measures
             )
@@ -162,7 +165,7 @@ def run_optimize_algorithm(
 
         _options = [{"label": name, "value": name} for name in _names_optimization_run]
 
-        return _options, ["Optimization run completed, you may close this window."]
+        return _options, ["Optimalisatie run is voltooid! Je kunt dit venster sluiten."]
 
 
 def run_vrtool_optimization(
