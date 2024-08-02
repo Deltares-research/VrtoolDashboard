@@ -10,6 +10,9 @@ None.
 
 ### Changed
 _ Maatregelen tab only shows measures before the final optimization step (eco optimum)
+- Disable POST and GET message in terminal in production
+- Adding custom measures now creates a backup of the db and modified in place the current one.
+- Switching pages keeps the options of dropdown menu "Optimization run selection"
 
 ### Deprecated
 None.
@@ -21,6 +24,7 @@ None.
 -  Bug traject faalkans with bekleding
 -  Bug traject faalkans with years 
 - Visualisation maatregel vertical oplossing piping
+- Bug in optimization table with toggle Versterking
 
 ## v0.5.0 [08/07/2024]
 
