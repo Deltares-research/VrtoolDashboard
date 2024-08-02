@@ -1,6 +1,7 @@
 import dash
 from dash import dcc
 import dash_bootstrap_components as dbc
+import logging
 
 from src.component_ids import STORE_CONFIG
 from src.layouts.layout_traject_page.layout_modal_measure import modal_measure_reliability
@@ -31,6 +32,8 @@ app.layout = dbc.Container(
         modal_optimize,  # keep this line to import the modal as closed to the app by default
         modal_measure_reliability,
         dash.page_container,
+        dcc.Location(id='url', refresh=True),
+
     ],
     fluid=True,
 )
@@ -48,4 +51,9 @@ if __name__ == '__main__':
     """
     print("============================= RERUN THE APP ====================================")
     print(ascii_art)
+
+    # Supress GET and POST messages in the console for production mode
+    log = logging.getLogger('werkzeug')
+    log.setLevel(logging.ERROR)
+
     app.run_server(debug=True)

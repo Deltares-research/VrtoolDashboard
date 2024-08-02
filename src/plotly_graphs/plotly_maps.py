@@ -513,7 +513,6 @@ def add_measure_type_trace(
             section.coordinates_rd, buffersize=60
         )
         _visible = True
-        print(measure_results.get("L_stab_screen"))
         if measure_results["dcrest"] == 0 and measure_results["dberm"] > 0:
             _name = "Bermverbreding"
             _color = "#9ACD32"

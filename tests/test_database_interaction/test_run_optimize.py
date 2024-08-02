@@ -12,6 +12,21 @@ from tests.test_callbacks.test_callback_optimize import optimization_table_38_1,
 
 
 class TestRunOptimize:
+
+    def test_traject_optimization_table(self):
+        traject_optimization_table = optimization_table_38_1
+
+        row_1 = traject_optimization_table[0]
+        expected_keys = ["section_col", 'reinforcement_col', 'reference_year', "GROUND_IMPROVEMENT",
+                         "GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN", "GEOTEXTILE", "DIAPHRAGM_WALL", "STABILITY_SCREEN"]
+        assert isinstance(traject_optimization_table, list)
+        assert isinstance(row_1, dict)
+        assert all([key in row_1.keys() for key in expected_keys])
+        assert all(
+            [isinstance(row_1[key], bool) for key in expected_keys if key not in ["section_col", "reference_year"]])
+        assert isinstance(row_1["section_col"], str)
+        assert isinstance(row_1["reference_year"], int)
+
     def test_get_selected_measure(self):
         traject_optimization_table = optimization_table_38_1
 
@@ -34,7 +49,7 @@ class TestRunOptimize:
         selected_measures = get_selected_measure(
             _vr_config, traject_optimization_table
         )
-
+        print(traject_optimization_table)
         assert isinstance(selected_measures, list)
 
     def test_run_optimize_no_revetment(self):
