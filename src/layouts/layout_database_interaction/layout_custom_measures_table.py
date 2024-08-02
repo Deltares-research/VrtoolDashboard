@@ -43,7 +43,10 @@ columns_defs = [
 
 ]
 df = pd.DataFrame(columns=[col["field"] for col in columns_defs],
-                  data=[["Rock", "7", "Piping", 0, 2000, 3.5]])  # empty dataframe
+                  data=[
+                      # ["Rock", "7", "Piping", 0, 2000, 3.5]
+                  ]
+                  )  # empty dataframe
 
 custom_measure_tab_layout = html.Div([
     # add text

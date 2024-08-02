@@ -2,6 +2,7 @@ import shutil
 from pathlib import Path
 
 import dash
+import pandas as pd
 from dash import callback, Input, Output, State
 from vrtool.common.enums import MechanismEnum, CombinableTypeEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
@@ -9,6 +10,9 @@ from vrtool.orm.orm_controllers import add_custom_measures
 
 from src.component_ids import EDITABLE_CUSTOM_MEASURE_TABLE_ID, ADD_CUSTOM_MEASURE_BUTTON_ID, STORE_CONFIG
 from src.constants import Mechanism
+from src.layouts.layout_database_interaction.layout_custom_measures_table import columns_defs
+from src.orm.import_database import get_all_custom_measures
+from src.utils.utils import get_vr_config_from_dict
 
 
 @callback(
@@ -112,6 +116,7 @@ def add_custom_measure_to_db(n_clicks: int, row_data: list[dict], vr_config: dic
             _vr_config, custom_measure_list_1
         )
 
+
 def convert_custom_table_to_input(row_data: list[dict]) -> list[dict]:
     """
     This function converts the custom measure table to the input format for the add_custom_measures function.
@@ -147,3 +152,21 @@ def convert_custom_table_to_input(row_data: list[dict]) -> list[dict]:
         converted_input.append(converted_row)
 
     return converted_input
+
+
+@callback(
+    Output(EDITABLE_CUSTOM_MEASURE_TABLE_ID, "rowData"),
+    Input(STORE_CONFIG, 'data'),
+)
+def fill_custom_measures_table_from_database(vr_config: dict) -> list[dict]:
+    """
+    Fill the custom measure table with all the custom measure present in the database.
+    :return:
+    """
+    _vr_config = get_vr_config_from_dict(vr_config)
+
+    custom_measures = get_all_custom_measures(_vr_config)
+
+    df = pd.DataFrame(columns=[col["field"] for col in columns_defs], data=custom_measures)
+
+    return df.to_dict('records')

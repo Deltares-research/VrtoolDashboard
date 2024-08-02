@@ -12,11 +12,25 @@ from src.constants import (
     Mechanism,
 )
 from src.linear_objects.dike_traject import DikeTraject
+from src.orm.importers.custom_measures_importer import CustomMeasureImporter
 from src.orm.importers.dike_traject_importer import DikeTrajectImporter
 from src.orm import models as orm_model
 from src.orm.importers.measure_reliability_time_importer import TrajectMeasureResultsTimeImporter
 from src.orm.importers.measures_importer import TrajectMeasureResultsImporter
 from src.orm.importers.optimization_run_importer import import_optimization_runs_name
+
+def get_all_custom_measures(vr_config: VrtoolConfig):
+    _path_dir = Path(vr_config.input_directory)
+    _path_database = _path_dir.joinpath(vr_config.input_database_name)
+
+    open_database(_path_database)
+    _res = CustomMeasureImporter(
+        vr_config=vr_config,
+
+
+    ).import_orm(orm_model)
+    return _res
+
 
 
 def get_all_measure_results(

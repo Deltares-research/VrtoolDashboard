@@ -49,7 +49,6 @@ class TestRunOptimize:
         selected_measures = get_selected_measure(
             _vr_config, traject_optimization_table
         )
-        print(traject_optimization_table)
         assert isinstance(selected_measures, list)
 
     def test_run_optimize_no_revetment(self):
