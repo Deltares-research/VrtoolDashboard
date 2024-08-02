@@ -48,7 +48,9 @@ df = pd.DataFrame(columns=[col["field"] for col in columns_defs],
                   ]
                   )  # empty dataframe
 
-custom_measure_tab_layout = html.Div([
+
+
+left_side = html.Div([
     # add text
     dcc.Markdown(
         '''
@@ -75,33 +77,16 @@ custom_measure_tab_layout = html.Div([
     ),
 
     dbc.Button("Custom maatregel toevoegen", id=ADD_CUSTOM_MEASURE_BUTTON_ID, color="primary", className="mr-1"),
-    # dash_table.DataTable(
-    #     columns=[
-    #         {"name": ["", "Year"], "id": "year" },
-    #         {"name": ["City", "Montreal"], "id": "montreal", "deletable": [False, True]},
-    #         {"name": ["City", "Toronto"], "id": "toronto", "renamable": True },
-    #         {"name": ["City", "Ottawa"], "id": "ottawa", "hideable": "last"},
-    #         {"name": ["City", "Vancouver"], "id": "vancouver"},
-    #         {"name": ["Climate", "Temperature"], "id": "temp"},
-    #         {"name": ["Climate", "Humidity"], "id": "humidity"},
-    #     ],
-    #     data=[
-    #         {
-    #             "year": i,
-    #             "montreal": i * 10,
-    #             "toronto": i * 100,
-    #             "ottawa": i * -1,
-    #             "vancouver": i * -10,
-    #             "temp": i * -100,
-    #             "humidity": i * 5,
-    #         }
-    #         for i in range(10)
-    #     ],
-    #     editable=True,
-    #
-    #     export_format='xlsx',
-    #     export_headers='display',
-    #     merge_duplicate_headers=True
-    # )
 
+])
+
+
+right_side = html.Div([])
+
+
+custom_measure_tab_layout = html.Div([
+    dbc.Row([
+        dbc.Col([left_side], md=6),
+        dbc.Col([right_side], md=6),
+    ]),
 ])
