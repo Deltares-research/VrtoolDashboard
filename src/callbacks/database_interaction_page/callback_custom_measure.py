@@ -62,6 +62,15 @@ def delete_row(n_click, selected_row, row_data):
 
 )
 def add_custom_measure_to_db(n_clicks: int, row_data: list[dict], vr_config: dict):
+    """
+    Add custom measures to the database.
+    When a custom measure is added, the original database is copied and a backup is created with a different name
+    "vrtool_input_backup.db" and the new database which contains custom measures is named "vrtool_input.db".
+    :param n_clicks:
+    :param row_data:
+    :param vr_config:
+    :return:
+    """
     if n_clicks:
 
         # 1. Get VrConfig from stored_config
@@ -79,17 +88,29 @@ def add_custom_measure_to_db(n_clicks: int, row_data: list[dict], vr_config: dic
         # 2. Get custom measures from the table
         custom_measure_list_1 = convert_custom_table_to_input(row_data)
 
-        # 3. Create a copy of the database
-        source_db = _vr_config.input_directory / _vr_config.input_database_name
-        target_db = _vr_config.input_directory / "vrtool_input_modified.db"
-        shutil.copy2(source_db, target_db)
-        _vr_config.input_database_name = "vrtool_input_modified.db"
+        # 3. Create a copy of the database for backup
+        def get_next_backup_filename(dir: Path):
+            version = 1
+            while True:
+                if version == 1:
+                    version_str = "original"
+                else:
+                    version_str = f"v{version}"
+                backup_file_path = dir.joinpath(f"vrtool_input_backup_{version_str}.db")
+                if not backup_file_path.exists():
+                    return backup_file_path
+                version += 1
 
-        # 4. Add custom measures to the modified database, the initial remains intact
+        source_db = _vr_config.input_directory / _vr_config.input_database_name
+        target_backup_db = get_next_backup_filename(_vr_config.input_directory)
+
+        shutil.copy2(source_db, target_backup_db)
+        _vr_config.input_database_name = "vrtool_input.db"
+
+        # 4. Add custom measures to the initial database, backup is left untouched.
         _added_measures = add_custom_measures(
             _vr_config, custom_measure_list_1
         )
-
 
 def convert_custom_table_to_input(row_data: list[dict]) -> list[dict]:
     """
