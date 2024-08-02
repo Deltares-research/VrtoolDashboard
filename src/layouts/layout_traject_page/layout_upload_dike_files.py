@@ -80,6 +80,7 @@ layout_traject_select = html.Div([
                 search_value='',  # remembers the value searched in dropdown
                 clearable=True,  # allow user to removes the selected value
                 style={'width': "100%"},
+
             ),
             # html.Div(id='dd-output_container'),
 

@@ -32,6 +32,8 @@ app.layout = dbc.Container(
         modal_optimize,  # keep this line to import the modal as closed to the app by default
         modal_measure_reliability,
         dash.page_container,
+        dcc.Location(id='url', refresh=True),
+
     ],
     fluid=True,
 )

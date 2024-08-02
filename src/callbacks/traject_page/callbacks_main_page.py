@@ -23,8 +23,8 @@ from src.orm.import_database import get_dike_traject_from_config_ORM, get_name_o
 @callback([Output('dummy_upload_id', 'children'),
            Output("upload-toast", "is_open"),
            Output(STORE_CONFIG, "data"),
-           Output(DROPDOWN_SELECTION_RUN_ID, "value"),
-           Output(DROPDOWN_SELECTION_RUN_ID, "options"),
+           Output(DROPDOWN_SELECTION_RUN_ID, "value", allow_duplicate=True),
+           Output(DROPDOWN_SELECTION_RUN_ID, "options", allow_duplicate=True),
            ],
           [Input('upload-data-config-json', 'contents')],
           [State('upload-data-config-json', 'filename')],
@@ -70,7 +70,6 @@ def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
             vr_config.excluded_mechanisms = json_content['excluded_mechanisms']
             vr_config.T = json_content["T"]
 
-            # _dike_traject = get_dike_traject_from_config_ORM(vr_config, run_id_dsn=2, run_is_vr=1)
             _value_selection_run_dropwdown = "Basisberekening"
 
             # Update the selection Dropwdown with all the names of the optimization runs
@@ -82,6 +81,44 @@ def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
             return html.Div("Geen bestand geüpload"), False, {}, "", []
     else:
         return html.Div("Geen bestand geüpload"), False, dash.no_update, "", []
+
+
+@callback([
+    Output(DROPDOWN_SELECTION_RUN_ID, "value", allow_duplicate=True),
+    Output(DROPDOWN_SELECTION_RUN_ID, "options", allow_duplicate=True),
+],
+    [Input("url", "pathname")],
+    State(STORE_CONFIG, "data"),
+    allow_duplicate=True,
+    prevent_initial_call=True,
+
+)
+def fill_option_field_run_selection(path: str, config_data: dict) -> tuple:
+    """
+    Fill the Dropdown selection with the names of the optimization runs in the imported database.
+    :param path: url path of the current page
+    :param config_data: content of the config.json file
+    :return:
+    """
+    if path == "/traject-page":
+
+        if config_data is None or config_data == {}:
+            return dash.no_update, dash.no_update
+        vr_config = VrtoolConfig()
+        vr_config.traject = config_data['traject']
+        vr_config.input_directory = config_data['input_directory']
+        vr_config.input_database_name = config_data['input_database_name']
+        vr_config.excluded_mechanisms = config_data['excluded_mechanisms']
+        vr_config.T = config_data["T"]
+
+        # _dike_traject = get_dike_traject_from_config_ORM(vr_config, run_id_dsn=2, run_is_vr=1)
+        _value_selection_run_dropwdown = "Basisberekening"
+
+        # Update the selection Dropwdown with all the names of the optimization runs
+        _names_optimization_run = get_name_optimization_runs(vr_config)
+        _options = [{"label": name, "value": name} for name in _names_optimization_run]
+        return _value_selection_run_dropwdown, _options
+    return dash.no_update, dash.no_update
 
 
 @callback(
@@ -172,8 +209,6 @@ def recompute_dike_traject_with_new_greedy_criteria(name: str, name_type: str, b
     _vr_config.input_database_name = vr_config['input_database_name']
     _vr_config.excluded_mechanisms = vr_config["excluded_mechanisms"]
     _vr_config.T = vr_config["T"]
-
-
 
     if name == "Basisberekening":
         _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=2, run_is_vr=1,
@@ -307,14 +342,14 @@ def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
 
         for section in _dike_traject.dike_sections:
             df_add = pd.DataFrame.from_records([{"section_col": section.name,
-                            "reinforcement_col": True,
-                            "reference_year": 2025,
-                            Measures.GROUND_IMPROVEMENT.name: True,
-                            Measures.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.name: True,
-                            Measures.GEOTEXTILE.name: True,
-                            Measures.DIAPHRAGM_WALL.name: True,
-                            Measures.STABILITY_SCREEN.name: True,
-                            }])
+                                                 "reinforcement_col": True,
+                                                 "reference_year": 2025,
+                                                 Measures.GROUND_IMPROVEMENT.name: True,
+                                                 Measures.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.name: True,
+                                                 Measures.GEOTEXTILE.name: True,
+                                                 Measures.DIAPHRAGM_WALL.name: True,
+                                                 Measures.STABILITY_SCREEN.name: True,
+                                                 }])
             df = pd.concat([df.infer_objects(), df_add], ignore_index=True)
 
         bool_columns = ["reinforcement_col", Measures.GROUND_IMPROVEMENT.name,
@@ -322,7 +357,6 @@ def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
                         Measures.GEOTEXTILE.name, Measures.DIAPHRAGM_WALL.name,
                         Measures.STABILITY_SCREEN.name]
         df[bool_columns] = df[bool_columns].astype(bool)
-
 
         return df.to_dict('records')
 
