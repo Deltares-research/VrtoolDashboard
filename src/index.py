@@ -4,6 +4,7 @@ import dash_bootstrap_components as dbc
 import logging
 
 from src.component_ids import STORE_CONFIG
+from src.layouts.layout_database_interaction.layout_modal_add_custom_measure import modal_custom_measure
 from src.layouts.layout_traject_page.layout_modal_measure import modal_measure_reliability
 from src.layouts.layout_traject_page.layout_modal_optimize import modal_optimize
 
@@ -30,10 +31,10 @@ app.layout = dbc.Container(
         dcc.Store(id=STORE_CONFIG, data=None, storage_type="session"),
         nav_bar_layout_1,
         modal_optimize,  # keep this line to import the modal as closed to the app by default
+        modal_custom_measure,
         modal_measure_reliability,
         dash.page_container,
         dcc.Location(id='url', refresh=True),
-
     ],
     fluid=True,
 )

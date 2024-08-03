@@ -8,7 +8,8 @@ from vrtool.common.enums import MechanismEnum, CombinableTypeEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.orm.orm_controllers import add_custom_measures
 
-from src.component_ids import EDITABLE_CUSTOM_MEASURE_TABLE_ID, ADD_CUSTOM_MEASURE_BUTTON_ID, STORE_CONFIG
+from src.component_ids import EDITABLE_CUSTOM_MEASURE_TABLE_ID, ADD_CUSTOM_MEASURE_BUTTON_ID, STORE_CONFIG, \
+    CUSTOM_MEASURE_MODEL_ID, CLOSE_CUSTOM_MEAS_MODAL_BUTTON_ID
 from src.constants import Mechanism
 from src.layouts.layout_database_interaction.layout_custom_measures_table import columns_defs
 from src.orm.import_database import get_all_custom_measures
@@ -59,6 +60,7 @@ def delete_row(n_click, selected_row, row_data):
 
 
 @callback(
+    Output(CUSTOM_MEASURE_MODEL_ID, "is_open", allow_duplicate=True),
     Input(ADD_CUSTOM_MEASURE_BUTTON_ID, "n_clicks"),
     State(EDITABLE_CUSTOM_MEASURE_TABLE_ID, "rowData"),
     State(STORE_CONFIG, "data"),
@@ -115,6 +117,8 @@ def add_custom_measure_to_db(n_clicks: int, row_data: list[dict], vr_config: dic
         _added_measures = add_custom_measures(
             _vr_config, custom_measure_list_1
         )
+        return True
+    return False
 
 
 def convert_custom_table_to_input(row_data: list[dict]) -> list[dict]:
@@ -170,3 +174,10 @@ def fill_custom_measures_table_from_database(vr_config: dict) -> list[dict]:
     df = pd.DataFrame(columns=[col["field"] for col in columns_defs], data=custom_measures)
 
     return df.to_dict('records')
+
+
+@callback(Output(CUSTOM_MEASURE_MODEL_ID, "is_open", allow_duplicate=True),
+            Input(CLOSE_CUSTOM_MEAS_MODAL_BUTTON_ID, "n_clicks"),
+            prevent_initial_call=True)  # Close the modal
+def close_custom_measure_modal(n_clicks):
+    return False
