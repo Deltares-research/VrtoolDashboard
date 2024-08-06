@@ -3,7 +3,8 @@ from dash import html, dcc
 import dash_ag_grid as dag
 import dash_bootstrap_components as dbc
 
-from src.component_ids import EDITABLE_CUSTOM_MEASURE_TABLE_ID, ADD_CUSTOM_MEASURE_BUTTON_ID
+from src.component_ids import EDITABLE_CUSTOM_MEASURE_TABLE_ID, ADD_CUSTOM_MEASURE_BUTTON_ID, \
+    REMOVE_CUSTOM_MEASURE_BUTTON_ID
 from src.constants import Mechanism
 
 columns_defs = [
@@ -48,8 +49,6 @@ df = pd.DataFrame(columns=[col["field"] for col in columns_defs],
                   ]
                   )  # empty dataframe
 
-
-
 left_side = html.Div([
     # add text
     dcc.Markdown(
@@ -75,14 +74,16 @@ left_side = html.Div([
         dashGridOptions={"rowSelection": "multiple", "enableCellTextSelection": True, "ensureDomOrder": True},
 
     ),
-
-    dbc.Button("Custom maatregel toevoegen", id=ADD_CUSTOM_MEASURE_BUTTON_ID, color="primary", className="mr-1"),
+    dbc.Row([
+        dbc.Col([dbc.Button("Custom maatregel toevoegen", id=ADD_CUSTOM_MEASURE_BUTTON_ID, color="primary",
+                            className="mr-1")], md=3),
+        dbc.Col([dbc.Button("Remove custom maatereglen from database", id=REMOVE_CUSTOM_MEASURE_BUTTON_ID,
+                            color="primary", className="mr-1")], md=3),
+    ]),
 
 ])
 
-
 right_side = html.Div([])
-
 
 custom_measure_tab_layout = html.Div([
     dbc.Row([

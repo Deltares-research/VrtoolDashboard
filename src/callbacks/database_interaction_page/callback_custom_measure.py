@@ -7,11 +7,12 @@ import pandas as pd
 from dash import callback, Input, Output, State
 from vrtool.common.enums import MechanismEnum, CombinableTypeEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
-from vrtool.orm.orm_controllers import add_custom_measures
+from vrtool.orm.orm_controllers import add_custom_measures, safe_clear_custom_measure
 from vrtool.vrtool_logger import VrToolLogger
 
 from src.component_ids import EDITABLE_CUSTOM_MEASURE_TABLE_ID, ADD_CUSTOM_MEASURE_BUTTON_ID, STORE_CONFIG, \
-    CUSTOM_MEASURE_MODEL_ID, CLOSE_CUSTOM_MEAS_MODAL_BUTTON_ID, MESSAGE_MODAL_CUSTOM_MEASURE_ID
+    CUSTOM_MEASURE_MODEL_ID, CLOSE_CUSTOM_MEAS_MODAL_BUTTON_ID, MESSAGE_MODAL_CUSTOM_MEASURE_ID, \
+    REMOVE_CUSTOM_MEASURE_BUTTON_ID
 from src.constants import Mechanism
 from src.layouts.layout_database_interaction.layout_custom_measures_table import columns_defs
 from src.orm.import_database import get_all_custom_measures
@@ -83,16 +84,7 @@ def add_custom_measure_to_db(n_clicks: int, row_data: list[dict], vr_config: dic
     if n_clicks:
 
         # 1. Get VrConfig from stored_config
-        _vr_config = VrtoolConfig()
-        _vr_config.traject = vr_config["traject"]
-        _vr_config.input_directory = Path(vr_config["input_directory"])
-        _vr_config.output_directory = Path(vr_config["output_directory"])
-        _vr_config.input_database_name = vr_config["input_database_name"]
-        _vr_config.T = vr_config["T"]
-
-        for meca in MechanismEnum:
-            if meca.name in vr_config["excluded_mechanisms"]:
-                _vr_config.excluded_mechanisms.append(meca)
+        _vr_config = get_vr_config_from_dict(vr_config)
 
         # 2. Get custom measures from the table
         custom_measure_list_1 = convert_custom_table_to_input(row_data)
@@ -149,6 +141,31 @@ def add_custom_measure_to_db(n_clicks: int, row_data: list[dict], vr_config: dic
 
         return True, ["Custom measures added successfully."]
     return False, [""]
+
+
+@callback(
+    Output(EDITABLE_CUSTOM_MEASURE_TABLE_ID, "rowData", allow_duplicate=True),
+
+    Input(REMOVE_CUSTOM_MEASURE_BUTTON_ID, "n_clicks"),
+    State(STORE_CONFIG, "data"),
+    prevent_initial_call=True
+
+)
+def remove_all_custom_measure_in_db(n_clicks, vr_config: dict):
+    """
+    Apply the safe_clear_custom_measure function to remove all custom measures from the database which do not have
+    OptimizeRun associated with them.
+    :param n_clicks:
+    :param vr_config:
+    :return:
+    """
+    _vr_config = get_vr_config_from_dict(vr_config)
+    safe_clear_custom_measure(_vr_config)
+    custom_measures = get_all_custom_measures(_vr_config)
+
+    df = pd.DataFrame(columns=[col["field"] for col in columns_defs], data=custom_measures)
+
+    return df.to_dict('records')
 
 
 def convert_custom_table_to_input(row_data: list[dict]) -> list[dict]:
