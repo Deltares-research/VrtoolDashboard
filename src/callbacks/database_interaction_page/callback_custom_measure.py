@@ -1,3 +1,4 @@
+import logging
 import shutil
 from pathlib import Path
 
@@ -7,9 +8,10 @@ from dash import callback, Input, Output, State
 from vrtool.common.enums import MechanismEnum, CombinableTypeEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.orm.orm_controllers import add_custom_measures
+from vrtool.vrtool_logger import VrToolLogger
 
 from src.component_ids import EDITABLE_CUSTOM_MEASURE_TABLE_ID, ADD_CUSTOM_MEASURE_BUTTON_ID, STORE_CONFIG, \
-    CUSTOM_MEASURE_MODEL_ID, CLOSE_CUSTOM_MEAS_MODAL_BUTTON_ID
+    CUSTOM_MEASURE_MODEL_ID, CLOSE_CUSTOM_MEAS_MODAL_BUTTON_ID, MESSAGE_MODAL_CUSTOM_MEASURE_ID
 from src.constants import Mechanism
 from src.layouts.layout_database_interaction.layout_custom_measures_table import columns_defs
 from src.orm.import_database import get_all_custom_measures
@@ -61,6 +63,7 @@ def delete_row(n_click, selected_row, row_data):
 
 @callback(
     Output(CUSTOM_MEASURE_MODEL_ID, "is_open", allow_duplicate=True),
+    Output(MESSAGE_MODAL_CUSTOM_MEASURE_ID, "children"),
     Input(ADD_CUSTOM_MEASURE_BUTTON_ID, "n_clicks"),
     State(EDITABLE_CUSTOM_MEASURE_TABLE_ID, "rowData"),
     State(STORE_CONFIG, "data"),
@@ -114,11 +117,38 @@ def add_custom_measure_to_db(n_clicks: int, row_data: list[dict], vr_config: dic
         _vr_config.input_database_name = "vrtool_input.db"
 
         # 4. Add custom measures to the initial database, backup is left untouched.
-        _added_measures = add_custom_measures(
-            _vr_config, custom_measure_list_1
-        )
-        return True
-    return False
+        class ModalPopupLogHandler(logging.StreamHandler):
+            """
+            Custom handler declared within this method so it is aware of the provided context
+            and able to trigger the `set_progress` method whilst running in the background.
+            """
+
+            def __enter__(self):
+                """
+                This is required for the `with` statement that allows disposal of the object.
+                """
+                # Add this handler to the VrToolLogger to trace the messages
+                # of the given logging level.
+                VrToolLogger.add_handler(self, logging.INFO)
+                return self
+
+            def __exit__(self, exc_type, exc_value, traceback):
+                """
+                We are only interested into closing the handler stream.
+                This needs to be done here explicitely.
+                """
+                self.close()
+
+            def emit(self, record):
+                return self.format(record)
+
+        with ModalPopupLogHandler() as handler:
+            _added_measures = add_custom_measures(
+                _vr_config, custom_measure_list_1
+            )
+
+        return True, ["Custom measures added successfully."]
+    return False, [""]
 
 
 def convert_custom_table_to_input(row_data: list[dict]) -> list[dict]:
@@ -177,7 +207,7 @@ def fill_custom_measures_table_from_database(vr_config: dict) -> list[dict]:
 
 
 @callback(Output(CUSTOM_MEASURE_MODEL_ID, "is_open", allow_duplicate=True),
-            Input(CLOSE_CUSTOM_MEAS_MODAL_BUTTON_ID, "n_clicks"),
-            prevent_initial_call=True)  # Close the modal
+          Input(CLOSE_CUSTOM_MEAS_MODAL_BUTTON_ID, "n_clicks"),
+          prevent_initial_call=True)  # Close the modal
 def close_custom_measure_modal(n_clicks):
     return False
