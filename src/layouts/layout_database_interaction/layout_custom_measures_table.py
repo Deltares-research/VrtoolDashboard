@@ -13,10 +13,18 @@ columns_defs = [
      "editable": True,
      "initialWidth": 180},
 
+    # {"field": "section_name",
+    #  "headerName": "Sectie",
+    #  "editable": True,
+    #  "initialWidth": 100, },
     {"field": "section_name",
      "headerName": "Sectie",
      "editable": True,
-     "initialWidth": 100, },
+     'cellEditor': 'agSelectCellEditor',
+     'cellEditorParams': {
+         'values': [],
+     },
+     "initialWidth": 140, },
 
     {"field": "mechanism",
      "headerName": "Mechanism",

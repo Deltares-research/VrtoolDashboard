@@ -15,6 +15,7 @@ from src.component_ids import EDITABLE_CUSTOM_MEASURE_TABLE_ID, ADD_CUSTOM_MEASU
     REMOVE_CUSTOM_MEASURE_BUTTON_ID
 from src.constants import Mechanism
 from src.layouts.layout_database_interaction.layout_custom_measures_table import columns_defs
+from src.linear_objects.dike_traject import DikeTraject
 from src.orm.import_database import get_all_custom_measures
 from src.utils.utils import get_vr_config_from_dict
 
@@ -207,9 +208,11 @@ def convert_custom_table_to_input(row_data: list[dict]) -> list[dict]:
 
 @callback(
     Output(EDITABLE_CUSTOM_MEASURE_TABLE_ID, "rowData"),
+    Output(EDITABLE_CUSTOM_MEASURE_TABLE_ID, "columnDefs"),
     Input(STORE_CONFIG, 'data'),
+    Input("stored-data", "data")
 )
-def fill_custom_measures_table_from_database(vr_config: dict) -> list[dict]:
+def fill_custom_measures_table_from_database(vr_config: dict, dike_traject_data: dict) -> list[dict, dict]:
     """
     Fill the custom measure table with all the custom measure present in the database.
     :return:
@@ -220,7 +223,11 @@ def fill_custom_measures_table_from_database(vr_config: dict) -> list[dict]:
 
     df = pd.DataFrame(columns=[col["field"] for col in columns_defs], data=custom_measures)
 
-    return df.to_dict('records')
+    new_columns_defs = columns_defs.copy()
+    new_columns_defs[1]["cellEditorParams"]["values"] = [section.name for section in
+                                                         DikeTraject.deserialize(dike_traject_data).dike_sections]
+
+    return df.to_dict('records'), new_columns_defs
 
 
 @callback(Output(CUSTOM_MEASURE_MODEL_ID, "is_open", allow_duplicate=True),
