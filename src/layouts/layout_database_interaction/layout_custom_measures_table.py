@@ -3,7 +3,8 @@ from dash import html, dcc
 import dash_ag_grid as dag
 import dash_bootstrap_components as dbc
 
-from src.component_ids import EDITABLE_CUSTOM_MEASURE_TABLE_ID, ADD_CUSTOM_MEASURE_BUTTON_ID
+from src.component_ids import EDITABLE_CUSTOM_MEASURE_TABLE_ID, ADD_CUSTOM_MEASURE_BUTTON_ID, \
+    REMOVE_CUSTOM_MEASURE_BUTTON_ID
 from src.constants import Mechanism
 
 columns_defs = [
@@ -12,10 +13,18 @@ columns_defs = [
      "editable": True,
      "initialWidth": 180},
 
+    # {"field": "section_name",
+    #  "headerName": "Sectie",
+    #  "editable": True,
+    #  "initialWidth": 100, },
     {"field": "section_name",
      "headerName": "Sectie",
      "editable": True,
-     "initialWidth": 100, },
+     'cellEditor': 'agSelectCellEditor',
+     'cellEditorParams': {
+         'values': [],
+     },
+     "initialWidth": 140, },
 
     {"field": "mechanism",
      "headerName": "Mechanism",
@@ -43,9 +52,12 @@ columns_defs = [
 
 ]
 df = pd.DataFrame(columns=[col["field"] for col in columns_defs],
-                  data=[["Rock", "7", "Piping", 0, 2000, 3.5]])  # empty dataframe
+                  data=[
+                      # ["Rock", "7", "Piping", 0, 2000, 3.5]
+                  ]
+                  )  # empty dataframe
 
-custom_measure_tab_layout = html.Div([
+left_side = html.Div([
     # add text
     dcc.Markdown(
         '''
@@ -70,35 +82,20 @@ custom_measure_tab_layout = html.Div([
         dashGridOptions={"rowSelection": "multiple", "enableCellTextSelection": True, "ensureDomOrder": True},
 
     ),
+    dbc.Row([
+        dbc.Col([dbc.Button("Custom maatregel toevoegen", id=ADD_CUSTOM_MEASURE_BUTTON_ID, color="primary",
+                            className="mr-1")], md=3),
+        dbc.Col([dbc.Button("Remove custom maatereglen from database", id=REMOVE_CUSTOM_MEASURE_BUTTON_ID,
+                            color="primary", className="mr-1")], md=3),
+    ]),
 
-    dbc.Button("Custom maatregel toevoegen", id=ADD_CUSTOM_MEASURE_BUTTON_ID, color="primary", className="mr-1"),
-    # dash_table.DataTable(
-    #     columns=[
-    #         {"name": ["", "Year"], "id": "year" },
-    #         {"name": ["City", "Montreal"], "id": "montreal", "deletable": [False, True]},
-    #         {"name": ["City", "Toronto"], "id": "toronto", "renamable": True },
-    #         {"name": ["City", "Ottawa"], "id": "ottawa", "hideable": "last"},
-    #         {"name": ["City", "Vancouver"], "id": "vancouver"},
-    #         {"name": ["Climate", "Temperature"], "id": "temp"},
-    #         {"name": ["Climate", "Humidity"], "id": "humidity"},
-    #     ],
-    #     data=[
-    #         {
-    #             "year": i,
-    #             "montreal": i * 10,
-    #             "toronto": i * 100,
-    #             "ottawa": i * -1,
-    #             "vancouver": i * -10,
-    #             "temp": i * -100,
-    #             "humidity": i * 5,
-    #         }
-    #         for i in range(10)
-    #     ],
-    #     editable=True,
-    #
-    #     export_format='xlsx',
-    #     export_headers='display',
-    #     merge_duplicate_headers=True
-    # )
+])
 
+right_side = html.Div([])
+
+custom_measure_tab_layout = html.Div([
+    dbc.Row([
+        dbc.Col([left_side], md=6),
+        dbc.Col([right_side], md=6),
+    ]),
 ])

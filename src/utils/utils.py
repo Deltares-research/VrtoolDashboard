@@ -5,6 +5,9 @@ import numpy as np
 from scipy.stats import norm
 import json
 
+from vrtool.common.enums import MechanismEnum
+from vrtool.defaults.vrtool_config import VrtoolConfig
+
 from src.constants import Mechanism
 
 
@@ -139,3 +142,17 @@ def get_beta(results: dict, year_index: int, mechanism: str) -> float:
         return results["Revetment"][year_index]
     elif mechanism == "STABILITYINNER":
         return results["StabilityInner"][year_index]
+
+
+def get_vr_config_from_dict(vr_config: dict) -> VrtoolConfig:
+    _vr_config = VrtoolConfig()
+    _vr_config.traject = vr_config["traject"]
+    _vr_config.input_directory = Path(vr_config["input_directory"])
+    _vr_config.output_directory = Path(vr_config["output_directory"])
+    _vr_config.input_database_name = vr_config["input_database_name"]
+    _vr_config.T = vr_config["T"]
+
+    for meca in MechanismEnum:
+        if meca.name in vr_config["excluded_mechanisms"]:
+            _vr_config.excluded_mechanisms.append(meca)
+    return _vr_config
