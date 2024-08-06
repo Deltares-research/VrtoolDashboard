@@ -6,13 +6,16 @@ All notable changes to this project will be documented in this file.
 ## v0.0.0 [##/##/####]
 
 ### Added
-None.
+- Safe remove of all custom measures in the database.
 
 ### Changed
 _ Maatregelen tab only shows measures before the final optimization step (eco optimum)
 - Disable POST and GET message in terminal in production
 - Adding custom measures now creates a backup of the db and modified in place the current one.
 - Switching pages keeps the options of dropdown menu "Optimization run selection"
+- Custom measure tables: Section is now dropdown
+- Custom measure tables: Display all measures of the database in the table
+- Custom measure tables: Modal to indicate when a measure is added to the database.
 
 ### Deprecated
 None.
