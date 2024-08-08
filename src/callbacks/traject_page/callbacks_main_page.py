@@ -18,6 +18,7 @@ import json
 
 from src.orm.import_database import get_dike_traject_from_config_ORM, get_name_optimization_runs, \
     get_run_optimization_ids
+from src.utils.utils import get_vr_config_from_dict, export_to_json
 
 
 @callback([Output('dummy_upload_id', 'children'),
@@ -63,13 +64,7 @@ def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
 
                     return _alert, False, {}, "", []
 
-            vr_config = VrtoolConfig()
-            vr_config.traject = json_content['traject']
-            vr_config.input_directory = json_content['input_directory']
-            vr_config.input_database_name = json_content['input_database_name']
-            vr_config.excluded_mechanisms = json_content['excluded_mechanisms']
-            vr_config.T = json_content["T"]
-
+            vr_config = get_vr_config_from_dict(json_content)
             _value_selection_run_dropwdown = "Basisberekening"
 
             # Update the selection Dropwdown with all the names of the optimization runs
@@ -139,13 +134,7 @@ def selection_traject_run(name: str, vr_config: dict) -> dict:
     if vr_config is None or vr_config == {}:
         return dash.no_update
 
-    _vr_config = VrtoolConfig()
-    _vr_config.traject = vr_config['traject']
-    _vr_config.input_directory = Path(vr_config['input_directory'])
-    _vr_config.output_directory = Path(vr_config['output_directory'])
-    _vr_config.input_database_name = vr_config['input_database_name']
-    _vr_config.excluded_mechanisms = vr_config["excluded_mechanisms"]
-    _vr_config.T = vr_config["T"]
+    _vr_config = get_vr_config_from_dict(vr_config)
 
     if name == '':
         return dash.no_update
@@ -160,6 +149,10 @@ def selection_traject_run(name: str, vr_config: dict) -> dict:
         raise ValueError("Name of the Optimization run is not correct.")
 
     _dike_traject.run_name = name
+
+    _path_save_dike_traject = _vr_config.input_directory.joinpath(f"dike_traject_{_vr_config.traject}_{name}.json")
+    export_to_json(_dike_traject.serialize(), _path_save_dike_traject)
+
     return _dike_traject.serialize()
 
 
@@ -202,13 +195,7 @@ def recompute_dike_traject_with_new_greedy_criteria(name: str, name_type: str, b
     if vr_config is None or vr_config == {}:
         return dash.no_update
 
-    _vr_config = VrtoolConfig()
-    _vr_config.traject = vr_config['traject']
-    _vr_config.input_directory = Path(vr_config['input_directory'])
-    _vr_config.output_directory = Path(vr_config['output_directory'])
-    _vr_config.input_database_name = vr_config['input_database_name']
-    _vr_config.excluded_mechanisms = vr_config["excluded_mechanisms"]
-    _vr_config.T = vr_config["T"]
+    _vr_config = get_vr_config_from_dict(vr_config)
 
     if name == "Basisberekening":
         _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=2, run_is_vr=1,
@@ -224,6 +211,7 @@ def recompute_dike_traject_with_new_greedy_criteria(name: str, name_type: str, b
         raise ValueError("Name of the Optimization run is not correct.")
 
     _dike_traject.run_name = name
+
     return _dike_traject.serialize(), n_click
 
 
