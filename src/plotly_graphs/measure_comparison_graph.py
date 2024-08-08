@@ -27,6 +27,15 @@ def plot_measure_results_graph(
     fig = go.Figure()
 
     # Add traces for the measures (uncombined)
+    custom = np.stack(
+        (
+            measure_results["measure"],
+            measure_results.get("dberm", None),
+            measure_results.get("dcrest", None),
+            measure_results.get("measure_result_id", None)  # keep this for the clickData event
+        ),
+        axis=-1,
+    )
     text_list = []
     for _, row in measure_results.iterrows():
         text = f"<b>{row['measure']}<b><br>"
@@ -36,15 +45,16 @@ def plot_measure_results_graph(
             text += f"Dcrest: {row['dcrest']}m<br>"
 
         text += f"Beta: {row['beta']:.2f}<br>"
-        text += f"LCC: €{row['LCC']:.2f} mln<br>"
+        text += f"Kost: €{row['cost'] /1e6:.2f} mln<br>"
 
         text_list.append(text)
 
     fig.add_trace(
         go.Scatter(
             name="Maatregelen",
-            x=measure_results["LCC"] / 1e6,
+            x=measure_results["cost"] / 1e6,
             y=measure_results["beta"],
+            customdata=custom,
             mode="markers",
             marker=dict(
                 size=8,

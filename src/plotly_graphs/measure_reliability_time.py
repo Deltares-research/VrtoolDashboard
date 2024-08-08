@@ -80,7 +80,6 @@ def update_measure_results_over_time_graph(fig: dict, click_data: dict) -> go.Fi
     _fig = go.Figure(fig)
     # update the opacity of the first trace :
     _fig.update_traces(marker=dict(opacity=0.3))
-
     click_custom_data = click_data["points"][0]["customdata"]
     measure_results_ids = list(map(int, click_custom_data.split(" + ")))
 
