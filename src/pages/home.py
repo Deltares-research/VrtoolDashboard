@@ -16,7 +16,11 @@ layout = html.Div([
 
     dcc.Link("Go to traject page", href="/traject-page"),
     html.Br(),
-    dcc.Link("Go to database interaction page", href="/database-interaction-page")
+    dcc.Link("Go to database interaction page", href="/database-interaction-page"),
+    html.Br(),
+    dcc.Link("Go to project page", href="/project-page"),
+    html.Br(),
+    dcc.Link("Go to comparison run page", href="/comparison-run-page"),
     # dcc.Link("Go to region page", href="/traject-page")
 
 ])

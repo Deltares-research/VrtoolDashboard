@@ -9,6 +9,7 @@ from dash_iconify import DashIconify
 def get_icon(icon):
     return DashIconify(icon=icon, height=16)
 
+
 nav_bar_layout_1 = html.Div([
     dbc.NavbarSimple(
         children=[
@@ -16,6 +17,8 @@ nav_bar_layout_1 = html.Div([
             dbc.DropdownMenu([
                 dbc.DropdownMenuItem("Traject", href="/traject-page"),
                 dbc.DropdownMenuItem("Database interaction", href="/database-interaction-page"),
+                dbc.DropdownMenuItem("Project", href="/project-page"),
+                dbc.DropdownMenuItem("Comparison run", href="/comparison-run-page"),
             ],
                 nav=True,
                 label="More Pages",
