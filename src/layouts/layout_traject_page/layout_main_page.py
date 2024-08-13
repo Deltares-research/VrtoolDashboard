@@ -94,7 +94,7 @@ def layout_tab_one() -> html.Div:
                 dbc.Col([layout_download_overview], md=2)
             ]),
 
-            DataTable(id='table'),
+            # DataTable(id='table'),
             html.Div(
                 "De onderstaande kaart geeft een overzicht van de dijkvakken binnen het geïmporteerde dijktraject."),
             html.Div(id='overview_map_div',
