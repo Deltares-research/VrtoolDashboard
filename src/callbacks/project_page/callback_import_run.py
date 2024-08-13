@@ -10,7 +10,7 @@ import pandas as pd
 from src.component_ids import STORE_CONFIG, DROPDOWN_SELECTION_RUN_ID, EDITABLE_TRAJECT_TABLE_ID, \
     SLIDER_YEAR_RELIABILITY_RESULTS_ID, GREEDY_OPTIMIZATION_CRITERIA_BETA, GREEDY_OPTIMIZATION_CRITERIA_YEAR, \
     BUTTON_RECOMPUTE_GREEDY_STEPS, BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA, \
-    STORED_PROJECT_DATA
+    STORED_PROJECT_DATA, EDITABLE_PROJECT_TABLE_ID
 from src.constants import ColorBarResultType, SubResultType, Measures, REFERENCE_YEAR
 from src.linear_objects.dike_traject import DikeTraject
 
@@ -39,36 +39,50 @@ def upload_and_save_in_project_data(contents: str, filename: str, stored_project
         - input_database_name: name of the input database.
         - excluded_mechanisms: list of mechanisms to be excluded from the analysis.
 
-    :param filename: name of the uploaded zip file.
+    :param filename: name of the uploaded file.
 
-    :return: Return a tuple with:
-        - html.Div with the serialized dike traject data.
-        - html.Div with the toast message.
-        - boolean indicating if the upload was successful.
-        - value of the dropdown selection run id.
+    :return:
     """
-    print(1)
     if stored_project_data is None:
         stored_project_data = dict()
     if contents is not None:
-        print(2)
         try:
 
             content_type, content_string = contents.split(',')
 
             decoded = base64.b64decode(content_string)
             json_content = json.loads(decoded)
-            print(3)
-            print(stored_project_data)
             traject_name, run_name = json_content["name"], json_content["run_name"]
-            print(4)
 
-            stored_project_data[f"{traject_name}_{run_name}"] = json_content
-            print(stored_project_data.keys())
-            print(5)
+            stored_project_data[f"{traject_name}|{run_name}"] = json_content
             return stored_project_data
 
         except:
             return dash.no_update
     else:
         return dash.no_update
+
+
+@callback(
+    Output(EDITABLE_PROJECT_TABLE_ID, "rowData"),
+    [Input(STORED_PROJECT_DATA, "data")],
+    allow_duplicate=True,
+    prevent_initial_call=True,
+)
+def fill_table_project_overview(project_data: dict) -> list[dict]:
+    """
+    Fill the overview table with the project data wth the imported dike traject data.
+    :param project_data:
+    :return:
+    """
+    row_data = []
+    if project_data is None:
+        return row_data
+    if project_data == {}:
+        return row_data
+
+    for traject_run in project_data.keys():
+        traject, run = traject_run.split("|")
+        row_data.append({"traject": traject, "run_name": run, "active": False})
+
+    return row_data

@@ -20,7 +20,7 @@ columns_defs = [
      "editable": False,
      "initialWidth": 200},
 
-    {"field": "reinforcement_col",
+    {"field": "active",
      "headerName": "Aktieveer",
      "cellRenderer": "DBC_Switch",
      "editable": True,
