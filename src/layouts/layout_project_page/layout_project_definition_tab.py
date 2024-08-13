@@ -59,7 +59,8 @@ left_side = [
         defaultColDef={"resizable": True,
                        "wrapHeaderText": True,
                        "autoHeaderHeight": True, },
-        dashGridOptions={"rowSelection": "multiple", "enableCellTextSelection": True, "ensureDomOrder": True}
+        dashGridOptions={"rowSelection": "multiple", "enableCellTextSelection": True, "ensureDomOrder": True},
+        persistence=True
 
     ),
 

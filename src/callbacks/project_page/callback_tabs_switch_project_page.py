@@ -11,7 +11,7 @@ from src.layouts.layout_project_page.layout_project_definition_tab import projec
 )
 def render_tab_project_page(active_tab: str) -> html.Div:
     """
-    Renders the content of the selected tab for the general overview page.
+    Renders the content of the selected tab for the project page.
     :param active_tab:
     :return:
     """

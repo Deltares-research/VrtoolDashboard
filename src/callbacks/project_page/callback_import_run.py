@@ -63,23 +63,25 @@ def upload_and_save_in_project_data(contents: str, filename: str, stored_project
         return dash.no_update
 
 
+#
 @callback(
     Output(EDITABLE_PROJECT_TABLE_ID, "rowData"),
-    [Input(STORED_PROJECT_DATA, "data")],
-    allow_duplicate=True,
-    prevent_initial_call=True,
+    Input(STORED_PROJECT_DATA, "data"),
+    Input("tabs_tab_project_page", "active_tab")
 )
-def fill_table_project_overview(project_data: dict) -> list[dict]:
+def fill_table_project_overview(project_data: dict, dummy: str) -> list[dict]:
     """
     Fill the overview table with the project data wth the imported dike traject data.
     :param project_data:
+    :param dummy: Dummy to keep the table displayed when switching tabs and pages.
+
     :return:
     """
     row_data = []
     if project_data is None:
-        return row_data
+        return dash.no_update
     if project_data == {}:
-        return row_data
+        return dash.no_update
 
     for traject_run in project_data.keys():
         traject, run = traject_run.split("|")
