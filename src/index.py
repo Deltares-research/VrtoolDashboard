@@ -23,6 +23,7 @@ import src.callbacks.database_interaction_page.callback_tabs_switch_database
 import src.callbacks.database_interaction_page.callback_custom_measure
 import src.callbacks.project_page.callback_tabs_switch_project_page
 import src.callbacks.project_page.callback_import_run
+import src.callbacks.project_page.callback_project_definition_output
 
 # Define the app layout
 app.layout = dbc.Container(

@@ -67,14 +67,14 @@ left_side = [
 ]
 
 right_side = [
-    html.H2("erg leuk"),
+    html.H2("Project overzicht"),
     html.Div(id=OVERVIEW_PROJECT_MAP_ID,
-             style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
+             style={'width': '100vh', 'height': '90vh', 'border': "2px solid black"}),
 ]
 
 project_definition_tab_layout = html.Div([
     dbc.Row([
-        dbc.Col(left_side, md=6),
-        dbc.Col(right_side, md=6),
+        dbc.Col(left_side, md=5),
+        dbc.Col(right_side, md=7),
     ]),
 ])
