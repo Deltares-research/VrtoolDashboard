@@ -322,7 +322,6 @@ def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
 
     :return:
     """
-
     df = pd.DataFrame(columns=["section_col", "reinforcement_col"])
 
     if dike_traject_data is not None:

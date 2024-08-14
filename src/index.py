@@ -3,7 +3,7 @@ from dash import dcc
 import dash_bootstrap_components as dbc
 import logging
 
-from src.component_ids import STORE_CONFIG
+from src.component_ids import STORE_CONFIG, STORED_PROJECT_DATA
 from src.layouts.layout_database_interaction.layout_modal_add_custom_measure import modal_custom_measure
 from src.layouts.layout_traject_page.layout_modal_measure import modal_measure_reliability
 from src.layouts.layout_traject_page.layout_modal_optimize import modal_optimize
@@ -21,6 +21,9 @@ import src.callbacks.traject_page.callbacks_tab_content
 import src.callbacks.database_interaction_page.callback_optimize
 import src.callbacks.database_interaction_page.callback_tabs_switch_database
 import src.callbacks.database_interaction_page.callback_custom_measure
+import src.callbacks.project_page.callback_tabs_switch_project_page
+import src.callbacks.project_page.callback_import_run
+import src.callbacks.project_page.callback_project_definition_output
 
 # Define the app layout
 app.layout = dbc.Container(
@@ -29,6 +32,7 @@ app.layout = dbc.Container(
     [
         dcc.Store(id='stored-data', data=None, storage_type="session"),
         dcc.Store(id=STORE_CONFIG, data=None, storage_type="session"),
+        dcc.Store(id=STORED_PROJECT_DATA, data=None, storage_type="session"),
         nav_bar_layout_1,
         modal_optimize,  # keep this line to import the modal as closed to the app by default
         modal_custom_measure,
