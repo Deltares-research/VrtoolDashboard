@@ -459,8 +459,9 @@ def plot_dike_traject_measures_map(
         )
         if _measure_results is not None:
             if _measure_results["investment_year"] is not None:
+                min_investment_year = min(_measure_results["investment_year"])
                 if (
-                        _measure_results["investment_year"][0] + REFERENCE_YEAR
+                        min_investment_year + REFERENCE_YEAR
                         <= selected_year
                 ):  # only show measures that are implemented in the selected year
                     if subresult_type == SubResultType.MEASURE_TYPE.name:
@@ -494,7 +495,7 @@ def plot_dike_traject_measures_map(
 
 
 def add_measure_type_trace(
-        fig: go.Figure, section: DikeSection, measure_results: dict, legend_display: dict
+        fig: go.Figure, section: DikeSection, measure_results: dict, legend_display: dict,
 ):
     """
     This function adds a trace to the figure for the measure type.
