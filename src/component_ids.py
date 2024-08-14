@@ -60,3 +60,5 @@ OVERVIEW_PROJECT_MAP_ID = 'overview_project_map_div'
 UPLOAD_DIKE_DATA_ID = 'upload-dike-data'
 STORED_PROJECT_DATA = "stored-project-data"
 EDITABLE_PROJECT_TABLE_ID = "editable_project_table_id"
+TABS_SWITCH_VISUALIZATION_PROJECT_PAGE = "tabs_switch_visualization_project_page"
+CONTENT_TABS_PROJECT_PAGE_OUTPUT_ID = "content_tabs_project_page_output"

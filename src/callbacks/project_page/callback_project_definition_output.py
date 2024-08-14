@@ -16,15 +16,12 @@ def make_graph_overview_dike(project_data: dict, dummy: str) -> dcc.Graph:
 
     :param dike_traject_data: The data of the dike traject to be displayed.
     """
-    print(1)
     if project_data is None or project_data == {}:
         _fig = plot_default_overview_map_dummy()
     else:
-        print(2)
         _fig = plot_project_overview_map(project_data)
-        print(3)
     return dcc.Graph(
         figure=_fig,
-        style={"width": "80%", "height": "80%"},
+        style={"width": "100%", "height": "100%"},
         config={"mapboxAccessToken": get_mapbox_token()},
     )

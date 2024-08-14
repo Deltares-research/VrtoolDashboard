@@ -45,7 +45,7 @@ def plot_project_overview_map(project_data: dict) -> go.Figure:
                 _color = "black"
                 _hovertemplate += f"<br>Niet in analyse"
             else:
-                _color = "red"
+                _color = "grey"
 
             add_section_trace(
                 fig,
