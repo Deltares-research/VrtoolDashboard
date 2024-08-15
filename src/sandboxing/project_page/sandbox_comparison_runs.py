@@ -11,5 +11,4 @@ with open(path_data, "r") as f:
 switch_cost_beta = "COST"
 
 _fig = plot_pf_time_project(data, switch_cost_beta)
-
 _fig.show()
