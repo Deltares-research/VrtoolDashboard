@@ -68,7 +68,8 @@ layout_radio_sub_type_result = dbc.RadioItems(
 layout_radio_length_switch = dbc.RadioItems(
     id="select_length_cost_switch",
     options=[{"label": "Kosten", "value": "COST"},
-             {"label": "Lengte", "value": "LENGTH"}],
+             {"label": "Lengte", "value": "LENGTH"},
+             ],
     value="COST",
 )
 
@@ -82,4 +83,12 @@ layout_radio_greedy_optimization_stop_criteria = dbc.RadioItems(
 
 )
 
+
+layout_radio_cost_beta_switch = dbc.RadioItems(
+    id="select_cost_beta_switch",
+    options=[{"label": "Kosten", "value": "COST"},
+             {"label": "Betrouwbaarheid", "value": "RELIABILITY"},
+             ],
+    value="COST",
+)
 

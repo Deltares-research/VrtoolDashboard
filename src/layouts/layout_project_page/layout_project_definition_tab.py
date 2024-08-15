@@ -5,7 +5,8 @@ from dash.dash_table import DataTable
 from dash.html import Br
 import dash_ag_grid as dag
 
-from src.component_ids import OVERVIEW_PROJECT_MAP_ID, EDITABLE_PROJECT_TABLE_ID
+from src.component_ids import OVERVIEW_PROJECT_MAP_ID, EDITABLE_PROJECT_TABLE_ID, \
+    TABS_SWITCH_VISUALIZATION_PROJECT_PAGE, CONTENT_TABS_PROJECT_PAGE_OUTPUT_ID
 
 df_imported_run_table = pd.DataFrame(columns=["traject", "run_name", "active"], data=[])
 
@@ -60,16 +61,26 @@ left_side = [
                        "wrapHeaderText": True,
                        "autoHeaderHeight": True, },
         dashGridOptions={"rowSelection": "multiple", "enableCellTextSelection": True, "ensureDomOrder": True},
-        persistence=True
+        persistence=True,
+        persistence_type="session",
 
     ),
 
 ]
 
 right_side = [
-    html.H2("Project overzicht"),
-    html.Div(id=OVERVIEW_PROJECT_MAP_ID,
-             style={'width': '100vh', 'height': '90vh', 'border': "2px solid black"}),
+
+    dbc.Tabs(
+        [
+            dbc.Tab(label="Map", tab_id="tab-1111"),
+            dbc.Tab(label="Comparison", tab_id="tab-1112"),
+            dbc.Tab(label="Time",    tab_id="tab-1113"),
+        ],
+        id=TABS_SWITCH_VISUALIZATION_PROJECT_PAGE,
+        active_tab="tab-1111",  # Set the initial active tab
+    ),
+    html.Div(id=CONTENT_TABS_PROJECT_PAGE_OUTPUT_ID),
+
 ]
 
 project_definition_tab_layout = html.Div([
