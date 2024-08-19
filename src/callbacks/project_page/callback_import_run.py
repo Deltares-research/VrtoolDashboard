@@ -10,7 +10,7 @@ import pandas as pd
 from src.component_ids import STORE_CONFIG, DROPDOWN_SELECTION_RUN_ID, EDITABLE_TRAJECT_TABLE_ID, \
     SLIDER_YEAR_RELIABILITY_RESULTS_ID, GREEDY_OPTIMIZATION_CRITERIA_BETA, GREEDY_OPTIMIZATION_CRITERIA_YEAR, \
     BUTTON_RECOMPUTE_GREEDY_STEPS, BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA, \
-    STORED_PROJECT_DATA, EDITABLE_PROJECT_TABLE_ID, MULTI_SELECT_SECTION_FOR_PROJECT_ID
+    STORED_IMPORTED_RUNS_DATA, EDITABLE_PROJECT_TABLE_ID, MULTI_SELECT_SECTION_FOR_PROJECT_ID
 from src.constants import ColorBarResultType, SubResultType, Measures, REFERENCE_YEAR
 from src.linear_objects.dike_traject import DikeTraject
 
@@ -23,10 +23,10 @@ from src.utils.utils import get_vr_config_from_dict, export_to_json
 
 
 @callback(
-    Output(STORED_PROJECT_DATA, "data"),
+    Output(STORED_IMPORTED_RUNS_DATA, "data"),
     [Input('upload-dike-data', 'contents')],
     [State('upload-dike-data', 'filename'),
-     State(STORED_PROJECT_DATA, "data")],
+     State(STORED_IMPORTED_RUNS_DATA, "data")],
     allow_duplicate=True,
     prevent_initial_call=True,
 )
@@ -66,7 +66,7 @@ def upload_and_save_in_project_data(contents: str, filename: str, stored_project
 #
 @callback(
     Output(EDITABLE_PROJECT_TABLE_ID, "rowData"),
-    Input(STORED_PROJECT_DATA, "data"),
+    Input(STORED_IMPORTED_RUNS_DATA, "data"),
     Input("tabs_tab_project_page", "active_tab")
 )
 def fill_table_project_overview(project_data: dict, dummy: str) -> list[dict]:
@@ -77,6 +77,7 @@ def fill_table_project_overview(project_data: dict, dummy: str) -> list[dict]:
 
     :return:
     """
+
     row_data = []
     if project_data is None:
         return dash.no_update

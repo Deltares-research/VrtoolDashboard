@@ -1,7 +1,7 @@
 from dash import html, Output, Input, callback
 
 from src.component_ids import TABS_SWITCH_VISUALIZATION_PROJECT_PAGE, CONTENT_TABS_PROJECT_PAGE_OUTPUT_ID, \
-    PROJECT_COMPARISON_GRAPH_ID, STORED_PROJECT_DATA, SLIDER_YEAR_RELIABILITY_RESULTS_ID, \
+    PROJECT_COMPARISON_GRAPH_ID, STORED_IMPORTED_RUNS_DATA, SLIDER_YEAR_RELIABILITY_RESULTS_ID, \
     PROJECT_COMPARISON_GRAPH_TIME_ID
 from src.layouts.layout_project_page.tabs_output.layout_output_tabs import layout_project_output_tab_one, \
     layout_project_output_tab_two, layout_project_output_tab_three
@@ -39,7 +39,7 @@ def render_project_overview_map_content(active_tab: str) -> html.Div:
 @callback(
     Output(PROJECT_COMPARISON_GRAPH_ID, "figure"),
     [
-        Input(STORED_PROJECT_DATA, "data"),
+        Input(STORED_IMPORTED_RUNS_DATA, "data"),
         Input(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "value"),
     ],
 )
@@ -61,7 +61,7 @@ def make_graph_pf_project_comparison(
 @callback(
     Output(PROJECT_COMPARISON_GRAPH_TIME_ID, "figure"),
     [
-        Input(STORED_PROJECT_DATA, "data"),
+        Input(STORED_IMPORTED_RUNS_DATA, "data"),
         Input("select_cost_beta_switch", "value")
     ],
 )

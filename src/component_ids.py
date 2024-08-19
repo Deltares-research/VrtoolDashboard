@@ -58,7 +58,7 @@ MESSAGE_MODAL_CUSTOM_MEASURE_ID = "message_modal_custom_measure_id"
 
 OVERVIEW_PROJECT_MAP_ID = 'overview_project_map_div'
 UPLOAD_DIKE_DATA_ID = 'upload-dike-data'
-STORED_PROJECT_DATA = "stored-project-data"
+STORED_IMPORTED_RUNS_DATA = "stored-project-data"
 EDITABLE_PROJECT_TABLE_ID = "editable_project_table_id"
 TABLE_PROJECT_SUMMARY_ID = "table_project_summary"
 TABS_SWITCH_VISUALIZATION_PROJECT_PAGE = "tabs_switch_visualization_project_page"

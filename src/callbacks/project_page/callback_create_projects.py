@@ -1,6 +1,6 @@
 from dash import callback, Output, Input, State, dash
 
-from src.component_ids import MULTI_SELECT_SECTION_FOR_PROJECT_ID, EDITABLE_PROJECT_TABLE_ID, STORED_PROJECT_DATA, \
+from src.component_ids import MULTI_SELECT_SECTION_FOR_PROJECT_ID, EDITABLE_PROJECT_TABLE_ID, STORED_IMPORTED_RUNS_DATA, \
     TABLE_PROJECT_SUMMARY_ID, ADD_PROJECT_BUTTON_ID, PROJECT_NAME_INPUT_FIELD_ID, ALERT_PROJECT_CREATION_ID
 from src.linear_objects.dike_traject import DikeTraject
 
@@ -8,7 +8,7 @@ from src.linear_objects.dike_traject import DikeTraject
 @callback(
     Output(MULTI_SELECT_SECTION_FOR_PROJECT_ID, "data"),
     Input(EDITABLE_PROJECT_TABLE_ID, "rowData"),
-    State(STORED_PROJECT_DATA, "data")
+    State(STORED_IMPORTED_RUNS_DATA, "data")
 )
 def get_multiselect_options(table_data: list[dict], project_data: dict) -> list[dict]:
     data = []
@@ -33,12 +33,15 @@ def get_multiselect_options(table_data: list[dict], project_data: dict) -> list[
     Output(ALERT_PROJECT_CREATION_ID, "is_open"),
     Output(ALERT_PROJECT_CREATION_ID, "children"),
     Input(ADD_PROJECT_BUTTON_ID, "n_clicks"),
-    State(STORED_PROJECT_DATA, "data"),
+    Input("tabs_tab_project_page", "active_tab"),
+
+    State(STORED_IMPORTED_RUNS_DATA, "data"),
     State(MULTI_SELECT_SECTION_FOR_PROJECT_ID, "value"),
     State(PROJECT_NAME_INPUT_FIELD_ID, "value"),
     State(TABLE_PROJECT_SUMMARY_ID, "rowData"),
 )
-def add_project_to_table_summary(n_clicks: int, project_data: dict, multi_select_value: list[str], project_name: str,
+def add_project_to_table_summary(n_clicks: int, dummy, project_data: dict, multi_select_value: list[str],
+                                 project_name: str,
                                  current_table_row) -> tuple:
     """
 
