@@ -8,7 +8,7 @@ import dash_mantine_components as dmc
 
 from src.component_ids import OVERVIEW_PROJECT_MAP_ID, EDITABLE_PROJECT_TABLE_ID, \
     TABS_SWITCH_VISUALIZATION_PROJECT_PAGE, CONTENT_TABS_PROJECT_PAGE_OUTPUT_ID, TABLE_PROJECT_SUMMARY_ID, \
-    MULTI_SELECT_SECTION_FOR_PROJECT_ID, ADD_PROJECT_BUTTON_ID, PROJECT_NAME_INPUT_FIELD_ID
+    MULTI_SELECT_SECTION_FOR_PROJECT_ID, ADD_PROJECT_BUTTON_ID, PROJECT_NAME_INPUT_FIELD_ID, ALERT_PROJECT_CREATION_ID
 
 df_imported_run_table = pd.DataFrame(columns=["traject", "run_name", "active"], data=[])
 df_project_summary_table = pd.DataFrame(columns=["project", "section_number", "year", "length"], data=[])
@@ -123,9 +123,11 @@ left_side = [
         dbc.AccordionItem(
             [
                 dmc.Group([
-                    dmc.TextInput(label="Project name", id=PROJECT_NAME_INPUT_FIELD_ID),
+                    dmc.TextInput(label="Project naam", id=PROJECT_NAME_INPUT_FIELD_ID),
                     multi_select,
-                    dmc.Button("Add project", id=ADD_PROJECT_BUTTON_ID),
+                    dbc.Alert(children="", id=ALERT_PROJECT_CREATION_ID, color="danger", is_open=False, dismissable=True),
+                    dmc.Button("Maak project aan", id=ADD_PROJECT_BUTTON_ID),
+                    dmc.Button("Update project", id="update_project_button"),
 
                 ]),
 
