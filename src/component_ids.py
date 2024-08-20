@@ -58,9 +58,19 @@ MESSAGE_MODAL_CUSTOM_MEASURE_ID = "message_modal_custom_measure_id"
 
 OVERVIEW_PROJECT_MAP_ID = 'overview_project_map_div'
 UPLOAD_DIKE_DATA_ID = 'upload-dike-data'
-STORED_PROJECT_DATA = "stored-project-data"
+STORED_IMPORTED_RUNS_DATA = "stored-project-data"
+STORED_PROJECT_OVERVIEW_DATA = "stored-project-overview-data"
 EDITABLE_PROJECT_TABLE_ID = "editable_project_table_id"
+TABLE_PROJECT_SUMMARY_ID = "table_project_summary"
 TABS_SWITCH_VISUALIZATION_PROJECT_PAGE = "tabs_switch_visualization_project_page"
 CONTENT_TABS_PROJECT_PAGE_OUTPUT_ID = "content_tabs_project_page_output"
 PROJECT_COMPARISON_GRAPH_ID = 'project_comparison_graph_of_runs'
 PROJECT_COMPARISON_GRAPH_TIME_ID = 'project_comparison_graph_time'
+MULTI_SELECT_SECTION_FOR_PROJECT_ID = "framework-multi-select"
+ADD_PROJECT_BUTTON_ID = "add_project_button"
+UPDATE_PROJECT_BUTTON_ID = "update_project_button"
+DELETE_PROJECT_BUTTON_ID = "delete_project_button"
+PROJECT_NAME_INPUT_FIELD_ID = "project_name_input_field"
+PROJECT_YEAR_INPUT_FIELD_ID = "project_year_input_field"
+ALERT_PROJECT_CREATION_ID = "alert_project_creation"
+

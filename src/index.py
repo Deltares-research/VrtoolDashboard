@@ -1,12 +1,13 @@
 import dash
-from dash import dcc
+from dash import dcc, _dash_renderer
 import dash_bootstrap_components as dbc
 import logging
 
-from src.component_ids import STORE_CONFIG, STORED_PROJECT_DATA
+from src.component_ids import STORE_CONFIG, STORED_IMPORTED_RUNS_DATA, STORED_PROJECT_OVERVIEW_DATA
 from src.layouts.layout_database_interaction.layout_modal_add_custom_measure import modal_custom_measure
 from src.layouts.layout_traject_page.layout_modal_measure import modal_measure_reliability
 from src.layouts.layout_traject_page.layout_modal_optimize import modal_optimize
+import dash_mantine_components as dmc
 
 from src.app import app
 
@@ -25,15 +26,18 @@ import src.callbacks.project_page.callback_tabs_switch_project_page
 import src.callbacks.project_page.callback_import_run
 import src.callbacks.project_page.callback_project_definition_output
 import src.callbacks.project_page.callback_tabs_output_switch
+import src.callbacks.project_page.callback_create_projects
 
+_dash_renderer._set_react_version("18.2.0")  # keep this line to avoid error with MantineProvider
 # Define the app layout
-app.layout = dbc.Container(
+app.layout = dmc.MantineProvider(dbc.Container(
     id="app-container",
     children=
     [
         dcc.Store(id='stored-data', data=None, storage_type="session"),
         dcc.Store(id=STORE_CONFIG, data=None, storage_type="session"),
-        dcc.Store(id=STORED_PROJECT_DATA, data=None, storage_type="session"),
+        dcc.Store(id=STORED_IMPORTED_RUNS_DATA, data=None, storage_type="session"),
+        dcc.Store(id=STORED_PROJECT_OVERVIEW_DATA, data=None, storage_type="session"),
         nav_bar_layout_1,
         modal_optimize,  # keep this line to import the modal as closed to the app by default
         modal_custom_measure,
@@ -42,7 +46,7 @@ app.layout = dbc.Container(
         dcc.Location(id='url', refresh=True),
     ],
     fluid=True,
-)
+))
 
 # Run the app on localhost:8050
 if __name__ == '__main__':

@@ -38,4 +38,3 @@ _fig = plot_dike_traject_reliability_measures_assessment_map(_dike_traject, 2026
 _fig.update_layout(mapbox=dict(accesstoken=get_mapbox_token()))
 _fig.show()
 
-
