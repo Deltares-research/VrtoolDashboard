@@ -117,7 +117,7 @@ def fill_project_overview_table(stored_project_data: list, dummy) -> list[dict]:
 def update_stored_project(n_clicks: int, multi_select_value: list[str],
                           project_name: str, year: int, stored_project_data: list) -> tuple:
     """
-
+    Update a project based on the project name with the newly selected sections and/or year.
     :param n_clicks: nb of clicks of the button "Update Project"
     :param project_data:
     :param multi_select_value:
@@ -148,4 +148,39 @@ def update_stored_project(n_clicks: int, multi_select_value: list[str],
             if section in multi_select_value:
                 return True, f"Section {section} is already in project {project['project']}", dash.no_update
 
+    return False, dash.no_update, list_to_return
+
+
+@callback(
+    Output(ALERT_PROJECT_CREATION_ID, "is_open", allow_duplicate=True),
+    Output(ALERT_PROJECT_CREATION_ID, "children", allow_duplicate=True),
+    Output(STORED_PROJECT_OVERVIEW_DATA, "data", allow_duplicate=True),
+    Input("delete_project_button", "n_clicks"),
+    State(PROJECT_NAME_INPUT_FIELD_ID, "value"),
+    State(STORED_PROJECT_OVERVIEW_DATA, "data"),
+    allow_duplicate=True,
+    prevent_initial_call=True,
+
+)
+def delete_project(n_clicks: int, project_name: str, stored_project_data: list) -> tuple:
+    """
+    Delete a project based on the project name.
+    :param n_clicks:
+    :param project_name:
+    :param stored_project_data:
+    :return:
+    """
+    if stored_project_data is None:
+        return dash.no_update, dash.no_update, dash.no_update
+
+    list_to_return = []
+    switch = False
+    for project in stored_project_data:
+        if project["project"] == project_name:
+            switch = True
+            continue
+        list_to_return.append(project)
+
+    if not switch:
+        return True, f"Project {project_name} bestaat niet.", dash.no_update
     return False, dash.no_update, list_to_return
