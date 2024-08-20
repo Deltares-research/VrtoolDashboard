@@ -12,6 +12,13 @@ from src.linear_objects.dike_traject import DikeTraject
     State(STORED_IMPORTED_RUNS_DATA, "data")
 )
 def get_multiselect_options(table_data: list[dict], project_data: dict) -> list[dict]:
+    """
+    Get the options for the multi select dropdown based on the stored runs data.
+
+    :param table_data:
+    :param project_data:
+    :return:
+    """
     data = []
 
     for dike_traject_data in project_data.values():
@@ -42,13 +49,14 @@ def get_multiselect_options(table_data: list[dict], project_data: dict) -> list[
 def create_and_store_project(n_clicks: int, multi_select_value: list[str],
                              project_name: str, year: int, stored_project_data: list) -> tuple:
     """
+    Create a project based on the project name with the selected sections and year.
+    :param n_clicks: nb of clicks of the button "Add Project"
+    :param multi_select_value: selected sections
+    :param project_name: name of the project
+    :param year: year of the project
+    :param stored_project_data: list of stored projects
+    :return
 
-    :param n_clicks: nb of clicks of the button "Maak Project"
-    :param project_data:
-    :param multi_select_value:
-    :param project_name:
-    :param current_table_row:
-    :return:
     """
     if stored_project_data is None:
         stored_project_data = []
@@ -92,6 +100,15 @@ def create_and_store_project(n_clicks: int, multi_select_value: list[str],
 
 )
 def fill_project_overview_table(stored_project_data: list, dummy) -> list[dict]:
+    """
+    Fill the overview table with the project data saved in the stored_project_data.
+    :param stored_project_data:
+    :param dummy:
+    :return:
+    """
+    if stored_project_data is None:
+        return dash.no_update
+
     output_list = []
     for project in stored_project_data:
         output_list.append({"project": project["project"],
@@ -129,7 +146,6 @@ def update_stored_project(n_clicks: int, multi_select_value: list[str],
     if stored_project_data is None:
         return dash.no_update, dash.no_update, dash.no_update
 
-    id_list_to_update = None
     list_to_return = []
     for project in stored_project_data:
         if project["project"] == project_name:
