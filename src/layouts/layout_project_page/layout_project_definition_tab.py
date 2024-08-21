@@ -151,6 +151,7 @@ right_side = [
             dbc.Tab(label="Map", tab_id="tab-1111"),
             dbc.Tab(label="Comparison", tab_id="tab-1112"),
             dbc.Tab(label="Time", tab_id="tab-1113"),
+            dbc.Tab(label="Project", tab_id="tab-1114"),
         ],
         id=TABS_SWITCH_VISUALIZATION_PROJECT_PAGE,
         active_tab="tab-1111",  # Set the initial active tab

@@ -7,6 +7,7 @@ import plotly.graph_objects as go
 from src.constants import REFERENCE_YEAR, ResultType, ColorBarResultType
 from src.linear_objects.dike_traject import DikeTraject, cum_cost_steps, get_step_traject_pf, get_initial_assessment_df, \
     get_traject_prob
+from src.linear_objects.project import DikeProject
 from src.utils.utils import pf_to_beta, beta_to_pf
 
 
@@ -126,15 +127,44 @@ def plot_pf_project_comparison(project_data: dict, selected_year) -> go.Figure:
     return fig
 
 
-def plot_pf_time_project(project_data: dict, switch_cost_beta: str):
+def plot_cost_vs_time_projects(projects: list[DikeProject]):
     fig = go.Figure()
 
-    for _, dike_traject_data in project_data.items():
+    years = []
+    costs = []
+    for project in projects:
+        color = f"rgb({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)})"
+        years.append(project.year)
+        costs.append(project.calc_project_cost())
+
+        fig.add_trace(go.Bar(
+            name=project.name,
+            x=[project.year],
+            y=[project.calc_project_cost()],
+            marker=dict(color=color, pattern_shape='/'),
+            # legendgroup=legend_group,
+            # legendgrouptitle=dict(text=legend_group),
+
+        ))
+
+    fig.update_layout(template='plotly_white')
+    fig.update_yaxes(title="Kosten (mln €)")
+    fig.update_xaxes(title="Investering jaar")
+
+    fig.update_layout(barmode='group',
+                      bargroupgap=0.1, )
+
+    return fig
+
+
+def plot_pf_time_runs_comparison(imported_runs_data: dict, switch_cost_beta: str):
+    fig = go.Figure()
+
+    for _, dike_traject_data in imported_runs_data.items():
         dike_traject = DikeTraject.deserialize(dike_traject_data)
         legend_group = dike_traject.name + "|" + dike_traject.run_name
         # pick a random color
         color = f"rgb({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)})"
-
 
         if switch_cost_beta == ColorBarResultType.RELIABILITY.name:
             x_vr = dike_traject.get_cum_cost("vr")
@@ -168,17 +198,17 @@ def plot_pf_time_project(project_data: dict, switch_cost_beta: str):
                                                    "Trajectfaalkans: %{y:.2e}<br>" + hover_extra
                                      ))
             fig.add_trace(go.Scatter(x=years,
-                                        y=y_vr,
-                                        legendgroup=legend_group,
-                                        legendgrouptitle=dict(text=legend_group),
-                                        # customdata=section_order_vr,
-                                        mode='markers+lines',
-                                        name='Veiligheidsrendement',
-                                        line=dict(color='green'),
-                                        marker=dict(size=6, color='green'),
-                                        hovertemplate="<b>%{customdata}</b><br><br>" +
-                                                    "Trajectfaalkans: %{y:.2e}<br>" + hover_extra
-                                        ))
+                                     y=y_vr,
+                                     legendgroup=legend_group,
+                                     legendgrouptitle=dict(text=legend_group),
+                                     # customdata=section_order_vr,
+                                     mode='markers+lines',
+                                     name='Veiligheidsrendement',
+                                     line=dict(color='green'),
+                                     marker=dict(size=6, color='green'),
+                                     hovertemplate="<b>%{customdata}</b><br><br>" +
+                                                   "Trajectfaalkans: %{y:.2e}<br>" + hover_extra
+                                     ))
 
 
         elif switch_cost_beta == ColorBarResultType.COST.name:
@@ -187,7 +217,8 @@ def plot_pf_time_project(project_data: dict, switch_cost_beta: str):
             for section_name in dike_traject.reinforcement_order_dsn:
                 section = dike_traject.get_section(section_name)
                 lcc = section.final_measure_doorsnede["LCC"] / 1e6
-                investment_year = section.final_measure_doorsnede["investment_year"][0]  # TODO: separate for combined measure with different investment years
+                investment_year = section.final_measure_doorsnede["investment_year"][
+                    0]  # TODO: separate for combined measure with different investment years
                 if investment_year not in cost_dict:
                     cost_dict[investment_year] = lcc
                 else:
@@ -242,5 +273,5 @@ def plot_pf_time_project(project_data: dict, switch_cost_beta: str):
     fig.update_xaxes(title="Investering jaar")
 
     fig.update_layout(barmode='group',
-                      bargroupgap=0.1,)
+                      bargroupgap=0.1, )
     return fig
