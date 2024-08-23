@@ -11,7 +11,7 @@ from src.plotly_graphs.pf_length_cost import plot_default_scatter_dummy
 from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
 from src.plotly_graphs.project_page.pf_traject_comparison import plot_pf_project_comparison, \
     plot_pf_time_runs_comparison
-from src.plotly_graphs.project_page.plotly_maps import plot_project_overview_map
+from src.plotly_graphs.project_page.plotly_maps import plot_project_overview_map, plot_comparison_runs_overview_map
 
 
 @callback(
@@ -53,7 +53,7 @@ def make_graph_overview_dike(project_data: dict) -> dcc.Graph:
     if project_data is None or project_data == {}:
         _fig = plot_default_overview_map_dummy()
     else:
-        _fig = plot_project_overview_map(project_data)
+        _fig = plot_comparison_runs_overview_map(project_data)
     return dcc.Graph(
         figure=_fig,
         style={"width": "100%", "height": "100%"},

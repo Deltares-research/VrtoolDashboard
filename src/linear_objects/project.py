@@ -19,9 +19,6 @@ class DikeProject():
         return cost
 
 
-
-
-
 def get_projects_from_saved_data(imported_runs_data: dict, project_overview_data: list[dict]) -> list[DikeProject]:
     """
 
