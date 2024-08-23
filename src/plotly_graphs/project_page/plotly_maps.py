@@ -5,7 +5,7 @@ from src.linear_objects.dike_traject import DikeTraject
 from src.plotly_graphs.plotly_maps import update_layout_map_box, add_section_trace
 
 
-def plot_project_overview_map(project_data: dict) -> go.Figure:
+def plot_project_overview_map(imported_runs_data: dict, project_data: list[dict]) -> go.Figure:
     """
     This function plots an overview Map of the current dike in data. It uses plotly Mapbox for the visualization.
 
@@ -16,7 +16,7 @@ def plot_project_overview_map(project_data: dict) -> go.Figure:
     """
     fig = go.Figure()
     traject_plotted = []
-    for _, dike_traject_data in project_data.items():
+    for _, dike_traject_data in imported_runs_data.items():
         dike_traject = DikeTraject.deserialize(dike_traject_data)
         if dike_traject.name in traject_plotted:
             continue
@@ -28,17 +28,11 @@ def plot_project_overview_map(project_data: dict) -> go.Figure:
                     f"Vaknaam {section.name}<br>" + f"Lengte: {section.length}m <extra></extra>"
             )
 
-            if not section.in_analyse:
-                _color = "black"
-                _hovertemplate += f"<br>Niet in analyse"
-            else:
-                _color = "grey"
-
             add_section_trace(
                 fig,
                 section,
                 name=dike_traject.name,
-                color=_color,
+                color="grey",
                 hovertemplate=_hovertemplate,
             )
             traject_plotted.append(dike_traject.name)
