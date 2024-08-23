@@ -86,7 +86,6 @@ def make_graph_pf_time_comparison(
     return _fig
 
 
-
 @callback(
     Output(PROJECT_COMPARISON_GRAPH_TIME_VS_COST_ID, "figure"),
     [
@@ -102,7 +101,6 @@ def make_graph_pf_time_vs_cost_comparison(
     """
 
     """
-
 
     projects = get_projects_from_saved_data(imported_runs_data, project_overview_data)
 

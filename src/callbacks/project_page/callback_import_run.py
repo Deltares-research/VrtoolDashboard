@@ -30,7 +30,7 @@ from src.utils.utils import get_vr_config_from_dict, export_to_json
     allow_duplicate=True,
     prevent_initial_call=True,
 )
-def upload_and_save_in_project_data(contents: str, filename: str, stored_project_data: dict):
+def upload_and_save_in_project_data(contents: str, filename: str, stored_imported_runs_data: dict):
     """This is the callback for the upload of the config.json file.
 
     :param contents: string content of the uploaded json. The file should content at least:
@@ -43,8 +43,8 @@ def upload_and_save_in_project_data(contents: str, filename: str, stored_project
 
     :return:
     """
-    if stored_project_data is None:
-        stored_project_data = dict()
+    if stored_imported_runs_data is None:
+        stored_imported_runs_data = dict()
     if contents is not None:
         try:
 
@@ -53,9 +53,8 @@ def upload_and_save_in_project_data(contents: str, filename: str, stored_project
             decoded = base64.b64decode(content_string)
             json_content = json.loads(decoded)
             traject_name, run_name = json_content["name"], json_content["run_name"]
-
-            stored_project_data[f"{traject_name}|{run_name}"] = json_content
-            return stored_project_data
+            stored_imported_runs_data[f"{traject_name}"] = json_content
+            return stored_imported_runs_data
 
         except:
             return dash.no_update
@@ -69,7 +68,7 @@ def upload_and_save_in_project_data(contents: str, filename: str, stored_project
     Input(STORED_IMPORTED_RUNS_DATA, "data"),
     Input("tabs_tab_project_page", "active_tab")
 )
-def fill_table_project_overview(project_data: dict, dummy: str) -> list[dict]:
+def fill_table_project_overview(imported_runs_data: dict, dummy: str) -> list[dict]:
     """
     Fill the overview table with the project data wth the imported dike traject data.
     :param project_data:
@@ -77,17 +76,15 @@ def fill_table_project_overview(project_data: dict, dummy: str) -> list[dict]:
 
     :return:
     """
-
     row_data = []
-    if project_data is None:
+    if imported_runs_data is None:
         return dash.no_update
-    if project_data == {}:
+    if imported_runs_data == {}:
         return dash.no_update
 
-    for traject_run in project_data.keys():
-        traject, run = traject_run.split("|")
+    for traject_run in imported_runs_data.keys():
+        traject = traject_run
+        run = imported_runs_data[traject_run]["run_name"]
         row_data.append({"traject": traject, "run_name": run, "active": False})
 
     return row_data
-
-

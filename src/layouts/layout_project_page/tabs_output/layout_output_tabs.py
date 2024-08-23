@@ -77,12 +77,14 @@ def layout_project_output_tab_four() -> html.Div:
             layout_radio_cost_beta_switch,
 
             html.Div(
-                style={'width': '130vh', 'height': '60vh', 'border': "2px solid black"},
+                style={'width': '90vh', 'height': '60vh', 'border': "2px solid black"},
                 children=[
                     dcc.Graph(id=PROJECT_COMPARISON_GRAPH_TIME_VS_COST_ID, figure=plot_default_scatter_dummy(),
-                              style={'width': '80%', 'height': '80%'}, ),
+                              style={'width': '100%', 'height': '100%'}, ),
                     # dcc.Store(id="store_clicked_section", data='all')
                 ],
 
             ),
         ])
+
+
