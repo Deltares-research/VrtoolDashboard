@@ -134,7 +134,6 @@ left_side = [
                     dmc.Button("Update project", id=UPDATE_PROJECT_BUTTON_ID),
                     dmc.Button("Delete project", id=DELETE_PROJECT_BUTTON_ID),
 
-
                 ]),
 
                 table_project_summary
@@ -149,8 +148,6 @@ right_side = [
     dbc.Tabs(
         [
             dbc.Tab(label="Map", tab_id="tab-1111"),
-            dbc.Tab(label="Comparison", tab_id="tab-1112"),
-            dbc.Tab(label="Time", tab_id="tab-1113"),
             dbc.Tab(label="Project", tab_id="tab-1114"),
         ],
         id=TABS_SWITCH_VISUALIZATION_PROJECT_PAGE,

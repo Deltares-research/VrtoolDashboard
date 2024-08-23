@@ -29,6 +29,7 @@ import src.callbacks.project_page.callback_project_definition_output
 import src.callbacks.project_page.callback_tabs_output_switch
 import src.callbacks.project_page.callback_create_projects
 import src.callbacks.comparison_page.callback_import_run
+import src.callbacks.comparison_page.callback_tabs_output_switch
 
 _dash_renderer._set_react_version("18.2.0")  # keep this line to avoid error with MantineProvider
 # Define the app layout

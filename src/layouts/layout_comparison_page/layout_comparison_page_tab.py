@@ -7,7 +7,7 @@ import dash_ag_grid as dag
 import dash_mantine_components as dmc
 
 from src.component_ids import EDITABLE_COMPARISON_TABLE_ID, TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE, \
-    CONTENT_TABS_PROJECT_COMPARISON_OUTPUT_ID
+    CONTENT_TABS_COMPARISON_PAGE_ID
 
 df_imported_run_table = pd.DataFrame(columns=["traject", "run_name", "active"], data=[])
 
@@ -90,7 +90,7 @@ right_side = [
         id=TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE,
         active_tab="tab-11111",  # Set the initial active tab
     ),
-    html.Div(id=CONTENT_TABS_PROJECT_COMPARISON_OUTPUT_ID),
+    html.Div(id=CONTENT_TABS_COMPARISON_PAGE_ID),
 
 ]
 

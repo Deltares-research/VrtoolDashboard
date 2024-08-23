@@ -1,16 +1,13 @@
 from dash import html, Output, Input, callback, State
 
-from src.component_ids import TABS_SWITCH_VISUALIZATION_PROJECT_PAGE, CONTENT_TABS_PROJECT_PAGE_OUTPUT_ID, \
-    PROJECT_COMPARISON_GRAPH_ID, STORED_IMPORTED_RUNS_DATA, SLIDER_YEAR_RELIABILITY_RESULTS_ID, \
-    RUNS_COMPARISON_GRAPH_TIME_ID, PROJECT_COMPARISON_GRAPH_TIME_VS_COST_ID, STORED_PROJECT_OVERVIEW_DATA
+from src.component_ids import (TABS_SWITCH_VISUALIZATION_PROJECT_PAGE, CONTENT_TABS_PROJECT_PAGE_OUTPUT_ID,
+                               STORED_IMPORTED_RUNS_DATA, PROJECT_COMPARISON_GRAPH_TIME_VS_COST_ID,
+                               STORED_PROJECT_OVERVIEW_DATA)
 from src.layouts.layout_project_page.tabs_output.layout_output_tabs import layout_project_output_tab_one, \
-    layout_project_output_tab_two, layout_project_output_tab_three, layout_project_output_tab_four
-from src.linear_objects.dike_traject import DikeTraject
+    layout_project_output_tab_two
 from src.linear_objects.project import DikeProject, get_projects_from_saved_data
 from src.plotly_graphs.pf_length_cost import plot_default_scatter_dummy
-from src.plotly_graphs.project_page.pf_traject_comparison import plot_pf_project_comparison, \
-    plot_pf_time_runs_comparison, plot_cost_vs_time_projects
-from src.utils.utils import export_to_json
+from src.plotly_graphs.project_page.pf_traject_comparison import plot_cost_vs_time_projects
 
 
 @callback(
@@ -29,61 +26,11 @@ def render_project_overview_map_content(active_tab: str) -> html.Div:
     if active_tab == "tab-1111":
         return layout_project_output_tab_one()
 
-    elif active_tab == "tab-1112":
-        return layout_project_output_tab_two()
-
-    elif active_tab == "tab-1113":
-        return layout_project_output_tab_three()
-
     elif active_tab == "tab-1114":
-        return layout_project_output_tab_four()
+        return layout_project_output_tab_two()
 
     else:
         return html.Div("Invalid tab selected")
-
-
-@callback(
-    Output(PROJECT_COMPARISON_GRAPH_ID, "figure"),
-    [
-        Input(STORED_IMPORTED_RUNS_DATA, "data"),
-        Input(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "value"),
-    ],
-)
-def make_graph_pf_project_comparison(
-        project_data: dict,
-        selected_year: float,
-):
-    """
-
-    """
-
-    if project_data is None:
-        return plot_default_scatter_dummy()
-    else:
-        _fig = plot_pf_project_comparison(project_data, selected_year)
-    return _fig
-
-
-@callback(
-    Output(RUNS_COMPARISON_GRAPH_TIME_ID, "figure"),
-    [
-        Input(STORED_IMPORTED_RUNS_DATA, "data"),
-        Input("select_cost_beta_switch", "value")
-    ],
-)
-def make_graph_pf_time_comparison(
-        project_data: dict,
-        switch_cost_beta: str,
-):
-    """
-
-    """
-    export_to_json(project_data, )
-    if project_data is None:
-        return plot_default_scatter_dummy()
-    else:
-        _fig = plot_pf_time_runs_comparison(project_data, switch_cost_beta)
-    return _fig
 
 
 @callback(
@@ -95,18 +42,23 @@ def make_graph_pf_time_comparison(
 
     ],
 )
-def make_graph_pf_time_vs_cost_comparison(
+def make_graph_pf_time_vs_cost_project_comparison(
         switch_cost_beta: str, imported_runs_data: dict, project_overview_data: list
 ):
     """
 
     """
 
-    projects = get_projects_from_saved_data(imported_runs_data, project_overview_data)
-
     if imported_runs_data is None:
         return plot_default_scatter_dummy()
 
+    if project_overview_data is None:
+        return plot_default_scatter_dummy()
+
+
     else:
+        projects = get_projects_from_saved_data(imported_runs_data, project_overview_data)
+
         _fig = plot_cost_vs_time_projects(projects)
+
     return _fig
