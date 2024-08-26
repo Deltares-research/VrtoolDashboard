@@ -21,34 +21,38 @@ def projects_reliability_over_time(projects: list[DikeProject]) -> go.Figure:
     _traject_pf, _ = get_traject_prob(_beta_df)
     _traject_betas = pf_to_beta(_traject_pf)[0]
 
-
-    # years = np.linspace(2025, 2100, 76)
-    # betas = np.zeros((len(all_dike_sections), len(years)))
-
+    # before the first project
     year_start_ini = 2025
     year_end_ini = projects[0].year
     years_ini = np.linspace(year_start_ini, year_end_ini, year_end_ini - year_start_ini + 1)
     years_beta = np.array(projects[0].dike_sections[0].years) + REFERENCE_YEAR
     betas_ini = interpolate_beta_values(years_ini, _traject_betas, years_beta)
 
-    year_start_ini = year_end_ini
-    for project in projects:
-        year_end_ini = project.year
-        print("project", project.name, year_start_ini, year_end_ini)
-
-        _beta_df = get_updated_beta_df(project.dike_sections, _beta_df)
+    for index in range(0, len(projects)-1):
+        year_end_ini = projects[index+1].year
+        year_start_ini = projects[index].year
+        _beta_df = get_updated_beta_df(projects[index].dike_sections, _beta_df)
         _traject_pf = get_traject_prob(_beta_df)[0]
-
         _traject_betas = pf_to_beta(_traject_pf)[0]
 
         years = np.linspace(year_start_ini, year_end_ini, year_end_ini - year_start_ini + 1)
         years_beta = np.array(projects[0].dike_sections[0].years) + REFERENCE_YEAR
-        betas = interpolate_beta_values(years_ini, _traject_betas, years_beta)
+        betas = interpolate_beta_values(years, _traject_betas, years_beta)
 
         #add the first beta value of the project
         years_ini = np.concatenate((years_ini, years))
         betas_ini = np.concatenate((betas_ini, betas))
-        year_start_ini = year_end_ini
+
+    # last project:
+    year_start_ini = projects[-1].year
+    year_end_ini = 2100
+    years = np.linspace(year_start_ini, year_end_ini, year_end_ini - year_start_ini + 1)
+    years_beta = np.array(projects[0].dike_sections[0].years) + REFERENCE_YEAR
+    betas = interpolate_beta_values(years, _traject_betas, years_beta)
+    years_ini = np.concatenate((years_ini, years))
+    betas_ini = np.concatenate((betas_ini, betas))
+
+
 
     _fig.add_trace(go.Scatter(x=years_ini, y=betas_ini, mode='lines+markers', name='Reliability over time'))
 
