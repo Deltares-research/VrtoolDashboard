@@ -11,50 +11,62 @@ from src.utils.utils import pf_to_beta, interpolate_beta_values
 
 def projects_reliability_over_time(projects: list[DikeProject]) -> go.Figure:
     _fig = go.Figure()
-    #first sort projects by year
+    # first sort projects by year
     projects = sorted(projects, key=lambda x: x.year)
-    print("")
-    print("project order", [(project.name, project.year) for project in projects])
+    # add rectangle between years with random color
+    color_1 = "rgba(245, 14, 151, 0.5)"
+    color_2 = "rgba(69, 112, 219, 0.5)"
 
     all_dike_sections = [section for project in projects for section in project.dike_sections]
     _beta_df = get_initial_assessment_df(all_dike_sections)
     _traject_pf, _ = get_traject_prob(_beta_df)
     _traject_betas = pf_to_beta(_traject_pf)[0]
 
-    # before the first project
-    year_start_ini = 2025
-    year_end_ini = projects[0].year
-    years_ini = np.linspace(year_start_ini, year_end_ini, year_end_ini - year_start_ini + 1)
+    # Initialize years and betas
+    years_ini = np.linspace(2025, projects[0].year, projects[0].year - 2025 + 1)
     years_beta = np.array(projects[0].dike_sections[0].years) + REFERENCE_YEAR
     betas_ini = interpolate_beta_values(years_ini, _traject_betas, years_beta)
+    _fig.add_shape(
+        type="rect",
+        x0=2025,
+        x1=projects[0].year,
+        y0=0,
+        y1=5,
+        fillcolor="grey",
+        opacity=0.3,
+        layer="below",
+        line_width=0,
+    )
 
-    for index in range(0, len(projects)-1):
-        year_end_ini = projects[index+1].year
-        year_start_ini = projects[index].year
+    # Loop through projects and update betas
+    for index in range(len(projects)):
+        year_start = projects[index].year
+        year_end = projects[index + 1].year if index < len(projects) - 1 else 2100
         _beta_df = get_updated_beta_df(projects[index].dike_sections, _beta_df)
         _traject_pf = get_traject_prob(_beta_df)[0]
         _traject_betas = pf_to_beta(_traject_pf)[0]
 
-        years = np.linspace(year_start_ini, year_end_ini, year_end_ini - year_start_ini + 1)
-        years_beta = np.array(projects[0].dike_sections[0].years) + REFERENCE_YEAR
+        years = np.linspace(year_start, year_end, year_end - year_start + 1)
         betas = interpolate_beta_values(years, _traject_betas, years_beta)
 
-        #add the first beta value of the project
         years_ini = np.concatenate((years_ini, years))
         betas_ini = np.concatenate((betas_ini, betas))
 
-    # last project:
-    year_start_ini = projects[-1].year
-    year_end_ini = 2100
-    years = np.linspace(year_start_ini, year_end_ini, year_end_ini - year_start_ini + 1)
-    years_beta = np.array(projects[0].dike_sections[0].years) + REFERENCE_YEAR
-    betas = interpolate_beta_values(years, _traject_betas, years_beta)
-    years_ini = np.concatenate((years_ini, years))
-    betas_ini = np.concatenate((betas_ini, betas))
+        _fig.add_shape(
+            type="rect",
+            x0=year_start,
+            x1=year_end,
+            y0=0,
+            y1=5,
+            fillcolor=color_1 if index % 2 == 1 else color_2,
+            opacity=0.3,
+            layer="below",
+            line_width=0,
+        )
 
+    _fig.add_trace(go.Scatter(x=years_ini, y=betas_ini, mode='lines+markers'))
+    _fig.update_layout(xaxis_title='Tijd', yaxis_title="Betrouwbaarheid")
 
-
-    _fig.add_trace(go.Scatter(x=years_ini, y=betas_ini, mode='lines+markers', name='Reliability over time'))
 
     return _fig
 
@@ -95,5 +107,3 @@ def get_updated_beta_df(dike_sections: list[DikeSection], beta_df: pd.DataFrame)
 
     # return beta_df, np.array(traject_pf)
     return beta_df
-
-

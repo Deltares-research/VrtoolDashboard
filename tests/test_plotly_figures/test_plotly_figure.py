@@ -42,4 +42,4 @@ class TestPlotlyScatter:
         _fig.show()
 
         # 3. Assert
-        # assert isinstance(_fig, Figure)
+        assert isinstance(_fig, Figure)
