@@ -64,8 +64,8 @@ EDITABLE_PROJECT_TABLE_ID = "editable_project_table_id"
 TABLE_PROJECT_SUMMARY_ID = "table_project_summary"
 TABS_SWITCH_VISUALIZATION_PROJECT_PAGE = "tabs_switch_visualization_project_page"
 CONTENT_TABS_PROJECT_PAGE_OUTPUT_ID = "content_tabs_project_page_output"
-PROJECT_COMPARISON_GRAPH_ID = 'project_comparison_graph_of_runs'
-PROJECT_COMPARISON_GRAPH_TIME_ID = 'project_comparison_graph_time'
+RUNS_COMPARISON_GRAPH_TIME_ID = 'project_comparison_graph_time'
+PROJECT_COMPARISON_GRAPH_TIME_VS_COST_ID = 'comparison_graph_time_vs_cost'
 MULTI_SELECT_SECTION_FOR_PROJECT_ID = "framework-multi-select"
 ADD_PROJECT_BUTTON_ID = "add_project_button"
 UPDATE_PROJECT_BUTTON_ID = "update_project_button"
@@ -73,4 +73,16 @@ DELETE_PROJECT_BUTTON_ID = "delete_project_button"
 PROJECT_NAME_INPUT_FIELD_ID = "project_name_input_field"
 PROJECT_YEAR_INPUT_FIELD_ID = "project_year_input_field"
 ALERT_PROJECT_CREATION_ID = "alert_project_creation"
+
+
+
+
+######## Comparison page ##########
+
+STORED_RUNS_COMPARISONS_DATA = "stored-runs-comparisons-data"
+EDITABLE_COMPARISON_TABLE_ID = "editable_comparison_table_id"
+TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE = "tabs_switch_visualization_comparison_page"
+CONTENT_TABS_COMPARISON_PAGE_ID = "content_tabs_project_comparison_output"
+OVERVIEW_COMPARISON_MAP_ID = 'overview_comparison_map_div'
+RUNS_COMPARISON_GRAPH_ID = 'project_comparison_graph_of_runs'
 

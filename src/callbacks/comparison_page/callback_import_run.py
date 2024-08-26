@@ -7,10 +7,7 @@ from vrtool.common.enums import MechanismEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
 import pandas as pd
 
-from src.component_ids import STORE_CONFIG, DROPDOWN_SELECTION_RUN_ID, EDITABLE_TRAJECT_TABLE_ID, \
-    SLIDER_YEAR_RELIABILITY_RESULTS_ID, GREEDY_OPTIMIZATION_CRITERIA_BETA, GREEDY_OPTIMIZATION_CRITERIA_YEAR, \
-    BUTTON_RECOMPUTE_GREEDY_STEPS, BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA, \
-    STORED_IMPORTED_RUNS_DATA, EDITABLE_PROJECT_TABLE_ID, MULTI_SELECT_SECTION_FOR_PROJECT_ID
+from src.component_ids import STORED_RUNS_COMPARISONS_DATA, EDITABLE_COMPARISON_TABLE_ID
 from src.constants import ColorBarResultType, SubResultType, Measures, REFERENCE_YEAR
 from src.linear_objects.dike_traject import DikeTraject
 
@@ -23,10 +20,10 @@ from src.utils.utils import get_vr_config_from_dict, export_to_json
 
 
 @callback(
-    Output(STORED_IMPORTED_RUNS_DATA, "data"),
-    [Input('upload-dike-data', 'contents')],
-    [State('upload-dike-data', 'filename'),
-     State(STORED_IMPORTED_RUNS_DATA, "data")],
+    Output(STORED_RUNS_COMPARISONS_DATA, "data"),
+    [Input('upload-dike-data-comparison', 'contents')],
+    [State('upload-dike-data-comparison', 'filename'),
+     State(STORED_RUNS_COMPARISONS_DATA, "data")],
     allow_duplicate=True,
     prevent_initial_call=True,
 )
@@ -46,6 +43,7 @@ def upload_and_save_in_project_data(contents: str, filename: str, stored_importe
     if stored_imported_runs_data is None:
         stored_imported_runs_data = dict()
     if contents is not None:
+
         try:
 
             content_type, content_string = contents.split(',')
@@ -53,7 +51,7 @@ def upload_and_save_in_project_data(contents: str, filename: str, stored_importe
             decoded = base64.b64decode(content_string)
             json_content = json.loads(decoded)
             traject_name, run_name = json_content["name"], json_content["run_name"]
-            stored_imported_runs_data[f"{traject_name}"] = json_content
+            stored_imported_runs_data[f"{traject_name}|{run_name}"] = json_content
             return stored_imported_runs_data
 
         except:
@@ -64,11 +62,10 @@ def upload_and_save_in_project_data(contents: str, filename: str, stored_importe
 
 #
 @callback(
-    Output(EDITABLE_PROJECT_TABLE_ID, "rowData"),
-    Input(STORED_IMPORTED_RUNS_DATA, "data"),
-    Input("tabs_tab_project_page", "active_tab")
+    Output(EDITABLE_COMPARISON_TABLE_ID, "rowData"),
+    Input(STORED_RUNS_COMPARISONS_DATA, "data"),
 )
-def fill_table_project_overview(imported_runs_data: dict, dummy: str) -> list[dict]:
+def fill_table_project_overview(imported_runs_data: dict) -> list[dict]:
     """
     Fill the overview table with the project data wth the imported dike traject data.
     :param project_data:
@@ -76,6 +73,7 @@ def fill_table_project_overview(imported_runs_data: dict, dummy: str) -> list[di
 
     :return:
     """
+
     row_data = []
     if imported_runs_data is None:
         return dash.no_update
@@ -83,8 +81,7 @@ def fill_table_project_overview(imported_runs_data: dict, dummy: str) -> list[di
         return dash.no_update
 
     for traject_run in imported_runs_data.keys():
-        traject = traject_run
-        run = imported_runs_data[traject_run]["run_name"]
+        traject, run = traject_run.split("|")
         row_data.append({"traject": traject, "run_name": run, "active": False})
 
     return row_data

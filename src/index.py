@@ -3,7 +3,8 @@ from dash import dcc, _dash_renderer
 import dash_bootstrap_components as dbc
 import logging
 
-from src.component_ids import STORE_CONFIG, STORED_IMPORTED_RUNS_DATA, STORED_PROJECT_OVERVIEW_DATA
+from src.component_ids import STORE_CONFIG, STORED_IMPORTED_RUNS_DATA, STORED_PROJECT_OVERVIEW_DATA, \
+    STORED_RUNS_COMPARISONS_DATA
 from src.layouts.layout_database_interaction.layout_modal_add_custom_measure import modal_custom_measure
 from src.layouts.layout_traject_page.layout_modal_measure import modal_measure_reliability
 from src.layouts.layout_traject_page.layout_modal_optimize import modal_optimize
@@ -27,6 +28,8 @@ import src.callbacks.project_page.callback_import_run
 import src.callbacks.project_page.callback_project_definition_output
 import src.callbacks.project_page.callback_tabs_output_switch
 import src.callbacks.project_page.callback_create_projects
+import src.callbacks.comparison_page.callback_import_run
+import src.callbacks.comparison_page.callback_tabs_output_switch
 
 _dash_renderer._set_react_version("18.2.0")  # keep this line to avoid error with MantineProvider
 # Define the app layout
@@ -36,6 +39,7 @@ app.layout = dmc.MantineProvider(dbc.Container(
     [
         dcc.Store(id='stored-data', data=None, storage_type="session"),
         dcc.Store(id=STORE_CONFIG, data=None, storage_type="session"),
+        dcc.Store(id=STORED_RUNS_COMPARISONS_DATA, data=None),
         dcc.Store(id=STORED_IMPORTED_RUNS_DATA, data=None, storage_type="session"),
         dcc.Store(id=STORED_PROJECT_OVERVIEW_DATA, data=None, storage_type="session"),
         nav_bar_layout_1,

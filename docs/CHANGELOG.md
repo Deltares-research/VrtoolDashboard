@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Safe remove of all custom measures in the database.
+- Project Page
+- Creation of new projects from user inputs
 
 ### Changed
 _ Maatregelen tab only shows measures before the final optimization step (eco optimum)
