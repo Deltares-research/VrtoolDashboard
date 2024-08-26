@@ -25,7 +25,7 @@ import src.callbacks.database_interaction_page.callback_tabs_switch_database
 import src.callbacks.database_interaction_page.callback_custom_measure
 import src.callbacks.project_page.callback_tabs_switch_project_page
 import src.callbacks.project_page.callback_import_run
-import src.callbacks.project_page.callback_project_definition_output
+import src.callbacks.project_page.callback_project_output_tabs
 import src.callbacks.project_page.callback_tabs_output_switch
 import src.callbacks.project_page.callback_create_projects
 import src.callbacks.comparison_page.callback_import_run
