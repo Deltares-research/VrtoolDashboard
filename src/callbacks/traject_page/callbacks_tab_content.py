@@ -438,7 +438,6 @@ def open_modal_measure_reliability_time(click_data: dict, selected_mechanism, vr
         return True, plot_measure_results_over_time_graph(betas_meas, _betas_ini, selected_mechanism, section_name,
                                                           _years, _measure_data), dash.no_update
     else:
-        print(click_data)
         _fig = update_measure_results_over_time_graph(fig, click_data)
 
         return False, plot_default_scatter_dummy(), _fig

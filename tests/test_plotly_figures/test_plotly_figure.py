@@ -7,7 +7,9 @@ from plotly.graph_objs import Figure
 
 from src.constants import ResultType
 from src.linear_objects.dike_traject import DikeTraject
+from src.linear_objects.project import get_projects_from_saved_data
 from src.plotly_graphs.pf_length_cost import plot_pf_length_cost
+from src.plotly_graphs.project_page.plotly_plots import projects_reliability_over_time
 
 
 class TestPlotlyScatter:
@@ -21,6 +23,23 @@ class TestPlotlyScatter:
 
         # 2. Call
         _fig = plot_pf_length_cost(_dike_traject, 2025, result_type.name, cost_length_switch)
+
+        # 3. Assert
+        assert isinstance(_fig, Figure)
+
+    def test_plot_projects_reliability_over_time_figure(self):
+        # 1. Define data
+        _imported_runs_data = json.load(
+            open(Path(__file__).parent.parent.joinpath("data", "imported_runs_data.json")))
+        _projects_overview_data = json.load(
+            open(Path(__file__).parent.parent.joinpath("data", "projects_overview_data.json")))
+
+        _projects = get_projects_from_saved_data(_imported_runs_data, _projects_overview_data)
+
+        # 2. Call
+
+        _fig = projects_reliability_over_time(_projects)
+        _fig.show()
 
         # 3. Assert
         assert isinstance(_fig, Figure)

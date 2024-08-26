@@ -156,3 +156,26 @@ def get_vr_config_from_dict(vr_config: dict) -> VrtoolConfig:
         if meca.name in vr_config["excluded_mechanisms"]:
             _vr_config.excluded_mechanisms.append(meca)
     return _vr_config
+
+
+def interpolate_beta_values(years_output: np.ndarray, betas: np.ndarray, years: np.ndarray) -> np.ndarray:
+    """
+    Function to interpolate the beta values for the years in the years_output list.
+    If years_output is before years, then assigne the first value from betas.
+    If years_output is after years, then assigne the last value from betas.
+
+
+    :param years_output: The years for which the beta values need to be interpolated.
+    :param betas: The beta values for the years in the years list.
+    :param years: The years for which the beta values are known.
+    :return: The interpolated beta values for the years_output list.
+    """
+    _betas_output = np.zeros(len(years_output))
+    for i, year in enumerate(years_output):
+        if year < years[0]:
+            _betas_output[i] = betas[0]
+        elif year > years[-1]:
+            _betas_output[i] = betas[-1]
+        else:
+            _betas_output[i] = np.interp(year, years, betas)
+    return _betas_output
