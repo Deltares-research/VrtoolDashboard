@@ -1,6 +1,7 @@
 from dash import callback, Output, Input, State, dash
 
-from src.component_ids import MULTI_SELECT_SECTION_FOR_PROJECT_ID, EDITABLE_PROJECT_TABLE_ID, STORED_IMPORTED_RUNS_DATA, \
+from src.component_ids import MULTI_SELECT_SECTION_FOR_PROJECT_ID, EDITABLE_IMPORTED_RUNS_TABLE_ID, \
+    STORED_IMPORTED_RUNS_DATA, \
     TABLE_PROJECT_SUMMARY_ID, ADD_PROJECT_BUTTON_ID, PROJECT_NAME_INPUT_FIELD_ID, ALERT_PROJECT_CREATION_ID, \
     STORED_PROJECT_OVERVIEW_DATA, UPDATE_PROJECT_BUTTON_ID, PROJECT_YEAR_INPUT_FIELD_ID
 from src.linear_objects.dike_traject import DikeTraject
@@ -8,7 +9,7 @@ from src.linear_objects.dike_traject import DikeTraject
 
 @callback(
     Output(MULTI_SELECT_SECTION_FOR_PROJECT_ID, "data"),
-    Input(EDITABLE_PROJECT_TABLE_ID, "rowData"),
+    Input(EDITABLE_IMPORTED_RUNS_TABLE_ID, "rowData"),
     State(STORED_IMPORTED_RUNS_DATA, "data")
 )
 def get_multiselect_options(table_data: list[dict], project_data: dict) -> list[dict]:
@@ -32,7 +33,6 @@ def get_multiselect_options(table_data: list[dict], project_data: dict) -> list[
         for section in dike_traject.dike_sections:
             group_dict["items"].append({"label": section.name, "value": section.name + "|" + dike_traject.name})
         data.append(group_dict)
-
     return data
 
 
@@ -200,3 +200,27 @@ def delete_project(n_clicks: int, project_name: str, stored_project_data: list) 
     if not switch:
         return True, f"Project {project_name} bestaat niet.", dash.no_update
     return False, dash.no_update, list_to_return
+
+
+@callback(Output(MULTI_SELECT_SECTION_FOR_PROJECT_ID, "value"),
+          Output(PROJECT_NAME_INPUT_FIELD_ID, "value"),
+          Input(TABLE_PROJECT_SUMMARY_ID, "selectedRows"),
+          State(STORED_PROJECT_OVERVIEW_DATA, "data"),
+          )
+def update_section_selection_on_click_event(selected_row: dict, project_data_overview) -> tuple[list[str], str]:
+    """
+    Update the selected sections in the multi select dropdown when a row is selected in the project overview table.
+    :param selected_row:
+    :param project_data_overview:
+    :return:
+    """
+    if selected_row is None:
+        return dash.no_update, dash.no_update
+    if selected_row == []:
+        return dash.no_update
+    selected_project_name = selected_row[0]['project']
+    for project in project_data_overview:
+        if project['project'] == selected_project_name:
+            selected_sections = project['sections']
+            return selected_sections, selected_project_name
+    return dash.no_update, dash.no_update

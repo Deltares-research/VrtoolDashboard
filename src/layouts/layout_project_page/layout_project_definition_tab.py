@@ -6,7 +6,7 @@ from dash.html import Br
 import dash_ag_grid as dag
 import dash_mantine_components as dmc
 
-from src.component_ids import OVERVIEW_PROJECT_MAP_ID, EDITABLE_PROJECT_TABLE_ID, \
+from src.component_ids import OVERVIEW_PROJECT_MAP_ID, EDITABLE_IMPORTED_RUNS_TABLE_ID, \
     TABS_SWITCH_VISUALIZATION_PROJECT_PAGE, CONTENT_TABS_PROJECT_PAGE_OUTPUT_ID, TABLE_PROJECT_SUMMARY_ID, \
     MULTI_SELECT_SECTION_FOR_PROJECT_ID, ADD_PROJECT_BUTTON_ID, PROJECT_NAME_INPUT_FIELD_ID, ALERT_PROJECT_CREATION_ID, \
     UPDATE_PROJECT_BUTTON_ID, PROJECT_YEAR_INPUT_FIELD_ID, DELETE_PROJECT_BUTTON_ID
@@ -57,7 +57,7 @@ columns_defs_2 = [
 ]
 
 table_importe_dike_data = dag.AgGrid(
-    id=EDITABLE_PROJECT_TABLE_ID,
+    id=EDITABLE_IMPORTED_RUNS_TABLE_ID,
     rowData=df_imported_run_table.to_dict('records'),
     columnDefs=columns_defs_1,
     defaultColDef={"resizable": True,
