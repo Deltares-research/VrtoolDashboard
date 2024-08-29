@@ -10,7 +10,7 @@ import pandas as pd
 from src.component_ids import STORE_CONFIG, DROPDOWN_SELECTION_RUN_ID, EDITABLE_TRAJECT_TABLE_ID, \
     SLIDER_YEAR_RELIABILITY_RESULTS_ID, GREEDY_OPTIMIZATION_CRITERIA_BETA, GREEDY_OPTIMIZATION_CRITERIA_YEAR, \
     BUTTON_RECOMPUTE_GREEDY_STEPS, BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA, \
-    STORED_IMPORTED_RUNS_DATA, EDITABLE_PROJECT_TABLE_ID, MULTI_SELECT_SECTION_FOR_PROJECT_ID
+    STORED_IMPORTED_RUNS_DATA, EDITABLE_IMPORTED_RUNS_TABLE_ID, MULTI_SELECT_SECTION_FOR_PROJECT_ID
 from src.constants import ColorBarResultType, SubResultType, Measures, REFERENCE_YEAR
 from src.linear_objects.dike_traject import DikeTraject
 
@@ -64,7 +64,7 @@ def upload_and_save_in_project_data(contents: str, filename: str, stored_importe
 
 #
 @callback(
-    Output(EDITABLE_PROJECT_TABLE_ID, "rowData"),
+    Output(EDITABLE_IMPORTED_RUNS_TABLE_ID, "rowData"),
     Input(STORED_IMPORTED_RUNS_DATA, "data"),
     Input("tabs_tab_project_page", "active_tab")
 )
