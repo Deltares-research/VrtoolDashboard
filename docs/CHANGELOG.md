@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Safe remove of all custom measures in the database.
 - Project Page
 - Creation of new projects from user inputs
+- Display anchored piles
 
 ### Changed
 _ Maatregelen tab only shows measures before the final optimization step (eco optimum)

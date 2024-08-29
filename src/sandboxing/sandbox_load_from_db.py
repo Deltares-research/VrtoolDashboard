@@ -51,7 +51,8 @@ _vr_config = VrtoolConfig().from_json(Path(
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Desktop\projects\VRTools\database\24-3\config.json"
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\eduard_debug\optimized_results\optimized_results\config.json"
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\test_lisa_24_07\config.json"
-    r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\test_stephan_6_august\config.json"
+    # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\test_stephan_6_august\config.json"
+    r"N:\Projects\11209000\11209353\B. Measurements and calculations\008 - Resultaten Proefvlucht\WSRL\24-3\traject24-3_9juli2024\vrtool_database_test_discounting\config.json"
 
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\COP demo\38-1 base river case\config.json"
 
@@ -78,14 +79,14 @@ print(f"Time to get dike traject from ORM: {t1 - t0}")
 
 # _fig = plot_dike_traject_reliability_initial_assessment_map(_traject_db, 2025, ResultType.INTERPRETATION_CLASS.name,
 #                                                             mechanism_type=Mechanism.SECTION.name, )
-# _fig = plot_dike_traject_reliability_measures_assessment_map(_traject_db, 2025,
-#                                                              result_type=ResultType.INTERPRETATION_CLASS.name,
-#                                                              calc_type=CalcType.VEILIGHEIDSRENDEMENT.name,
-#                                                              colorbar_result_type=ColorBarResultType.MEASURE.name,
-#                                                              mechanism_type=Mechanism.SECTION.name,
-#                                                              sub_result_type=SubResultType.INVESTMENT_YEAR.name,
-#                                                              # sub_result_type=SubResultType.BERM_WIDENING.name,
-#                                                              )
+_fig = plot_dike_traject_reliability_measures_assessment_map(_traject_db, 2025,
+                                                             result_type=ResultType.INTERPRETATION_CLASS.name,
+                                                             calc_type=CalcType.VEILIGHEIDSRENDEMENT.name,
+                                                             colorbar_result_type=ColorBarResultType.MEASURE.name,
+                                                             mechanism_type=Mechanism.SECTION.name,
+                                                             sub_result_type=SubResultType.MEASURE_TYPE.name,
+                                                             # sub_result_type=SubResultType.BERM_WIDENING.name,
+                                                             )
 
 # add token of the mapbox account
 
@@ -94,7 +95,7 @@ print(f"Time to get dike traject from ORM: {t1 - t0}")
 #                                                              colorbar_result_type=ColorBarResultType.MEASURE.name,
 #                                                              mechanism_type=Mechanism.SECTION.name,
 #                                                              sub_result_type=SubResultType.MEASURE_TYPE.name, )
-_fig = plot_pf_length_cost(_traject_db, 2025, result_type=ResultType.RELIABILITY.name, cost_length_switch="COST")
+# _fig = plot_pf_length_cost(_traject_db, 2025, result_type=ResultType.RELIABILITY.name, cost_length_switch="COST")
 t2 = time.time()
 print(f"Time to plot: {t2 - t1}")
 

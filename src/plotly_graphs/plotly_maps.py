@@ -440,6 +440,7 @@ def plot_dike_traject_measures_map(
         "VZG": True,
         "screen": True,
         "diaphram wall": True,
+        "sheetpile": True,
         "crest_heightening": True,
         "berm_widening": True,
         "revetment": True,
@@ -504,7 +505,6 @@ def add_measure_type_trace(
     :param measure_results:
     :param legend_display: dict to avoid double legend entries
     """
-
     if MeasureTypeEnum.SOIL_REINFORCEMENT.name in measure_results[
         "type"] or MeasureTypeEnum.SOIL_REINFORCEMENT.legacy_name in measure_results[
         "type"] or MeasureTypeEnum.SOIL_REINFORCEMENT_WITH_STABILITY_SCREEN.name in measure_results[
@@ -636,6 +636,32 @@ def add_measure_type_trace(
             )
         )
         legend_display["diaphram wall"] = False
+
+    if MeasureTypeEnum.ANCHORED_SHEETPILE.name in measure_results[
+        "type"] or MeasureTypeEnum.ANCHORED_SHEETPILE.legacy_name in measure_results["type"]:
+        _coordinates_wgs = GWSRDConvertor.generate_coordinates_from_buffer(
+            section.coordinates_rd, buffersize=60
+        )
+
+        fig.add_trace(
+            go.Scattermapbox(
+                name="Damwandconstructie",
+                legendgroup="sheetpile",
+                mode="lines",
+                lat=[x[0] for x in _coordinates_wgs],
+                lon=[x[1] for x in _coordinates_wgs],
+                fillcolor="grey",
+                line={"width": 1, "color": "grey"},
+                fill="toself",
+                showlegend=legend_display.get("sheetpile"),
+                hovertemplate=f"Vaknaam: {section.name}<br>"
+                              f"Custom maatregel: {measure_results['name']} <br>"
+                              f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>"
+                              f"<extra></extra>",
+            )
+        )
+        legend_display["sheetpile"] = False
+
 
     if MeasureTypeEnum.REVETMENT.name in measure_results["type"] or MeasureTypeEnum.REVETMENT.legacy_name in \
             measure_results["type"]:
