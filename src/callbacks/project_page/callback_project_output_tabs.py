@@ -15,7 +15,7 @@ from src.utils.utils import export_to_json
           [Input(STORED_IMPORTED_RUNS_DATA, "data"),
            State(STORED_PROJECT_OVERVIEW_DATA, "data"),
            Input("tabs_tab_project_page", "active_tab")])
-def make_graph_overview_dike(imported_runs_data: dict, project_data: list[dict], dummy: str) -> dcc.Graph:
+def make_graph_overview_area_projects(imported_runs_data: dict, project_data: list[dict], dummy: str) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
 
@@ -24,7 +24,10 @@ def make_graph_overview_dike(imported_runs_data: dict, project_data: list[dict],
     if imported_runs_data is None or imported_runs_data == {}:
         _fig = plot_default_overview_map_dummy()
     else:
-        _fig = plot_project_overview_map(imported_runs_data, project_data)
+        _projects = get_projects_from_saved_data(imported_runs_data, project_data)
+
+        # 2. Call
+        _fig = plot_project_overview_map(_projects)
     return dcc.Graph(
         figure=_fig,
         style={"width": "100%", "height": "100%"},

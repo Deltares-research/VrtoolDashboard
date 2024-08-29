@@ -4,7 +4,7 @@ from typing import Optional
 import numpy as np
 import plotly.graph_objects as go
 
-from src.constants import REFERENCE_YEAR, ResultType, ColorBarResultType
+from src.constants import REFERENCE_YEAR, ResultType, ColorBarResultType, PROJECTS_COLOR_SEQUENCE
 from src.linear_objects.dike_traject import DikeTraject, cum_cost_steps, get_step_traject_pf, get_initial_assessment_df, \
     get_traject_prob
 from src.linear_objects.project import DikeProject
@@ -132,8 +132,8 @@ def plot_cost_vs_time_projects(projects: list[DikeProject]):
 
     years = []
     costs = []
-    for project in projects:
-        color = f"rgb({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)})"
+    for i, project in enumerate(projects):
+        _color = PROJECTS_COLOR_SEQUENCE[i]
         years.append(project.year)
         costs.append(project.calc_project_cost())
 
@@ -141,7 +141,7 @@ def plot_cost_vs_time_projects(projects: list[DikeProject]):
             name=project.name,
             x=[project.year],
             y=[project.calc_project_cost()],
-            marker=dict(color=color, pattern_shape='/'),
+            marker=dict(color=_color, pattern_shape='/'),
             # legendgroup=legend_group,
             # legendgrouptitle=dict(text=legend_group),
 

@@ -1,11 +1,14 @@
 import numpy as np
 import plotly.graph_objects as go
 
+from src.constants import PROJECTS_COLOR_SEQUENCE
 from src.linear_objects.dike_traject import DikeTraject
+from src.linear_objects.project import DikeProject
 from src.plotly_graphs.plotly_maps import update_layout_map_box, add_section_trace
+from src.utils.gws_convertor import GWSRDConvertor
 
 
-def plot_project_overview_map(imported_runs_data: dict, project_data: list[dict]) -> go.Figure:
+def plot_project_overview_map(projects: list[DikeProject]) -> go.Figure:
     """
     This function plots an overview Map of the current dike in data. It uses plotly Mapbox for the visualization.
 
@@ -15,29 +18,43 @@ def plot_project_overview_map(imported_runs_data: dict, project_data: list[dict]
     :return:
     """
     fig = go.Figure()
-    traject_plotted = []
-    for _, dike_traject_data in imported_runs_data.items():
-        dike_traject = DikeTraject.deserialize(dike_traject_data)
-        if dike_traject.name in traject_plotted:
-            continue
+    for i, project in enumerate(projects):
 
-        for index, section in enumerate(dike_traject.dike_sections):
-
+        _color = PROJECTS_COLOR_SEQUENCE[i]
+        for index, section in enumerate(project.dike_sections):
             # if a section is not in analyse, skip it, and it turns blank on the map.
             _hovertemplate = (
+                    f"Traject {project.name}<br>" +
                     f"Vaknaam {section.name}<br>" + f"Lengte: {section.length}m <extra></extra>"
             )
+            _coordinates_wgs = [
+                GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in section.coordinates_rd
+            ]  # convert in GWS coordinates:
 
-            add_section_trace(
-                fig,
-                section,
-                name=dike_traject.name,
-                color="grey",
-                hovertemplate=_hovertemplate,
+            fig.add_trace(
+                go.Scattermapbox(
+                    mode="lines+text",
+                    lat=[x[0] for x in _coordinates_wgs],
+                    lon=[x[1] for x in _coordinates_wgs],
+                    marker={"size": 10, "color": _color},
+                    line={"width": 10, "color": _color},
+                    name=project.name,
+                    legendgroup=project.name,
+                    hovertemplate=_hovertemplate,
+                    showlegend=True if index == 0 else False,
+                )
             )
-            traject_plotted.append(dike_traject.name)
+            if index == int(len(project.dike_sections)/2):
+                fig.add_trace(go.Scattermapbox(
+                    mode="text",
+                    lat=[[x[0] for x in _coordinates_wgs][index]],
+                    lon=[[x[1] for x in _coordinates_wgs][index]],
+                    showlegend=False,
+                    text=project.name,
+                    textfont=dict(size=15)
 
-        # Update layout of the figure and add token for mapbox
+                ))
+
         _middle_point = (52.155170, 5.387207)  # lat/lon of Amersfoort
         update_layout_map_box(fig, _middle_point, zoom=7)
 
