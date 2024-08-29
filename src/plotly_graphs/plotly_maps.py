@@ -810,6 +810,7 @@ def add_section_trace(
         showlegend: bool = False,
         legendgroup: str = None,
         opacity: float = 1,
+        width: int = 10,
 ):
     """
     Add a trace of a section to the figure which the given specifications for color and hover, etc...
@@ -824,7 +825,7 @@ def add_section_trace(
             lat=[x[0] for x in _coordinates_wgs],
             lon=[x[1] for x in _coordinates_wgs],
             marker={"size": 10, "color": color},
-            line={"width": 5, "color": color},
+            line={"width": width, "color": color},
             name=name,
             opacity=opacity,
             legendgroup=legendgroup,
