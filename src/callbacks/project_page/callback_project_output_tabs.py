@@ -23,7 +23,11 @@ def make_graph_overview_area_projects(imported_runs_data: dict, project_data: li
     """
     if imported_runs_data is None or imported_runs_data == {}:
         _fig = plot_default_overview_map_dummy()
+
+    if project_data is None:
+        _fig = plot_default_overview_map_dummy()
     else:
+
         _projects = get_projects_from_saved_data(imported_runs_data, project_data)
 
         # 2. Call
