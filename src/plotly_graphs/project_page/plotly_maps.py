@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 from src.constants import PROJECTS_COLOR_SEQUENCE
 from src.linear_objects.dike_traject import DikeTraject
 from src.linear_objects.project import DikeProject
-from src.plotly_graphs.plotly_maps import update_layout_map_box, add_section_trace
+from src.plotly_graphs.plotly_maps import update_layout_map_box, add_section_trace, plot_default_overview_map_dummy
 from src.utils.gws_convertor import GWSRDConvertor
 
 
@@ -18,6 +18,8 @@ def plot_project_overview_map(projects: list[DikeProject]) -> go.Figure:
     :return:
     """
     fig = go.Figure()
+    if len(projects) == 0:
+        return plot_default_overview_map_dummy()
     for i, project in enumerate(projects):
 
         _color = PROJECTS_COLOR_SEQUENCE[i]
@@ -44,7 +46,7 @@ def plot_project_overview_map(projects: list[DikeProject]) -> go.Figure:
                     showlegend=True if index == 0 else False,
                 )
             )
-            if index == int(len(project.dike_sections)/2):
+            if index == int(len(project.dike_sections) / 2):
                 fig.add_trace(go.Scattermapbox(
                     mode="text",
                     lat=[[x[0] for x in _coordinates_wgs][index]],
