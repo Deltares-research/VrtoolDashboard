@@ -9,7 +9,9 @@ from src.constants import ResultType
 from src.linear_objects.dike_traject import DikeTraject
 from src.linear_objects.project import get_projects_from_saved_data
 from src.plotly_graphs.pf_length_cost import plot_pf_length_cost
+from src.plotly_graphs.project_page.plotly_maps import plot_cost_vs_time_projects
 from src.plotly_graphs.project_page.plotly_plots import projects_reliability_over_time
+import pytest
 
 
 class TestPlotlyScatter:
@@ -32,14 +34,33 @@ class TestPlotlyScatter:
         _imported_runs_data = json.load(
             open(Path(__file__).parent.parent.joinpath("data", "imported_runs_data.json")))
         _projects_overview_data = json.load(
-            open(Path(__file__).parent.parent.joinpath("data", "projects_overview_data.json")))
+            open(Path(__file__).parent.parent.joinpath("data", "projects_overview_data_new.json")))
 
         _projects = get_projects_from_saved_data(_imported_runs_data, _projects_overview_data)
 
         # 2. Call
 
         _fig = projects_reliability_over_time(_projects)
+
+        # 3. Assert
+        assert isinstance(_fig, Figure)
+
+    def test_plot_projects_cost_over_time(self):
+        # 1. Define data
+        _imported_runs_data = json.load(
+            open(Path(__file__).parent.parent.joinpath("data", "imported_runs_data.json")))
+        _projects_overview_data = json.load(
+            open(Path(__file__).parent.parent.joinpath("data", "projects_overview_data_new.json")))
+
+        _projects = get_projects_from_saved_data(_imported_runs_data, _projects_overview_data)
+
+        # 2. Call
+        _fig = plot_cost_vs_time_projects(_projects)
         _fig.show()
 
         # 3. Assert
         assert isinstance(_fig, Figure)
+
+
+
+
