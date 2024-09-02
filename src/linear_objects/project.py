@@ -48,6 +48,7 @@ def get_projects_from_saved_data(imported_runs_data: dict, project_overview_data
                     break
 
             section = dike_traject.get_section(section_name)
+            section.parent_traject_name = traject_name
             sections.append(section)
 
         project = DikeProject(

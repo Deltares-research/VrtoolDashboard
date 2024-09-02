@@ -129,10 +129,11 @@ def plot_cost_vs_time_projects(projects: list[DikeProject]):
         _color = PROJECTS_COLOR_SEQUENCE[i]
 
         # Split the cost equally over the duration of the project
-        cost = project.calc_project_cost() / (project.end_year - project.start_year + 1)
+        cost = project.calc_project_cost()
+        cost_yearly = cost / (project.end_year - project.start_year + 1)
         cost_list = np.zeros(len(years))
         for year in range(project.start_year, project.end_year + 1):
-            cost_list[year - start_program] = cost
+            cost_list[year - start_program] = cost_yearly
 
         fig.add_trace(go.Bar(
             name=project.name,
@@ -140,6 +141,11 @@ def plot_cost_vs_time_projects(projects: list[DikeProject]):
             y=cost_list,
             offset=0,
             marker=dict(color=_color, pattern_shape='/'),
+
+            # hovertemplate with start and end year, total cost cost of project
+            hovertemplate=f"{project.name}<br>Startjaar: {project.start_year}<br>"
+                          f"Eindjaar: {project.end_year}<br>"
+                          f"Kosten: {cost / 1e6:.1f} mln €<extra></extra>"
         ))
 
     fig.update_layout(template='plotly_white')
