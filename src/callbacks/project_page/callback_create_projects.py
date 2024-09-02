@@ -3,7 +3,8 @@ from dash import callback, Output, Input, State, dash
 from src.component_ids import MULTI_SELECT_SECTION_FOR_PROJECT_ID, EDITABLE_IMPORTED_RUNS_TABLE_ID, \
     STORED_IMPORTED_RUNS_DATA, \
     TABLE_PROJECT_SUMMARY_ID, ADD_PROJECT_BUTTON_ID, PROJECT_NAME_INPUT_FIELD_ID, ALERT_PROJECT_CREATION_ID, \
-    STORED_PROJECT_OVERVIEW_DATA, UPDATE_PROJECT_BUTTON_ID, PROJECT_YEAR_INPUT_FIELD_ID
+    STORED_PROJECT_OVERVIEW_DATA, UPDATE_PROJECT_BUTTON_ID, PROJECT_START_YEAR_INPUT_FIELD_ID, \
+    PROJECT_END_YEAR_INPUT_FIELD_ID
 from src.linear_objects.dike_traject import DikeTraject
 
 
@@ -43,11 +44,12 @@ def get_multiselect_options(table_data: list[dict], project_data: dict) -> list[
     Input(ADD_PROJECT_BUTTON_ID, "n_clicks"),
     State(MULTI_SELECT_SECTION_FOR_PROJECT_ID, "value"),
     State(PROJECT_NAME_INPUT_FIELD_ID, "value"),
-    State(PROJECT_YEAR_INPUT_FIELD_ID, "value"),
+    State(PROJECT_START_YEAR_INPUT_FIELD_ID, "value"),
+    State(PROJECT_END_YEAR_INPUT_FIELD_ID, "value"),
     State(STORED_PROJECT_OVERVIEW_DATA, "data")
 )
 def create_and_store_project(n_clicks: int, multi_select_value: list[str],
-                             project_name: str, year: int, stored_project_data: list) -> tuple:
+                             project_name: str, start_year: int, end_year: int, stored_project_data: list) -> tuple:
     """
     Create a project based on the project name with the selected sections and year.
     :param n_clicks: nb of clicks of the button "Add Project"
@@ -70,8 +72,11 @@ def create_and_store_project(n_clicks: int, multi_select_value: list[str],
     if len(multi_select_value) == 0:
         return dash.no_update, dash.no_update, dash.no_update
 
-    if year is None or year == "":
+    if start_year is None or start_year == "" or end_year is None or end_year == "":
         return dash.no_update, "Jaar mag niet leeg zijn.", dash.no_update
+
+    if start_year > end_year:
+        return dash.no_update, "Start jaar mag niet groter zijn dan eind jaar.", dash.no_update
 
     # Do nothing update if the name of the project is already in the table
     for project in stored_project_data:
@@ -86,7 +91,8 @@ def create_and_store_project(n_clicks: int, multi_select_value: list[str],
     stored_project_data.append({"project": project_name,
                                 "sections": multi_select_value,  # not displayed in the table but is kept in memory
                                 "section_number": len(multi_select_value),
-                                "year": year,
+                                "start_year": start_year,
+                                "end_year": end_year,
                                 "length": 0.0,
                                 })
 
@@ -113,7 +119,8 @@ def fill_project_overview_table(stored_project_data: list, dummy) -> list[dict]:
     for project in stored_project_data:
         output_list.append({"project": project["project"],
                             "section_number": project["section_number"],
-                            "year": project["year"],
+                            "start_year": project["start_year"],
+                            "end_year": project["end_year"],
                             "length": project["length"],
                             })
     return output_list
@@ -126,13 +133,14 @@ def fill_project_overview_table(stored_project_data: list, dummy) -> list[dict]:
     Input(UPDATE_PROJECT_BUTTON_ID, "n_clicks"),
     State(MULTI_SELECT_SECTION_FOR_PROJECT_ID, "value"),
     State(PROJECT_NAME_INPUT_FIELD_ID, "value"),
-    State(PROJECT_YEAR_INPUT_FIELD_ID, "value"),
+    State(PROJECT_START_YEAR_INPUT_FIELD_ID, "value"),
+    State(PROJECT_END_YEAR_INPUT_FIELD_ID, "value"),
     State(STORED_PROJECT_OVERVIEW_DATA, "data"),
     allow_duplicate=True,
     prevent_initial_call=True,
 )
 def update_stored_project(n_clicks: int, multi_select_value: list[str],
-                          project_name: str, year: int, stored_project_data: list) -> tuple:
+                          project_name: str, start_year: int, end_year: int, stored_project_data: list) -> tuple:
     """
     Update a project based on the project name with the newly selected sections and/or year.
     :param n_clicks: nb of clicks of the button "Update Project"
@@ -152,7 +160,8 @@ def update_stored_project(n_clicks: int, multi_select_value: list[str],
             list_to_return.append({"project": project_name,
                                    "sections": multi_select_value,  # not displayed in the table but is kept in memory
                                    "section_number": len(multi_select_value),
-                                   "year": year,
+                                   "start_year": start_year,
+                                   "end_year": end_year,
                                    "length": 0.0,
                                    })
 

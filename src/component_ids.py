@@ -71,7 +71,8 @@ ADD_PROJECT_BUTTON_ID = "add_project_button"
 UPDATE_PROJECT_BUTTON_ID = "update_project_button"
 DELETE_PROJECT_BUTTON_ID = "delete_project_button"
 PROJECT_NAME_INPUT_FIELD_ID = "project_name_input_field"
-PROJECT_YEAR_INPUT_FIELD_ID = "project_year_input_field"
+PROJECT_START_YEAR_INPUT_FIELD_ID = "project_start_year_input_field"
+PROJECT_END_YEAR_INPUT_FIELD_ID = "project_end_year_input_field"
 ALERT_PROJECT_CREATION_ID = "alert_project_creation"
 
 

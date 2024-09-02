@@ -8,7 +8,8 @@ from src.linear_objects.dike_traject import DikeTraject
 class DikeProject():
     name: str
     dike_sections: list[DikeSection]
-    year: int  # Year for which the project is undertaken
+    start_year: int  # starting year of the project
+    end_year: int   # ending year of the project, this is the year where reinforced beta is taken.s
     total_length: float = 0
 
     def calc_project_cost(self):
@@ -51,7 +52,8 @@ def get_projects_from_saved_data(imported_runs_data: dict, project_overview_data
 
         project = DikeProject(
             name=project_data["project"],
-            year=project_data["year"],
+            start_year=project_data["start_year"],
+            end_year=project_data["end_year"],
             dike_sections=sections,
         )
         projects.append(project)
