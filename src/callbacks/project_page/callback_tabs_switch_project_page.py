@@ -1,6 +1,7 @@
 from dash import callback, Output, Input, html, State
 
 from src.layouts.layout_project_page.layout_project_definition_tab import project_definition_tab_layout
+from src.layouts.layout_project_page.layout_project_visualization_tab import project_visualization_tab_layout
 
 
 @callback(
@@ -11,7 +12,7 @@ def render_tab_content(tab_switch):
     if tab_switch == "tab-111" or tab_switch == "tab-1":
         return [project_definition_tab_layout]
     if tab_switch == "tab-112" or tab_switch == "tab-2":
-        return [html.Div("Not yet implemented")]
+        return [project_visualization_tab_layout]
     return [html.Div("Not yet implemented")]
     # return html.Div(
     #     id="status-container",

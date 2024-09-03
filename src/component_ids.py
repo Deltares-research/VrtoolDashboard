@@ -74,6 +74,8 @@ PROJECT_NAME_INPUT_FIELD_ID = "project_name_input_field"
 PROJECT_START_YEAR_INPUT_FIELD_ID = "project_start_year_input_field"
 PROJECT_END_YEAR_INPUT_FIELD_ID = "project_end_year_input_field"
 ALERT_PROJECT_CREATION_ID = "alert_project_creation"
+PROJECT_PAGE_VISUALIZATION_COST_GRAPH = "project_page_visualization_cost_graph"
+PROJECT_PAGE_VISUALIZATION_RELIABILITY_GRAPH = "project_page_visualization_reliability_graph"
 
 
 
