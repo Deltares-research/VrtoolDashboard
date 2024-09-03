@@ -1,7 +1,9 @@
+import dash
 from dash import callback, Output, Input, html, dcc, State
 
 from src.component_ids import STORED_IMPORTED_RUNS_DATA, OVERVIEW_PROJECT_MAP_ID, STORED_PROJECT_OVERVIEW_DATA, \
-    PROJECT_COMPARISON_GRAPH_TIME_VS_COST_ID
+    PROJECT_COMPARISON_GRAPH_TIME_VS_COST_ID, PROJECT_PAGE_VISUALIZATION_COST_GRAPH, \
+    PROJECT_PAGE_VISUALIZATION_RELIABILITY_GRAPH, TABS_SWITCH_VISUALIZATION_PROJECT_PAGE
 from src.constants import get_mapbox_token
 from src.linear_objects.project import get_projects_from_saved_data
 from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
@@ -77,3 +79,4 @@ def make_graph_pf_time_vs_cost_project_comparison(
             raise ValueError(f"Switch cost beta value {switch_cost_beta} not recognized")
 
     return _fig
+
