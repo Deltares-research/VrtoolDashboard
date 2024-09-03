@@ -19,6 +19,7 @@ class DikeSection(BaseLinearObject):
     final_measure_doorsnede: Optional[dict]  # replace dict with a Measure Object
     years: list[int]  # Years for which a reliability result is available (both for initial and measures)
     active_mechanisms: list[str]  # Active mechanisms for the dike section
+    parent_traject_name: Optional[str]  # Name of the parent traject
 
     def __init__(self, name: str, coordinates_rd: list[tuple[float, float]], in_analyse: int):
         """
@@ -39,6 +40,7 @@ class DikeSection(BaseLinearObject):
         self.years = []
         self.revetment = False
         self.active_mechanisms = []
+        self.parent_traject_name = None  # this is used in project page to retrieve the parent traject of a section from a project
 
     def serialize(self) -> dict:
         """Serialize the DikeSection object to a dict, in order to be saved in dcc.Store"""

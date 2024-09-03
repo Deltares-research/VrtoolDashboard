@@ -17,7 +17,7 @@ class TestPlotlyScatterMapBoxProjectPage():
         _imported_runs_data = json.load(
             open(Path(__file__).parent.parent.joinpath("data", "imported_runs_data.json")))
         _projects_overview_data = json.load(
-            open(Path(__file__).parent.parent.joinpath("data", "projects_overview_data.json")))
+            open(Path(__file__).parent.parent.joinpath("data", "projects_overview_data_new.json")))
 
         _projects = get_projects_from_saved_data(_imported_runs_data, _projects_overview_data)
 
@@ -28,7 +28,6 @@ class TestPlotlyScatterMapBoxProjectPage():
 
         # only for testing TO BE REMOVED?COMMENTED OUT
         _fig.update_layout(mapbox={"accesstoken": get_mapbox_token()})
-        _fig.show()
 
         # 3. Assert
         assert isinstance(_fig, Figure)

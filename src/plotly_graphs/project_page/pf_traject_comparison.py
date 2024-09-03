@@ -127,35 +127,6 @@ def plot_pf_project_comparison(project_data: dict, selected_year) -> go.Figure:
     return fig
 
 
-def plot_cost_vs_time_projects(projects: list[DikeProject]):
-    fig = go.Figure()
-
-    years = []
-    costs = []
-    for i, project in enumerate(projects):
-        _color = PROJECTS_COLOR_SEQUENCE[i]
-        years.append(project.year)
-        costs.append(project.calc_project_cost())
-
-        fig.add_trace(go.Bar(
-            name=project.name,
-            x=[project.year],
-            y=[project.calc_project_cost()],
-            marker=dict(color=_color, pattern_shape='/'),
-            # legendgroup=legend_group,
-            # legendgrouptitle=dict(text=legend_group),
-
-        ))
-
-    fig.update_layout(template='plotly_white')
-    fig.update_yaxes(title="Kosten (mln €)")
-    fig.update_xaxes(title="Investering jaar")
-
-    fig.update_layout(barmode='group',
-                      bargroupgap=0.1, )
-
-    return fig
-
 
 def plot_pf_time_runs_comparison(imported_runs_data: dict, switch_cost_beta: str):
     fig = go.Figure()

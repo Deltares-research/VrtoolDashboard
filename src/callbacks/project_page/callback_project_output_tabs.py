@@ -5,8 +5,8 @@ from src.component_ids import STORED_IMPORTED_RUNS_DATA, OVERVIEW_PROJECT_MAP_ID
 from src.constants import get_mapbox_token
 from src.linear_objects.project import get_projects_from_saved_data
 from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
-from src.plotly_graphs.project_page.pf_traject_comparison import plot_default_scatter_dummy, plot_cost_vs_time_projects
-from src.plotly_graphs.project_page.plotly_maps import plot_project_overview_map
+from src.plotly_graphs.project_page.pf_traject_comparison import plot_default_scatter_dummy
+from src.plotly_graphs.project_page.plotly_maps import plot_project_overview_map, plot_cost_vs_time_projects
 from src.plotly_graphs.project_page.plotly_plots import projects_reliability_over_time
 from src.utils.utils import export_to_json
 
@@ -21,6 +21,7 @@ def make_graph_overview_area_projects(imported_runs_data: dict, project_data: li
 
     :param dike_traject_data: The data of the dike traject to be displayed.
     """
+    export_to_json(project_data)
     if imported_runs_data is None or imported_runs_data == {}:
         _fig = plot_default_overview_map_dummy()
 
@@ -70,7 +71,7 @@ def make_graph_pf_time_vs_cost_project_comparison(
             _fig = plot_cost_vs_time_projects(projects)
 
         elif switch_cost_beta == "RELIABILITY":
-            _fig = projects_reliability_over_time(projects)
+            _fig = projects_reliability_over_time(projects, imported_runs_data)
 
         else:
             raise ValueError(f"Switch cost beta value {switch_cost_beta} not recognized")

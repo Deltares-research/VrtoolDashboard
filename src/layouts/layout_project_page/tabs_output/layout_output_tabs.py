@@ -25,7 +25,7 @@ def layout_project_output_tab_two() -> html.Div:
     return html.Div(
         children=[
             dbc.Row([
-                dbc.Col([html.H2("Tijd vs Kosten")], md=10),
+                dbc.Col([html.H2("Tijd")], md=10),
             ]),
             layout_radio_cost_beta_switch,
 

@@ -82,3 +82,4 @@ conversion_dict_measure_names = {"GROUND_IMPROVEMENT": "Soil reinforcement",
 
 import plotly.express as px
 PROJECTS_COLOR_SEQUENCE = px.colors.qualitative.Pastel
+CLASSIC_PLOTLY_COLOR_SEQUENCE = px.colors.qualitative.Plotly
