@@ -71,7 +71,7 @@ def make_graph_pf_time_vs_cost_project_comparison(
             _fig = plot_cost_vs_time_projects(projects)
 
         elif switch_cost_beta == "RELIABILITY":
-            _fig = projects_reliability_over_time(projects)
+            _fig = projects_reliability_over_time(projects, imported_runs_data)
 
         else:
             raise ValueError(f"Switch cost beta value {switch_cost_beta} not recognized")

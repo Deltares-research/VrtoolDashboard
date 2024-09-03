@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 
-from src.constants import REFERENCE_YEAR, CLASSIC_PLOTLY_COLOR_SEQUENCE
+from src.constants import REFERENCE_YEAR, CLASSIC_PLOTLY_COLOR_SEQUENCE, PROJECTS_COLOR_SEQUENCE
 from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import get_traject_prob, get_initial_assessment_df, DikeTraject
 from src.linear_objects.project import DikeProject
@@ -11,9 +11,9 @@ from src.utils.utils import pf_to_beta, interpolate_beta_values
 
 def projects_reliability_over_time(projects: list[DikeProject], imported_runs_data: dict) -> go.Figure:
     _fig = go.Figure()
+
     # first sort projects by ending year
     projects = sorted(projects, key=lambda x: x.end_year)
-    # add rectangle between years with random color
 
     for index, traject_data in enumerate(imported_runs_data.values()):
         color_traject = CLASSIC_PLOTLY_COLOR_SEQUENCE[index]
@@ -48,15 +48,49 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
             years_ini = np.concatenate((years_ini, years))
             betas_ini = np.concatenate((betas_ini, betas))
 
-            _fig.add_annotation(x=year_start, y=betas_ini[-1], text=project.name, showarrow=True, arrowhead=1)
-            _fig.add_hline(y=pf_to_beta(dike_traject.lower_bound_value), line_dash="dot", line_color=color_traject)
+        _fig.add_trace(go.Scatter(name="ondergrens",
+                                  x=years_ini,
+                                  y=[pf_to_beta(dike_traject.lower_bound_value)] * len(years_ini),
+                                  line=dict(color=color_traject, dash="dot"),
+                                  mode='lines',
+                                  legendgroup=dike_traject.name,
+                                  legendgrouptitle=dict(text=dike_traject.name)
+                                  ))
 
-        _fig.add_trace(go.Scatter(name=dike_traject.name,
+        _fig.add_trace(go.Scatter(name="Traject faalkans",
                                   x=years_ini,
                                   y=betas_ini,
                                   marker=dict(color=color_traject),
                                   line=dict(color=color_traject),
-                                  mode='lines+markers'))
+                                  mode='lines+markers',
+                                  legendgroup=dike_traject.name,
+                                  legendgrouptitle=dict(text=dike_traject.name)
+                                  ))
+
+    # Add project shapes:
+    for index, project in enumerate(projects):
+        color = PROJECTS_COLOR_SEQUENCE[index]
+        _fig.add_shape(
+            type="rect",
+            x0=project.start_year,
+            y0=0 + 0.5 * index,
+            x1=project.end_year,
+            y1=0.5 + 0.5 * index,
+            fillcolor=color,
+            opacity=0.5,
+            layer="below",
+            line_width=0,
+        )
+        # add annotation in the middle of the shape:
+        _fig.add_annotation(
+            x=(project.start_year + project.end_year) / 2,
+            y=0.25 + 0.5 * index,
+            text=project.name,
+            showarrow=False,
+            font=dict(color="black", size=18),
+        )
+
+
 
     _fig.update_layout(xaxis_title='Tijd', yaxis_title="Betrouwbaarheid")
 
