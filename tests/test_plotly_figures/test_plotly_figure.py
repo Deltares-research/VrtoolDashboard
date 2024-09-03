@@ -39,9 +39,7 @@ class TestPlotlyScatter:
         _projects = get_projects_from_saved_data(_imported_runs_data, _projects_overview_data)
 
         # 2. Call
-
         _fig = projects_reliability_over_time(_projects, _imported_runs_data)
-        _fig.show()
 
         # 3. Assert
         assert isinstance(_fig, Figure)
@@ -57,7 +55,6 @@ class TestPlotlyScatter:
 
         # 2. Call
         _fig = plot_cost_vs_time_projects(_projects)
-        _fig.show()
 
         # 3. Assert
         assert isinstance(_fig, Figure)
