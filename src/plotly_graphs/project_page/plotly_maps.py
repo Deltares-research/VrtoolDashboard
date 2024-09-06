@@ -132,7 +132,7 @@ def plot_cost_vs_time_projects(projects: list[DikeProject]):
         cost = project.calc_project_cost()
         cost_yearly = cost / (project.end_year - project.start_year + 1)
         cost_list = np.zeros(len(years))
-        for year in range(project.start_year, project.end_year + 1):
+        for year in range(project.start_year, project.end_year):
             cost_list[year - start_program] = cost_yearly
 
         fig.add_trace(go.Bar(

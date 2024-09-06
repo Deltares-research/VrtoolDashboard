@@ -3,7 +3,8 @@ import dash_bootstrap_components as dbc
 import dash_daq as daq
 import dash_mantine_components as dmc
 
-from src.component_ids import PROJECT_PAGE_VISUALIZATION_COST_GRAPH, PROJECT_PAGE_VISUALIZATION_RELIABILITY_GRAPH
+from src.component_ids import PROJECT_PAGE_VISUALIZATION_COST_GRAPH, PROJECT_PAGE_VISUALIZATION_RELIABILITY_GRAPH, \
+    OVERVIEW_PROJECT_MAP_ID
 from src.constants import get_mapbox_token
 from src.plotly_graphs.pf_length_cost import plot_default_scatter_dummy
 from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
@@ -118,6 +119,7 @@ reliability_chart = dcc.Graph(id=PROJECT_PAGE_VISUALIZATION_RELIABILITY_GRAPH, f
                               style={'width': '100%', 'height': '100%'}, )
 
 map_overview_area = dcc.Graph(
+        id=OVERVIEW_PROJECT_MAP_ID,
         figure=plot_default_overview_map_dummy(),
         style={"width": "100%", "height": "100%"},
         config={"mapboxAccessToken": get_mapbox_token()},

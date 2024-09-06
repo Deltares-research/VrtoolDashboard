@@ -15,8 +15,8 @@ def layout_project_output_tab_one() -> html.Div:
                 dbc.Col([html.H2("Overzicht Gebied")], md=10),
             ]),
 
-            html.Div(id=OVERVIEW_PROJECT_MAP_ID,
-                     style={'width': '90vh', 'height': '60vh', 'border': "2px solid black"}),
+            # html.Div(id=OVERVIEW_PROJECT_MAP_ID,
+            #          style={'width': '90vh', 'height': '60vh', 'border': "2px solid black"}),
 
         ])
 
