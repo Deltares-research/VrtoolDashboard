@@ -92,7 +92,7 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
 
 
 
-    _fig.update_layout(xaxis_title='Tijd', yaxis_title="Betrouwbaarheid")
+    _fig.update_layout(xaxis_title='Jaar', yaxis_title="Betrouwbaarheid")
 
     return _fig
 

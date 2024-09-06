@@ -6,8 +6,7 @@ from dash.html import Br
 import dash_ag_grid as dag
 import dash_mantine_components as dmc
 
-from src.component_ids import OVERVIEW_PROJECT_MAP_ID, EDITABLE_IMPORTED_RUNS_TABLE_ID, \
-    TABS_SWITCH_VISUALIZATION_PROJECT_PAGE, CONTENT_TABS_PROJECT_PAGE_OUTPUT_ID, TABLE_PROJECT_SUMMARY_ID, \
+from src.component_ids import EDITABLE_IMPORTED_RUNS_TABLE_ID, TABLE_PROJECT_SUMMARY_ID, \
     MULTI_SELECT_SECTION_FOR_PROJECT_ID, ADD_PROJECT_BUTTON_ID, PROJECT_NAME_INPUT_FIELD_ID, ALERT_PROJECT_CREATION_ID, \
     UPDATE_PROJECT_BUTTON_ID, PROJECT_START_YEAR_INPUT_FIELD_ID, DELETE_PROJECT_BUTTON_ID, \
     PROJECT_END_YEAR_INPUT_FIELD_ID
@@ -153,23 +152,4 @@ left_side = [
 
 ]
 
-right_side = [
-
-    dbc.Tabs(
-        [
-            dbc.Tab(label="Map", tab_id="tab-1111"),
-            dbc.Tab(label="Project", tab_id="tab-1114"),
-        ],
-        id=TABS_SWITCH_VISUALIZATION_PROJECT_PAGE,
-        active_tab="tab-1111",  # Set the initial active tab
-    ),
-    html.Div(id=CONTENT_TABS_PROJECT_PAGE_OUTPUT_ID),
-
-]
-
-project_definition_tab_layout = html.Div([
-    dbc.Row([
-        dbc.Col(left_side, md=5),
-        dbc.Col(right_side, md=7),
-    ]),
-])
+project_definition_tab_layout = html.Div(children=left_side)

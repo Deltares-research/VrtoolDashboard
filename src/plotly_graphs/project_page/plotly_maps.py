@@ -150,7 +150,7 @@ def plot_cost_vs_time_projects(projects: list[DikeProject]):
 
     fig.update_layout(template='plotly_white')
     fig.update_yaxes(title="Kosten (mln €)")
-    fig.update_xaxes(title="Investering jaar")
+    fig.update_xaxes(title="Jaar")
 
     # no gap between bars
     fig.update_layout(barmode='stack', bargap=0)
