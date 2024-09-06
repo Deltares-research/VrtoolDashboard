@@ -30,3 +30,54 @@ input[type="radio"]:disabled + label {
 nav .navbar-nav.mr-auto.mt-2 .nav-item .nav-link{
     color: #ffffff;
 }
+
+
+/* Tabs
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+#tabs {
+  width: 100%;
+}
+
+.custom-tabs {
+  background-color: #1E2130;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 14px;
+  height: fit-content;
+  cursor: pointer;
+}
+
+#Specs-tab.custom-tab, #Control-chart-tab.custom-tab {
+  background-color: #161a28;
+  letter-spacing: 1px;
+  color: inherit;
+  border: 0;
+  border-bottom: #1E2130 solid 4px !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  height: 18px;
+}
+
+#Specs-tab.custom-tab--selected, #Control-chart-tab.custom-tab--selected {
+  border-bottom: #91dfd2 solid 4px !important;
+}
+
+#Specs-tab.custom-tab {
+  margin-right: 3px;
+}
+
+#Control-chart-tab.custom-tab {
+  margin-left: 3px;
+}
+
+.section-banner {
+  color: darkgray;
+  font-size: 1.5rem;
+  text-align: left;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #4b5460;
+}

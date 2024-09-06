@@ -1,5 +1,5 @@
 import dash
-from dash import html
+from dash import html, dcc
 import dash_bootstrap_components as dbc
 
 
@@ -7,15 +7,22 @@ dash.register_page(__name__)
 
 
 layout = html.Div([
-    dbc.Tabs(
+    dcc.Tabs(
         [
-            dbc.Tab(label="Importeer data", tab_id="tab-111"),
-            dbc.Tab(label="Project definitie", tab_id="tab-112"),
+            dcc.Tab(label="Project definitie",
+                    id="tab-111",
+                    className="custom-tab",
+                    selected_className="custom-tab--selected"),
+            dcc.Tab(label="Area results",
+                    id="tab-112",
+                    className="custom-tab",
+                    selected_className="custom-tab--selected"),
         ],
         id="tabs_tab_project_page",
-        active_tab="tab-111",  # Set the initial active tab
+        value="tab-111",  # Set the initial active tab
+        className="custom-tabs"
     ),
-    html.Div(id="content_tab_project_page"),
+    html.Div(id="content_tab_project_page", children=[]),
 
 
 ])
