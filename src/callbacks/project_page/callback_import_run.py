@@ -2,24 +2,12 @@ from pathlib import Path
 
 import dash
 from dash import html, dcc, Output, Input, State, callback
-import dash_bootstrap_components as dbc
-from vrtool.common.enums import MechanismEnum
-from vrtool.defaults.vrtool_config import VrtoolConfig
-import pandas as pd
 
-from src.component_ids import STORE_CONFIG, DROPDOWN_SELECTION_RUN_ID, EDITABLE_TRAJECT_TABLE_ID, \
-    SLIDER_YEAR_RELIABILITY_RESULTS_ID, GREEDY_OPTIMIZATION_CRITERIA_BETA, GREEDY_OPTIMIZATION_CRITERIA_YEAR, \
-    BUTTON_RECOMPUTE_GREEDY_STEPS, BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA, \
-    STORED_IMPORTED_RUNS_DATA, EDITABLE_IMPORTED_RUNS_TABLE_ID, MULTI_SELECT_SECTION_FOR_PROJECT_ID
-from src.constants import ColorBarResultType, SubResultType, Measures, REFERENCE_YEAR
-from src.linear_objects.dike_traject import DikeTraject
+from src.component_ids import STORED_IMPORTED_RUNS_DATA, EDITABLE_IMPORTED_RUNS_TABLE_ID
+
 
 import base64
 import json
-
-from src.orm.import_database import get_dike_traject_from_config_ORM, get_name_optimization_runs, \
-    get_run_optimization_ids
-from src.utils.utils import get_vr_config_from_dict, export_to_json
 
 
 @callback(

@@ -9,7 +9,8 @@ import dash_mantine_components as dmc
 from src.component_ids import EDITABLE_IMPORTED_RUNS_TABLE_ID, TABLE_PROJECT_SUMMARY_ID, \
     MULTI_SELECT_SECTION_FOR_PROJECT_ID, ADD_PROJECT_BUTTON_ID, PROJECT_NAME_INPUT_FIELD_ID, ALERT_PROJECT_CREATION_ID, \
     UPDATE_PROJECT_BUTTON_ID, PROJECT_START_YEAR_INPUT_FIELD_ID, DELETE_PROJECT_BUTTON_ID, \
-    PROJECT_END_YEAR_INPUT_FIELD_ID
+    PROJECT_END_YEAR_INPUT_FIELD_ID, EXPORT_PROJECTS_TO_JSON_ID, BUTTON_DOWNLOAD_PROJECTS_EXPORT, UPLOAD_SAVED_PROJECTS
+from src.layouts.layout_traject_page.layout_download_buttons import layout_download_projects
 
 df_imported_run_table = pd.DataFrame(columns=["traject", "run_name", "active"], data=[])
 df_project_summary_table = pd.DataFrame(columns=["project", "section_number", "start_year", "end_year" "length"],
@@ -54,11 +55,6 @@ columns_defs_2 = [
      "headerName": "Jaar eind",
      "editable": False,
      "initialWidth": 100},
-
-    {"field": "length",
-     "headerName": "Lengte (km)",
-     "editable": False,
-     "initialWidth": 150},
 
 ]
 
@@ -121,6 +117,32 @@ left_side = [
         multiple=False,
         accept='.json'
     ),
+
+    #Add text in Dutch: "or" centered in the middle of the page
+    html.P("of", style={"text-align": "center"}),
+
+
+    dcc.Upload(
+        id=UPLOAD_SAVED_PROJECTS,
+        children=html.Div([
+            '',
+            html.A('Upload an existing project file')
+        ]),
+        style={
+            'width': '100%',
+            'height': '60px',
+            'lineHeight': '60px',
+            'borderWidth': '1px',
+            'borderStyle': 'dashed',
+            'borderRadius': '5px',
+            'textAlign': 'center',
+            'margin': '10px'
+        },
+        # Allow multiple files to be uploaded
+        multiple=False,
+        accept='.json'
+    ),
+
     Br(),
     dbc.Accordion([
         dbc.AccordionItem(
@@ -144,8 +166,12 @@ left_side = [
                     dmc.Button("Delete project", id=DELETE_PROJECT_BUTTON_ID),
 
                 ]),
+                dmc.Group([
+                    table_project_summary,
+                    layout_download_projects,
 
-                table_project_summary
+                ])
+
             ],
             title='Projects overview')
     ]),

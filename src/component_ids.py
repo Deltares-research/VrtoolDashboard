@@ -74,6 +74,10 @@ ALERT_PROJECT_CREATION_ID = "alert_project_creation"
 PROJECT_PAGE_VISUALIZATION_COST_GRAPH = "project_page_visualization_cost_graph"
 PROJECT_PAGE_VISUALIZATION_RELIABILITY_GRAPH = "project_page_visualization_reliability_graph"
 PROJECT_OVERVIEW_TABLE_DISPLAY = "project_overview_table_display"
+EXPORT_PROJECTS_TO_JSON_ID = "export_projects_to_json"
+BUTTON_DOWNLOAD_PROJECTS_EXPORT = "button_download_projects_export"
+BUTTON_DOWNLOAD_PROJECTS_EXPORT_NB_CLICKS = "button_download_projects_export_nb_clicks"
+UPLOAD_SAVED_PROJECTS = "upload_saved_projects"
 
 ######## Comparison page ##########
 
