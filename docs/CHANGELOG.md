@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 None.
 
 ### Changed
-None.
+- Vrtool core 1.0.0
 
 ### Deprecated
 None.
