@@ -121,7 +121,6 @@ def fill_project_overview_table(stored_project_data: list, dummy) -> list[dict]:
                             "section_number": project["section_number"],
                             "start_year": project["start_year"],
                             "end_year": project["end_year"],
-                            "length": project["length"],
                             })
     return output_list
 
