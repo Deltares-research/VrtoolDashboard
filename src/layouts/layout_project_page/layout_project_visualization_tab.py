@@ -1,6 +1,5 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
-import dash_daq as daq
 import dash_mantine_components as dmc
 
 from src.component_ids import PROJECT_PAGE_VISUALIZATION_COST_GRAPH, PROJECT_PAGE_VISUALIZATION_RELIABILITY_GRAPH, \
