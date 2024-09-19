@@ -43,25 +43,26 @@ head = dmc.TableThead(
             dmc.TableTh("Start jaar"),
             dmc.TableTh("Eind jaar"),
             dmc.TableTh("Lengte (km)"),
-            dmc.TableTh("Faalkans 0"),
-            dmc.TableTh("Faalkans 1"),
+            dmc.TableTh("Beoordeling \n faalkans"),
+            dmc.TableTh("Versterking faalkans"),
 
-        ]
+        ],
+
     )
 )
 body = dmc.TableTbody(rows)
-caption = dmc.TableCaption("Some elements from periodic table")
+caption = dmc.TableCaption(" ")
 
 
 def fill_project_display_overview_table(projects: list[DikeProject]):
     elements_updated = [
         {"project": project.name,
-         "nb_sections": 0,  # TODO
+         "nb_sections": len(project.dike_sections),
          "start_year": project.start_year,
          "end_year": project.end_year,
-         "length": 0,  # TODO
-         "project_reliability_before_reinforcement": 0,  # TODO
-         "project_reliability_after_reinforcement": 0,  # TODO
+         "length": f"{project.total_length / 1e3:.2f}",  # km
+         "project_reliability_before_reinforcement": "{:.2e}".format(project.project_failure_prob_assessement),
+         "project_reliability_after_reinforcement": "{:.2e}".format(project.project_failure_prob_after_reinforcement),
          }
         for project in projects
     ]
@@ -81,7 +82,12 @@ def fill_project_display_overview_table(projects: list[DikeProject]):
     ]
     body_updated = dmc.TableTbody(rows_updated)
 
-    return [dmc.Table([head, body_updated, caption])]
+    return [dmc.Table(children=[head, body_updated, caption],
+                      withTableBorder=True,
+                      withColumnBorders=True,
+                      highlightOnHover=True,
+                      horizontalSpacing=10,
+                      )]
 
 
 def left_side_area_stats():
