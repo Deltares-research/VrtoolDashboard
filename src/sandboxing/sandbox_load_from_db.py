@@ -52,10 +52,10 @@ _vr_config = VrtoolConfig().from_json(Path(
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\eduard_debug\optimized_results\optimized_results\config.json"
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\test_lisa_24_07\config.json"
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\test_stephan_6_august\config.json"
-    r"N:\Projects\11209000\11209353\B. Measurements and calculations\008 - Resultaten Proefvlucht\WSRL\24-3\traject24-3_9juli2024\vrtool_database_test_discounting\config.json"
+    # r"N:\Projects\11209000\11209353\B. Measurements and calculations\008 - Resultaten Proefvlucht\WSRL\24-3\traject24-3_9juli2024\vrtool_database_test_discounting\config.json"
+    r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\31-1 base coastal case\config.json"
 
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\COP demo\38-1 base river case\config.json"
-
 
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\38-1 test/config.json"
     # r"N:\Projects\11209000\11209353\B. Measurements and calculations\008 - Resultaten Proefvlucht\WDOD\10-3\database_vrtool_0_1_3_no_stix/config.json"
@@ -63,7 +63,7 @@ _vr_config = VrtoolConfig().from_json(Path(
     # r"n:\Projects\11209000\11209353\B. Measurements and calculations\008 - Resultaten Proefvlucht\WSRL\24-3\02_Berekening\config.json"
     # r"N:\Projects\11209000\11209353\B. Measurements and calculations\008 - Resultaten Proefvlucht\WRIJ\47-1\database_vrtool_0_1_3\config.json"
     # r"N:\Projects\11209000\11209353\B. Measurements and calculations\008 - Resultaten Proefvlucht\WRIJ\47-1\database_vrtool_0_1_3\config.json"
-# C:\Users\hauth\Documents\38-1\input_files
+    # C:\Users\hauth\Documents\38-1\input_files
 ))
 # _vr_config = VrtoolConfig().from_json(Path(__file__).parent.parent / "tests/data/TestCase1_38-1_no_housing/vr_config.json")
 t0 = time.time()
@@ -101,4 +101,3 @@ print(f"Time to plot: {t2 - t1}")
 
 _fig.update_layout(mapbox=dict(accesstoken=get_mapbox_token()))
 _fig.show()
-
