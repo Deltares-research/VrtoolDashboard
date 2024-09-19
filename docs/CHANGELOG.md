@@ -6,6 +6,23 @@ All notable changes to this project will be documented in this file.
 ## v0.0.0 [##/##/####]
 
 ### Added
+None.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
+## v0.6.0 [19/09/2024]
+
+### Added
 - Safe remove of all custom measures in the database.
 - Project Page
 - Creation of new projects from user inputs
