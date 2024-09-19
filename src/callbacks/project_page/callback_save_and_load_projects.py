@@ -1,21 +1,10 @@
+import base64
 import json
 
 from dash import html, Output, Input, callback, State, dcc, no_update
 
-from src.component_ids import TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE, CONTENT_TABS_COMPARISON_PAGE_ID, \
-    STORED_RUNS_COMPARISONS_DATA, RUNS_COMPARISON_GRAPH_TIME_ID, \
-    SLIDER_YEAR_RELIABILITY_RESULTS_ID, OVERVIEW_COMPARISON_MAP_ID, RUNS_COMPARISON_GRAPH_ID, \
-    EXPORT_PROJECTS_TO_JSON_ID, BUTTON_DOWNLOAD_PROJECTS_EXPORT_NB_CLICKS, BUTTON_DOWNLOAD_PROJECTS_EXPORT, \
-    STORED_PROJECT_OVERVIEW_DATA, STORED_IMPORTED_RUNS_DATA
-from src.constants import get_mapbox_token
-from src.layouts.layout_comparison_page.layout_output_tabs import layout_project_output_tab_one, \
-    layout_project_output_tab_two, layout_project_output_tab_three
-
-from src.plotly_graphs.pf_length_cost import plot_default_scatter_dummy
-from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
-from src.plotly_graphs.project_page.pf_traject_comparison import plot_pf_project_comparison, \
-    plot_pf_time_runs_comparison
-from src.plotly_graphs.project_page.plotly_maps import plot_comparison_runs_overview_map
+from src.component_ids import EXPORT_PROJECTS_TO_JSON_ID, BUTTON_DOWNLOAD_PROJECTS_EXPORT_NB_CLICKS, \
+    BUTTON_DOWNLOAD_PROJECTS_EXPORT, STORED_PROJECT_OVERVIEW_DATA, STORED_IMPORTED_RUNS_DATA, UPLOAD_SAVED_PROJECTS
 
 
 @callback(
@@ -27,8 +16,9 @@ from src.plotly_graphs.project_page.plotly_maps import plot_comparison_runs_over
         State(STORED_PROJECT_OVERVIEW_DATA, "data"),
         State(STORED_IMPORTED_RUNS_DATA, "data"), ]
 )
-def download_reinforced_sections_geojson(n_clicks: int, store_n_click_button: int, imported_runs_data: dict,
-                                         project_data: list[dict]) -> tuple[dict, int]:
+def download_reinforced_sections_geojson(n_clicks: int, store_n_click_button: int, project_data: list[dict],
+                                         imported_runs_data: dict,
+                                         ) -> tuple[dict, int]:
     """
     Trigger the button to download and save the projects data into a json file so that it can reused later on.
 
@@ -49,3 +39,40 @@ def download_reinforced_sections_geojson(n_clicks: int, store_n_click_button: in
 
         return dict(content=_content_json,
                     filename=f"projects_{store_n_click_button}.json"), n_clicks
+
+
+@callback(
+    [Output(STORED_IMPORTED_RUNS_DATA, "data", allow_duplicate=True),
+     Output(STORED_PROJECT_OVERVIEW_DATA, "data", allow_duplicate=True)],
+    [Input(UPLOAD_SAVED_PROJECTS, 'contents')],
+    [State(UPLOAD_SAVED_PROJECTS, 'filename')],
+    allow_duplicate=True,
+    prevent_initial_call=True,
+)
+def upload_existing_saved_projects(contents: str, filename: str):
+    """
+    Import projects that have been previously saved by clicking on the button "Opslaan projects". It overwrites the
+    current stored projects in STORED_PROJECT_OVERVIEW_DATA and STORED_IMPORTED_RUNS_DATA.
+
+    :param contents: string content of the uploaded json. The file should content at least:
+        - imported_runs_data: imported_runs_data
+        - project_data: project_data
+
+
+    :return: imported_runs_data, project_data
+    """
+    if contents is not None:
+        try:
+
+            content_type, content_string = contents.split(',')
+
+            decoded = base64.b64decode(content_string)
+            json_content = json.loads(decoded)
+            imported_runs_data = json_content["imported_runs_data"]
+            project_data = json_content["project_data"]
+            return imported_runs_data, project_data
+
+        except:
+            return no_update, no_update
+    else:
+        return no_update, no_update
