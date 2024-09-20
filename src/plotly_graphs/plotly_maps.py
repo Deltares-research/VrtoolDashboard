@@ -928,6 +928,11 @@ def get_middle_point(sections: list[DikeSection]) -> tuple[float, float]:
     middle_point_gws = GWSRDConvertor().to_wgs(middle_point_rd[0], middle_point_rd[1])
     return middle_point_gws
 
+def get_average_point(sections: list[DikeSection]) -> tuple[float, float]:
+    avg_lat = sum([section.coordinates_rd[0][0] for section in sections]) / len(sections)
+    avg_lon = sum([section.coordinates_rd[0][1] for section in sections]) / len(sections)
+    return GWSRDConvertor().to_wgs(avg_lat, avg_lon)
+
 
 def update_layout_map_box(fig: go.Figure, center: tuple[float, float], zoom: int = 11):
     """Update layout of Mapbox figure.
