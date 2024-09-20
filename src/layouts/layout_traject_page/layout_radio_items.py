@@ -105,5 +105,5 @@ layout_radio_result_type_project_page = dbc.RadioItems(
     ],
     inline=True,
     value=ResultType.RELIABILITY.name,
-    style={"margin-top": "2px"}
+    style={"margin-top": "2px", "margin-left": "10px"}
 )

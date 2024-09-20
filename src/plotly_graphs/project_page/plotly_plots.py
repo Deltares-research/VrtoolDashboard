@@ -2,15 +2,16 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 
-from src.constants import REFERENCE_YEAR, CLASSIC_PLOTLY_COLOR_SEQUENCE, PROJECTS_COLOR_SEQUENCE
+from src.constants import REFERENCE_YEAR, CLASSIC_PLOTLY_COLOR_SEQUENCE, PROJECTS_COLOR_SEQUENCE, ResultType
 from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import get_traject_prob, get_initial_assessment_df, DikeTraject
 from src.linear_objects.project import DikeProject
 from src.utils.traject_probability import get_updated_beta_df
-from src.utils.utils import pf_to_beta, interpolate_beta_values
+from src.utils.utils import pf_to_beta, interpolate_beta_values, beta_to_pf
 
 
-def projects_reliability_over_time(projects: list[DikeProject], imported_runs_data: dict) -> go.Figure:
+def projects_reliability_over_time(projects: list[DikeProject], imported_runs_data: dict,
+                                   result_type: str) -> go.Figure:
     _fig = go.Figure()
 
     # first sort projects by ending year
@@ -49,9 +50,22 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
             years_ini = np.concatenate((years_ini, years))
             betas_ini = np.concatenate((betas_ini, betas))
 
+        if result_type == ResultType.RELIABILITY.name:
+            y = betas_ini
+            y_ondergrens = [pf_to_beta(dike_traject.lower_bound_value)] * len(years_ini)
+        elif result_type == ResultType.PROBABILITY.name:
+            y = beta_to_pf(betas_ini)
+            y_ondergrens = [dike_traject.lower_bound_value] * len(years_ini)
+        elif result_type == ResultType.DISTANCE_TO_NORM.name:
+            y = dike_traject.lower_bound_value / beta_to_pf(betas_ini)
+            y_ondergrens = [1] * len(years_ini)
+            pass
+        else:
+            raise ValueError(f"Result type {result_type} not recognized")
+
         _fig.add_trace(go.Scatter(name="ondergrens",
                                   x=years_ini,
-                                  y=[pf_to_beta(dike_traject.lower_bound_value)] * len(years_ini),
+                                  y=y_ondergrens,
                                   line=dict(color=color_traject, dash="dot"),
                                   mode='lines',
                                   legendgroup=dike_traject.name,
@@ -60,7 +74,7 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
 
         _fig.add_trace(go.Scatter(name="Traject faalkans",
                                   x=years_ini,
-                                  y=betas_ini,
+                                  y=y,
                                   marker=dict(color=color_traject),
                                   line=dict(color=color_traject),
                                   mode='lines+markers',
@@ -68,31 +82,73 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
                                   legendgrouptitle=dict(text=dike_traject.name)
                                   ))
 
-    # Add project shapes:
-    for index, project in enumerate(projects):
-        color = PROJECTS_COLOR_SEQUENCE[index]
+    def add_shapes(y0, y1, y_text, color):
         _fig.add_shape(
             type="rect",
             x0=project.start_year,
-            y0=0 + 0.5 * index,
+            y0=y0,
             x1=project.end_year,
-            y1=0.5 + 0.5 * index,
+            y1=y1,
             fillcolor=color,
             opacity=0.5,
             layer="below",
             line_width=0,
         )
+
         # add annotation in the middle of the shape:
         _fig.add_annotation(
             x=(project.start_year + project.end_year) / 2,
-            y=0.25 + 0.5 * index,
+            y=y_text,
             text=project.name,
             showarrow=False,
             font=dict(color="black", size=18),
         )
 
+    if result_type == ResultType.RELIABILITY.name:
+        y0_ini = 0
+        y1_ini = 0.5
+        # Add project shapes:
+        for index, project in enumerate(projects):
+            color = PROJECTS_COLOR_SEQUENCE[index]
+            y0 = y0_ini + y1_ini * index
+            y1 = y1_ini + y1_ini * index
+            y_text = 0.25 + 0.5 * index,
+            add_shapes(y0, y1, y_text, color)
 
+        _fig.update_layout(xaxis_title='Jaar', yaxis_title="Betrouwbaarheid")
 
-    _fig.update_layout(xaxis_title='Jaar', yaxis_title="Betrouwbaarheid")
+    elif result_type == ResultType.PROBABILITY.name:
+        _fig.update_yaxes(type="log")
+        y0_ini = 10e-6
+        y1_ini = y0_ini * 5  # This is the range for each shape in log scale
 
+        # Add project shapes, similar to linear case:
+        for index, project in enumerate(projects):
+            color = PROJECTS_COLOR_SEQUENCE[index]
+            y0 = y0_ini * (5 ** index)
+            y1 = y1_ini * (5 ** index)
+            y_text = y0_ini * (5 ** index)
+            add_shapes(y0, y1, y_text, color)
+        ticks = [1.e-6, 1.e-5, 1.e-4, 0.001, 0.01, 0.1, 1]
+        _fig.update_yaxes(type="log", tickvals=ticks, ticktext=[str(tick) for tick in ticks])
+        _fig.update_layout(xaxis_title='Jaar', yaxis_title="Faalkans")
+
+    elif result_type == ResultType.DISTANCE_TO_NORM.name:
+        _fig.update_yaxes(type="log")
+        y0_ini = 0.001
+        y1_ini = y0_ini * 5
+        # Add project shapes, similar to linear case:
+        for index, project in enumerate(projects):
+            color = PROJECTS_COLOR_SEQUENCE[index]
+            y0 = y0_ini * (5 ** index)
+            y1 = y1_ini * (5 ** index)
+            y_text = y0_ini * (5 ** index)
+            add_shapes(y0, y1, y_text, color)
+        ticks = [0.001, 0.01, 0.1, 1, 10]
+        _fig.update_yaxes(type="log", tickvals=ticks, ticktext=[str(tick) for tick in ticks])
+        _fig.update_layout(xaxis_title='Jaar', yaxis_title="Afstand tot norm")
+    else:
+        raise ValueError(f"Result type {result_type} not recognized")
+
+    _fig.update_layout(template='plotly_white')
     return _fig
