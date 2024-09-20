@@ -6,7 +6,9 @@ All notable changes to this project will be documented in this file.
 ## v0.0.0 [##/##/####]
 
 ### Added
-None.
+- Added radio result type in projects page
+- Added all trajects on map in projects page
+- Added name input field to save projects
 
 ### Changed
 - Vrtool core 1.0.0

@@ -19,7 +19,7 @@ class TestPlotlyScatterMapBoxProjectPage():
         _projects_overview_data = json.load(
             open(Path(__file__).parent.parent.joinpath("data", "projects_overview_data_new.json")))
 
-        _projects = get_projects_from_saved_data(_imported_runs_data, _projects_overview_data)
+        _projects, _ = get_projects_from_saved_data(_imported_runs_data, _projects_overview_data)
 
 
         # 2. Call
