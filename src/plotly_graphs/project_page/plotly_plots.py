@@ -96,13 +96,14 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
         )
 
         # add annotation in the middle of the shape:
-        _fig.add_annotation(
-            x=(project.start_year + project.end_year) / 2,
-            y=y_text,
-            text=project.name,
-            showarrow=False,
-            font=dict(color="black", size=18),
-        )
+        # THIS IS BUGGY
+        # _fig.add_annotation(
+        #     x=(project.start_year + project.end_year) / 2,
+        #     y=y_text,
+        #     text=project.name,
+        #     showarrow=False,
+        #     font=dict(color="black", size=18),
+        # )
 
     if result_type == ResultType.RELIABILITY.name:
         y0_ini = 0
