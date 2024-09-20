@@ -5,6 +5,7 @@ import dash_mantine_components as dmc
 from src.component_ids import PROJECT_PAGE_VISUALIZATION_COST_GRAPH, PROJECT_PAGE_VISUALIZATION_RELIABILITY_GRAPH, \
     OVERVIEW_PROJECT_MAP_ID, PROJECT_OVERVIEW_TABLE_DISPLAY
 from src.constants import get_mapbox_token
+from src.layouts.layout_traject_page.layout_radio_items import layout_radio_result_type_project_page
 from src.linear_objects.project import DikeProject
 from src.plotly_graphs.pf_length_cost import plot_default_scatter_dummy
 from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
@@ -12,11 +13,6 @@ from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
 max_length = 100
 
 elements = [
-    # {"position": 6, "mass": 12.011, "symbol": "C", "name": "Carbon"},
-    # {"position": 7, "mass": 14.007, "symbol": "N", "name": "Nitrogen"},
-    # {"position": 39, "mass": 88.906, "symbol": "Y", "name": "Yttrium"},
-    # {"position": 56, "mass": 137.33, "symbol": "Ba", "name": "Barium"},
-    # {"position": 58, "mass": 140.12, "symbol": "Ce", "name": "Cerium"},
 ]
 
 rows = [
@@ -113,37 +109,15 @@ def left_side_area_stats():
     )
 
 
-def generate_piechart():
-    return dcc.Graph(
-        id="piechart",
-        figure={
-            "data": [
-                {
-                    "labels": [1, 1, 1],
-                    "values": [3, 3, 3],
-                    "type": "pie",
-                    "marker": {"line": {"color": "white", "width": 1}},
-                    "hoverinfo": "label",
-                    "textinfo": "label",
-                }
-            ],
-            "layout": {
-                "margin": dict(l=20, r=20, t=20, b=20),
-                "showlegend": True,
-                "paper_bgcolor": "rgba(0,0,0,0)",
-                "plot_bgcolor": "rgba(0,0,0,0)",
-                "font": {"color": "white"},
-                "autosize": True,
-            },
-        },
-    )
-
-
 cost_chart = dcc.Graph(id=PROJECT_PAGE_VISUALIZATION_COST_GRAPH, figure=plot_default_scatter_dummy(),
                        style={'width': '100%', 'height': '100%'}, )
 
-reliability_chart = dcc.Graph(id=PROJECT_PAGE_VISUALIZATION_RELIABILITY_GRAPH, figure=plot_default_scatter_dummy(),
-                              style={'width': '100%', 'height': '100%'}, )
+reliability_chart_box = html.Div(children=[
+    layout_radio_result_type_project_page,
+    dcc.Graph(id=PROJECT_PAGE_VISUALIZATION_RELIABILITY_GRAPH, figure=plot_default_scatter_dummy(),
+              style={'width': '100%', 'height': '100%'})
+
+])
 
 map_overview_area = dcc.Graph(
     id=OVERVIEW_PROJECT_MAP_ID,
@@ -157,14 +131,14 @@ right_side_visualization = html.Div(
     id="project_page_visualization__",
     children=[
         dbc.Row([
-            dbc.Col(table, md=7),
-            dbc.Col(map_overview_area, md=5),
-        ]),
+            dbc.Col(table, md=7, style={"height": "100%"}),
+            dbc.Col(map_overview_area, md=5, style={"height": "100%"}),
+        ], className="h-60"),
 
         dbc.Row([
-            dbc.Col(cost_chart, md=5),
-            dbc.Col(reliability_chart, md=7),
-        ]),
+            dbc.Col(cost_chart, md=5, style={"height": "100%"}),
+            dbc.Col(reliability_chart_box, md=7, style={"height": "100%"}),
+        ], className="h-40"),
     ],
 )
 

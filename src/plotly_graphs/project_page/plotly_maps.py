@@ -4,7 +4,8 @@ import plotly.graph_objects as go
 from src.constants import PROJECTS_COLOR_SEQUENCE
 from src.linear_objects.dike_traject import DikeTraject
 from src.linear_objects.project import DikeProject
-from src.plotly_graphs.plotly_maps import update_layout_map_box, add_section_trace, plot_default_overview_map_dummy
+from src.plotly_graphs.plotly_maps import update_layout_map_box, add_section_trace, plot_default_overview_map_dummy, \
+    get_middle_point, get_average_point
 from src.utils.gws_convertor import GWSRDConvertor
 
 
@@ -18,12 +19,14 @@ def plot_project_overview_map(projects: list[DikeProject]) -> go.Figure:
     :return:
     """
     fig = go.Figure()
+    sections = []
     if len(projects) == 0:
         return plot_default_overview_map_dummy()
     for i, project in enumerate(projects):
 
         _color = PROJECTS_COLOR_SEQUENCE[i]
         for index, section in enumerate(project.dike_sections):
+            sections.append(section)
             # if a section is not in analyse, skip it, and it turns blank on the map.
             _hovertemplate = (
                     f"Traject {project.name}<br>" +
@@ -57,8 +60,8 @@ def plot_project_overview_map(projects: list[DikeProject]) -> go.Figure:
 
                 ))
 
-        _middle_point = (52.155170, 5.387207)  # lat/lon of Amersfoort
-        update_layout_map_box(fig, _middle_point, zoom=7)
+        _middle_point = get_average_point(sections)
+        update_layout_map_box(fig, _middle_point, zoom=10)
 
     return fig
 
