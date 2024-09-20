@@ -19,7 +19,7 @@ with open(path_overview_projects) as f:
     project_overview_data = json.load(f)
 
 
-projects = get_projects_from_saved_data(imported_runs_data, project_overview_data)
+projects, _ = get_projects_from_saved_data(imported_runs_data, project_overview_data)
 
 _fig = plot_cost_vs_time_projects(projects)
 _fig.show()

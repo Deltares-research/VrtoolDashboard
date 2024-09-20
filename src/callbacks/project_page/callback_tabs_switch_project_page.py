@@ -51,11 +51,11 @@ def update_project_page_visualization(tabs_switch, result_type: str, imported_ru
     if project_overview_data is None:
         return dash.no_update, dash.no_update, dash.no_update, dash.no_update
 
-    projects = get_projects_from_saved_data(imported_runs_data, project_overview_data)
+    projects, trajects = get_projects_from_saved_data(imported_runs_data, project_overview_data)
     cost_fig = plot_cost_vs_time_projects(projects)
     reliability_fig = projects_reliability_over_time(projects, imported_runs_data, result_type)
     project_overview_table = fill_project_display_overview_table(projects)
 
-    map_fig = plot_project_overview_map(projects)
+    map_fig = plot_project_overview_map(projects, trajects.values())
     return cost_fig, reliability_fig, map_fig, project_overview_table
 

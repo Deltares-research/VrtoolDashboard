@@ -36,7 +36,7 @@ class TestPlotlyScatter:
         _projects_overview_data = json.load(
             open(Path(__file__).parent.parent.joinpath("data", "projects_overview_data_new.json")))
 
-        _projects = get_projects_from_saved_data(_imported_runs_data, _projects_overview_data)
+        _projects, _ = get_projects_from_saved_data(_imported_runs_data, _projects_overview_data)
 
         # 2. Call
         _fig = projects_reliability_over_time(_projects, _imported_runs_data, ResultType.RELIABILITY.name)
@@ -51,7 +51,7 @@ class TestPlotlyScatter:
         _projects_overview_data = json.load(
             open(Path(__file__).parent.parent.joinpath("data", "projects_overview_data_new.json")))
 
-        _projects = get_projects_from_saved_data(_imported_runs_data, _projects_overview_data)
+        _projects, _ = get_projects_from_saved_data(_imported_runs_data, _projects_overview_data)
 
         # 2. Call
         _fig = plot_cost_vs_time_projects(_projects)

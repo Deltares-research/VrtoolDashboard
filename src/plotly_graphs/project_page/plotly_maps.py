@@ -1,3 +1,5 @@
+from typing import Optional
+
 import numpy as np
 import plotly.graph_objects as go
 
@@ -9,7 +11,7 @@ from src.plotly_graphs.plotly_maps import update_layout_map_box, add_section_tra
 from src.utils.gws_convertor import GWSRDConvertor
 
 
-def plot_project_overview_map(projects: list[DikeProject]) -> go.Figure:
+def plot_project_overview_map(projects: list[DikeProject], trajects: Optional[list[DikeTraject]]=None) -> go.Figure:
     """
     This function plots an overview Map of the current dike in data. It uses plotly Mapbox for the visualization.
 
@@ -62,6 +64,35 @@ def plot_project_overview_map(projects: list[DikeProject]) -> go.Figure:
 
         _middle_point = get_average_point(sections)
         update_layout_map_box(fig, _middle_point, zoom=10)
+
+    if trajects is not None:
+        _color = "grey"
+        for traject in trajects:
+            for index, section in enumerate(traject.dike_sections):
+                sections.append(section)
+                # if a section is not in analyse, skip it, and it turns blank on the map.
+                _hovertemplate = (
+                        f"Traject {traject.name}<br>" +
+                        f"Vaknaam {section.name}<br>" + f"Lengte: {section.length}m <extra></extra>"
+                )
+                _coordinates_wgs = [
+                    GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in section.coordinates_rd
+                ]  # convert in GWS coordinates:
+
+                fig.add_trace(
+                    go.Scattermapbox(
+                        mode="lines",
+                        lat=[x[0] for x in _coordinates_wgs],
+                        lon=[x[1] for x in _coordinates_wgs],
+                        marker={"size": 10, "color": _color},
+                        line={"width": 4, "color": _color},
+                        name=traject.name,
+                        legendgroup=traject.name,
+                        hovertemplate=_hovertemplate,
+                        opacity=0.9,
+                        showlegend=True if index == 0 else False,
+                    )
+                )
 
     return fig
 

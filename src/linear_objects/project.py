@@ -27,7 +27,7 @@ class DikeProject():
         return sum([section.length for section in self.dike_sections])
 
 
-def get_projects_from_saved_data(imported_runs_data: dict, project_overview_data: list[dict]) -> list[DikeProject]:
+def get_projects_from_saved_data(imported_runs_data: dict, project_overview_data: list[dict]) -> tuple[list[DikeProject], list[DikeTraject]]:
     """
 
     :param imported_runs_data: stored data of all the imported runs as a dict with key format: "traject|run", for ex:
@@ -36,6 +36,7 @@ def get_projects_from_saved_data(imported_runs_data: dict, project_overview_data
     :return:
     """
     projects = []
+
 
     # First populate the dike_trajects dict to avoid dezerializing the same data multiple times
     dict_runs = {}
@@ -67,7 +68,7 @@ def get_projects_from_saved_data(imported_runs_data: dict, project_overview_data
             project_failure_prob_after_reinforcement=calc_prob_failure_after_reinforcement(sections)
         )
         projects.append(project)
-    return projects
+    return projects, dict_runs
 
 
 def calc_prob_failure_before_reinforcement(dike_sections: list[DikeSection]) -> float:
