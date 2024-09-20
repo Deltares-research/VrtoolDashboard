@@ -15,6 +15,7 @@ class ResultType(Enum):
     COST = "Kosten"
     MEASURE = "Maatregel"
     INTERPRETATION_CLASS = "Duidingsklassen"
+    DISTANCE_TO_NORM = "Factor afstand tot norm"
 
 
 class SubResultType(Enum):

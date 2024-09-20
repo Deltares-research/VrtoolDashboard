@@ -79,6 +79,7 @@ BUTTON_DOWNLOAD_PROJECTS_EXPORT = "button_download_projects_export"
 BUTTON_DOWNLOAD_PROJECTS_EXPORT_NB_CLICKS = "button_download_projects_export_nb_clicks"
 UPLOAD_SAVED_PROJECTS = "upload_saved_projects"
 SAVE_PROJECTS_NAME_ID = "save_projects_name_id"
+RADIO_PROJECT_PAGE_RESULT_TYPE = "radio_project_page_result_type"
 
 ######## Comparison page ##########
 

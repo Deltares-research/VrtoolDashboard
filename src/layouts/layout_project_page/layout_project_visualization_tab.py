@@ -5,6 +5,7 @@ import dash_mantine_components as dmc
 from src.component_ids import PROJECT_PAGE_VISUALIZATION_COST_GRAPH, PROJECT_PAGE_VISUALIZATION_RELIABILITY_GRAPH, \
     OVERVIEW_PROJECT_MAP_ID, PROJECT_OVERVIEW_TABLE_DISPLAY
 from src.constants import get_mapbox_token
+from src.layouts.layout_traject_page.layout_radio_items import layout_radio_result_type_project_page
 from src.linear_objects.project import DikeProject
 from src.plotly_graphs.pf_length_cost import plot_default_scatter_dummy
 from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
@@ -108,12 +109,15 @@ def left_side_area_stats():
     )
 
 
-
 cost_chart = dcc.Graph(id=PROJECT_PAGE_VISUALIZATION_COST_GRAPH, figure=plot_default_scatter_dummy(),
                        style={'width': '100%', 'height': '100%'}, )
 
-reliability_chart = dcc.Graph(id=PROJECT_PAGE_VISUALIZATION_RELIABILITY_GRAPH, figure=plot_default_scatter_dummy(),
-                              style={'width': '100%', 'height': '100%'}, )
+reliability_chart_box = html.Div(children=[
+    layout_radio_result_type_project_page,
+    dcc.Graph(id=PROJECT_PAGE_VISUALIZATION_RELIABILITY_GRAPH, figure=plot_default_scatter_dummy(),
+              style={'width': '100%', 'height': '100%'})
+
+])
 
 map_overview_area = dcc.Graph(
     id=OVERVIEW_PROJECT_MAP_ID,
@@ -133,7 +137,7 @@ right_side_visualization = html.Div(
 
         dbc.Row([
             dbc.Col(cost_chart, md=5, style={"height": "100%"}),
-            dbc.Col(reliability_chart, md=7, style={"height": "100%"}),
+            dbc.Col(reliability_chart_box, md=7, style={"height": "100%"}),
         ], className="h-40"),
     ],
 )
