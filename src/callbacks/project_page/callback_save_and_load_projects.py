@@ -4,7 +4,8 @@ import json
 from dash import html, Output, Input, callback, State, dcc, no_update
 
 from src.component_ids import EXPORT_PROJECTS_TO_JSON_ID, BUTTON_DOWNLOAD_PROJECTS_EXPORT_NB_CLICKS, \
-    BUTTON_DOWNLOAD_PROJECTS_EXPORT, STORED_PROJECT_OVERVIEW_DATA, STORED_IMPORTED_RUNS_DATA, UPLOAD_SAVED_PROJECTS
+    BUTTON_DOWNLOAD_PROJECTS_EXPORT, STORED_PROJECT_OVERVIEW_DATA, STORED_IMPORTED_RUNS_DATA, UPLOAD_SAVED_PROJECTS, \
+    SAVE_PROJECTS_NAME_ID
 
 
 @callback(
@@ -13,10 +14,12 @@ from src.component_ids import EXPORT_PROJECTS_TO_JSON_ID, BUTTON_DOWNLOAD_PROJEC
     [
         Input(BUTTON_DOWNLOAD_PROJECTS_EXPORT, 'n_clicks'),
         Input(BUTTON_DOWNLOAD_PROJECTS_EXPORT_NB_CLICKS, 'value'),
+        State(SAVE_PROJECTS_NAME_ID, "value"),
         State(STORED_PROJECT_OVERVIEW_DATA, "data"),
         State(STORED_IMPORTED_RUNS_DATA, "data"), ]
 )
-def download_reinforced_sections_geojson(n_clicks: int, store_n_click_button: int, project_data: list[dict],
+def download_reinforced_sections_geojson(n_clicks: int, store_n_click_button: int, filename_save: int,
+                                         project_data: list[dict],
                                          imported_runs_data: dict,
                                          ) -> tuple[dict, int]:
     """
@@ -31,14 +34,13 @@ def download_reinforced_sections_geojson(n_clicks: int, store_n_click_button: in
     if n_clicks is None or store_n_click_button == n_clicks:  # update when clicking on button ONLY
         return no_update, no_update
 
-
     else:
         _content = dict(imported_runs_data=imported_runs_data,
                         project_data=project_data)
         _content_json = json.dumps(_content)
 
         return dict(content=_content_json,
-                    filename=f"projects_{store_n_click_button}.json"), n_clicks
+                    filename=f"{filename_save}.json"), n_clicks
 
 
 @callback(
