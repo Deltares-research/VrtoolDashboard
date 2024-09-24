@@ -3,7 +3,7 @@ import dash_bootstrap_components as dbc
 import dash_mantine_components as dmc
 
 from src.component_ids import PROJECT_PAGE_VISUALIZATION_COST_GRAPH, PROJECT_PAGE_VISUALIZATION_RELIABILITY_GRAPH, \
-    OVERVIEW_PROJECT_MAP_ID, PROJECT_OVERVIEW_TABLE_DISPLAY
+    OVERVIEW_PROJECT_MAP_ID, PROJECT_OVERVIEW_TABLE_DISPLAY, TOTAL_AREA_COST, TOTAL_AREA_DAMAGE, TOTAL_AREA_RISK
 from src.layouts.layout_traject_page.layout_radio_items import layout_radio_result_type_project_page
 from src.linear_objects.project import DikeProject
 from src.plotly_graphs.pf_length_cost import plot_default_scatter_dummy
@@ -92,14 +92,24 @@ def left_side_area_stats():
             html.Div(
                 id="card-1",
                 children=[
-                    html.P("Area stats"),
+                    dmc.Center(style={"width": "100%"},
+                               children=[
+                                   dmc.SimpleGrid(
+                                       cols=1,
+                                       spacing="md",
+                                       verticalSpacing="md",
+                                       children=[
+                                           html.P(""),
+                                           dmc.Text("Totaal kosten:", td="underline"),
+                                           dmc.Text("", id=TOTAL_AREA_COST, fw=700, size="xl"),
+                                           dmc.Text("Totaal schade:", td="underline"),
+                                           dmc.Text("XXXX €", id=TOTAL_AREA_DAMAGE, fw=700, size="xl"),
+                                           dmc.Text("Totaal risico:", td="underline"),
+                                           dmc.Text("XXXX €", id=TOTAL_AREA_RISK, fw=700, size="xl"),
+                                       ]
+                                   ),
 
-                ],
-            ),
-            html.Div(
-                id="card-2",
-                children=[
-                    html.P("Total cost:"),
+                               ]),
 
                 ],
             ),

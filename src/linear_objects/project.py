@@ -89,3 +89,18 @@ def calc_prob_failure_after_reinforcement(dike_sections: list[DikeSection]) -> f
 
     _traject_pf = get_traject_prob(_beta_df)[0]
     return _traject_pf[0][0]
+
+
+
+def calc_area_stats(projects: list[DikeProject]):
+    cost = 0
+    damage = 0
+    risk = 0
+    for project in projects:
+        cost += project.calc_project_cost()
+        for section in project.dike_sections:
+            pass
+            # damage += section.final_measure_veiligheidsrendement["schade"]
+            # risk += section.final_measure_veiligheidsrendement["risico"]
+
+    return cost, damage, risk

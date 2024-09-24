@@ -80,6 +80,9 @@ BUTTON_DOWNLOAD_PROJECTS_EXPORT_NB_CLICKS = "button_download_projects_export_nb_
 UPLOAD_SAVED_PROJECTS = "upload_saved_projects"
 SAVE_PROJECTS_NAME_ID = "save_projects_name_id"
 RADIO_PROJECT_PAGE_RESULT_TYPE = "radio_project_page_result_type"
+TOTAL_AREA_COST = "total_area_cost"
+TOTAL_AREA_DAMAGE = "total_area_damage"
+TOTAL_AREA_RISK = "total_area_risk"
 
 ######## Comparison page ##########
 
