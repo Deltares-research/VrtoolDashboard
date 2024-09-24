@@ -179,11 +179,12 @@ def plot_cost_vs_time_projects(projects: list[DikeProject]):
             # hovertemplate with start and end year, total cost cost of project
             hovertemplate=f"{project.name}<br>Startjaar: {project.start_year}<br>"
                           f"Eindjaar: {project.end_year}<br>"
-                          f"Kosten: {cost / 1e6:.1f} mln €<extra></extra>"
+                          f"Jaarlijkse Kosten: {cost_yearly / 1e6:.2f} mln €<br>"
+                          f"Totaal Kosten: {cost / 1e6:.1f} mln €<extra></extra>"
         ))
 
     fig.update_layout(template='plotly_white')
-    fig.update_yaxes(title="Kosten (mln €)")
+    fig.update_yaxes(title="Jaarlijkse Kosten (mln €)")
     fig.update_xaxes(title="Jaar")
 
     # no gap between bars

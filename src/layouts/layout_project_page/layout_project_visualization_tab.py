@@ -3,7 +3,7 @@ import dash_bootstrap_components as dbc
 import dash_mantine_components as dmc
 
 from src.component_ids import PROJECT_PAGE_VISUALIZATION_COST_GRAPH, PROJECT_PAGE_VISUALIZATION_RELIABILITY_GRAPH, \
-    OVERVIEW_PROJECT_MAP_ID, PROJECT_OVERVIEW_TABLE_DISPLAY
+    OVERVIEW_PROJECT_MAP_ID, PROJECT_OVERVIEW_TABLE_DISPLAY, TOTAL_AREA_COST, TOTAL_AREA_DAMAGE, TOTAL_AREA_RISK
 from src.layouts.layout_traject_page.layout_radio_items import layout_radio_result_type_project_page
 from src.linear_objects.project import DikeProject
 from src.plotly_graphs.pf_length_cost import plot_default_scatter_dummy
@@ -22,6 +22,7 @@ rows = [
             dmc.TableTd(element["start_year"]),
             dmc.TableTd(element["end_year"]),
             dmc.TableTd(element["length"]),
+            dmc.TableTd(element["project_full_cost"]),
             dmc.TableTd(element["project_reliability_before_reinforcement"]),
             dmc.TableTd(element["project_reliability_after_reinforcement"]),
         ]
@@ -37,6 +38,7 @@ head = dmc.TableThead(
             dmc.TableTh("Start jaar"),
             dmc.TableTh("Eind jaar"),
             dmc.TableTh("Lengte (km)"),
+            dmc.TableTh("Kosten (M€)"),
             dmc.TableTh("Beoordeling \n faalkans"),
             dmc.TableTh("Versterking faalkans"),
 
@@ -55,6 +57,7 @@ def fill_project_display_overview_table(projects: list[DikeProject]):
          "start_year": project.start_year,
          "end_year": project.end_year,
          "length": f"{project.total_length / 1e3:.2f}",  # km
+         "project_full_cost": f"{project.calc_project_cost() / 1e6:.2f}",  # M€
          "project_reliability_before_reinforcement": "{:.2e}".format(project.project_failure_prob_assessement),
          "project_reliability_after_reinforcement": "{:.2e}".format(project.project_failure_prob_after_reinforcement),
          }
@@ -68,6 +71,7 @@ def fill_project_display_overview_table(projects: list[DikeProject]):
                 dmc.TableTd(element["start_year"]),
                 dmc.TableTd(element["end_year"]),
                 dmc.TableTd(element["length"]),
+                dmc.TableTd(element["project_full_cost"]),
                 dmc.TableTd(element["project_reliability_before_reinforcement"]),
                 dmc.TableTd(element["project_reliability_after_reinforcement"]),
             ]
@@ -92,14 +96,24 @@ def left_side_area_stats():
             html.Div(
                 id="card-1",
                 children=[
-                    html.P("Area stats"),
+                    dmc.Center(style={"width": "100%"},
+                               children=[
+                                   dmc.SimpleGrid(
+                                       cols=1,
+                                       spacing="md",
+                                       verticalSpacing="md",
+                                       children=[
+                                           html.P(""),
+                                           dmc.Text("Totaal kosten:", td="underline"),
+                                           dmc.Text("", id=TOTAL_AREA_COST, fw=700, size="xl"),
+                                           dmc.Text("Totaal schade:", td="underline"),
+                                           dmc.Text("XXXX €", id=TOTAL_AREA_DAMAGE, fw=700, size="xl"),
+                                           dmc.Text("Totaal risico:", td="underline"),
+                                           dmc.Text("XXXX €", id=TOTAL_AREA_RISK, fw=700, size="xl"),
+                                       ]
+                                   ),
 
-                ],
-            ),
-            html.Div(
-                id="card-2",
-                children=[
-                    html.P("Total cost:"),
+                               ]),
 
                 ],
             ),
