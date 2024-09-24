@@ -27,7 +27,6 @@ from src.constants import (
 
 class TestCallbackTabContent:
 
-    @pytest.mark.skip(reason="Avoid overcharging MapBox licence")
     def test_make_graph_overview_dike_callback(self):
         # 1. Define data
         _dike_data = json.load(
@@ -48,7 +47,6 @@ class TestCallbackTabContent:
         # 3. Assert
         assert isinstance(output, dcc.Graph)
 
-    @pytest.mark.skip(reason="Avoid overcharging MapBox licence")
     def test_make_graph_initial_assessment_callback(self):
         # 1. Define data
         _dike_data = json.load(
@@ -71,7 +69,6 @@ class TestCallbackTabContent:
         # 3. Assert
         assert isinstance(output, dcc.Graph)
 
-    @pytest.mark.skip(reason="Avoid overcharging MapBox licence")
     def test_make_graph_map_measures_callback(self):
         # 1. Define data
         _dike_data = json.load(
@@ -122,7 +119,6 @@ class TestCallbackTabContent:
         # 3. Assert
         assert isinstance(output, Figure)
 
-    @pytest.mark.skip(reason="Avoid overcharging MapBox licence")
     def test_make_graph_map_urgency(self):
         # 1. Define data
         _dike_data = json.load(
