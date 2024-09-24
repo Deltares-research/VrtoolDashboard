@@ -22,6 +22,7 @@ rows = [
             dmc.TableTd(element["start_year"]),
             dmc.TableTd(element["end_year"]),
             dmc.TableTd(element["length"]),
+            dmc.TableTd(element["project_full_cost"]),
             dmc.TableTd(element["project_reliability_before_reinforcement"]),
             dmc.TableTd(element["project_reliability_after_reinforcement"]),
         ]
@@ -37,6 +38,7 @@ head = dmc.TableThead(
             dmc.TableTh("Start jaar"),
             dmc.TableTh("Eind jaar"),
             dmc.TableTh("Lengte (km)"),
+            dmc.TableTh("Kosten (M€)"),
             dmc.TableTh("Beoordeling \n faalkans"),
             dmc.TableTh("Versterking faalkans"),
 
@@ -55,6 +57,7 @@ def fill_project_display_overview_table(projects: list[DikeProject]):
          "start_year": project.start_year,
          "end_year": project.end_year,
          "length": f"{project.total_length / 1e3:.2f}",  # km
+         "project_full_cost": f"{project.calc_project_cost() / 1e6:.2f}",  # M€
          "project_reliability_before_reinforcement": "{:.2e}".format(project.project_failure_prob_assessement),
          "project_reliability_after_reinforcement": "{:.2e}".format(project.project_failure_prob_after_reinforcement),
          }
@@ -68,6 +71,7 @@ def fill_project_display_overview_table(projects: list[DikeProject]):
                 dmc.TableTd(element["start_year"]),
                 dmc.TableTd(element["end_year"]),
                 dmc.TableTd(element["length"]),
+                dmc.TableTd(element["project_full_cost"]),
                 dmc.TableTd(element["project_reliability_before_reinforcement"]),
                 dmc.TableTd(element["project_reliability_after_reinforcement"]),
             ]
