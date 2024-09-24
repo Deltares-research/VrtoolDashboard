@@ -1027,14 +1027,14 @@ def add_colorscale_bar(
                 title="Verhouding pf vr/dsn",
                 titleside="right",
                 tickmode="array",
-                tickvals=[0, 1, 2, 3],
-                ticktext=["1", "10", "10", "100"],
+                tickvals=[-2, -1, 0, 1, 2],
+                ticktext=["0.01", "0.1", "1", "10", "100"],
                 ticks="outside",
                 len=0.5,
             ),
             showscale=True,
-            cmin=0,
-            cmax=3,
+            cmin=-2,
+            cmax=2,
         )
 
     elif (
@@ -1258,7 +1258,7 @@ def get_reliability_color(reliability_value: float, center_pf: float) -> str:
 def get_probability_ratio_color(probability_ratio: float) -> str:
     cmap = plt.cm.BrBG  # theme of the colorscale
     cmap = cmap.reversed()
-    return get_color(np.log(probability_ratio), cmap, 0, 3)
+    return get_color(np.log10(probability_ratio), cmap, -2, 2)  # from 0.01 to 100
 
 
 def get_cost_color(cost_value) -> str:

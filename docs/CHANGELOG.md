@@ -9,10 +9,12 @@ All notable changes to this project will be documented in this file.
 - Added radio result type in projects page
 - Added all trajects on map in projects page
 - Added name input field to save projects
+- Added basic areal stats to projects page
 
 ### Changed
 - Vrtool core 1.0.0
-- Upgrade to MapLibre 
+- Upgrade to MapLibre
+- Colorscale for verhouding vr/dsn
 
 ### Deprecated
 None.
