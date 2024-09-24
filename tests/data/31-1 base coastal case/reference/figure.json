@@ -828,7 +828,7 @@
             "type": "scattergl"
           }
         ],
-        "scattermapbox": [
+        "scattermap": [
           {
             "marker": {
               "colorbar": {
@@ -838,7 +838,7 @@
                 "ticks": "inside"
               }
             },
-            "type": "scattermapbox"
+            "type": "scattermap"
           }
         ],
         "scatterpolargl": [

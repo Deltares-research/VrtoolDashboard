@@ -4,7 +4,6 @@ import dash_mantine_components as dmc
 
 from src.component_ids import PROJECT_PAGE_VISUALIZATION_COST_GRAPH, PROJECT_PAGE_VISUALIZATION_RELIABILITY_GRAPH, \
     OVERVIEW_PROJECT_MAP_ID, PROJECT_OVERVIEW_TABLE_DISPLAY
-from src.constants import get_mapbox_token
 from src.layouts.layout_traject_page.layout_radio_items import layout_radio_result_type_project_page
 from src.linear_objects.project import DikeProject
 from src.plotly_graphs.pf_length_cost import plot_default_scatter_dummy
@@ -123,7 +122,6 @@ map_overview_area = dcc.Graph(
     id=OVERVIEW_PROJECT_MAP_ID,
     figure=plot_default_overview_map_dummy(),
     style={"width": "100%", "height": "100%"},
-    config={"mapboxAccessToken": get_mapbox_token()},
 )
 
 table = html.Div(id=PROJECT_OVERVIEW_TABLE_DISPLAY, children=[dmc.Table([head, body, caption])])

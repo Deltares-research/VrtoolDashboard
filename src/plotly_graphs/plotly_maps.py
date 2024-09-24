@@ -29,7 +29,7 @@ def plot_default_overview_map_dummy() -> go.Figure:
     """
     fig = go.Figure()
 
-    fig.add_trace(go.Scattermapbox(mode="lines", lat=[], lon=[], showlegend=False))
+    fig.add_trace(go.Scattermap(mode="lines", lat=[], lon=[], showlegend=False))
 
     # this is centered on the Netherlands and zoomed out
     update_layout_map_box(fig, center=(51.798160177811454, 5.200357914732026), zoom=8)
@@ -548,7 +548,7 @@ def add_measure_type_trace(
         _hovertext += "<extra></extra>"
 
         fig.add_trace(
-            go.Scattermapbox(
+            go.Scattermap(
                 name=_name,
                 legendgroup=_name,
                 mode="lines",
@@ -570,7 +570,7 @@ def add_measure_type_trace(
             GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in section.coordinates_rd
         ]  # convert in GWS coordinates:
         fig.add_trace(
-            go.Scattermapbox(
+            go.Scattermap(
                 name="Verticale pipingoplossing",
                 legendgroup="VZG",
                 mode="lines",
@@ -595,7 +595,7 @@ def add_measure_type_trace(
             GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in section.coordinates_rd
         ]  # convert in GWS coordinates:
         fig.add_trace(
-            go.Scattermapbox(
+            go.Scattermap(
                 name="Stabiliteitsscherm",
                 legendgroup="screen",
                 mode="lines",
@@ -619,7 +619,7 @@ def add_measure_type_trace(
         )
 
         fig.add_trace(
-            go.Scattermapbox(
+            go.Scattermap(
                 name="Zelfkerende constructie",
                 legendgroup="diaphram wall",
                 mode="lines",
@@ -644,7 +644,7 @@ def add_measure_type_trace(
         )
 
         fig.add_trace(
-            go.Scattermapbox(
+            go.Scattermap(
                 name="Damwandconstructie",
                 legendgroup="sheetpile",
                 mode="lines",
@@ -673,7 +673,7 @@ def add_measure_type_trace(
         ]  # convert in GWS coordinates:
 
         fig.add_trace(
-            go.Scattermapbox(
+            go.Scattermap(
                 name="Aanpassing bekleding",
                 legendgroup="revetment",
                 mode="lines",
@@ -702,7 +702,7 @@ def add_measure_type_trace(
         )
 
         fig.add_trace(
-            go.Scattermapbox(
+            go.Scattermap(
                 name="Custom",
                 legendgroup="custom",
                 mode="lines",
@@ -736,7 +736,7 @@ def add_measure_crest_heightening_trace(
             _color = get_crest_heightening_color(measure_results["dcrest"])
 
             fig.add_trace(
-                go.Scattermapbox(
+                go.Scattermap(
                     name=measure_results["name"],
                     legendgroup=measure_results["name"],
                     mode="lines",
@@ -769,7 +769,7 @@ def add_measure_berm_widening_trace(
             _color = get_berm_widening_color(measure_results["dberm"])
 
             fig.add_trace(
-                go.Scattermapbox(
+                go.Scattermap(
                     name=measure_results["name"],
                     legendgroup=measure_results["name"],
                     mode="lines",
@@ -846,7 +846,7 @@ def add_section_trace(
     ]  # convert in GWS coordinates:
 
     fig.add_trace(
-        go.Scattermapbox(
+        go.Scattermap(
             mode="lines",
             lat=[x[0] for x in _coordinates_wgs],
             lon=[x[1] for x in _coordinates_wgs],
@@ -945,7 +945,7 @@ def update_layout_map_box(fig: go.Figure, center: tuple[float, float], zoom: int
     fig.update_layout(
         margin=dict(l=0, r=0, t=0, b=0),
         showlegend=True,
-        mapbox=dict(
+        map=dict(
             center=dict(lat=center[0], lon=center[1]),
             zoom=zoom,
         ),

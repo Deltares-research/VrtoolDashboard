@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Vrtool core 1.0.0
+- Upgrade to MapLibre 
 
 ### Deprecated
 None.
