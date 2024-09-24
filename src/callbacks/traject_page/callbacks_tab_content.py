@@ -13,7 +13,7 @@ from src.component_ids import (
     STORE_CONFIG, MEASURE_MODAL_ID, CLOSE_MEASURE_MODAL_BUTTON_ID, DIKE_TRAJECT_PF_COST_GRAPH_ID,
     GRAPH_MEASURE_RELIABILITY_TIME_ID
 )
-from src.constants import REFERENCE_YEAR, get_mapbox_token, Mechanism
+from src.constants import REFERENCE_YEAR, Mechanism
 from src.linear_objects.dike_traject import DikeTraject
 from src.orm.import_database import get_all_measure_results, get_measure_reliability_over_time
 from src.plotly_graphs.measure_comparison_graph import plot_measure_results_graph
@@ -53,7 +53,6 @@ def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
     return dcc.Graph(
         figure=_fig,
         style={"width": "100%", "height": "100%"},
-        config={"mapboxAccessToken": get_mapbox_token()},
     )
 
 
@@ -91,7 +90,6 @@ def make_graph_map_initial_assessment(
     return dcc.Graph(
         figure=_fig,
         style={"width": "100%", "height": "100%"},
-        config={"mapboxAccessToken": get_mapbox_token()},
     )
 
 
@@ -148,7 +146,6 @@ def make_graph_map_measures(
     return dcc.Graph(
         figure=_fig,
         style={"width": "100%", "height": "100%"},
-        config={"mapboxAccessToken": get_mapbox_token()},
     )
 
 
@@ -220,7 +217,6 @@ def make_graph_map_urgency(
     return dcc.Graph(
         figure=_fig,
         style={"width": "100%", "height": "100%"},
-        config={"mapboxAccessToken": get_mapbox_token()},
     )
 
 

@@ -39,7 +39,7 @@ def plot_project_overview_map(projects: list[DikeProject], trajects: Optional[li
             ]  # convert in GWS coordinates:
 
             fig.add_trace(
-                go.Scattermapbox(
+                go.Scattermap(
                     mode="lines+text",
                     lat=[x[0] for x in _coordinates_wgs],
                     lon=[x[1] for x in _coordinates_wgs],
@@ -52,7 +52,7 @@ def plot_project_overview_map(projects: list[DikeProject], trajects: Optional[li
                 )
             )
             if index == int(len(project.dike_sections) / 2):
-                fig.add_trace(go.Scattermapbox(
+                fig.add_trace(go.Scattermap(
                     mode="text",
                     lat=[[x[0] for x in _coordinates_wgs][index]],
                     lon=[[x[1] for x in _coordinates_wgs][index]],
@@ -80,7 +80,7 @@ def plot_project_overview_map(projects: list[DikeProject], trajects: Optional[li
                 ]  # convert in GWS coordinates:
 
                 fig.add_trace(
-                    go.Scattermapbox(
+                    go.Scattermap(
                         mode="lines",
                         lat=[x[0] for x in _coordinates_wgs],
                         lon=[x[1] for x in _coordinates_wgs],

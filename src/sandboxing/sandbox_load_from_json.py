@@ -4,7 +4,7 @@ from pathlib import Path
 from vrtool.probabilistic_tools.probabilistic_functions import beta_to_pf
 
 from src.callbacks.traject_page.callbacks_tab_content import make_graph_pf_vs_cost
-from src.constants import ResultType, CalcType, ColorBarResultType, Mechanism, SubResultType, get_mapbox_token
+from src.constants import ResultType, CalcType, ColorBarResultType, Mechanism, SubResultType
 from src.linear_objects.dike_traject import DikeTraject
 from src.plotly_graphs.pf_length_cost import plot_pf_length_cost
 from src.plotly_graphs.plotly_maps import plot_dike_traject_reliability_measures_assessment_map, \
@@ -35,6 +35,5 @@ _fig = plot_dike_traject_reliability_measures_assessment_map(_dike_traject, 2026
 # #
 # _fig = plot_dike_traject_reliability_initial_assessment_map(_dike_traject, 2025, result_type.name,
 #                                                             mechanism_type=Mechanism.REVETMENT.name, )
-_fig.update_layout(mapbox=dict(accesstoken=get_mapbox_token()))
 _fig.show()
 

@@ -6,7 +6,7 @@ from vrtool.orm.orm_controllers import open_database
 
 from src.callbacks.traject_page.callbacks_tab_content import make_graph_measure_results_comparison, \
     get_mechanism_name_ORM
-from src.constants import CalcType, ColorBarResultType, Mechanism, SubResultType, ResultType, get_mapbox_token
+from src.constants import CalcType, ColorBarResultType, Mechanism
 from src.linear_objects.dike_traject import DikeTraject
 from src.orm.import_database import get_all_measure_results, get_dike_traject_from_config_ORM, \
     get_name_optimization_runs, get_measure_reliability_over_time

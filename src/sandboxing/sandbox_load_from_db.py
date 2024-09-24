@@ -3,7 +3,7 @@ import time
 from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.orm.orm_controllers import open_database
 
-from src.constants import CalcType, ColorBarResultType, Mechanism, SubResultType, ResultType, get_mapbox_token
+from src.constants import CalcType, ColorBarResultType, Mechanism, SubResultType, ResultType
 from src.orm.import_database import get_dike_traject_from_config_ORM, get_name_optimization_runs
 from src.orm.importers.dike_traject_importer import DikeTrajectImporter
 from src.orm import models as orm_model
@@ -99,5 +99,4 @@ _fig = plot_dike_traject_reliability_measures_assessment_map(_traject_db, 2025,
 t2 = time.time()
 print(f"Time to plot: {t2 - t1}")
 
-_fig.update_layout(mapbox=dict(accesstoken=get_mapbox_token()))
 _fig.show()

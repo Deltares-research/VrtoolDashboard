@@ -3,7 +3,6 @@ from dash import html, Output, Input, callback, State, dcc
 from src.component_ids import TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE, CONTENT_TABS_COMPARISON_PAGE_ID, \
     STORED_RUNS_COMPARISONS_DATA, RUNS_COMPARISON_GRAPH_TIME_ID, \
     SLIDER_YEAR_RELIABILITY_RESULTS_ID, OVERVIEW_COMPARISON_MAP_ID, RUNS_COMPARISON_GRAPH_ID
-from src.constants import get_mapbox_token
 from src.layouts.layout_comparison_page.layout_output_tabs import layout_project_output_tab_one, \
     layout_project_output_tab_two, layout_project_output_tab_three
 
@@ -57,7 +56,6 @@ def make_graph_overview_project(imported_runs_data: dict, project_data: list[dic
     return dcc.Graph(
         figure=_fig,
         style={"width": "100%", "height": "100%"},
-        config={"mapboxAccessToken": get_mapbox_token()},
     )
 
 

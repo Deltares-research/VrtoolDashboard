@@ -58,11 +58,6 @@ class GreedyOPtimizationCriteria(Enum):
     TARGET_PF = "Faalkans"
 
 
-def get_mapbox_token() -> str:
-    with open(Path(__file__).parent / "assets" / "mapbox_token.txt") as f:
-        return f.read()
-
-
 conversion_dict_measure_names = {"GROUND_IMPROVEMENT": "Soil reinforcement",
                                  "GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN": "Soil reinforcement with stability screen",
                                  "GEOTEXTILE": "Vertical Piping Solution",
@@ -82,5 +77,6 @@ conversion_dict_measure_names = {"GROUND_IMPROVEMENT": "Soil reinforcement",
 #                            'rgb(67, 217, 250)']
 
 import plotly.express as px
+
 PROJECTS_COLOR_SEQUENCE = px.colors.qualitative.Pastel
 CLASSIC_PLOTLY_COLOR_SEQUENCE = px.colors.qualitative.Plotly
