@@ -93,14 +93,27 @@ def calc_prob_failure_after_reinforcement(dike_sections: list[DikeSection]) -> f
 
 
 def calc_area_stats(projects: list[DikeProject]):
+    """
+    Calculate the total cost, damage and risk for the entire area.
+    Cost is simply the sum of the costs of all the reinforced sections in the projects
+    Damage is the sum of the flood damages of all the sections in the projects
+
+    Risk is the sum of the flood damages of all the sections in the projects multiplied by the probability of failure
+    after completion (i.e. reinforcement) of the project.
+
+    :param projects: list of DikeProject objects
+    :return: tuple: the total cost, damage and risk
+    """
     cost = 0
     damage = 0
     risk = 0
     for project in projects:
+        damage_project = 0
+
         cost += project.calc_project_cost()
         for section in project.dike_sections:
-            pass
-            # damage += section.final_measure_veiligheidsrendement["schade"]
-            # risk += section.final_measure_veiligheidsrendement["risico"]
+            damage_project += section.flood_damages
+        damage += damage_project
+        risk += project.project_failure_prob_after_reinforcement * damage_project
 
     return cost, damage, risk

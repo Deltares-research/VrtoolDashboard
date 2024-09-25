@@ -3,7 +3,8 @@
 ## v0.0.0 [##/##/####]
 
 ### Added
-None.
+- Added flood_damages attribute to DikeSection
+- Added total damages and risk to Area stats
 
 ### Changed
 None.
