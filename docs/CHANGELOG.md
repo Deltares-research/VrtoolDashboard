@@ -1,9 +1,23 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
-
-
 ## v0.0.0 [##/##/####]
+
+### Added
+None.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
+## v0.6.1 [25/09/2024]
 
 ### Added
 - Added radio result type in projects page
