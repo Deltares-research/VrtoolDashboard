@@ -361,7 +361,8 @@
                 "Piping",
                 "StabilityInner",
                 "Revetment"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -1008,7 +1009,8 @@
                 "Piping",
                 "StabilityInner",
                 "Revetment"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -1338,7 +1340,8 @@
                 "Piping",
                 "StabilityInner",
                 "Revetment"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -1870,7 +1873,8 @@
                 "Piping",
                 "StabilityInner",
                 "Revetment"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -2266,7 +2270,8 @@
                 "Piping",
                 "StabilityInner",
                 "Revetment"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -2866,7 +2871,8 @@
                 "Piping",
                 "StabilityInner",
                 "Revetment"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -3282,7 +3288,8 @@
                 "Piping",
                 "StabilityInner",
                 "Revetment"
-            ]
+            ],
+            "flood_damages": 0
         }
     ],
     "reinforcement_order_vr": [

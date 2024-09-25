@@ -346,7 +346,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -589,7 +590,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -1056,7 +1058,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -1339,7 +1342,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -1810,7 +1814,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -2047,7 +2052,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -2304,7 +2310,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -2639,7 +2646,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -2957,7 +2965,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -3679,7 +3688,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -4202,7 +4212,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -4665,7 +4676,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -5180,7 +5192,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -5515,7 +5528,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -5732,7 +5746,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -6123,7 +6138,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -6390,7 +6406,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -6675,7 +6692,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -6902,7 +6920,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -7293,7 +7312,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -7636,7 +7656,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -7849,7 +7870,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -8273,7 +8295,8 @@
             ],
             "revetment": false,
             "Revetment": false,
-            "active_mechanisms": []
+            "active_mechanisms": [],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -8502,7 +8525,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -8723,7 +8747,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -9030,7 +9055,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -9273,7 +9299,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -9496,7 +9523,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -9763,7 +9791,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -10098,7 +10127,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -10457,7 +10487,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -10880,7 +10911,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -11387,7 +11419,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -12270,7 +12303,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -12600,7 +12634,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -12870,7 +12905,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -13239,7 +13275,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -13522,7 +13559,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -13713,7 +13751,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -14328,7 +14367,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -14778,7 +14818,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -14985,7 +15026,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -15320,7 +15362,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -15565,7 +15608,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -15962,7 +16006,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -16256,7 +16301,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -16531,7 +16577,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -16790,7 +16837,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -17207,7 +17255,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -17473,7 +17522,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -17819,7 +17869,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -18461,7 +18512,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -19155,7 +19207,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -19508,7 +19561,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -19789,7 +19843,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -20106,7 +20161,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -20511,7 +20567,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -21304,7 +21361,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -21721,7 +21779,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -22174,7 +22233,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -22419,7 +22479,8 @@
                 "Overflow",
                 "StabilityInner",
                 "Piping"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -22939,7 +23000,8 @@
             ],
             "revetment": false,
             "Revetment": false,
-            "active_mechanisms": []
+            "active_mechanisms": [],
+            "flood_damages": 0
         }
     ],
     "reinforcement_order_vr": [

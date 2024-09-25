@@ -344,7 +344,8 @@
                 "Overflow",
                 "Piping",
                 "StabilityInner"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -585,7 +586,8 @@
                 "Overflow",
                 "Piping",
                 "StabilityInner"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -1054,7 +1056,8 @@
                 "Overflow",
                 "Piping",
                 "StabilityInner"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -1567,7 +1570,8 @@
                 "Overflow",
                 "Piping",
                 "StabilityInner"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -1956,7 +1960,8 @@
                 "Overflow",
                 "Piping",
                 "StabilityInner"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -2284,7 +2289,8 @@
                 "Overflow",
                 "Piping",
                 "StabilityInner"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -2652,7 +2658,8 @@
                 "Overflow",
                 "Piping",
                 "StabilityInner"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -2985,7 +2992,8 @@
                 "Overflow",
                 "Piping",
                 "StabilityInner"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -3277,7 +3285,8 @@
                 "Overflow",
                 "Piping",
                 "StabilityInner"
-            ]
+            ],
+            "flood_damages": 0
         },
         {
             "coordinates_rd": [
@@ -3681,7 +3690,8 @@
                 "Overflow",
                 "Piping",
                 "StabilityInner"
-            ]
+            ],
+            "flood_damages": 0
         }
     ],
     "reinforcement_order_vr": [
