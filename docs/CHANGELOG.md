@@ -12,7 +12,7 @@ All notable changes to this project will be documented in this file.
 - Added basic areal stats to projects page
 
 ### Changed
-- Vrtool core 1.0.0
+- Vrtool core 1.0.1
 - Upgrade to MapLibre
 - Colorscale for verhouding vr/dsn
 
