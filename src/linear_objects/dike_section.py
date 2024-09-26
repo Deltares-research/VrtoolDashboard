@@ -20,6 +20,7 @@ class DikeSection(BaseLinearObject):
     years: list[int]  # Years for which a reliability result is available (both for initial and measures)
     active_mechanisms: list[str]  # Active mechanisms for the dike section
     parent_traject_name: Optional[str]  # Name of the parent traject
+    flood_damages: Optional[float]  # Flood damages for the dike section
 
     def __init__(self, name: str, coordinates_rd: list[tuple[float, float]], in_analyse: int):
         """
@@ -41,6 +42,7 @@ class DikeSection(BaseLinearObject):
         self.revetment = False
         self.active_mechanisms = []
         self.parent_traject_name = None  # this is used in project page to retrieve the parent traject of a section from a project
+        self.flood_damages = 0
 
     def serialize(self) -> dict:
         """Serialize the DikeSection object to a dict, in order to be saved in dcc.Store"""
@@ -57,6 +59,7 @@ class DikeSection(BaseLinearObject):
             'final_measure_doorsnede': self.final_measure_doorsnede,
             'years': self.years,
             'active_mechanisms': self.active_mechanisms,
+            'flood_damages': self.flood_damages,
         }
 
     @staticmethod
@@ -76,6 +79,7 @@ class DikeSection(BaseLinearObject):
         section.years = data['years']
         section.revetment = data['revetment']
         section.active_mechanisms = data['active_mechanisms']
+        section.flood_damages = data['flood_damages']
         return section
 
     def export_as_geojson_feature(self, params: dict) -> dict:
@@ -102,6 +106,7 @@ class DikeSection(BaseLinearObject):
                 "length": self.length,
                 "in_analyse": self.in_analyse,
                 "revetment": self.revetment,
+                "flooding_damages": self.flood_damages,
             }
         }
 

@@ -16,7 +16,7 @@ from vrtool.orm.orm_controllers import export_results_safety_assessment, get_dik
 
 _input_model = Path(
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\RESULTS"
-    "C:/Users/hauth/bitbucket/VRtoolDashboard/tests/data/TestCase1_38-1_no_housing"
+    "/tests/data/TestCase1_38-1_no_housing"
 )
 _results_dir = Path(
     r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\RESULTS\res"
