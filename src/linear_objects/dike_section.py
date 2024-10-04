@@ -79,7 +79,7 @@ class DikeSection(BaseLinearObject):
         section.years = data['years']
         section.revetment = data['revetment']
         section.active_mechanisms = data['active_mechanisms']
-        section.flood_damages = data['flood_damages']
+        section.flood_damages = data.get('flood_damages', 0)
         return section
 
     def export_as_geojson_feature(self, params: dict) -> dict:

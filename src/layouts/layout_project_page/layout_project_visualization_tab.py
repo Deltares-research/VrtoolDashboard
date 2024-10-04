@@ -143,8 +143,8 @@ right_side_visualization = html.Div(
     id="project_page_visualization__",
     children=[
         dbc.Row([
-            dbc.Col(table, md=7, style={"height": "100%"}),
-            dbc.Col(map_overview_area, md=5, style={"height": "100%"}),
+            dbc.Col(table, md=5, style={"height": "100%"}),
+            dbc.Col(map_overview_area, md=7, style={"height": "100%"}),
         ], className="h-60"),
 
         dbc.Row([

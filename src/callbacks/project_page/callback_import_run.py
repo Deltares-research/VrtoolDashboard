@@ -1,13 +1,13 @@
-from pathlib import Path
-
 import dash
 from dash import html, dcc, Output, Input, State, callback
+import plotly.graph_objects as go
 
-from src.component_ids import STORED_IMPORTED_RUNS_DATA, EDITABLE_IMPORTED_RUNS_TABLE_ID
-
+from src.component_ids import STORED_IMPORTED_RUNS_DATA, EDITABLE_IMPORTED_RUNS_TABLE_ID, OVERVIEW_PROJECT_MAP_ID_2
 
 import base64
 import json
+
+from src.plotly_graphs.project_page.plotly_maps import plot_comparison_runs_overview_map
 
 
 @callback(
@@ -53,10 +53,11 @@ def upload_and_save_in_project_data(contents: str, filename: str, stored_importe
 #
 @callback(
     Output(EDITABLE_IMPORTED_RUNS_TABLE_ID, "rowData"),
+    Output(OVERVIEW_PROJECT_MAP_ID_2, "figure"),
     Input(STORED_IMPORTED_RUNS_DATA, "data"),
     Input("tabs_tab_project_page", "active_tab")
 )
-def fill_table_project_overview(imported_runs_data: dict, dummy: str) -> list[dict]:
+def fill_table_project_overview_and_update_map(imported_runs_data: dict, dummy: str) -> tuple[list[dict], go.Figure]:
     """
     Fill the overview table with the project data wth the imported dike traject data.
     :param project_data:
@@ -65,14 +66,16 @@ def fill_table_project_overview(imported_runs_data: dict, dummy: str) -> list[di
     :return:
     """
     row_data = []
+
     if imported_runs_data is None:
-        return dash.no_update
+        return dash.no_update, dash.no_update
     if imported_runs_data == {}:
-        return dash.no_update
+        return dash.no_update, dash.no_update
 
     for traject_run in imported_runs_data.keys():
         traject = traject_run
         run = imported_runs_data[traject_run]["run_name"]
         row_data.append({"traject": traject, "run_name": run, "active": False})
+    _fig = plot_comparison_runs_overview_map(imported_runs_data)
 
-    return row_data
+    return row_data, _fig
