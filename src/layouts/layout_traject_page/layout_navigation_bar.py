@@ -16,9 +16,9 @@ nav_bar_layout_1 = html.Div([
             # dbc.NavItem(dbc.NavLink("Home", href="/", style={"color": "white"})),
             dbc.DropdownMenu([
                 dbc.DropdownMenuItem("Traject", href="/traject-page"),
-                dbc.DropdownMenuItem("Database interaction", href="/database-interaction-page"),
-                dbc.DropdownMenuItem("Project", href="/project-page"),
-                dbc.DropdownMenuItem("Comparison run", href="/comparison-run-page"),
+                dbc.DropdownMenuItem("Database interactie", href="/database-interaction-page"),
+                dbc.DropdownMenuItem("Gebied", href="/project-page"),
+                dbc.DropdownMenuItem("Vergelijken runs", href="/comparison-run-page"),
             ],
                 nav=True,
                 label="Paginas",
