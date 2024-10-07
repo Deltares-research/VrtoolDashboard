@@ -3,11 +3,29 @@
 ## v0.0.0 [##/##/####]
 
 ### Added
+None.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
+## v0.6.2 [07/10/2024]
+
+### Added
 - Added flood_damages attribute to DikeSection
 - Added total damages and risk to Area stats
 
 ### Changed
-None.
+- New home page
+- Transalation fixes
 
 ### Deprecated
 None.
