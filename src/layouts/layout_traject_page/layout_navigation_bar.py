@@ -34,16 +34,20 @@ nav_bar_layout_1 = html.Div([
             dbc.NavLink("", href="https://deltares-research.github.io/VrtoolDocumentation/",
                         external_link=True, target="_blank",
                         class_name="fa-solid fa-book",
-                        style={"color": "white", 'text-transform': 'lowercase'}
+                        style={"color": "white", 'text-transform': 'lowercase', 'leftpadding': '100px'},
                         ),
             dbc.NavLink(" Documentatie", href="https://deltares-research.github.io/VrtoolDocumentation/",
                         external_link=True, target="_blank",
-                        style={"color": "white"}
+                        style={"color": "white", 'leftpadding': '100px'},
+                        className="ml-auto"
                         ),
 
         ],
-        brand="Dashboard Veiligheidsrendement",
-        brand_style={'font-size': '30px', "color": 'white'},
+        brand=html.Div([
+            html.Img(src="/assets/logo_vrtool.svg", height="40px"),  # Adjust the path and height as needed
+            "Dashboard Veiligheidsrendement"
+        ], style={'display': 'flex', 'alignItems': 'center'}),
+        brand_style={'font-size': '30px', "color": 'white', "rightpadding": "10px"},
         brand_href="/",
         color="#141e95",  # this is Deltares color
         links_left=True,

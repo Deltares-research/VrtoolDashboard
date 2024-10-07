@@ -29,8 +29,6 @@ def make_layout_main_page() -> dbc.Row:
             dbc.Col(
                 html.Div(
                     [
-                        # html.H2("Welkom bij het dashboard van Versterkingsaanpak vanuit VR tool 🌊"),
-
 
                         make_collapsing_menu(menu_name='Traject selectie',
                                              collapse_id=1,
@@ -39,12 +37,6 @@ def make_layout_main_page() -> dbc.Row:
                         make_collapsing_menu(menu_name="Instellingen",
                                              collapse_id=2,
                                              inner_layouts=[dike_settings_layout]),
-
-                        # make_collapsing_menu(menu_name="Maatregelen optimalisatie",
-                        #                      collapse_id=3,
-                        #                      # inner_layouts=[dike_vr_optimization_layout],
-                        #                      inner_layouts=[dike_vr_optimization_layout_ag_grid],
-                        #                      is_open=False),
 
                     ]
                 ),
@@ -63,7 +55,6 @@ def make_layout_main_page() -> dbc.Row:
                                 dbc.Tab(label="Resultaten optimalisatie", tab_id="tab-4"),
                                 dbc.Tab(label="Prioriteringsinformatie", tab_id="tab-5"),
                                 dbc.Tab(label="Maatregelen", tab_id="tab-6"),
-
 
                             ],
                             id="tabs",
@@ -145,7 +136,6 @@ def layout_tab_three() -> html.Div:
 
 
 def layout_tab_four() -> html.Div:
-
     layout = html.Div(
         children=[
             html.H2("Optimalisatie"),
@@ -197,7 +187,6 @@ def layout_tab_five() -> html.Div:
     return layout
 
 
-
 def layout_tab_six() -> html.Div:
     layout = html.Div(
         children=[
@@ -206,7 +195,8 @@ def layout_tab_six() -> html.Div:
             layout_radio_dike_section_selection,
             # html.Div(id=GRAPH_MEASURE_COMPARISON_ID,
             #          style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
-            html.Div("U kunt op een maatregel bolletje kliken om de betrouwbaarheid van de maatregel over tijd te bekijken."),
+            html.Div(
+                "U kunt op een maatregel bolletje kliken om de betrouwbaarheid van de maatregel over tijd te bekijken."),
 
             html.Div(
                 style={'width': '130vh', 'height': '60vh', 'border': "2px solid black"},

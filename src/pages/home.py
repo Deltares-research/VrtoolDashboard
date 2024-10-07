@@ -79,7 +79,7 @@ layout = html.Div([
                         [
                             dbc.CardBody(
                                 [
-                                    html.H4("Comparison", className="card-title"),
+                                    html.H4("Vergelijken", className="card-title"),
                                     dmc.List(
                                         [
                                             dmc.ListItem("Importeer meerdere dijktrajecten", className="card-text"),
