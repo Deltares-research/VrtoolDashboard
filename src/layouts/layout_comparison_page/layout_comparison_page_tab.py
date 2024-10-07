@@ -83,9 +83,9 @@ right_side = [
 
     dbc.Tabs(
         [
-            dbc.Tab(label="Map", tab_id="tab-11111"),
-            dbc.Tab(label="Comparison", tab_id="tab-11112"),
-            dbc.Tab(label="Time", tab_id="tab-11113"),
+            dbc.Tab(label="Kaart", tab_id="tab-11111"),
+            dbc.Tab(label="Vergelijken", tab_id="tab-11112"),
+            dbc.Tab(label="Tijd", tab_id="tab-11113"),
         ],
         id=TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE,
         active_tab="tab-11111",  # Set the initial active tab

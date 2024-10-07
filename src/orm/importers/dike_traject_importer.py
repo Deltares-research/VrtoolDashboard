@@ -1,26 +1,20 @@
 from pathlib import Path
 from typing import Optional
 
-import numpy as np
 from geopandas import GeoDataFrame
 from vrtool.defaults.vrtool_config import VrtoolConfig
-from vrtool.orm.io.importers.optimization.optimization_step_importer import OptimizationStepImporter
 from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol
-from vrtool.orm.models import SectionData, MeasurePerSection
+from vrtool.orm.models import SectionData
 
-from src.constants import GreedyOPtimizationCriteria
 from src.linear_objects.dike_section import DikeSection
-from src.linear_objects.dike_traject import DikeTraject, get_initial_assessment_df, get_traject_prob
+from src.linear_objects.dike_traject import DikeTraject
 
 from src.orm.importers.dike_section_importer import DikeSectionImporter
-from src.orm.importers.optimization_step_importer import _get_final_measure_betas, _get_section_lcc
 from src.orm.importers.solution_importer import TrajectSolutionRunImporter
-from src.orm.models import OptimizationSelectedMeasure, OptimizationStep, MeasureResult
 from src.orm.models.dike_traject_info import DikeTrajectInfo
 
 import geopandas as gpd
 
-from src.orm.orm_controller_custom import get_optimization_steps_ordered
 from src.utils.utils import get_signal_value
 
 

@@ -17,6 +17,25 @@ None.
 ### Fixed
 None.
 
+## v0.6.2 [07/10/2024]
+
+### Added
+- Added flood_damages attribute to DikeSection
+- Added total damages and risk to Area stats
+
+### Changed
+- New home page
+- Transalation fixes
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
 ## v0.6.1 [25/09/2024]
 
 ### Added

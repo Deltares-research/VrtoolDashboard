@@ -9,8 +9,10 @@ import dash_mantine_components as dmc
 from src.component_ids import EDITABLE_IMPORTED_RUNS_TABLE_ID, TABLE_PROJECT_SUMMARY_ID, \
     MULTI_SELECT_SECTION_FOR_PROJECT_ID, ADD_PROJECT_BUTTON_ID, PROJECT_NAME_INPUT_FIELD_ID, ALERT_PROJECT_CREATION_ID, \
     UPDATE_PROJECT_BUTTON_ID, PROJECT_START_YEAR_INPUT_FIELD_ID, DELETE_PROJECT_BUTTON_ID, \
-    PROJECT_END_YEAR_INPUT_FIELD_ID, EXPORT_PROJECTS_TO_JSON_ID, BUTTON_DOWNLOAD_PROJECTS_EXPORT, UPLOAD_SAVED_PROJECTS
+    PROJECT_END_YEAR_INPUT_FIELD_ID, EXPORT_PROJECTS_TO_JSON_ID, BUTTON_DOWNLOAD_PROJECTS_EXPORT, UPLOAD_SAVED_PROJECTS, \
+    CONTENT_TABS_COMPARISON_PAGE_ID, OVERVIEW_COMPARISON_MAP_ID, OVERVIEW_PROJECT_MAP_ID_2
 from src.layouts.layout_traject_page.layout_download_buttons import layout_download_projects
+from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
 
 df_imported_run_table = pd.DataFrame(columns=["traject", "run_name", "active"], data=[])
 df_project_summary_table = pd.DataFrame(columns=["project", "section_number", "start_year", "end_year" "length"],
@@ -118,15 +120,14 @@ left_side = [
         accept='.json'
     ),
 
-    #Add text in Dutch: "or" centered in the middle of the page
+    # Add text in Dutch: "or" centered in the middle of the page
     html.P("of", style={"text-align": "center"}),
-
 
     dcc.Upload(
         id=UPLOAD_SAVED_PROJECTS,
         children=html.Div([
             '',
-            html.A('Upload an existing project file')
+            html.A('Upload een project bestand .json')
         ]),
         style={
             'width': '100%',
@@ -163,7 +164,7 @@ left_side = [
                               dismissable=True),
                     dmc.Button("Maak project aan", id=ADD_PROJECT_BUTTON_ID),
                     dmc.Button("Update project", id=UPDATE_PROJECT_BUTTON_ID),
-                    dmc.Button("Delete project", id=DELETE_PROJECT_BUTTON_ID),
+                    dmc.Button("Verwijder project", id=DELETE_PROJECT_BUTTON_ID),
 
                 ]),
                 dmc.Group([
@@ -173,9 +174,32 @@ left_side = [
                 ])
 
             ],
-            title='Projects overview')
+            title='Projects overzicht')
     ]),
 
 ]
 
-project_definition_tab_layout = html.Div(children=left_side)
+right_side = [
+
+    html.Div(
+        children=[
+
+            html.Div(
+                style={'width': '90vh', 'height': '60vh', 'border': "2px solid black"},
+                children=dcc.Graph(
+                    id=OVERVIEW_PROJECT_MAP_ID_2,
+                    figure=plot_default_overview_map_dummy(),
+                    style={"width": "100%", "height": "100%"},
+                )
+            ),
+
+        ])
+
+]
+
+project_definition_tab_layout = html.Div([
+    dbc.Row([
+        dbc.Col(left_side, md=5),
+        dbc.Col(right_side, md=7),
+    ]),
+])

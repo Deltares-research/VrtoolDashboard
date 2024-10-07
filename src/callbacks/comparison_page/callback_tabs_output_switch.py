@@ -43,7 +43,7 @@ def render_project_overview_map_content(active_tab: str) -> html.Div:
           [Input(STORED_RUNS_COMPARISONS_DATA, "data"),
            # Input("tabs_tab_project_page", "active_tab")
            ])
-def make_graph_overview_project(imported_runs_data: dict, project_data: list[dict]) -> dcc.Graph:
+def make_graph_overview_project(imported_runs_data: dict) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
 

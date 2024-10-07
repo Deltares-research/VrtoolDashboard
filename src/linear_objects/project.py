@@ -27,7 +27,8 @@ class DikeProject():
         return sum([section.length for section in self.dike_sections])
 
 
-def get_projects_from_saved_data(imported_runs_data: dict, project_overview_data: list[dict]) -> tuple[list[DikeProject], list[DikeTraject]]:
+def get_projects_from_saved_data(imported_runs_data: dict, project_overview_data: list[dict]) -> tuple[
+    list[DikeProject], list[DikeTraject]]:
     """
 
     :param imported_runs_data: stored data of all the imported runs as a dict with key format: "traject|run", for ex:
@@ -36,7 +37,6 @@ def get_projects_from_saved_data(imported_runs_data: dict, project_overview_data
     :return:
     """
     projects = []
-
 
     # First populate the dike_trajects dict to avoid dezerializing the same data multiple times
     dict_runs = {}
@@ -83,6 +83,7 @@ def calc_prob_failure_before_reinforcement(dike_sections: list[DikeSection]) -> 
     _traject_pf, _ = get_traject_prob(_beta_df)
     return _traject_pf[0][0]
 
+
 def calc_prob_failure_after_reinforcement(dike_sections: list[DikeSection]) -> float:
     _beta_df_ini = get_initial_assessment_df(dike_sections)
     _beta_df = get_updated_beta_df(dike_sections, _beta_df_ini)
@@ -91,16 +92,30 @@ def calc_prob_failure_after_reinforcement(dike_sections: list[DikeSection]) -> f
     return _traject_pf[0][0]
 
 
-
 def calc_area_stats(projects: list[DikeProject]):
+    """
+    Calculate the total cost, damage and risk for the entire area.
+    Cost is simply the sum of the costs of all the reinforced sections in the projects
+    Damage is the sum of the flood damages of all the sections in the projects
+
+    Risk is the sum of the flood damages of all the sections in the projects multiplied by the probability of failure
+    after completion (i.e. reinforcement) of the project.
+
+    :param projects: list of DikeProject objects
+    :return: tuple: the total cost, damage and risk
+    """
     cost = 0
     damage = 0
     risk = 0
     for project in projects:
+        damage_project = 0
+
         cost += project.calc_project_cost()
         for section in project.dike_sections:
-            pass
-            # damage += section.final_measure_veiligheidsrendement["schade"]
-            # risk += section.final_measure_veiligheidsrendement["risico"]
+            if section.flood_damages is not None:
+                damage_project += section.flood_damages
+
+        damage += damage_project
+        risk += project.project_failure_prob_after_reinforcement * damage_project
 
     return cost, damage, risk

@@ -110,6 +110,7 @@ class DikeSectionImporter(OrmImporterProtocol):
         _dike_section.is_reinforced_doorsnede = True  # TODO remove this argument?
         _dike_section.active_mechanisms = self._get_all_section_mechanism(orm_model)
         _dike_section.revetment = True if "Revetment" in _dike_section.active_mechanisms else False
+        _dike_section.flood_damages = orm_model.flood_damage
 
         _dike_section.initial_assessment = self._get_initial_assessment(orm_model, _dike_section.active_mechanisms)
         _dike_section.years = self.assessment_time
