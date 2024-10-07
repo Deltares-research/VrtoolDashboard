@@ -21,7 +21,7 @@ nav_bar_layout_1 = html.Div([
                 dbc.DropdownMenuItem("Comparison run", href="/comparison-run-page"),
             ],
                 nav=True,
-                label="More Pages",
+                label="Paginas",
                 toggle_style={
                     "color": "white",
                     "background-color": "#141e95",

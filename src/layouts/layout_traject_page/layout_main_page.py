@@ -29,12 +29,8 @@ def make_layout_main_page() -> dbc.Row:
             dbc.Col(
                 html.Div(
                     [
-                        html.H2("Welkom bij het dashboard van Versterkingsaanpak vanuit VR tool 🌊"),
-                        dcc.Markdown(
-                            '''
-                            Dit dashboard kan worden gebruikt om de resultaten van veiligheidsrendementberekeningen te visualiseren, en deze te vertalen naar de scope van dijkversterkingsprojecten.
-                            '''
-                        ),
+                        # html.H2("Welkom bij het dashboard van Versterkingsaanpak vanuit VR tool 🌊"),
+
 
                         make_collapsing_menu(menu_name='Traject selectie',
                                              collapse_id=1,
