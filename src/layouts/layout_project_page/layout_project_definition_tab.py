@@ -127,7 +127,7 @@ left_side = [
         id=UPLOAD_SAVED_PROJECTS,
         children=html.Div([
             '',
-            html.A('Upload an existing project file')
+            html.A('Upload een project bestand .json')
         ]),
         style={
             'width': '100%',
@@ -164,7 +164,7 @@ left_side = [
                               dismissable=True),
                     dmc.Button("Maak project aan", id=ADD_PROJECT_BUTTON_ID),
                     dmc.Button("Update project", id=UPDATE_PROJECT_BUTTON_ID),
-                    dmc.Button("Delete project", id=DELETE_PROJECT_BUTTON_ID),
+                    dmc.Button("Verwijder project", id=DELETE_PROJECT_BUTTON_ID),
 
                 ]),
                 dmc.Group([
@@ -174,7 +174,7 @@ left_side = [
                 ])
 
             ],
-            title='Projects overview')
+            title='Projects overzicht')
     ]),
 
 ]

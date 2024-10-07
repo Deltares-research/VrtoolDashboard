@@ -11,7 +11,7 @@ def layout_project_output_tab_one() -> html.Div:
     return html.Div(
         children=[
             dbc.Row([
-                dbc.Col([html.H2("Overzicht Project")], md=10),
+                dbc.Col([html.H2("Overzicht Projects")], md=10),
             ]),
 
             html.Div(id=OVERVIEW_COMPARISON_MAP_ID,
