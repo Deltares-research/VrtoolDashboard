@@ -17,6 +17,23 @@ None.
 ### Fixed
 None.
 
+## v0.6.3 [11/10/2024]
+
+### Added
+None.
+
+### Changed
+- Comparison graph improvements UI 
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+ - bug displaying project name om map
+
 ## v0.6.2 [07/10/2024]
 
 ### Added
