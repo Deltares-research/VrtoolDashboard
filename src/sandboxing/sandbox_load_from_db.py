@@ -53,7 +53,8 @@ _vr_config = VrtoolConfig().from_json(Path(
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\test_lisa_24_07\config.json"
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\test_stephan_6_august\config.json"
     # r"N:\Projects\11209000\11209353\B. Measurements and calculations\008 - Resultaten Proefvlucht\WSRL\24-3\traject24-3_9juli2024\vrtool_database_test_discounting\config.json"
-    r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\31-1 base coastal case\config.json"
+    # r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\31-1 base coastal case\config.json"
+    r"C:\Users\hauth\OneDrive - Stichting Deltares\Desktop\projects\VRTools\databases\10-1\config.json"
 
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\COP demo\38-1 base river case\config.json"
 
@@ -70,6 +71,7 @@ t0 = time.time()
 print(_vr_config)
 _traject_db = get_dike_traject_from_config_ORM(vr_config=_vr_config, run_is_vr=1, run_id_dsn=2)
 data = _traject_db.serialize()
+print(data)
 export_to_json(data)
 # print(data)
 t1 = time.time()

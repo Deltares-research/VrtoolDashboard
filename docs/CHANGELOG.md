@@ -6,7 +6,7 @@
 None.
 
 ### Changed
-None.
+- Comparison graph improvements UI 
 
 ### Deprecated
 None.
