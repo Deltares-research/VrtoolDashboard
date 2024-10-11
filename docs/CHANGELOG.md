@@ -6,6 +6,23 @@
 None.
 
 ### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
+## v0.6.3 [11/10/2024]
+
+### Added
+None.
+
+### Changed
 - Comparison graph improvements UI 
 
 ### Deprecated
