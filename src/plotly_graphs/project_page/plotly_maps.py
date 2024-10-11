@@ -25,7 +25,6 @@ def plot_project_overview_map(projects: list[DikeProject], trajects: Optional[li
     if len(projects) == 0:
         return plot_default_overview_map_dummy()
     for i, project in enumerate(projects):
-
         _color = PROJECTS_COLOR_SEQUENCE[i]
         for index, section in enumerate(project.dike_sections):
             sections.append(section)
@@ -54,8 +53,8 @@ def plot_project_overview_map(projects: list[DikeProject], trajects: Optional[li
             if index == int(len(project.dike_sections) / 2):
                 fig.add_trace(go.Scattermap(
                     mode="text",
-                    lat=[[x[0] for x in _coordinates_wgs][index]],
-                    lon=[[x[1] for x in _coordinates_wgs][index]],
+                    lat=[[x[0] for x in _coordinates_wgs][0]],
+                    lon=[[x[1] for x in _coordinates_wgs][0]],
                     showlegend=False,
                     text=project.name,
                     textfont=dict(size=15)

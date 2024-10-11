@@ -15,7 +15,7 @@ None.
 None.
 
 ### Fixed
-None.
+ - bug displaying project name om map
 
 ## v0.6.2 [07/10/2024]
 
