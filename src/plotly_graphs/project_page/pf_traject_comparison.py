@@ -4,7 +4,8 @@ from typing import Optional
 import numpy as np
 import plotly.graph_objects as go
 
-from src.constants import REFERENCE_YEAR, ResultType, ColorBarResultType, PROJECTS_COLOR_SEQUENCE
+from src.constants import REFERENCE_YEAR, ResultType, ColorBarResultType, PROJECTS_COLOR_SEQUENCE, \
+    CLASSIC_PLOTLY_COLOR_SEQUENCE
 from src.linear_objects.dike_traject import DikeTraject, cum_cost_steps, get_step_traject_pf, get_initial_assessment_df, \
     get_traject_prob
 from src.linear_objects.project import DikeProject
@@ -27,8 +28,7 @@ def plot_pf_project_comparison(project_data: dict, selected_year) -> go.Figure:
     """
 
     fig = go.Figure()
-
-    for _, dike_traject_data in project_data.items():
+    for index, (_, dike_traject_data) in enumerate(project_data.items()):
         dike_traject = DikeTraject.deserialize(dike_traject_data)
         _year_index = bisect_right(dike_traject.dike_sections[0].years, selected_year - REFERENCE_YEAR) - 1
 
@@ -53,72 +53,26 @@ def plot_pf_project_comparison(project_data: dict, selected_year) -> go.Figure:
         y_signalering = pf_to_beta(dike_traject.signalering_value)
 
         legend_group = dike_traject.name + "|" + dike_traject.run_name
-
-        # add traces for Veiligheidrendement and Doorsnede-eisen
-
-        fig.add_trace(go.Scatter(x=x_dsn,
-                                 y=y_dsn,
-                                 legendgroup=legend_group,
-                                 legendgrouptitle=dict(text=legend_group),
-                                 customdata=section_order_dsn,
-                                 mode='markers+lines',
-                                 name='Doorsnede-eisen',
-                                 line=dict(color='blue'),
-                                 marker=dict(size=6, color='blue'),
-                                 hovertemplate="<b>%{customdata}</b><br><br>" +
-                                               "Trajectfaalkans: %{y:.2e}<br>" + hover_extra
-                                 ))
+        color = CLASSIC_PLOTLY_COLOR_SEQUENCE[index]
+        if index == 0:
+            add_signaleringswaarde(fig, max_x, y_signalering, y_ondergrens)
 
         fig.add_trace(go.Scatter(x=x_vr,
                                  y=y_vr,
-                                 legendgroup=legend_group,
-                                 legendgrouptitle=dict(text=legend_group),
                                  customdata=section_order_vr,
                                  mode='markers+lines',
-                                 name='Veiligheidsrendement',
-                                 line=dict(color='green'),
-                                 marker=dict(size=6, color='green'),
+                                 name=dike_traject.run_name,
+                                 line=dict(color=color),
+                                 marker=dict(size=6, color=color),
                                  hovertemplate="<b>%{customdata}</b><br><br>" +
                                                "Trajectfaalkans: %{y:.2e}<br>" + hover_extra
                                  ))
 
-        # fig.add_trace(go.Scatter(x=x_step,
-        #                          y=y_step,
-        #                          customdata=greedy_step_order,
-        #                          mode='markers+lines',
-        #                          name='Optimalisatie stappen',
-        #                          line=dict(color='green', dash='dot'),
-        #                          marker=dict(size=3, color='green'),
-        #                          hovertemplate="<b>%{customdata}</b><br><br>" +
-        #                                        "Trajectfaalkans: %{y:.2e}<br>" + hover_extra
-        #                          ))
 
-        fig.add_trace(go.Scatter(
-            x=[0, max_x],
-            y=[y_ondergrens, y_ondergrens],
-            mode="lines",
-            marker=dict(size=0),
-            showlegend=True,
-            name="Ondergrens",
-            legendgroup=legend_group,
-            legendgrouptitle=dict(text=legend_group),
-            line=dict(color='black', dash='dash')
-        ))
-        fig.add_trace(go.Scatter(
-            x=[0, max_x],
-            y=[y_signalering, y_signalering],
-            mode="lines",
-            marker=dict(size=0),
-            showlegend=True,
-            name="Signaleringswaarde",
-            legendgroup=legend_group,
-            legendgrouptitle=dict(text=legend_group),
-            line=dict(color='black', dash='dot')
-        ))
 
         x_max = np.max([np.max(x_vr), np.max(x_dsn)])
         # fig.update_xaxes(range=[0, x_max], title=title_x_axis)
-        fig.update_layout(title=title_extra + f'TODO year', yaxis_title=title_y_axis)
+        fig.update_layout(title=title_extra, yaxis_title=title_y_axis)
 
         fig.update_yaxes(range=[None, 6])
 
@@ -126,7 +80,25 @@ def plot_pf_project_comparison(project_data: dict, selected_year) -> go.Figure:
 
     return fig
 
-
+def add_signaleringswaarde(fig, max_x, y_signalering, y_ondergrens):
+    fig.add_trace(go.Scatter(
+        x=[0, max_x],
+        y=[y_ondergrens, y_ondergrens],
+        mode="lines",
+        marker=dict(size=0),
+        showlegend=True,
+        name="Ondergrens",
+        line=dict(color='black', dash='dash')
+    ))
+    fig.add_trace(go.Scatter(
+        x=[0, max_x],
+        y=[y_signalering, y_signalering],
+        mode="lines",
+        marker=dict(size=0),
+        showlegend=True,
+        name="Signaleringswaarde",
+        line=dict(color='black', dash='dot')
+    ))
 
 def plot_pf_time_runs_comparison(imported_runs_data: dict, switch_cost_beta: str):
     fig = go.Figure()
