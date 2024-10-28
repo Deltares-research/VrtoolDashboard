@@ -109,10 +109,5 @@ layout_traject_select = html.Div([
     ]),
     html.Br(),  # add vertical space
     dbc.Row([layout_button_save_run_as_json]),
-    # dbc.Row([
-    #     dbc.Col(dmc.TextInput(label="Run naam", id=RUN_SAVE_NAME_ID, style={"width": "15%"}), md=4),
-    #     dbc.Col(dmc.Button("Opslaan", id=BUTTON_SAVE_RUN_AS_JSON, className="ml-auto"), md=4),
-    #
-    # ]),
 
 ])
