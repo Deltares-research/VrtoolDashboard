@@ -72,7 +72,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         self.greedy_criteria_year = greedy_criteria_year
         self.greedy_criteria_beta = greedy_criteria_beta
         self.set_economic_optimal_final_step_id()
-        print(self.greedy_optimization_criteria, self.greedy_criteria_year, self.greedy_criteria_beta)
 
     def import_orm(self):
         """Import the final measures for both Veiligheidsrendement and Doorsnede"""
