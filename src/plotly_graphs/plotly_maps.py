@@ -496,7 +496,7 @@ def plot_dike_traject_measures_map(
 
 
 def add_measure_type_trace(
-        fig: go.Figure, section: DikeSection, measure_results: dict, legend_display: dict,
+        fig: go.Figure, section: DikeSection, measure_results: dict, legend_display: dict, opacity: float = 1
 ):
     """
     This function adds a trace to the figure for the measure type.
@@ -560,6 +560,7 @@ def add_measure_type_trace(
                 showlegend=_showlegend,
                 visible=_visible,
                 hovertemplate=_hovertext,
+                opacity=opacity,
             )
         )
 
@@ -661,7 +662,6 @@ def add_measure_type_trace(
             )
         )
         legend_display["sheetpile"] = False
-
 
     if MeasureTypeEnum.REVETMENT.name in measure_results["type"] or MeasureTypeEnum.REVETMENT.legacy_name in \
             measure_results["type"]:
@@ -861,7 +861,57 @@ def add_section_trace(
     )
 
 
-def dike_traject_pf_cost_helping_map(
+def dike_traject_pf_cost_helping_map_detail(
+        dike_traject: DikeTraject, curve_number: int, reinforced_sections: list[str]
+) -> go.Figure:
+    """
+    Args:
+        dike_traject:
+        curve_number:
+        reinforced_sections:
+
+    Returns:
+
+    """
+    fig = go.Figure()
+    _legend_display = {
+        "ground_reinforcement": True,
+        "VZG": True,
+        "screen": True,
+        "diaphram wall": True,
+        "sheetpile": True,
+        "crest_heightening": True,
+        "berm_widening": True,
+        "revetment": True,
+        "custom": True,
+    }
+
+    for section in dike_traject.dike_sections:
+
+        # if a section is not in analyse, skip it, and it turns blank on the map.
+        if not section.in_analyse:
+            continue
+
+        _measure_results = (
+            section.final_measure_doorsnede
+            if curve_number == 0
+            else section.final_measure_veiligheidsrendement
+        )
+        if _measure_results is not None:
+
+            opacity = 1 if section.name == reinforced_sections[-1] else 0.4
+            add_measure_type_trace(
+                fig, section, _measure_results, _legend_display, opacity
+            )
+
+    # Update layout of the figure and add token for mapbox
+    _middle_point = get_middle_point(dike_traject.dike_sections)
+    update_layout_map_box(fig, _middle_point)
+
+    return fig
+
+
+def dike_traject_pf_cost_helping_map_simple(
         dike_traject: DikeTraject, curve_number: int, reinforced_sections: list[str]
 ) -> go.Figure:
     """
@@ -927,6 +977,7 @@ def get_middle_point(sections: list[DikeSection]) -> tuple[float, float]:
     # convert in gws coordinates:
     middle_point_gws = GWSRDConvertor().to_wgs(middle_point_rd[0], middle_point_rd[1])
     return middle_point_gws
+
 
 def get_average_point(sections: list[DikeSection]) -> tuple[float, float]:
     avg_lat = sum([section.coordinates_rd[0][0] for section in sections]) / len(sections)

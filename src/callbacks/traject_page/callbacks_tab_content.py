@@ -29,7 +29,7 @@ from src.plotly_graphs.plotly_maps import (
     plot_dike_traject_reliability_initial_assessment_map,
     plot_dike_traject_reliability_measures_assessment_map,
     plot_dike_traject_urgency,
-    dike_traject_pf_cost_helping_map,
+    dike_traject_pf_cost_helping_map_simple,
 )
 from src.utils.utils import export_to_json
 
@@ -251,9 +251,8 @@ def update_click(dike_traject_data: dict, click_data: dict) -> Figure:
         )
         _reinforced_sections = _order[: int(click_data["points"][0]["pointNumber"])]
 
-        return dike_traject_pf_cost_helping_map(
-            _dike_traject, click_data["points"][0]["curveNumber"], _reinforced_sections
-        )
+        return dike_traject_pf_cost_helping_map_simple(_dike_traject, click_data["points"][0]["curveNumber"],
+                                                       _reinforced_sections)
 
 
 ### TAB Maatregelen ###

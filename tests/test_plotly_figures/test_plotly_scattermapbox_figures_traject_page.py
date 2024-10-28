@@ -8,8 +8,9 @@ from plotly.graph_objs import Figure
 from src.constants import ResultType, Mechanism, SubResultType, ColorBarResultType, CalcType
 from src.linear_objects.dike_traject import DikeTraject
 from src.plotly_graphs.plotly_maps import plot_dike_traject_reliability_initial_assessment_map, \
-    plot_dike_traject_reliability_measures_assessment_map, plot_dike_traject_urgency, dike_traject_pf_cost_helping_map, \
-    plot_default_overview_map_dummy, plot_overview_map
+    plot_dike_traject_reliability_measures_assessment_map, plot_dike_traject_urgency, \
+    dike_traject_pf_cost_helping_map_simple, \
+    plot_default_overview_map_dummy, plot_overview_map, dike_traject_pf_cost_helping_map_detail
 
 
 class TestPlotlyScatterMapBox():
@@ -129,16 +130,32 @@ class TestPlotlyScatterMapBox():
         # 3. Assert
         assert isinstance(_fig, Figure)
 
-    def test_dike_traject_pf_cost_helping_map(self):
+    def test_dike_traject_pf_cost_helping_map_simple(self):
         # 1. Define data
         _dike_data = json.load(
             open(Path(__file__).parent.parent / 'data/31-1 base coastal case/reference' / 'dike_data.json'))
         _dike_traject = DikeTraject.deserialize(_dike_data)
 
         # 2. Call
-        _fig1 = dike_traject_pf_cost_helping_map(_dike_traject, 0, ["33"])
-        _fig2 = dike_traject_pf_cost_helping_map(_dike_traject, 0, ["93"])  # this one has a grey dijkvak
+        _fig1 = dike_traject_pf_cost_helping_map_simple(_dike_traject, 0, ["33"])
+        _fig2 = dike_traject_pf_cost_helping_map_simple(_dike_traject, 0, ["93"])  # this one has a grey dijkvak
 
         # 3. Assert
         assert isinstance(_fig1, Figure)
         assert isinstance(_fig2, Figure)
+
+    def test_dike_traject_pf_cost_helping_map_detailed(self):
+        # 1. Define data
+        _dike_data = json.load(
+            open(Path(__file__).parent.parent / 'data/31-1 base coastal case/reference' / 'dike_data.json'))
+        _dike_traject = DikeTraject.deserialize(_dike_data)
+
+        # 2. Call
+        _fig1 = dike_traject_pf_cost_helping_map_detail(_dike_traject, 0, ["33"])
+        _fig2 = dike_traject_pf_cost_helping_map_detail(_dike_traject, 0, ["93"])  # this one has a grey dijkvak
+
+        # 3. Assert
+        assert isinstance(_fig1, Figure)
+        assert isinstance(_fig2, Figure)
+
+
