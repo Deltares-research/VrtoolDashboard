@@ -1,5 +1,7 @@
+import json
+
 import dash
-from dash import Output, callback, Input
+from dash import Output, callback, Input, State
 
 from src.component_ids import DOWNLOAD_OVERVIEW_ID, DOWNLOAD_OVERVIEW_BUTTON_ID, DOWNLOAD_ASSESSMENT_BUTTON_ID, \
     DOWNLOAD_ASSESSMENT_ID, SLIDER_YEAR_RELIABILITY_RESULTS_ID, DOWNLOAD_REINFORCED_SECTIONS_ID, \
@@ -10,14 +12,15 @@ from src.utils.utils import export_to_json
 
 
 @callback(
-    [Output(DOWNLOAD_RUN_JSON_ID, 'data')],
-    [Input('stored-data', 'data'),
+    Output(DOWNLOAD_RUN_JSON_ID, 'data'),
+    [State('stored-data', 'data'),
      Input(BUTTON_SAVE_RUN_AS_JSON, 'n_clicks'),
-     Input(RUN_SAVE_NAME_ID, 'data'),
+     State(RUN_SAVE_NAME_ID, 'value'),
      ]
 )
 def download_traject_run_json(dike_traject_data: dict, n_clicks: int, run_name: str):
-    print(n_clicks, run_name)
+    if run_name is None or run_name == "":
+        return dash.no_update
     if dike_traject_data is None or n_clicks == 0 or n_clicks is None:
         return dash.no_update
 
@@ -25,8 +28,8 @@ def download_traject_run_json(dike_traject_data: dict, n_clicks: int, run_name: 
         return dash.no_update
 
     else:
-        _dike_traject = DikeTraject.deserialize(dike_traject_data)
-        return dict(content=_dike_traject, filename=f"{run_name}.json")
+        content = json.dumps(dike_traject_data)
+        return dict(content=content, filename=f"{run_name}.json")
 
 
 @callback(
