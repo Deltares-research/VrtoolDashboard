@@ -54,6 +54,9 @@ CUSTOM_MEASURE_MODEL_ID = "custom_measure_model_id"
 CLOSE_CUSTOM_MEAS_MODAL_BUTTON_ID = "close-modal-custom-measure"
 MESSAGE_MODAL_CUSTOM_MEASURE_ID = "message_modal_custom_measure_id"
 
+BUTTON_SAVE_RUN_AS_JSON = "button_save_run_as_json"
+RUN_SAVE_NAME_ID = "run_save_name_id"
+
 ############ project page ############
 
 OVERVIEW_PROJECT_MAP_ID = 'overview_project_map_div'
