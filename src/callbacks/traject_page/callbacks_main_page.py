@@ -151,7 +151,7 @@ def selection_traject_run(name: str, vr_config: dict) -> dict:
     _dike_traject.run_name = name
 
     _path_save_dike_traject = _vr_config.input_directory.joinpath(f"dike_traject_{_vr_config.traject}_{name}.json")
-    export_to_json(_dike_traject.serialize(), _path_save_dike_traject)
+    # export_to_json(_dike_traject.serialize(), _path_save_dike_traject)
 
     return _dike_traject.serialize()
 
@@ -366,3 +366,5 @@ def update_slider_years_from_database(dike_traject_data: dict):
         _assessment_years = _dike_traject.dike_sections[0].years  # all sections should have the same assessment years
         _marks = {year + REFERENCE_YEAR: {'label': f"{year + REFERENCE_YEAR}"} for year in _assessment_years}
         return _marks
+
+
