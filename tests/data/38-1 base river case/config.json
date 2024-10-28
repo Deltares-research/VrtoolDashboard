@@ -13,6 +13,6 @@
     "HYDRAULIC_STRUCTURES"
   ],
   "input_database_name": "vrtool_input.db",
-  "input_directory": "C:/Users/hauth/bitbucket/VRtoolDashboard/tests/data/38-1 base river case",
-  "output_directory": "C:/Users/hauth/bitbucket/VRtoolDashboard/tests/data/38-1 base river case/res"
+  "input_directory": "C:/Users/hauth/repositories/VRtoolDashboard/tests/data/38-1 base river case",
+  "output_directory": "C:/Users/hauth/repositories/VRtoolDashboard/tests/data/38-1 base river case/res"
 }

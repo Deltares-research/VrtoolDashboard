@@ -2714,5 +2714,8 @@
   ],
   "signalering_value": 1.11e-05,
   "lower_bound_value": 3.33e-05,
-  "run_name": "test"
+  "run_name": "test",
+  "greedy_stop_type_criteria": "ECONOMIC_OPTIMAL",
+  "greedy_stop_criteria_year": null,
+  "greedy_stop_criteria_beta": null
 }

@@ -1,9 +1,12 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
+import dash_mantine_components as dmc
+
 
 from src.component_ids import DROPDOWN_SELECTION_RUN_ID, GREEDY_OPTIMIZATION_CRITERIA_BETA, \
     GREEDY_OPTIMIZATION_CRITERIA_YEAR, BUTTON_RECOMPUTE_GREEDY_STEPS, BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, \
-    DIV_NUMBERFIELD_OPTIMIZATION_STOP_CRITERIA, DIV_BUTTON_RECOMPUTE_GREEDY_STEPS_ID
+    DIV_NUMBERFIELD_OPTIMIZATION_STOP_CRITERIA, DIV_BUTTON_RECOMPUTE_GREEDY_STEPS_ID, BUTTON_SAVE_RUN_AS_JSON, \
+    RUN_SAVE_NAME_ID, DOWNLOAD_RUN_JSON_ID
 from src.layouts.layout_traject_page.layout_radio_items import layout_radio_greedy_optimization_stop_criteria
 
 layout_number_field_optimization_stop_criteria = html.Div(
@@ -26,6 +29,14 @@ layout_button_recompute_greedy_steps = html.Div(children=[
     dcc.Input(id=BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, value=0, type='hidden'), ],
     hidden=True,
     id=DIV_BUTTON_RECOMPUTE_GREEDY_STEPS_ID
+)
+
+layout_button_save_run_as_json = html.Div(
+    children=[
+        dmc.TextInput(label="Run naam", id=RUN_SAVE_NAME_ID, style={"width": "50%"}),
+        dbc.Button("Opslaan", id=BUTTON_SAVE_RUN_AS_JSON, color="primary", className="mr-1"),
+        dcc.Download(id=DOWNLOAD_RUN_JSON_ID),
+    ]
 )
 
 layout_traject_select = html.Div([
@@ -95,6 +106,8 @@ layout_traject_select = html.Div([
         dbc.Col([layout_number_field_optimization_stop_criteria], md=4),
         dbc.Col([layout_button_recompute_greedy_steps], md=4)
 
-    ])
+    ]),
+    html.Br(),  # add vertical space
+    dbc.Row([layout_button_save_run_as_json]),
 
 ])

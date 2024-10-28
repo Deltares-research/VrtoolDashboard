@@ -78,6 +78,9 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         self.get_final_measure_vr()
         self.get_final_measure_dsn()
         self.dike_traject.final_step_number = self.final_step
+        self.dike_traject.greedy_stop_type_criteria = self.greedy_optimization_criteria
+        self.dike_traject.greedy_stop_criteria_year = self.greedy_criteria_year
+        self.dike_traject.greedy_stop_criteria_beta = self.greedy_criteria_beta
 
     def set_economic_optimal_final_step_id(self):
         """Get the final step id of the optimization run.
