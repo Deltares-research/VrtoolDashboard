@@ -3,10 +3,11 @@
 ## v0.0.0 [##/##/####]
 
 ### Added
-None.
+- Added a button and name field to export the traject run json
 
 ### Changed
-None.
+- Map below reliability vs cost graph now displays the selected measure
+- Map of the program definition now displays the sections selected in the MultiSelectField
 
 ### Deprecated
 None.
