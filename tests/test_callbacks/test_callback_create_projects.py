@@ -13,29 +13,37 @@ from src.constants import ProgramDefinitionMapType
 
 class TestCallbackCreateProjects:
 
-    @pytest.mark.parametrize("map_type", [ProgramDefinitionMapType.SIMPLE.name])
+    @pytest.mark.parametrize("map_type", [ProgramDefinitionMapType.PROJECTS.name])
     def test_update_map_project_definition_page(self, map_type):
         # 1. Define data
+        _data = json.load(
+            open(Path(__file__).parent.parent.joinpath("data", "programmering_WDOD", "Programmering WDOD.json"))
+        )
+
+        _imported_runs_data = _data['imported_runs_data']
+        _projects_overview_data = _data['project_data']
         _dummy = "tab1234"
         _selected_sections = [
-            "1|7-2",
-            "3|7-2",
-            "5|7-2",
-            "6|7-2",
-            "7|7-2",
-            "8|7-2",
-            "9|7-2",
-            "10|7-2",
-            "vak 01|24-3",
-            "vak 02|24-3"
+            "1|10-3",
+            "2|10-3",
+            "3|10-3",
+            "4|10-3",
+            "5|10-3",
+            "7|10-3",
+            "6|10-3",
+            "9|10-3",
+            "10|10-3",
+            "11|10-3",
+            "12|10-3",
+            "13|10-3",
+            "14|10-3",
+            "15|10-3",
+            "16|10-3",
+            "17|10-3",
+            "18|10-3",
+            "19|10-3",
+            "20|10-3"
         ]
-
-        _imported_runs_data = json.load(
-            open(Path(__file__).parent.parent.joinpath("data", "imported_runs_data.json")))
-        _projects_overview_data = json.load(
-            open(Path(__file__).parent.parent.joinpath("data", "projects_overview_data_new.json")))
-        # _map_type = ProgramDefinitionMapType.PROJECTS.name
-
 
         # 2. Define callback
         def run_callback():
@@ -44,6 +52,7 @@ class TestCallbackCreateProjects:
 
         ctx = copy_context()
         output = ctx.run(run_callback)
+        output.show()
 
         # 3. Assert
         assert isinstance(output, Figure)

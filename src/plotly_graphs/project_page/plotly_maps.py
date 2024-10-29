@@ -95,10 +95,8 @@ def plot_project_overview_map(projects: list[DikeProject], trajects: Optional[li
 
     return fig
 
-def plot_comparison_runs_overview_map_projects(trajects: list[DikeTraject], selected_sections)-> go.Figure:
-
-    fig = go.Figure()
-    return fig
+def plot_comparison_runs_overview_map_projects(projects: list[DikeProject], trajects: list[DikeTraject])-> go.Figure:
+    return plot_project_overview_map(projects, trajects)
 
 def plot_comparison_runs_overview_map_assessment(trajects: list[DikeTraject], selected_sections)-> go.Figure:
 

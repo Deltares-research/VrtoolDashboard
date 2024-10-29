@@ -8,6 +8,7 @@ from src.component_ids import MULTI_SELECT_SECTION_FOR_PROJECT_ID, EDITABLE_IMPO
 from src.constants import ProgramDefinitionMapType
 from src.linear_objects.dike_traject import DikeTraject
 from src.linear_objects.project import get_projects_from_saved_data
+from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
 from src.plotly_graphs.project_page.plotly_maps import plot_project_overview_map, \
     plot_comparison_runs_overview_map_simple, plot_comparison_runs_overview_map_projects, \
     plot_comparison_runs_overview_map_assessment
@@ -255,14 +256,14 @@ def update_map_project_definition_page(dummy, selected_sections: list, switch_ty
     if project_overview_data is None:
         return dash.no_update
 
-    _, trajects = get_projects_from_saved_data(imported_runs_data, project_overview_data, calc_failure_pro=False)
+    projects, trajects = get_projects_from_saved_data(imported_runs_data, project_overview_data, calc_failure_pro=False)
 
     if switch_type_map == ProgramDefinitionMapType.SIMPLE.name:
         _fig = plot_comparison_runs_overview_map_simple(list(trajects.values()), selected_sections)
     elif switch_type_map == ProgramDefinitionMapType.PROJECTS.name:
-        _fig = plot_comparison_runs_overview_map_projects(list(trajects.values()), selected_sections)
-    elif switch_type_map  == ProgramDefinitionMapType.ASSESSMENT_PROBABILITIES.PROJECTS.name:
+        _fig = plot_comparison_runs_overview_map_projects(projects, list(trajects.values()))
+    elif switch_type_map == ProgramDefinitionMapType.ASSESSMENT_PROBABILITIES.PROJECTS.name:
         _fig = plot_comparison_runs_overview_map_assessment(list(trajects.values()), selected_sections)
-
-
+    else:
+        _fig = plot_default_overview_map_dummy()
     return _fig
