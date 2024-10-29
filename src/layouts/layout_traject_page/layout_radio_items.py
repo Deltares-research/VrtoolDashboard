@@ -93,6 +93,15 @@ layout_radio_cost_beta_switch = dbc.RadioItems(
     value="COST",
 )
 
+layout_radio_helper_map_switch = dbc.RadioItems(
+    id="select_helper_map_switch",
+    options=[{"label": "Simpel", "value": "SIMPLE"},
+             {"label": "Gedetaileerd", "value": "DETAILED"},
+             ],
+    value="SIMPLE",
+    inline=True
+)
+
 ##### Projects page #####
 
 layout_radio_result_type_project_page = dbc.RadioItems(
