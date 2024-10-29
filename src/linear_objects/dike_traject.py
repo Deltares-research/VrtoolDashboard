@@ -60,7 +60,6 @@ class DikeTraject(BaseLinearObject):
             DikeSection.deserialize(section_data)
             for section_data in data["dike_sections"]
         ]
-        print(data)
         return DikeTraject(
             name=data["name"],
             dike_sections=sections,
