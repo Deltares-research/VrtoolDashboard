@@ -8,11 +8,13 @@ from dash import dcc
 from plotly.graph_objs import Figure
 
 from src.callbacks.project_page.callback_create_projects import update_map_project_definition_page
+from src.constants import ProgramDefinitionMapType
 
 
 class TestCallbackCreateProjects:
 
-    def test_update_map_project_definition_page(self):
+    @pytest.mark.parametrize("map_type", [ProgramDefinitionMapType.SIMPLE.name])
+    def test_update_map_project_definition_page(self, map_type):
         # 1. Define data
         _dummy = "tab1234"
         _selected_sections = [
@@ -32,10 +34,12 @@ class TestCallbackCreateProjects:
             open(Path(__file__).parent.parent.joinpath("data", "imported_runs_data.json")))
         _projects_overview_data = json.load(
             open(Path(__file__).parent.parent.joinpath("data", "projects_overview_data_new.json")))
+        # _map_type = ProgramDefinitionMapType.PROJECTS.name
+
 
         # 2. Define callback
         def run_callback():
-            return update_map_project_definition_page(_dummy, _selected_sections, _imported_runs_data,
+            return update_map_project_definition_page(_dummy, _selected_sections, map_type, _imported_runs_data,
                                                       _projects_overview_data)
 
         ctx = copy_context()

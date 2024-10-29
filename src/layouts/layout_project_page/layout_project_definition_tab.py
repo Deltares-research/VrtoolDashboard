@@ -11,6 +11,7 @@ from src.component_ids import EDITABLE_IMPORTED_RUNS_TABLE_ID, TABLE_PROJECT_SUM
     UPDATE_PROJECT_BUTTON_ID, PROJECT_START_YEAR_INPUT_FIELD_ID, DELETE_PROJECT_BUTTON_ID, \
     PROJECT_END_YEAR_INPUT_FIELD_ID, UPLOAD_SAVED_PROJECTS, OVERVIEW_PROJECT_MAP_ID_2, \
     PROGRAM_SELECTION_MAP_RADIO_SWITCH_ID
+from src.constants import ProgramDefinitionMapType
 from src.layouts.layout_traject_page.layout_download_buttons import layout_download_projects
 from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
 
@@ -99,10 +100,12 @@ multi_select = dmc.MultiSelect(
 
 layout_radio_helper_map_switch = dbc.RadioItems(
     id=PROGRAM_SELECTION_MAP_RADIO_SWITCH_ID,
-    options=[{"label": "Simpel", "value": "SIMPLE"},
-             {"label": "Projects", "value": "PROJECTS"},
-             {"label": "Faalkans", "value": "ASSESSMENT_PROBABILITIES"},
-             ],
+    options=[
+        {"label": ProgramDefinitionMapType.SIMPLE.value, "value": ProgramDefinitionMapType.SIMPLE.name},
+        {"label": ProgramDefinitionMapType.PROJECTS.value, "value": ProgramDefinitionMapType.PROJECTS.name},
+        {"label": ProgramDefinitionMapType.ASSESSMENT_PROBABILITIES.value, "value": ProgramDefinitionMapType.ASSESSMENT_PROBABILITIES.name},
+        {}
+    ],
     value="SIMPLE",
     inline=True
 )

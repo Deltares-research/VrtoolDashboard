@@ -95,8 +95,17 @@ def plot_project_overview_map(projects: list[DikeProject], trajects: Optional[li
 
     return fig
 
+def plot_comparison_runs_overview_map_projects(trajects: list[DikeTraject], selected_sections)-> go.Figure:
 
-def plot_comparison_runs_overview_map(trajects: list[DikeTraject], selected_sections)-> go.Figure:
+    fig = go.Figure()
+    return fig
+
+def plot_comparison_runs_overview_map_assessment(trajects: list[DikeTraject], selected_sections)-> go.Figure:
+
+    fig = go.Figure()
+    return fig
+
+def plot_comparison_runs_overview_map_simple(trajects: list[DikeTraject], selected_sections)-> go.Figure:
     """
     This function plots an overview Map of the current dike in data. It uses plotly Mapbox for the visualization.
 
