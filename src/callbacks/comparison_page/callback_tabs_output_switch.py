@@ -4,10 +4,11 @@ from dash import html, Output, Input, callback, State, dcc
 from src.component_ids import TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE, CONTENT_TABS_COMPARISON_PAGE_ID, \
     STORED_RUNS_COMPARISONS_DATA, RUNS_COMPARISON_GRAPH_TIME_ID, \
     SLIDER_YEAR_RELIABILITY_RESULTS_ID, OVERVIEW_COMPARISON_MAP_ID, RUNS_COMPARISON_GRAPH_ID, \
-    RADIO_COMPARISON_PAGE_RESULT_TYPE
+    RADIO_COMPARISON_PAGE_RESULT_TYPE, MEASURE_COMPARISON_MAP_ID
 from src.layouts.layout_comparison_page.layout_output_tabs import layout_project_output_tab_one, \
-    layout_project_output_tab_two, layout_project_output_tab_three
+    layout_project_output_tab_two, layout_project_output_tab_three, layout_project_output_tab_four
 from src.linear_objects.dike_traject import DikeTraject
+from src.plotly_graphs.comparison_page.plot_measures_comparison_map import plot_comparison_measures_map
 
 from src.plotly_graphs.pf_length_cost import plot_default_scatter_dummy
 from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
@@ -37,6 +38,15 @@ def render_project_overview_map_content(active_tab: str) -> html.Div:
 
     elif active_tab == "tab-11113":
         return layout_project_output_tab_three()
+
+    elif active_tab == "tab-11114":
+        return layout_project_output_tab_four()
+
+    elif active_tab == "tab-11115":
+        return html.Div("Placeholder 1 tab")
+
+    elif active_tab == "tab-11116":
+        return html.Div("Placeholder 2 tab")
 
     else:
         return html.Div("Invalid tab selected")
@@ -103,4 +113,17 @@ def make_graph_pf_time_comparison(
         return plot_default_scatter_dummy()
     else:
         _fig = plot_pf_time_runs_comparison(project_data)
+    return _fig
+
+
+@callback(
+    Output(MEASURE_COMPARISON_MAP_ID, "figure"),
+    [
+        Input(STORED_RUNS_COMPARISONS_DATA, "data"),
+    ],
+)
+def make_map_comparison_measure(imported_runs: dict):
+    if imported_runs is None:
+        return plot_default_overview_map_dummy()
+    _fig = plot_comparison_measures_map(imported_runs)
     return _fig
