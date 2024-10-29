@@ -3,12 +3,13 @@ from typing import Optional
 import numpy as np
 import plotly.graph_objects as go
 
-from src.constants import PROJECTS_COLOR_SEQUENCE
+from src.constants import PROJECTS_COLOR_SEQUENCE, Mechanism, ResultType, ColorBarResultType, SubResultType
 from src.linear_objects.dike_traject import DikeTraject
 from src.linear_objects.project import DikeProject
 from src.plotly_graphs.plotly_maps import update_layout_map_box, add_section_trace, plot_default_overview_map_dummy, \
-    get_middle_point, get_average_point
+    get_middle_point, get_average_point, get_reliability_color, add_colorscale_bar
 from src.utils.gws_convertor import GWSRDConvertor
+from src.utils.utils import get_beta, beta_to_pf
 
 
 def plot_project_overview_map(projects: list[DikeProject], trajects: Optional[list[DikeTraject]]=None) -> go.Figure:
@@ -95,8 +96,82 @@ def plot_project_overview_map(projects: list[DikeProject], trajects: Optional[li
 
     return fig
 
+def plot_comparison_runs_overview_map_projects(projects: list[DikeProject], trajects: list[DikeTraject])-> go.Figure:
+    return plot_project_overview_map(projects, trajects)
 
-def plot_comparison_runs_overview_map(trajects: list[DikeTraject], selected_sections)-> go.Figure:
+def plot_comparison_runs_overview_map_assessment(trajects: list[DikeTraject])-> go.Figure:
+
+    fig = go.Figure()
+    sections = []  # add section to a list to find the middle point for all trajects
+    for dike_traject in trajects:
+        for section in dike_traject.dike_sections:
+            sections.append(section)
+            _coordinates_wgs = [
+                GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in section.coordinates_rd
+            ]  # convert in GWS coordinates:
+
+            # if a section is not in analyse, skip it, and it turns blank on the map.
+            if not section.in_analyse:
+                continue
+
+            _initial_results = section.initial_assessment
+
+            if _initial_results is not None:
+                _year_index = 0
+                _beta = get_beta(_initial_results, _year_index, Mechanism.SECTION.name)
+                _beta_dict = {
+                    meca: beta[_year_index]
+                    for meca, beta in _initial_results.items()
+                    if meca != "Section"
+                }
+                _color = get_reliability_color(_beta, dike_traject.lower_bound_value)
+
+
+                _hover_res = f"Pf sectie: {beta_to_pf(_beta):.2e}<br>"
+
+                _hovertemplate = (
+                        f"Vaknaam {section.name}<br>" + _hover_res + "<extra></extra>"
+                )
+
+                _mechanism = min(
+                    _beta_dict, key=_beta_dict.get
+                )  # mechanism with lowest beta
+                _hovertemplate = (
+                        _hovertemplate[:-15]
+                        + f"Laagste beta: {_mechanism}<br>"
+                        + "<extra></extra>"
+                )  # :-15 to remove <extra></extra> from string
+
+            else:
+                _color = "grey"
+                _hovertemplate = (
+                        f"Vaknaam {section.name}<br>" f"Beta: NO DATA<br>" + "<extra></extra>"
+                )
+
+            add_section_trace(
+                fig,
+                section,
+                name=dike_traject.name,
+                color=_color,
+                hovertemplate=_hovertemplate,
+            )
+
+    # Add colorscale bar, /!\ This will be centered around the lower bound value of the LAST dike traject
+    add_colorscale_bar(
+        fig,
+        ResultType.PROBABILITY.name,
+        ColorBarResultType.RELIABILITY.name,
+        SubResultType.ABSOLUTE.name,
+        dike_traject.lower_bound_value,
+    )
+
+    # Update layout of the figure and add token for mapbox
+    _middle_point = get_middle_point(sections)
+    update_layout_map_box(fig, _middle_point)
+
+    return fig
+
+def plot_comparison_runs_overview_map_simple(trajects: list[DikeTraject], selected_sections)-> go.Figure:
     """
     This function plots an overview Map of the current dike in data. It uses plotly Mapbox for the visualization.
 
