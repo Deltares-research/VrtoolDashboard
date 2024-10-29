@@ -65,6 +65,7 @@ OVERVIEW_PROJECT_MAP_ID_2 = 'overview_project_map_div_2'
 UPLOAD_DIKE_DATA_ID = 'upload-dike-data'
 STORED_IMPORTED_RUNS_DATA = "stored-project-data"
 STORED_PROJECT_OVERVIEW_DATA = "stored-project-overview-data"
+PROGRAM_SELECTION_MAP_RADIO_SWITCH_ID = 'program_selection_map_radio_switch'
 EDITABLE_IMPORTED_RUNS_TABLE_ID = "editable_project_table_id"
 TABLE_PROJECT_SUMMARY_ID = "table_project_summary"
 RUNS_COMPARISON_GRAPH_TIME_ID = 'project_comparison_graph_time'

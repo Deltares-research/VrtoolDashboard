@@ -9,7 +9,8 @@ import dash_mantine_components as dmc
 from src.component_ids import EDITABLE_IMPORTED_RUNS_TABLE_ID, TABLE_PROJECT_SUMMARY_ID, \
     MULTI_SELECT_SECTION_FOR_PROJECT_ID, ADD_PROJECT_BUTTON_ID, PROJECT_NAME_INPUT_FIELD_ID, ALERT_PROJECT_CREATION_ID, \
     UPDATE_PROJECT_BUTTON_ID, PROJECT_START_YEAR_INPUT_FIELD_ID, DELETE_PROJECT_BUTTON_ID, \
-    PROJECT_END_YEAR_INPUT_FIELD_ID, UPLOAD_SAVED_PROJECTS, OVERVIEW_PROJECT_MAP_ID_2
+    PROJECT_END_YEAR_INPUT_FIELD_ID, UPLOAD_SAVED_PROJECTS, OVERVIEW_PROJECT_MAP_ID_2, \
+    PROGRAM_SELECTION_MAP_RADIO_SWITCH_ID
 from src.layouts.layout_traject_page.layout_download_buttons import layout_download_projects
 from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
 
@@ -94,6 +95,16 @@ multi_select = dmc.MultiSelect(
     w=400,
     mb=10,
     clearable=True,
+)
+
+layout_radio_helper_map_switch = dbc.RadioItems(
+    id=PROGRAM_SELECTION_MAP_RADIO_SWITCH_ID,
+    options=[{"label": "Simpel", "value": "SIMPLE"},
+             {"label": "Projects", "value": "PROJECTS"},
+             {"label": "Faalkans", "value": "ASSESSMENT_PROBABILITIES"},
+             ],
+    value="SIMPLE",
+    inline=True
 )
 
 left_side = [
@@ -185,11 +196,14 @@ right_side = [
 
             html.Div(
                 style={'width': '110vh', 'height': '80vh', 'border': "2px solid black"},
-                children=dcc.Graph(
-                    id=OVERVIEW_PROJECT_MAP_ID_2,
-                    figure=plot_default_overview_map_dummy(),
-                    style={"width": "100%", "height": "100%"},
-                )
+                children=[
+                    layout_radio_helper_map_switch,
+                    dcc.Graph(
+                        id=OVERVIEW_PROJECT_MAP_ID_2,
+                        figure=plot_default_overview_map_dummy(),
+                        style={"width": "100%", "height": "100%"},
+                    )
+                ]
             ),
 
         ])
