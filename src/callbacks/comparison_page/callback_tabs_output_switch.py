@@ -91,12 +91,10 @@ def make_graph_pf_project_comparison(
     Output(RUNS_COMPARISON_GRAPH_TIME_ID, "figure"),
     [
         Input(STORED_RUNS_COMPARISONS_DATA, "data"),
-        Input("select_cost_beta_switch", "value")
     ],
 )
 def make_graph_pf_time_comparison(
         project_data: dict,
-        switch_cost_beta: str,
 ):
     """
 
@@ -104,5 +102,5 @@ def make_graph_pf_time_comparison(
     if project_data is None:
         return plot_default_scatter_dummy()
     else:
-        _fig = plot_pf_time_runs_comparison(project_data, switch_cost_beta)
+        _fig = plot_pf_time_runs_comparison(project_data)
     return _fig

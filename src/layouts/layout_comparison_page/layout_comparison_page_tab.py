@@ -84,7 +84,7 @@ right_side = [
     dbc.Tabs(
         [
             dbc.Tab(label="Kaart", tab_id="tab-11111"),
-            dbc.Tab(label="Vergelijken", tab_id="tab-11112"),
+            dbc.Tab(label="Kosten", tab_id="tab-11112"),
             dbc.Tab(label="Tijd", tab_id="tab-11113"),
         ],
         id=TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE,

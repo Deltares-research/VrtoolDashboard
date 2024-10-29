@@ -84,15 +84,6 @@ layout_radio_greedy_optimization_stop_criteria = dbc.RadioItems(
 
 )
 
-
-layout_radio_cost_beta_switch = dbc.RadioItems(
-    id="select_cost_beta_switch",
-    options=[{"label": "Kosten", "value": "COST"},
-             {"label": "Betrouwbaarheid", "value": "RELIABILITY"},
-             ],
-    value="COST",
-)
-
 layout_radio_helper_map_switch = dbc.RadioItems(
     id="select_helper_map_switch",
     options=[{"label": "Simpel", "value": "SIMPLE"},
@@ -116,7 +107,6 @@ layout_radio_result_type_project_page = dbc.RadioItems(
     value=ResultType.RELIABILITY.name,
     style={"margin-top": "2px", "margin-left": "10px"}
 )
-
 
 #### Comparison Page ####
 
