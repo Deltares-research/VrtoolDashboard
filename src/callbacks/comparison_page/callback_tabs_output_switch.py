@@ -6,11 +6,13 @@ from src.component_ids import TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE, CONTENT
     SLIDER_YEAR_RELIABILITY_RESULTS_ID, OVERVIEW_COMPARISON_MAP_ID, RUNS_COMPARISON_GRAPH_ID
 from src.layouts.layout_comparison_page.layout_output_tabs import layout_project_output_tab_one, \
     layout_project_output_tab_two, layout_project_output_tab_three
+from src.linear_objects.dike_traject import DikeTraject
 
 from src.plotly_graphs.pf_length_cost import plot_default_scatter_dummy
 from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
 from src.plotly_graphs.project_page.pf_traject_comparison import plot_pf_project_comparison, \
     plot_pf_time_runs_comparison
+from src.plotly_graphs.project_page.plotly_maps import plot_comparison_runs_overview_map_simple
 
 
 @callback(
@@ -43,7 +45,7 @@ def render_project_overview_map_content(active_tab: str) -> html.Div:
           [Input(STORED_RUNS_COMPARISONS_DATA, "data"),
            # Input("tabs_tab_project_page", "active_tab")
            ])
-def make_graph_overview_project(imported_runs_data: dict) -> dcc.Graph:
+def make_graph_overview_comparison(imported_runs_data: dict) -> dcc.Graph:
     """
     IS THIS CALLBACK DEPRECATED?
     Call to display the graph of the overview map of the dike from the saved imported dike data.
@@ -53,8 +55,8 @@ def make_graph_overview_project(imported_runs_data: dict) -> dcc.Graph:
     if imported_runs_data is None or imported_runs_data == {}:
         _fig = plot_default_overview_map_dummy()
     else:
-        return dash.no_update
-        # _fig = plot_default_overview_map_dummy()
+        trajects = [DikeTraject.deserialize(imported_runs_data[run_name]) for run_name in imported_runs_data.keys()]
+        _fig = plot_comparison_runs_overview_map_simple(trajects, [])
     return dcc.Graph(
         figure=_fig,
         style={"width": "100%", "height": "100%"},
