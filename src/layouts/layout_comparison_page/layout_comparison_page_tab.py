@@ -96,7 +96,7 @@ right_side = [
 
 project_definition_tab_layout = html.Div([
     dbc.Row([
-        dbc.Col(left_side, md=5),
-        dbc.Col(right_side, md=7),
+        dbc.Col(left_side, md=4),
+        dbc.Col(right_side, md=8),
     ]),
 ])
