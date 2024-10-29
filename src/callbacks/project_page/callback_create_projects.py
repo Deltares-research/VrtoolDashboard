@@ -6,7 +6,8 @@ from src.component_ids import MULTI_SELECT_SECTION_FOR_PROJECT_ID, EDITABLE_IMPO
     STORED_PROJECT_OVERVIEW_DATA, UPDATE_PROJECT_BUTTON_ID, PROJECT_START_YEAR_INPUT_FIELD_ID, \
     PROJECT_END_YEAR_INPUT_FIELD_ID, OVERVIEW_PROJECT_MAP_ID_2
 from src.linear_objects.dike_traject import DikeTraject
-from src.plotly_graphs.project_page.plotly_maps import plot_comparison_runs_overview_map
+from src.linear_objects.project import get_projects_from_saved_data
+from src.plotly_graphs.project_page.plotly_maps import plot_comparison_runs_overview_map, plot_project_overview_map
 
 
 @callback(
@@ -238,15 +239,22 @@ def update_section_selection_on_click_event(selected_row: dict, project_data_ove
 @callback(
     Output(OVERVIEW_PROJECT_MAP_ID_2, "figure"),
     [Input("tabs_tab_project_page", "value"),
+     Input(TABLE_PROJECT_SUMMARY_ID, "selectedRows"),
      State(STORED_IMPORTED_RUNS_DATA, "data"),
      State(STORED_PROJECT_OVERVIEW_DATA, "data")]
 )
-def update_map_project_definition_page(dummy, imported_runs_data: dict, project_overview_data: list):
+def update_map_project_definition_page(dummy, selected_row: dict, imported_runs_data: dict, project_overview_data: list):
     if imported_runs_data is None:
         return dash.no_update
     if project_overview_data is None:
         return dash.no_update
 
-    _fig = plot_comparison_runs_overview_map(imported_runs_data)
+
+    projects, trajects = get_projects_from_saved_data(imported_runs_data, project_overview_data, calc_failure_pro=False)
+    if selected_row is None:
+        _fig = plot_project_overview_map(projects, list(trajects.values()))
+    else:
+        selected_project_name = selected_row[0]['project']
+        _fig = plot_comparison_runs_overview_map(projects, list(trajects.values()), selected_project_name)
 
     return _fig

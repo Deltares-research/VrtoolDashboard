@@ -7,7 +7,6 @@ from src.component_ids import STORED_IMPORTED_RUNS_DATA, EDITABLE_IMPORTED_RUNS_
 import base64
 import json
 
-from src.plotly_graphs.project_page.plotly_maps import plot_comparison_runs_overview_map
 
 
 @callback(
