@@ -2,7 +2,7 @@ from dash import dcc
 import dash_bootstrap_components as dbc
 
 from src.component_ids import SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA, SELECT_DIKE_SECTION_FOR_MEASURES_ID, \
-    RADIO_PROJECT_PAGE_RESULT_TYPE
+    RADIO_PROJECT_PAGE_RESULT_TYPE, RADIO_COMPARISON_PAGE_RESULT_TYPE
 from src.constants import ColorBarResultType, ResultType, CalcType, Mechanism, SubResultType, GreedyOPtimizationCriteria
 
 """
@@ -111,6 +111,20 @@ layout_radio_result_type_project_page = dbc.RadioItems(
         {"label": ResultType.PROBABILITY.value, "value": ResultType.PROBABILITY.name},
         {"label": ResultType.DISTANCE_TO_NORM.value, "value": ResultType.DISTANCE_TO_NORM.name},
 
+    ],
+    inline=True,
+    value=ResultType.RELIABILITY.name,
+    style={"margin-top": "2px", "margin-left": "10px"}
+)
+
+
+#### Comparison Page ####
+
+layout_radio_result_type_comparison_page = dbc.RadioItems(
+    id=RADIO_COMPARISON_PAGE_RESULT_TYPE,
+    options=[
+        {"label": ResultType.RELIABILITY.value, "value": ResultType.RELIABILITY.name},
+        {"label": ResultType.PROBABILITY.value, "value": ResultType.PROBABILITY.name},
     ],
     inline=True,
     value=ResultType.RELIABILITY.name,
