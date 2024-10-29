@@ -13,7 +13,11 @@ from src.constants import ProgramDefinitionMapType
 
 class TestCallbackCreateProjects:
 
-    @pytest.mark.parametrize("map_type", [ProgramDefinitionMapType.PROJECTS.name])
+    @pytest.mark.parametrize("map_type", [
+        ProgramDefinitionMapType.SIMPLE.name,
+        ProgramDefinitionMapType.PROJECTS.name,
+        ProgramDefinitionMapType.ASSESSMENT_PROBABILITIES.name
+    ])
     def test_update_map_project_definition_page(self, map_type):
         # 1. Define data
         _data = json.load(
@@ -52,7 +56,6 @@ class TestCallbackCreateProjects:
 
         ctx = copy_context()
         output = ctx.run(run_callback)
-        output.show()
 
         # 3. Assert
         assert isinstance(output, Figure)

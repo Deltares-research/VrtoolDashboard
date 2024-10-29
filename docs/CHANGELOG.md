@@ -4,6 +4,7 @@
 
 ### Added
 - Added a button and name field to export the traject run json
+- Added a switch for the map of the program definition to display faalkans
 
 ### Changed
 - Map below reliability vs cost graph now displays the selected measure

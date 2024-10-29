@@ -262,8 +262,8 @@ def update_map_project_definition_page(dummy, selected_sections: list, switch_ty
         _fig = plot_comparison_runs_overview_map_simple(list(trajects.values()), selected_sections)
     elif switch_type_map == ProgramDefinitionMapType.PROJECTS.name:
         _fig = plot_comparison_runs_overview_map_projects(projects, list(trajects.values()))
-    elif switch_type_map == ProgramDefinitionMapType.ASSESSMENT_PROBABILITIES.PROJECTS.name:
-        _fig = plot_comparison_runs_overview_map_assessment(list(trajects.values()), selected_sections)
+    elif switch_type_map == ProgramDefinitionMapType.ASSESSMENT_PROBABILITIES.name:
+        _fig = plot_comparison_runs_overview_map_assessment(list(trajects.values()))
     else:
         _fig = plot_default_overview_map_dummy()
     return _fig
