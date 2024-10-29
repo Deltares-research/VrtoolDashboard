@@ -157,8 +157,5 @@ class TestPlotlyScatterMapBox():
                                                             "WsNoo_Stab_014700_015400",
                                                             "WsNoo_Stab_014100_014700",
                                                             "WsNoo_Stab_017400_018000"])
-        # _fig2 = dike_traject_pf_cost_helping_map_detail(_dike_traject, 0, ["93"])  # this one has a grey dijkvak
-        _fig1.show()
         # 3. Assert
         assert isinstance(_fig1, Figure)
-        # assert isinstance(_fig2, Figure)
