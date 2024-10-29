@@ -96,7 +96,7 @@ def plot_project_overview_map(projects: list[DikeProject], trajects: Optional[li
     return fig
 
 
-def plot_comparison_runs_overview_map(projects: list[DikeProject], trajects: list[DikeTraject], selected_project_name)-> go.Figure:
+def plot_comparison_runs_overview_map(trajects: list[DikeTraject], selected_sections)-> go.Figure:
     """
     This function plots an overview Map of the current dike in data. It uses plotly Mapbox for the visualization.
 
@@ -106,60 +106,15 @@ def plot_comparison_runs_overview_map(projects: list[DikeProject], trajects: lis
     fig = go.Figure()
     sections = []
 
-    # if len(projects) == 0:
-    #     return plot_default_overview_map_dummy()
-
-
-    for i, project in enumerate(projects):
-        _color = PROJECTS_COLOR_SEQUENCE[i]
-        if project.name == selected_project_name:
-            opacity = 1
-        else:
-            opacity = 0.3
-        for index, section in enumerate(project.dike_sections):
-            sections.append(section)
-            # if a section is not in analyse, skip it, and it turns blank on the map.
-            _hovertemplate = (
-                    f"Traject {project.name}<br>" +
-                    f"Vaknaam {section.name}<br>" + f"Lengte: {section.length}m <extra></extra>"
-            )
-            _coordinates_wgs = [
-                GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in section.coordinates_rd
-            ]  # convert in GWS coordinates:
-
-            fig.add_trace(
-                go.Scattermap(
-                    mode="lines+text",
-                    lat=[x[0] for x in _coordinates_wgs],
-                    lon=[x[1] for x in _coordinates_wgs],
-                    marker={"size": 10, "color": _color},
-                    line={"width": 10, "color": _color},
-                    opacity=opacity,
-                    name=project.name,
-                    legendgroup=project.name,
-                    hovertemplate=_hovertemplate,
-                    showlegend=True if index == 0 else False,
-                )
-            )
-            if index == int(len(project.dike_sections) / 2):
-                fig.add_trace(go.Scattermap(
-                    mode="text",
-                    lat=[[x[0] for x in _coordinates_wgs][0]],
-                    lon=[[x[1] for x in _coordinates_wgs][0]],
-                    showlegend=False,
-                    text=project.name,
-                    textfont=dict(size=15)
-
-                ))
-
-        _middle_point = get_average_point(sections)
-        update_layout_map_box(fig, _middle_point, zoom=10)
-
     if trajects is not None:
-        _color = "grey"
         for traject in trajects:
             for index, section in enumerate(traject.dike_sections):
                 sections.append(section)
+
+                if f"{section.name}|{traject.name}" in selected_sections:
+                    _color = "red"
+                else:
+                    _color = "grey"
                 # if a section is not in analyse, skip it, and it turns blank on the map.
                 _hovertemplate = (
                         f"Traject {traject.name}<br>" +
@@ -183,6 +138,9 @@ def plot_comparison_runs_overview_map(projects: list[DikeProject], trajects: lis
                         showlegend=True if index == 0 else False,
                     )
                 )
+
+    _middle_point = get_average_point(sections)
+    update_layout_map_box(fig, _middle_point, zoom=10)
 
     return fig
 

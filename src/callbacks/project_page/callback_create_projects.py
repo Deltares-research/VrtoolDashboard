@@ -239,22 +239,20 @@ def update_section_selection_on_click_event(selected_row: dict, project_data_ove
 @callback(
     Output(OVERVIEW_PROJECT_MAP_ID_2, "figure"),
     [Input("tabs_tab_project_page", "value"),
-     Input(TABLE_PROJECT_SUMMARY_ID, "selectedRows"),
+     # Input(TABLE_PROJECT_SUMMARY_ID, "selectedRows"),
+     Input(MULTI_SELECT_SECTION_FOR_PROJECT_ID, "value"),
      State(STORED_IMPORTED_RUNS_DATA, "data"),
      State(STORED_PROJECT_OVERVIEW_DATA, "data")]
 )
-def update_map_project_definition_page(dummy, selected_row: dict, imported_runs_data: dict, project_overview_data: list):
+def update_map_project_definition_page(dummy, selected_sections: list, imported_runs_data: dict,
+                                       project_overview_data: list):
     if imported_runs_data is None:
         return dash.no_update
     if project_overview_data is None:
         return dash.no_update
 
+    _, trajects = get_projects_from_saved_data(imported_runs_data, project_overview_data, calc_failure_pro=False)
 
-    projects, trajects = get_projects_from_saved_data(imported_runs_data, project_overview_data, calc_failure_pro=False)
-    if selected_row is None:
-        _fig = plot_project_overview_map(projects, list(trajects.values()))
-    else:
-        selected_project_name = selected_row[0]['project']
-        _fig = plot_comparison_runs_overview_map(projects, list(trajects.values()), selected_project_name)
+    _fig = plot_comparison_runs_overview_map(list(trajects.values()), selected_sections)
 
     return _fig
