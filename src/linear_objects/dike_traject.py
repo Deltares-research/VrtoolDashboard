@@ -60,6 +60,7 @@ class DikeTraject(BaseLinearObject):
             DikeSection.deserialize(section_data)
             for section_data in data["dike_sections"]
         ]
+        print(data)
         return DikeTraject(
             name=data["name"],
             dike_sections=sections,
@@ -72,9 +73,9 @@ class DikeTraject(BaseLinearObject):
             _run_id_vr=data["_run_id_vr"],
             _run_id_dsn=data["_run_id_dsn"],
             final_step_number=data["final_step_number"],
-            greedy_stop_type_criteria=data["greedy_stop_type_criteria"],
-            greedy_stop_criteria_year=data["greedy_stop_criteria_year"],
-            greedy_stop_criteria_beta=data["greedy_stop_criteria_beta"],
+            greedy_stop_type_criteria=data.get("greedy_stop_type_criteria", None),
+            greedy_stop_criteria_year=data.get("greedy_stop_criteria_year", None),
+            greedy_stop_criteria_beta=data.get("greedy_stop_criteria_beta", None),
         )
 
     def export_to_geojson(self, params: dict) -> str:
