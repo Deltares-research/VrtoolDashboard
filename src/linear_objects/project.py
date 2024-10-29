@@ -27,13 +27,15 @@ class DikeProject():
         return sum([section.length for section in self.dike_sections])
 
 
-def get_projects_from_saved_data(imported_runs_data: dict, project_overview_data: list[dict]) -> tuple[
-    list[DikeProject], list[DikeTraject]]:
+def get_projects_from_saved_data(imported_runs_data: dict, project_overview_data: list[dict],
+                                 calc_failure_pro: bool = True) -> tuple[
+    list[DikeProject], dict[str, DikeTraject]]:
     """
 
     :param imported_runs_data: stored data of all the imported runs as a dict with key format: "traject|run", for ex:
     "7-2|Basisberekening"
     :param project_overview_data: Overview of the projects with the selected sections
+    :param calc_failure_pro: bool: if True, calculate the probability of failure for the projects
     :return:
     """
     projects = []
@@ -64,8 +66,10 @@ def get_projects_from_saved_data(imported_runs_data: dict, project_overview_data
             start_year=project_data["start_year"],
             end_year=project_data["end_year"],
             dike_sections=sections,
-            project_failure_prob_assessement=calc_prob_failure_before_reinforcement(sections),
-            project_failure_prob_after_reinforcement=calc_prob_failure_after_reinforcement(sections)
+            project_failure_prob_assessement=calc_prob_failure_before_reinforcement(
+                sections) if calc_failure_pro else None,
+            project_failure_prob_after_reinforcement=calc_prob_failure_after_reinforcement(
+                sections) if calc_failure_pro else None,
         )
         projects.append(project)
     return projects, dict_runs
