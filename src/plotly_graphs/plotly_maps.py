@@ -496,7 +496,7 @@ def plot_dike_traject_measures_map(
 
 
 def add_measure_type_trace(
-        fig: go.Figure, section: DikeSection, measure_results: dict, legend_display: dict, opacity: float = 1
+        fig: go.Figure, section: DikeSection, measure_results: dict, legend_display: dict, opacity: float = 1,
 ):
     """
     This function adds a trace to the figure for the measure type.
