@@ -516,24 +516,24 @@ def add_measure_type_trace(
         _visible = True
         if measure_results["dcrest"] == 0 and measure_results["dberm"] > 0:
             _name = "Bermverbreding"
-            _color = "#9ACD32"
+            _color = f"rgb(154, 205, 50, {opacity})"
             _showlegend = legend_display.get("berm_widening")
             legend_display["berm_widening"] = False
 
         if measure_results["dberm"] == 0 and measure_results["dcrest"] > 0:
             _name = "Kruinverhoging"
-            _color = "#00FF00"
+            _color = f"rgb(0, 255, 0, {opacity})"
             _showlegend = legend_display.get("crest_heightening")
             legend_display["crest_heightening"] = False
 
         if measure_results["dcrest"] > 0 and measure_results["dberm"] > 0:
             _name = "Grondversterking binnenwaarts"
-            _color = "#008000"  # Green
+            _color = f"rgb(0, 128, 0, {opacity})" # Green
             _showlegend = legend_display.get("ground_reinforcement")
             legend_display["ground_reinforcement"] = False
         if measure_results["dcrest"] == 0 and measure_results["dberm"] == 0:
             _name = "Grondversterking binnenwaarts"
-            _color = "#008000"  # Green
+            _color = f"rgb(0, 128, 0, {opacity})" # Green
             _showlegend = legend_display.get("ground_reinforcement")
             legend_display["ground_reinforcement"] = False
             _visible = False
@@ -578,6 +578,7 @@ def add_measure_type_trace(
                 lat=[x[0] for x in _coordinates_wgs],
                 lon=[x[1] for x in _coordinates_wgs],
                 line={"color": _color, "width": 4},
+                opacity=opacity,
                 showlegend=legend_display.get("VZG"),
                 hovertemplate=f"Vaknaam {section.name}<br>"
                               f"{measure_results['name']}<br>"
@@ -603,6 +604,7 @@ def add_measure_type_trace(
                 lat=[x[0] for x in _coordinates_wgs],
                 lon=[x[1] for x in _coordinates_wgs],
                 line={"color": _color, "width": 4},
+                opacity=opacity,
                 showlegend=legend_display.get("screen"),
                 hovertemplate=f"Vaknaam {section.name}<br>"
                               f"{measure_results['name']} <br>"
@@ -626,9 +628,10 @@ def add_measure_type_trace(
                 mode="lines",
                 lat=[x[0] for x in _coordinates_wgs],
                 lon=[x[1] for x in _coordinates_wgs],
-                fillcolor="black",
+                fillcolor=f"rgba(0, 0, 0, {opacity})",
                 line={"width": 1, "color": "black"},
                 fill="toself",
+                opacity=opacity,
                 showlegend=legend_display.get("diaphram wall"),
                 hovertemplate=f"Vaknaam: {section.name}<br>"
                               f"Custom maatregel: {measure_results['name']} <br>"
@@ -654,6 +657,7 @@ def add_measure_type_trace(
                 fillcolor="grey",
                 line={"width": 1, "color": "grey"},
                 fill="toself",
+                opacity=opacity,
                 showlegend=legend_display.get("sheetpile"),
                 hovertemplate=f"Vaknaam: {section.name}<br>"
                               f"Custom maatregel: {measure_results['name']} <br>"
@@ -682,7 +686,7 @@ def add_measure_type_trace(
                 fillcolor="grey",
                 line={"width": 4, "color": "black"},
                 # fill="toself",
-                opacity=1,
+                opacity=opacity,
                 showlegend=legend_display.get("revetment"),
                 hovertemplate=f"Vaknaam {section.name}<br>"
                               f"{measure_results['name']} <br>"
@@ -711,6 +715,7 @@ def add_measure_type_trace(
                 fillcolor="grey",
                 line={"width": 1, "color": "grey"},
                 fill="toself",
+                opacity=opacity,
                 showlegend=legend_display.get("custom"),
                 hovertemplate=f"Vaknaam {section.name}<br>"
                               f"{measure_results['name']} <br>"
@@ -885,6 +890,8 @@ def dike_traject_pf_cost_helping_map_detail(
         "revetment": True,
         "custom": True,
     }
+    if curve_number == 2:  # for the VR pad, we don't store the measures for each section, so we can't make this plot
+        return plot_default_overview_map_dummy()
 
     for section in dike_traject.dike_sections:
 
@@ -898,8 +905,7 @@ def dike_traject_pf_cost_helping_map_detail(
             else section.final_measure_veiligheidsrendement
         )
         if _measure_results is not None:
-
-            opacity = 1 if section.name == reinforced_sections[-1] else 0.4
+            opacity = 1 if section.name == reinforced_sections[-1] else 0.2
             add_measure_type_trace(
                 fig, section, _measure_results, _legend_display, opacity
             )

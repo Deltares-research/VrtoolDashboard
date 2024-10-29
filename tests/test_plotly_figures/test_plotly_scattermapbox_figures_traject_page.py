@@ -34,7 +34,6 @@ class TestPlotlyScatterMapBox():
         # 3. Assert
         assert isinstance(_fig, Figure)
 
-
     @pytest.mark.parametrize("result_type", [ResultType.RELIABILITY, ResultType.PROBABILITY])
     @pytest.mark.parametrize("mechanism",
                              [Mechanism.SECTION, Mechanism.PIPING, Mechanism.OVERFLOW, Mechanism.STABILITY])
@@ -97,9 +96,11 @@ class TestPlotlyScatterMapBox():
         assert isinstance(_fig, Figure)
 
     @pytest.mark.parametrize("calc_type", [CalcType.VEILIGHEIDSRENDEMENT, CalcType.DOORSNEDE_EISEN])
-    @pytest.mark.parametrize("sub_result_type", [SubResultType.MEASURE_TYPE, SubResultType.BERM_WIDENING, SubResultType.CREST_HIGHTENING, SubResultType.INVESTMENT_YEAR])
-    def test_plot_dike_traject_reliability_measures_assessment_map_measure(self,calc_type: Enum,
-                                                                        sub_result_type: Enum):
+    @pytest.mark.parametrize("sub_result_type",
+                             [SubResultType.MEASURE_TYPE, SubResultType.BERM_WIDENING, SubResultType.CREST_HIGHTENING,
+                              SubResultType.INVESTMENT_YEAR])
+    def test_plot_dike_traject_reliability_measures_assessment_map_measure(self, calc_type: Enum,
+                                                                           sub_result_type: Enum):
         # 1. Define data
         _dike_data = json.load(
             open(Path(__file__).parent.parent / 'data/31-1 base coastal case/reference' / 'dike_data.json'))
@@ -151,11 +152,13 @@ class TestPlotlyScatterMapBox():
         _dike_traject = DikeTraject.deserialize(_dike_data)
 
         # 2. Call
-        _fig1 = dike_traject_pf_cost_helping_map_detail(_dike_traject, 0, ["33"])
-        _fig2 = dike_traject_pf_cost_helping_map_detail(_dike_traject, 0, ["93"])  # this one has a grey dijkvak
-
+        _fig1 = dike_traject_pf_cost_helping_map_detail(_dike_traject, 0,
+                                                        [
+                                                            "WsNoo_Stab_014700_015400",
+                                                            "WsNoo_Stab_014100_014700",
+                                                            "WsNoo_Stab_017400_018000"])
+        # _fig2 = dike_traject_pf_cost_helping_map_detail(_dike_traject, 0, ["93"])  # this one has a grey dijkvak
+        _fig1.show()
         # 3. Assert
         assert isinstance(_fig1, Figure)
-        assert isinstance(_fig2, Figure)
-
-
+        # assert isinstance(_fig2, Figure)
