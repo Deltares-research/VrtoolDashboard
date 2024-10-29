@@ -102,8 +102,10 @@ def plot_comparison_runs_overview_map_projects(projects: list[DikeProject], traj
 def plot_comparison_runs_overview_map_assessment(trajects: list[DikeTraject])-> go.Figure:
 
     fig = go.Figure()
+    sections = []  # add section to a list to find the middle point for all trajects
     for dike_traject in trajects:
         for section in dike_traject.dike_sections:
+            sections.append(section)
             _coordinates_wgs = [
                 GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in section.coordinates_rd
             ]  # convert in GWS coordinates:
@@ -164,7 +166,7 @@ def plot_comparison_runs_overview_map_assessment(trajects: list[DikeTraject])-> 
     )
 
     # Update layout of the figure and add token for mapbox
-    _middle_point = get_middle_point(dike_traject.dike_sections)
+    _middle_point = get_middle_point(sections)
     update_layout_map_box(fig, _middle_point)
 
     return fig
