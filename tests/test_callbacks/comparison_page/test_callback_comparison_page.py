@@ -9,6 +9,7 @@ from plotly.graph_objs import Figure
 
 from src.callbacks.comparison_page.callback_tabs_output_switch import make_graph_overview_comparison, \
     make_graph_pf_project_comparison
+from src.constants import ResultType
 
 
 class TestCallbackComparisonPage:
@@ -61,7 +62,7 @@ class TestCallbackComparisonPage:
 
         # 2. Define callback
         def run_callback():
-            return make_graph_pf_project_comparison(_imported_runs, 0)
+            return make_graph_pf_project_comparison(_imported_runs, 0, ResultType.PROBABILITY.name)
 
         ctx = copy_context()
         output = ctx.run(run_callback)

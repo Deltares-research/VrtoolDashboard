@@ -3,7 +3,8 @@ from dash import html, Output, Input, callback, State, dcc
 
 from src.component_ids import TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE, CONTENT_TABS_COMPARISON_PAGE_ID, \
     STORED_RUNS_COMPARISONS_DATA, RUNS_COMPARISON_GRAPH_TIME_ID, \
-    SLIDER_YEAR_RELIABILITY_RESULTS_ID, OVERVIEW_COMPARISON_MAP_ID, RUNS_COMPARISON_GRAPH_ID
+    SLIDER_YEAR_RELIABILITY_RESULTS_ID, OVERVIEW_COMPARISON_MAP_ID, RUNS_COMPARISON_GRAPH_ID, \
+    RADIO_COMPARISON_PAGE_RESULT_TYPE
 from src.layouts.layout_comparison_page.layout_output_tabs import layout_project_output_tab_one, \
     layout_project_output_tab_two, layout_project_output_tab_three
 from src.linear_objects.dike_traject import DikeTraject
@@ -68,11 +69,13 @@ def make_graph_overview_comparison(imported_runs_data: dict) -> dcc.Graph:
     [
         Input(STORED_RUNS_COMPARISONS_DATA, "data"),
         Input(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "value"),
+        Input(RADIO_COMPARISON_PAGE_RESULT_TYPE, "value")
     ],
 )
 def make_graph_pf_project_comparison(
         project_data: dict,
         selected_year: float,
+        result_type: str
 ):
     """
 
@@ -80,7 +83,7 @@ def make_graph_pf_project_comparison(
     if project_data is None:
         return plot_default_scatter_dummy()
     else:
-        _fig = plot_pf_project_comparison(project_data, selected_year)
+        _fig = plot_pf_project_comparison(project_data, selected_year, result_type)
     return _fig
 
 

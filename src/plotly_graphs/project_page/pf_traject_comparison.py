@@ -22,7 +22,7 @@ def plot_default_scatter_dummy() -> go.Figure:
     return fig
 
 
-def plot_pf_project_comparison(project_data: dict, selected_year) -> go.Figure:
+def plot_pf_project_comparison(project_data: dict, selected_year: int, result_type: str) -> go.Figure:
     """
     :return:
     """
@@ -41,12 +41,22 @@ def plot_pf_project_comparison(project_data: dict, selected_year) -> go.Figure:
         max_x = x_vr[-1]
         title_extra = "Faalkans i.r.t kosten"
 
-        y_vr = pf_to_beta(dike_traject.calc_traject_probability_array("vr")[:, _year_index])
-        # y_step = pf_to_beta(get_step_traject_pf(dike_traject)[:, _year_index])
+        if result_type == ResultType.RELIABILITY.name:
+            y_vr = pf_to_beta(dike_traject.calc_traject_probability_array("vr")[:, _year_index])
+            # y_step = pf_to_beta(get_step_traject_pf(dike_traject)[:, _year_index])
+            y_ondergrens = pf_to_beta(dike_traject.lower_bound_value)
+            y_signalering = pf_to_beta(dike_traject.signalering_value)
+            title_y_axis = "Betrouwbaarheid"
 
-        title_y_axis = "Betrouwbaarheid"
-        y_ondergrens = pf_to_beta(dike_traject.lower_bound_value)
-        y_signalering = pf_to_beta(dike_traject.signalering_value)
+
+        else:
+            y_vr = dike_traject.calc_traject_probability_array("vr")[:, _year_index]
+            # y_step = get_step_traject_pf(dike_traject)[:, _year_index]
+            y_ondergrens = dike_traject.lower_bound_value
+            y_signalering = dike_traject.signalering_value
+            title_y_axis = "Trajectfaalkans per jaar"
+
+
 
         color = CLASSIC_PLOTLY_COLOR_SEQUENCE[index]
         if index == 0:
@@ -68,8 +78,15 @@ def plot_pf_project_comparison(project_data: dict, selected_year) -> go.Figure:
         x_max = np.max([np.max(x_vr)])
         fig.update_xaxes(range=[0, x_max], title=title_x_axis)
         fig.update_layout(title=title_extra, yaxis_title=title_y_axis, xaxis_title=title_x_axis)
+        if result_type == ResultType.RELIABILITY.name:
+            fig.update_yaxes(range=[None, 6])
+        elif result_type == ResultType.PROBABILITY.name:
 
-        fig.update_yaxes(range=[None, 6])
+            fig.update_yaxes(range=[None, 1e-7],
+                             type='log',
+                             exponentformat='power',
+                             )
+
 
         fig.update_layout(showlegend=True, template='plotly_white')
 
