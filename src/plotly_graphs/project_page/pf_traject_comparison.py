@@ -32,27 +32,22 @@ def plot_pf_project_comparison(project_data: dict, selected_year) -> go.Figure:
         dike_traject = DikeTraject.deserialize(dike_traject_data)
         _year_index = bisect_right(dike_traject.dike_sections[0].years, selected_year - REFERENCE_YEAR) - 1
 
-        section_order_dsn = ["Geen maatregel"] + dike_traject.reinforcement_order_dsn
         section_order_vr = ["Geen maatregel"] + dike_traject.reinforcement_order_vr
         # greedy_step_order = ["Geen maatregel"] + [f"Stap {o}" for o in range(1, len(dike_traject.greedy_steps))]
 
         x_vr = dike_traject.get_cum_cost("vr")
-        x_dsn = dike_traject.get_cum_cost("dsn")
         # x_step = cum_cost_steps(dike_traject)
         title_x_axis = "Kosten (mln €)"
-        max_x = max(x_vr[-1], x_dsn[-1])
-        hover_extra = "Kosten: €%{x:.2f} mln<br>"
-        title_extra = "Faalkans i.r.t. kosten"
+        max_x = x_vr[-1]
+        title_extra = "Faalkans i.r.t kosten"
 
         y_vr = pf_to_beta(dike_traject.calc_traject_probability_array("vr")[:, _year_index])
-        y_dsn = pf_to_beta(dike_traject.calc_traject_probability_array("dsn")[:, _year_index])
         # y_step = pf_to_beta(get_step_traject_pf(dike_traject)[:, _year_index])
 
         title_y_axis = "Betrouwbaarheid"
         y_ondergrens = pf_to_beta(dike_traject.lower_bound_value)
         y_signalering = pf_to_beta(dike_traject.signalering_value)
 
-        legend_group = dike_traject.name + "|" + dike_traject.run_name
         color = CLASSIC_PLOTLY_COLOR_SEQUENCE[index]
         if index == 0:
             add_signaleringswaarde(fig, max_x, y_signalering, y_ondergrens)
@@ -65,14 +60,14 @@ def plot_pf_project_comparison(project_data: dict, selected_year) -> go.Figure:
                                  line=dict(color=color),
                                  marker=dict(size=6, color=color),
                                  hovertemplate="<b>%{customdata}</b><br><br>" +
-                                               "Trajectfaalkans: %{y:.2e}<br>" + hover_extra
+                                               "Trajectfaalkans: %{y:.2e}<br>"
                                  ))
 
 
 
-        x_max = np.max([np.max(x_vr), np.max(x_dsn)])
-        # fig.update_xaxes(range=[0, x_max], title=title_x_axis)
-        fig.update_layout(title=title_extra, yaxis_title=title_y_axis)
+        x_max = np.max([np.max(x_vr)])
+        fig.update_xaxes(range=[0, x_max], title=title_x_axis)
+        fig.update_layout(title=title_extra, yaxis_title=title_y_axis, xaxis_title=title_x_axis)
 
         fig.update_yaxes(range=[None, 6])
 
