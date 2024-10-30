@@ -174,6 +174,7 @@ def plot_dike_traject_reliability_initial_assessment_map(
     # Update layout of the figure and add token for mapbox
     _middle_point = get_middle_point(dike_traject.dike_sections)
     update_layout_map_box(fig, _middle_point)
+    place_legend_right_top_corner(fig)
 
     return fig
 
@@ -418,6 +419,7 @@ def plot_dike_traject_urgency(
     # Update layout of the figure and add token for mapbox
     _middle_point = get_middle_point(dike_traject.dike_sections)
     update_layout_map_box(fig, _middle_point)
+    place_legend_right_top_corner(fig)
 
     return fig
 
@@ -491,6 +493,7 @@ def plot_dike_traject_measures_map(
 
     _middle_point = get_middle_point(dike_traject.dike_sections)
     update_layout_map_box(fig, _middle_point)
+    place_legend_right_top_corner(fig)
 
     return fig
 
@@ -1013,6 +1016,22 @@ def update_layout_map_box(fig: go.Figure, center: tuple[float, float], zoom: int
         ),
     )
 
+def place_legend_left_top_corner(fig: go.Figure):
+    fig.update_layout(legend=dict(
+        yanchor="top",
+        y=0.99,
+        xanchor="left",
+        x=0.01,
+    ))
+
+def place_legend_right_top_corner(fig: go.Figure):
+    fig.update_layout(legend=dict(
+        yanchor="top",
+        y=0.95,
+        xanchor="right",
+        x=0.99,
+    ))
+
 
 def add_colorscale_bar(
         fig: go.Figure,
@@ -1051,6 +1070,8 @@ def add_colorscale_bar(
                 ticktext=["1e-2", "1e-3", "1e-4", "1e-5", "1e-6"],
                 ticks="outside",
                 len=0.5,
+                x=0.9,
+                xref="paper", # Superpose the colobar with the map
             ),
             showscale=True,
             cmin=beta_ondergrsns - 1.5,
@@ -1073,6 +1094,8 @@ def add_colorscale_bar(
                 ticktext=["2", "3", str(round(beta_ondergrsns, 1)), "4", "5"],
                 ticks="outside",
                 len=0.5,
+                x=0.9,
+                xref="paper",  # Superpose the colobar with the map
             ),
             showscale=True,
             cmin=beta_ondergrsns - 1.5,

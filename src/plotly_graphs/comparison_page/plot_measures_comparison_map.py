@@ -12,7 +12,8 @@ from src.constants import (
 )
 from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject
-from src.plotly_graphs.plotly_maps import add_measure_type_trace, update_layout_map_box, get_middle_point
+from src.plotly_graphs.plotly_maps import add_measure_type_trace, update_layout_map_box, get_middle_point, \
+    place_legend_left_top_corner, place_legend_right_top_corner
 from src.utils.gws_convertor import GWSRDConvertor
 from src.utils.utils import to_million_euros, beta_to_pf, pf_to_beta, get_beta
 
@@ -63,11 +64,7 @@ def plot_comparison_measures_map(imported_runs: dict) -> go.Figure:
 
     _middle_point = get_middle_point(dike_traject.dike_sections)
     update_layout_map_box(fig, _middle_point)
-    fig.update_layout(legend=dict(
-        yanchor="top",
-        y=0.99,
-        xanchor="left",
-        x=0.01,
-    ))
+    place_legend_right_top_corner(fig)
+
 
     return fig
