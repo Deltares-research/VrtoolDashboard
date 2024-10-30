@@ -21,20 +21,26 @@ color_dict = {""}
 
 def plot_comparison_measures_map(imported_runs: dict) -> go.Figure:
     fig = go.Figure()
-    _legend_display = {
-        "ground_reinforcement": True,
-        "VZG": True,
-        "screen": True,
-        "diaphram wall": True,
-        "sheetpile": True,
-        "crest_heightening": True,
-        "berm_widening": True,
-        "revetment": True,
-        "custom": True,
-    }
+
 
     for index, (_, dike_traject_data) in enumerate(imported_runs.items()):
         dike_traject = DikeTraject.deserialize(dike_traject_data)
+
+        if index >= 2: # onyl display the first two trajects
+            break
+
+        _legend_display = {
+            "ground_reinforcement": True,
+            "VZG": True,
+            "screen": True,
+            "diaphram wall": True,
+            "sheetpile": True,
+            "crest_heightening": True,
+            "berm_widening": True,
+            "revetment": True,
+            "custom": True,
+        }
+
         for section in dike_traject.dike_sections:
             side = 'left' if index == 0 else 'right'
             section.shift_trajectory_sideways(100, side)
@@ -50,9 +56,18 @@ def plot_comparison_measures_map(imported_runs: dict) -> go.Figure:
                 if _measure_results["investment_year"] == None:
                     _measure_results = None
                 else:
-                    add_measure_type_trace(fig, section, _measure_results, _legend_display)
+                    add_measure_type_trace(fig, section, _measure_results, _legend_display, legendgroup=dike_traject.run_name)
+
+
+
 
     _middle_point = get_middle_point(dike_traject.dike_sections)
     update_layout_map_box(fig, _middle_point)
+    fig.update_layout(legend=dict(
+        yanchor="top",
+        y=0.99,
+        xanchor="left",
+        x=0.01,
+    ))
 
     return fig

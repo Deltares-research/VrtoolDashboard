@@ -1,5 +1,5 @@
 from bisect import bisect_right
-from typing import Tuple
+from typing import Tuple, Optional
 
 import numpy as np
 import plotly.graph_objects as go
@@ -496,7 +496,7 @@ def plot_dike_traject_measures_map(
 
 
 def add_measure_type_trace(
-        fig: go.Figure, section: DikeSection, measure_results: dict, legend_display: dict, opacity: float = 1,
+        fig: go.Figure, section: DikeSection, measure_results: dict, legend_display: dict, opacity: float = 1, legendgroup: Optional[str] = None
 ):
     """
     This function adds a trace to the figure for the measure type.
@@ -504,6 +504,9 @@ def add_measure_type_trace(
     :param section: DikeSection
     :param measure_results:
     :param legend_display: dict to avoid double legend entries
+    :param opacity: float
+    :param legendgroup: Optional[str]. If None, the legendgroup is based on the measures types (all VZG grouped together)
+    otherwise it is based on the provided name
     """
     if MeasureTypeEnum.SOIL_REINFORCEMENT.name in measure_results[
         "type"] or MeasureTypeEnum.SOIL_REINFORCEMENT.legacy_name in measure_results[
@@ -550,7 +553,9 @@ def add_measure_type_trace(
         fig.add_trace(
             go.Scattermap(
                 name=_name,
-                legendgroup=_name,
+                legendgroup=_name if legendgroup is None else legendgroup,
+                legendgrouptitle_text=None if legendgroup is None else legendgroup,
+                legendgrouptitle = dict(font=dict(weight='bold')),
                 mode="lines",
                 lat=[x[0] for x in _coordinates_wgs],
                 lon=[x[1] for x in _coordinates_wgs],
@@ -573,7 +578,7 @@ def add_measure_type_trace(
         fig.add_trace(
             go.Scattermap(
                 name="Verticale pipingoplossing",
-                legendgroup="VZG",
+                legendgroup="VZG" if legendgroup is None else legendgroup,
                 mode="lines",
                 lat=[x[0] for x in _coordinates_wgs],
                 lon=[x[1] for x in _coordinates_wgs],
@@ -599,7 +604,7 @@ def add_measure_type_trace(
         fig.add_trace(
             go.Scattermap(
                 name="Stabiliteitsscherm",
-                legendgroup="screen",
+                legendgroup="screen" if legendgroup is None else legendgroup,
                 mode="lines",
                 lat=[x[0] for x in _coordinates_wgs],
                 lon=[x[1] for x in _coordinates_wgs],
@@ -624,7 +629,7 @@ def add_measure_type_trace(
         fig.add_trace(
             go.Scattermap(
                 name="Zelfkerende constructie",
-                legendgroup="diaphram wall",
+                legendgroup="diaphram wall" if legendgroup is None else legendgroup,
                 mode="lines",
                 lat=[x[0] for x in _coordinates_wgs],
                 lon=[x[1] for x in _coordinates_wgs],
@@ -650,7 +655,7 @@ def add_measure_type_trace(
         fig.add_trace(
             go.Scattermap(
                 name="Damwandconstructie",
-                legendgroup="sheetpile",
+                legendgroup="sheetpile" if legendgroup is None else legendgroup,
                 mode="lines",
                 lat=[x[0] for x in _coordinates_wgs],
                 lon=[x[1] for x in _coordinates_wgs],
@@ -679,7 +684,7 @@ def add_measure_type_trace(
         fig.add_trace(
             go.Scattermap(
                 name="Aanpassing bekleding",
-                legendgroup="revetment",
+                legendgroup="revetment" if legendgroup is None else legendgroup,
                 mode="lines",
                 lat=[x[0] for x in _coordinates_wgs],
                 lon=[x[1] for x in _coordinates_wgs],
@@ -708,7 +713,7 @@ def add_measure_type_trace(
         fig.add_trace(
             go.Scattermap(
                 name="Custom",
-                legendgroup="custom",
+                legendgroup="custom" if legendgroup is None else legendgroup,
                 mode="lines",
                 lat=[x[0] for x in _coordinates_wgs],
                 lon=[x[1] for x in _coordinates_wgs],
