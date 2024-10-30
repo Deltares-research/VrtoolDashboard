@@ -174,4 +174,4 @@ class TestCallbackComparisonPage:
         output = ctx.run(run_callback)
 
         # 3. Assert
-        assert isinstance(output, Figure)
+        assert isinstance(output, tuple)
