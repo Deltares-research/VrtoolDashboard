@@ -7,7 +7,7 @@ from .layout_dike_settings import dike_settings_layout
 from .layout_download_buttons import layout_download_overview, layout_download_assessment, \
     layout_download_reinforced_sections
 from .layout_radio_items import layout_radio_color_bar_result_type, layout_radio_sub_type_result, \
-    layout_radio_length_switch
+    layout_radio_length_switch, layout_radio_helper_map_switch
 from .layout_sliders import layout_urgency_length_slider
 from src.layouts.layout_traject_page.layout_tabs.layout_tab_measures import layout_radio_dike_section_selection
 from .layout_upload_dike_files import layout_traject_select
@@ -161,6 +161,7 @@ def layout_tab_four() -> html.Div:
             html.Div(
                 style={'width': '130vh', 'height': '30vh', 'border': "2px solid black"},
                 children=[
+                    layout_radio_helper_map_switch,
                     dcc.Graph(id='dike_traject_pf_cost_helping_map', figure=plot_default_overview_map_dummy(),
                               style={'width': '100%', 'height': '100%'})
                 ]),

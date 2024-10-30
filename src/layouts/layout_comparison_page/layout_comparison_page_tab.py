@@ -84,8 +84,11 @@ right_side = [
     dbc.Tabs(
         [
             dbc.Tab(label="Kaart", tab_id="tab-11111"),
-            dbc.Tab(label="Vergelijken", tab_id="tab-11112"),
+            dbc.Tab(label="Kosten", tab_id="tab-11112"),
             dbc.Tab(label="Tijd", tab_id="tab-11113"),
+            dbc.Tab(label="Maatregelen", tab_id="tab-11114"),
+            dbc.Tab(label="PLACEHOLDER 1", tab_id="tab-11115"),
+            dbc.Tab(label="PLACEHOLDER 2", tab_id="tab-11116"),
         ],
         id=TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE,
         active_tab="tab-11111",  # Set the initial active tab
@@ -96,7 +99,7 @@ right_side = [
 
 project_definition_tab_layout = html.Div([
     dbc.Row([
-        dbc.Col(left_side, md=5),
-        dbc.Col(right_side, md=7),
+        dbc.Col(left_side, md=4),
+        dbc.Col(right_side, md=8),
     ]),
 ])

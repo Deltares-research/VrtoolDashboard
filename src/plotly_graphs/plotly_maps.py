@@ -1,5 +1,5 @@
 from bisect import bisect_right
-from typing import Tuple
+from typing import Tuple, Optional
 
 import numpy as np
 import plotly.graph_objects as go
@@ -174,6 +174,7 @@ def plot_dike_traject_reliability_initial_assessment_map(
     # Update layout of the figure and add token for mapbox
     _middle_point = get_middle_point(dike_traject.dike_sections)
     update_layout_map_box(fig, _middle_point)
+    place_legend_right_top_corner(fig)
 
     return fig
 
@@ -418,6 +419,7 @@ def plot_dike_traject_urgency(
     # Update layout of the figure and add token for mapbox
     _middle_point = get_middle_point(dike_traject.dike_sections)
     update_layout_map_box(fig, _middle_point)
+    place_legend_right_top_corner(fig)
 
     return fig
 
@@ -491,12 +493,13 @@ def plot_dike_traject_measures_map(
 
     _middle_point = get_middle_point(dike_traject.dike_sections)
     update_layout_map_box(fig, _middle_point)
+    place_legend_right_top_corner(fig)
 
     return fig
 
 
 def add_measure_type_trace(
-        fig: go.Figure, section: DikeSection, measure_results: dict, legend_display: dict,
+        fig: go.Figure, section: DikeSection, measure_results: dict, legend_display: dict, opacity: float = 1, legendgroup: Optional[str] = None
 ):
     """
     This function adds a trace to the figure for the measure type.
@@ -504,6 +507,9 @@ def add_measure_type_trace(
     :param section: DikeSection
     :param measure_results:
     :param legend_display: dict to avoid double legend entries
+    :param opacity: float
+    :param legendgroup: Optional[str]. If None, the legendgroup is based on the measures types (all VZG grouped together)
+    otherwise it is based on the provided name
     """
     if MeasureTypeEnum.SOIL_REINFORCEMENT.name in measure_results[
         "type"] or MeasureTypeEnum.SOIL_REINFORCEMENT.legacy_name in measure_results[
@@ -516,24 +522,24 @@ def add_measure_type_trace(
         _visible = True
         if measure_results["dcrest"] == 0 and measure_results["dberm"] > 0:
             _name = "Bermverbreding"
-            _color = "#9ACD32"
+            _color = f"rgb(154, 205, 50, {opacity})"
             _showlegend = legend_display.get("berm_widening")
             legend_display["berm_widening"] = False
 
         if measure_results["dberm"] == 0 and measure_results["dcrest"] > 0:
             _name = "Kruinverhoging"
-            _color = "#00FF00"
+            _color = f"rgb(0, 255, 0, {opacity})"
             _showlegend = legend_display.get("crest_heightening")
             legend_display["crest_heightening"] = False
 
         if measure_results["dcrest"] > 0 and measure_results["dberm"] > 0:
             _name = "Grondversterking binnenwaarts"
-            _color = "#008000"  # Green
+            _color = f"rgb(0, 128, 0, {opacity})" # Green
             _showlegend = legend_display.get("ground_reinforcement")
             legend_display["ground_reinforcement"] = False
         if measure_results["dcrest"] == 0 and measure_results["dberm"] == 0:
             _name = "Grondversterking binnenwaarts"
-            _color = "#008000"  # Green
+            _color = f"rgb(0, 128, 0, {opacity})" # Green
             _showlegend = legend_display.get("ground_reinforcement")
             legend_display["ground_reinforcement"] = False
             _visible = False
@@ -550,7 +556,9 @@ def add_measure_type_trace(
         fig.add_trace(
             go.Scattermap(
                 name=_name,
-                legendgroup=_name,
+                legendgroup=_name if legendgroup is None else legendgroup,
+                legendgrouptitle_text=None if legendgroup is None else legendgroup,
+                legendgrouptitle = dict(font=dict(weight='bold')),
                 mode="lines",
                 lat=[x[0] for x in _coordinates_wgs],
                 lon=[x[1] for x in _coordinates_wgs],
@@ -560,6 +568,7 @@ def add_measure_type_trace(
                 showlegend=_showlegend,
                 visible=_visible,
                 hovertemplate=_hovertext,
+                opacity=opacity,
             )
         )
 
@@ -572,11 +581,12 @@ def add_measure_type_trace(
         fig.add_trace(
             go.Scattermap(
                 name="Verticale pipingoplossing",
-                legendgroup="VZG",
+                legendgroup="VZG" if legendgroup is None else legendgroup,
                 mode="lines",
                 lat=[x[0] for x in _coordinates_wgs],
                 lon=[x[1] for x in _coordinates_wgs],
                 line={"color": _color, "width": 4},
+                opacity=opacity,
                 showlegend=legend_display.get("VZG"),
                 hovertemplate=f"Vaknaam {section.name}<br>"
                               f"{measure_results['name']}<br>"
@@ -597,11 +607,12 @@ def add_measure_type_trace(
         fig.add_trace(
             go.Scattermap(
                 name="Stabiliteitsscherm",
-                legendgroup="screen",
+                legendgroup="screen" if legendgroup is None else legendgroup,
                 mode="lines",
                 lat=[x[0] for x in _coordinates_wgs],
                 lon=[x[1] for x in _coordinates_wgs],
                 line={"color": _color, "width": 4},
+                opacity=opacity,
                 showlegend=legend_display.get("screen"),
                 hovertemplate=f"Vaknaam {section.name}<br>"
                               f"{measure_results['name']} <br>"
@@ -621,13 +632,14 @@ def add_measure_type_trace(
         fig.add_trace(
             go.Scattermap(
                 name="Zelfkerende constructie",
-                legendgroup="diaphram wall",
+                legendgroup="diaphram wall" if legendgroup is None else legendgroup,
                 mode="lines",
                 lat=[x[0] for x in _coordinates_wgs],
                 lon=[x[1] for x in _coordinates_wgs],
-                fillcolor="black",
+                fillcolor=f"rgba(0, 0, 0, {opacity})",
                 line={"width": 1, "color": "black"},
                 fill="toself",
+                opacity=opacity,
                 showlegend=legend_display.get("diaphram wall"),
                 hovertemplate=f"Vaknaam: {section.name}<br>"
                               f"Custom maatregel: {measure_results['name']} <br>"
@@ -646,13 +658,14 @@ def add_measure_type_trace(
         fig.add_trace(
             go.Scattermap(
                 name="Damwandconstructie",
-                legendgroup="sheetpile",
+                legendgroup="sheetpile" if legendgroup is None else legendgroup,
                 mode="lines",
                 lat=[x[0] for x in _coordinates_wgs],
                 lon=[x[1] for x in _coordinates_wgs],
-                fillcolor="grey",
+                fillcolor=f"rgb(128, 128, 128, {opacity})",
                 line={"width": 1, "color": "grey"},
                 fill="toself",
+                opacity=opacity,
                 showlegend=legend_display.get("sheetpile"),
                 hovertemplate=f"Vaknaam: {section.name}<br>"
                               f"Custom maatregel: {measure_results['name']} <br>"
@@ -661,7 +674,6 @@ def add_measure_type_trace(
             )
         )
         legend_display["sheetpile"] = False
-
 
     if MeasureTypeEnum.REVETMENT.name in measure_results["type"] or MeasureTypeEnum.REVETMENT.legacy_name in \
             measure_results["type"]:
@@ -675,14 +687,14 @@ def add_measure_type_trace(
         fig.add_trace(
             go.Scattermap(
                 name="Aanpassing bekleding",
-                legendgroup="revetment",
+                legendgroup="revetment" if legendgroup is None else legendgroup,
                 mode="lines",
                 lat=[x[0] for x in _coordinates_wgs],
                 lon=[x[1] for x in _coordinates_wgs],
-                fillcolor="grey",
+                fillcolor=f"rgb(128, 128, 128, {opacity})",
                 line={"width": 4, "color": "black"},
                 # fill="toself",
-                opacity=1,
+                opacity=opacity,
                 showlegend=legend_display.get("revetment"),
                 hovertemplate=f"Vaknaam {section.name}<br>"
                               f"{measure_results['name']} <br>"
@@ -704,13 +716,14 @@ def add_measure_type_trace(
         fig.add_trace(
             go.Scattermap(
                 name="Custom",
-                legendgroup="custom",
+                legendgroup="custom" if legendgroup is None else legendgroup,
                 mode="lines",
                 lat=[x[0] for x in _coordinates_wgs],
                 lon=[x[1] for x in _coordinates_wgs],
-                fillcolor="grey",
+                fillcolor=f"rgb(128, 128, 128, {opacity})",
                 line={"width": 1, "color": "grey"},
                 fill="toself",
+                opacity=opacity,
                 showlegend=legend_display.get("custom"),
                 hovertemplate=f"Vaknaam {section.name}<br>"
                               f"{measure_results['name']} <br>"
@@ -861,7 +874,58 @@ def add_section_trace(
     )
 
 
-def dike_traject_pf_cost_helping_map(
+def dike_traject_pf_cost_helping_map_detail(
+        dike_traject: DikeTraject, curve_number: int, reinforced_sections: list[str]
+) -> go.Figure:
+    """
+    Args:
+        dike_traject:
+        curve_number:
+        reinforced_sections:
+
+    Returns:
+
+    """
+    fig = go.Figure()
+    _legend_display = {
+        "ground_reinforcement": True,
+        "VZG": True,
+        "screen": True,
+        "diaphram wall": True,
+        "sheetpile": True,
+        "crest_heightening": True,
+        "berm_widening": True,
+        "revetment": True,
+        "custom": True,
+    }
+    if curve_number == 2:  # for the VR pad, we don't store the measures for each section, so we can't make this plot
+        return plot_default_overview_map_dummy()
+
+    for section in dike_traject.dike_sections:
+
+        # if a section is not in analyse, skip it, and it turns blank on the map.
+        if not section.in_analyse:
+            continue
+
+        _measure_results = (
+            section.final_measure_doorsnede
+            if curve_number == 0
+            else section.final_measure_veiligheidsrendement
+        )
+        if _measure_results is not None:
+            opacity = 1 if section.name == reinforced_sections[-1] else 0.2
+            add_measure_type_trace(
+                fig, section, _measure_results, _legend_display, opacity
+            )
+
+    # Update layout of the figure and add token for mapbox
+    _middle_point = get_middle_point(dike_traject.dike_sections)
+    update_layout_map_box(fig, _middle_point)
+
+    return fig
+
+
+def dike_traject_pf_cost_helping_map_simple(
         dike_traject: DikeTraject, curve_number: int, reinforced_sections: list[str]
 ) -> go.Figure:
     """
@@ -928,6 +992,7 @@ def get_middle_point(sections: list[DikeSection]) -> tuple[float, float]:
     middle_point_gws = GWSRDConvertor().to_wgs(middle_point_rd[0], middle_point_rd[1])
     return middle_point_gws
 
+
 def get_average_point(sections: list[DikeSection]) -> tuple[float, float]:
     avg_lat = sum([section.coordinates_rd[0][0] for section in sections]) / len(sections)
     avg_lon = sum([section.coordinates_rd[0][1] for section in sections]) / len(sections)
@@ -950,6 +1015,22 @@ def update_layout_map_box(fig: go.Figure, center: tuple[float, float], zoom: int
             zoom=zoom,
         ),
     )
+
+def place_legend_left_top_corner(fig: go.Figure):
+    fig.update_layout(legend=dict(
+        yanchor="top",
+        y=0.99,
+        xanchor="left",
+        x=0.01,
+    ))
+
+def place_legend_right_top_corner(fig: go.Figure):
+    fig.update_layout(legend=dict(
+        yanchor="top",
+        y=0.95,
+        xanchor="right",
+        x=0.99,
+    ))
 
 
 def add_colorscale_bar(
@@ -989,6 +1070,8 @@ def add_colorscale_bar(
                 ticktext=["1e-2", "1e-3", "1e-4", "1e-5", "1e-6"],
                 ticks="outside",
                 len=0.5,
+                x=0.9,
+                xref="paper", # Superpose the colobar with the map
             ),
             showscale=True,
             cmin=beta_ondergrsns - 1.5,
@@ -1011,6 +1094,8 @@ def add_colorscale_bar(
                 ticktext=["2", "3", str(round(beta_ondergrsns, 1)), "4", "5"],
                 ticks="outside",
                 len=0.5,
+                x=0.9,
+                xref="paper",  # Superpose the colobar with the map
             ),
             showscale=True,
             cmin=beta_ondergrsns - 1.5,

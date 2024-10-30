@@ -57,6 +57,12 @@ class GreedyOPtimizationCriteria(Enum):
     ECONOMIC_OPTIMAL = "Economisch optimaal (standaard)"
     TARGET_PF = "Faalkans"
 
+class ProgramDefinitionMapType(Enum):
+    SIMPLE = "Simple"
+    PROJECTS = "Projects"
+    ASSESSMENT_PROBABILITIES = "Faalkans"
+
+
 
 conversion_dict_measure_names = {"GROUND_IMPROVEMENT": "Soil reinforcement",
                                  "GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN": "Soil reinforcement with stability screen",

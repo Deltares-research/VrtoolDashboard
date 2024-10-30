@@ -29,7 +29,7 @@ from src.plotly_graphs.plotly_maps import (
     plot_dike_traject_reliability_initial_assessment_map,
     plot_dike_traject_reliability_measures_assessment_map,
     plot_dike_traject_urgency,
-    dike_traject_pf_cost_helping_map,
+    dike_traject_pf_cost_helping_map_simple, dike_traject_pf_cost_helping_map_detail,
 )
 from src.utils.utils import export_to_json, get_default_plotly_config, get_plotly_config
 
@@ -225,8 +225,9 @@ def make_graph_map_urgency(
     Output("dike_traject_pf_cost_helping_map", "figure"),
     Input("stored-data", "data"),
     Input(DIKE_TRAJECT_PF_COST_GRAPH_ID, "clickData"),
+    Input("select_helper_map_switch", 'value')
 )
-def update_click(dike_traject_data: dict, click_data: dict) -> Figure:
+def update_click(dike_traject_data: dict, click_data: dict, switch_map_helper_type: str) -> Figure:
     """
     Trigger callback when clicking over the Pf_vs_cost graph. This callback will update the accompanying map of the
     traject by highlighting the selected dike section.
@@ -235,6 +236,7 @@ def update_click(dike_traject_data: dict, click_data: dict) -> Figure:
     :param click_data: data obtained from Plotly API by clicking on the plot of Pf_vs_cost graph. This data
     is typically a dictionary with the structure:
     {'points': [{'curveNumber': 1, 'pointNumber': 40, 'pointIndex': 40, 'x': 103.3, 'y': 3.5, 'customdata': '33A', 'bbox': {'x0': 1194.28, 'x1': 1200.28, 'y0': 462.52, 'y1': 468.52}}]}
+    :param switch_map_helper_type: Selected switch map helper type by the user from the OptionField, one of "SIMPLE" or "DETAIL"
     :return: Update the accompanying map of the Pf_vs_cost graph.
     """
     # TODO: the maps here does not need to be plotly! or at least not a MapBox
@@ -252,9 +254,12 @@ def update_click(dike_traject_data: dict, click_data: dict) -> Figure:
         )
         _reinforced_sections = _order[: int(click_data["points"][0]["pointNumber"])]
 
-        return dike_traject_pf_cost_helping_map(
-            _dike_traject, click_data["points"][0]["curveNumber"], _reinforced_sections
-        )
+        if switch_map_helper_type == "DETAILED":
+            return dike_traject_pf_cost_helping_map_detail(_dike_traject, click_data["points"][0]["curveNumber"],
+                                                           _reinforced_sections)
+        else:
+            return dike_traject_pf_cost_helping_map_simple(_dike_traject, click_data["points"][0]["curveNumber"],
+                                                       _reinforced_sections)
 
 
 ### TAB Maatregelen ###
