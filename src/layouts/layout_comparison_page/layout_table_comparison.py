@@ -3,6 +3,8 @@ import dash_ag_grid as dag
 
 from src.component_ids import TABLE_COMPARISON_MEASURES
 
+# color_higlight = "bg-danger"
+color_higlight = "mediumaquamarine"
 columnDefs = [
     {"field": "section_name", "sortable": True, 'headerName': 'Sectie', "pinned": True, 'width': 80},
     {
@@ -15,10 +17,20 @@ columnDefs = [
              },
 
             {'field': "run_1_dberm", 'headerName': 'Dberm', 'width': 50,
-             "cellClassRules": {"bg-danger": 'params.data.run_1_dberm != params.data.run_2_dberm', },},
+             "cellStyle": {"styleConditions": [
+                 {"style": {"backgroundColor": color_higlight},
+                  "condition": 'params.data.run_1_dberm != params.data.run_2_dberm'},
+             ]},
+
+             },
 
             {'field': "run_1_dcrest", 'headerName': 'Dcrest', 'width': 50,
-             "cellClassRules": {"bg-danger": 'params.data.run_1_dcrest != params.data.run_2_dcrest', }, },
+             "cellStyle": {"styleConditions": [
+                 {"style": {"backgroundColor": color_higlight},
+                  "condition": 'params.data.run_1_dcrest != params.data.run_2_dcrest'},
+             ]},
+
+             },
         ],
     },
     {
@@ -28,16 +40,32 @@ columnDefs = [
 
              },
             {'field': "run_2_dberm", 'headerName': 'Dberm', 'width': 50,
-             "cellClassRules": {"bg-danger": 'params.data.run_1_dberm != params.data.run_2_dberm', }},
+             "cellStyle": {"styleConditions": [
+                 {"style": {"backgroundColor": color_higlight},
+                  "condition": 'params.data.run_1_dberm != params.data.run_2_dberm'},
+             ]},
+
+             },
 
             {'field': "run_2_dcrest", 'headerName': 'Dcrest', 'width': 50,
-             "cellClassRules": {"bg-danger": 'params.data.run_1_dcrest != params.data.run_2_dcrest', }},
+             "cellStyle": {"styleConditions": [
+                 {"style": {"backgroundColor": color_higlight},
+                  "condition": 'params.data.run_1_dberm != params.data.run_2_dberm'},
+             ]},
+
+             },
         ]
     }
 ]
 
-rowClassRules = {
-    "bg-danger": 'params.data.run_1_measure != params.data.run_2_measure',
+
+getRowStyle = {
+    "styleConditions": [
+        {
+            "condition": 'params.data.run_1_measure != params.data.run_2_measure',
+            "style": {"backgroundColor": "grey", "color": "white"},
+        },
+    ]
 }
 
 df = pd.DataFrame({
@@ -62,6 +90,6 @@ table_ag_grid_comparison_measures = dag.AgGrid(
     # className="ag-theme-quartz", ugly
     # className="ag-theme-alpine", default
     className="ag-theme-balham",
-    rowClassRules=rowClassRules,
+    getRowStyle=getRowStyle,
 
 )
