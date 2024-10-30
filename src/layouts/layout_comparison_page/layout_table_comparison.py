@@ -31,6 +31,15 @@ columnDefs = [
              ]},
 
              },
+
+            {'field': "run_1_Lscreen", 'headerName': 'LScherm', 'width': 50,
+             "cellStyle": {"styleConditions": [
+                 {"style": {"backgroundColor": color_higlight},
+                  "condition": 'params.data.run_1_Lscreen != params.data.run_2_Lscreen'},
+             ]},
+
+             },
+
         ],
     },
     {
@@ -50,14 +59,21 @@ columnDefs = [
             {'field': "run_2_dcrest", 'headerName': 'Dcrest', 'width': 50,
              "cellStyle": {"styleConditions": [
                  {"style": {"backgroundColor": color_higlight},
-                  "condition": 'params.data.run_1_dberm != params.data.run_2_dberm'},
+                  "condition": 'params.data.run_1_dcrest != params.data.run_2_dcrest'},
+             ]},
+
+             },
+
+            {'field': "run_2_Lscreen", 'headerName': 'LScherm', 'width': 50,
+             "cellStyle": {"styleConditions": [
+                 {"style": {"backgroundColor": color_higlight},
+                  "condition": 'params.data.run_1_Lscreen != params.data.run_2_Lscreen'},
              ]},
 
              },
         ]
     }
 ]
-
 
 getRowStyle = {
     "styleConditions": [

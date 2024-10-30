@@ -1,5 +1,5 @@
 import dash
-from dash import html, Output, Input, callback, State, dcc
+from dash import html, Output, Input, callback, State, dcc, Patch
 
 from src.component_ids import TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE, CONTENT_TABS_COMPARISON_PAGE_ID, \
     STORED_RUNS_COMPARISONS_DATA, RUNS_COMPARISON_GRAPH_TIME_ID, \
@@ -136,7 +136,7 @@ def make_map_comparison_measure(imported_runs: dict, table_data: list[dict]):
 
 @callback(
     Output(TABLE_COMPARISON_MEASURES, "rowData"),
-    # Output(TABLE_COMPARISON_MEASURES, "columnDefs"),
+    Output(TABLE_COMPARISON_MEASURES, "columnDefs"),
     [
         Input(STORED_RUNS_COMPARISONS_DATA, "data"),
         Input(EDITABLE_COMPARISON_TABLE_ID, "rowData"),
@@ -145,7 +145,7 @@ def make_map_comparison_measure(imported_runs: dict, table_data: list[dict]):
 def update_table_comparison_measures(imported_runs: dict, table_imported_runs_data: list[dict]):
     data = []
     if imported_runs is None:
-        return []
+        return [], []
 
     dike_traject_1 = DikeTraject.deserialize(list(imported_runs.values())[0])
     dike_traject_2 = DikeTraject.deserialize(list(imported_runs.values())[1])
@@ -159,9 +159,15 @@ def update_table_comparison_measures(imported_runs: dict, table_imported_runs_da
             "run_1_measure": ", ".join(section_1.final_measure_veiligheidsrendement.get('type', ["Geen maatregel"])),
             "run_1_dberm": section_1.final_measure_veiligheidsrendement.get('dberm'),
             "run_1_dcrest": section_1.final_measure_veiligheidsrendement.get('dcrest'),
+            "run_1_Lscreen": section_1.final_measure_veiligheidsrendement.get('L_stab_screen'),
             "run_2_measure": ", ".join(section_2.final_measure_veiligheidsrendement.get('type', ["Geen maatregel"])),
             "run_2_dberm": section_2.final_measure_veiligheidsrendement.get('dberm'),
             "run_2_dcrest": section_2.final_measure_veiligheidsrendement.get('dcrest'),
+            "run_2_Lscreen": section_2.final_measure_veiligheidsrendement.get('L_stab_screen'),
         })
 
-    return data
+    patched_grid = Patch()
+    patched_grid[1]["headerName"] = f"{dike_traject_1.name}|{dike_traject_1.run_name}"
+    patched_grid[2]["headerName"] = f"{dike_traject_2.name}|{dike_traject_2.run_name}"
+
+    return data, patched_grid
