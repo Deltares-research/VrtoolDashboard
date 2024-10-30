@@ -150,18 +150,18 @@ def update_table_comparison_measures(imported_runs: dict, table_imported_runs_da
     dike_traject_1 = DikeTraject.deserialize(list(imported_runs.values())[0])
     dike_traject_2 = DikeTraject.deserialize(list(imported_runs.values())[1])
 
-    # "section_name": [],
-    # "run_1_measure": [],
-    # "run_1_dberm": [],
-    # "run_2_measure": [],
-    # "run_2_dberm": []
+    def convert_measure_type_list_to_str(list_measure_type: list) -> str:
+        return ", ".join(list_measure_type)
+
     for section_1, section_2 in zip(dike_traject_1.dike_sections, dike_traject_2.dike_sections):
         data.append({
             "section_name": section_1.name,
-            "run_1_measure": section_1.final_measure_veiligheidsrendement.get('type'),
+            "run_1_measure": ", ".join(section_1.final_measure_veiligheidsrendement.get('type', ["Geen maatregel"])),
             "run_1_dberm": section_1.final_measure_veiligheidsrendement.get('dberm'),
-            "run_2_measure": section_2.final_measure_veiligheidsrendement.get('type'),
-            "run_2_dberm": section_2.final_measure_veiligheidsrendement.get('dberm')
+            "run_1_dcrest": section_1.final_measure_veiligheidsrendement.get('dcrest'),
+            "run_2_measure": ", ".join(section_2.final_measure_veiligheidsrendement.get('type', ["Geen maatregel"])),
+            "run_2_dberm": section_2.final_measure_veiligheidsrendement.get('dberm'),
+            "run_2_dcrest": section_2.final_measure_veiligheidsrendement.get('dcrest'),
         })
 
     return data
