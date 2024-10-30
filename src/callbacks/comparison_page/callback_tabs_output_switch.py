@@ -3,14 +3,18 @@ from dash import html, Output, Input, callback, State, dcc
 
 from src.component_ids import TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE, CONTENT_TABS_COMPARISON_PAGE_ID, \
     STORED_RUNS_COMPARISONS_DATA, RUNS_COMPARISON_GRAPH_TIME_ID, \
-    SLIDER_YEAR_RELIABILITY_RESULTS_ID, OVERVIEW_COMPARISON_MAP_ID, RUNS_COMPARISON_GRAPH_ID
+    SLIDER_YEAR_RELIABILITY_RESULTS_ID, OVERVIEW_COMPARISON_MAP_ID, RUNS_COMPARISON_GRAPH_ID, \
+    RADIO_COMPARISON_PAGE_RESULT_TYPE, MEASURE_COMPARISON_MAP_ID, EDITABLE_COMPARISON_TABLE_ID
 from src.layouts.layout_comparison_page.layout_output_tabs import layout_project_output_tab_one, \
-    layout_project_output_tab_two, layout_project_output_tab_three
+    layout_project_output_tab_two, layout_project_output_tab_three, layout_project_output_tab_four
+from src.linear_objects.dike_traject import DikeTraject
+from src.plotly_graphs.comparison_page.plot_measures_comparison_map import plot_comparison_measures_map
 
 from src.plotly_graphs.pf_length_cost import plot_default_scatter_dummy
 from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
 from src.plotly_graphs.project_page.pf_traject_comparison import plot_pf_project_comparison, \
     plot_pf_time_runs_comparison
+from src.plotly_graphs.project_page.plotly_maps import plot_comparison_runs_overview_map_simple
 
 
 @callback(
@@ -35,6 +39,15 @@ def render_project_overview_map_content(active_tab: str) -> html.Div:
     elif active_tab == "tab-11113":
         return layout_project_output_tab_three()
 
+    elif active_tab == "tab-11114":
+        return layout_project_output_tab_four()
+
+    elif active_tab == "tab-11115":
+        return html.Div("Placeholder 1 tab")
+
+    elif active_tab == "tab-11116":
+        return html.Div("Placeholder 2 tab")
+
     else:
         return html.Div("Invalid tab selected")
 
@@ -43,7 +56,7 @@ def render_project_overview_map_content(active_tab: str) -> html.Div:
           [Input(STORED_RUNS_COMPARISONS_DATA, "data"),
            # Input("tabs_tab_project_page", "active_tab")
            ])
-def make_graph_overview_project(imported_runs_data: dict) -> dcc.Graph:
+def make_graph_overview_comparison(imported_runs_data: dict) -> dcc.Graph:
     """
     IS THIS CALLBACK DEPRECATED?
     Call to display the graph of the overview map of the dike from the saved imported dike data.
@@ -53,8 +66,8 @@ def make_graph_overview_project(imported_runs_data: dict) -> dcc.Graph:
     if imported_runs_data is None or imported_runs_data == {}:
         _fig = plot_default_overview_map_dummy()
     else:
-        return dash.no_update
-        # _fig = plot_default_overview_map_dummy()
+        trajects = [DikeTraject.deserialize(imported_runs_data[run_name]) for run_name in imported_runs_data.keys()]
+        _fig = plot_comparison_runs_overview_map_simple(trajects, [])
     return dcc.Graph(
         figure=_fig,
         style={"width": "100%", "height": "100%"},
@@ -66,11 +79,13 @@ def make_graph_overview_project(imported_runs_data: dict) -> dcc.Graph:
     [
         Input(STORED_RUNS_COMPARISONS_DATA, "data"),
         Input(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "value"),
+        Input(RADIO_COMPARISON_PAGE_RESULT_TYPE, "value")
     ],
 )
 def make_graph_pf_project_comparison(
         project_data: dict,
         selected_year: float,
+        result_type: str
 ):
     """
 
@@ -78,7 +93,7 @@ def make_graph_pf_project_comparison(
     if project_data is None:
         return plot_default_scatter_dummy()
     else:
-        _fig = plot_pf_project_comparison(project_data, selected_year)
+        _fig = plot_pf_project_comparison(project_data, selected_year, result_type)
     return _fig
 
 
@@ -86,12 +101,10 @@ def make_graph_pf_project_comparison(
     Output(RUNS_COMPARISON_GRAPH_TIME_ID, "figure"),
     [
         Input(STORED_RUNS_COMPARISONS_DATA, "data"),
-        Input("select_cost_beta_switch", "value")
     ],
 )
 def make_graph_pf_time_comparison(
         project_data: dict,
-        switch_cost_beta: str,
 ):
     """
 
@@ -99,5 +112,21 @@ def make_graph_pf_time_comparison(
     if project_data is None:
         return plot_default_scatter_dummy()
     else:
-        _fig = plot_pf_time_runs_comparison(project_data, switch_cost_beta)
+        _fig = plot_pf_time_runs_comparison(project_data)
+    return _fig
+
+
+@callback(
+    Output(MEASURE_COMPARISON_MAP_ID, "figure"),
+    [
+        Input(STORED_RUNS_COMPARISONS_DATA, "data"),
+        Input(EDITABLE_COMPARISON_TABLE_ID, "rowData"),
+    ],
+)
+def make_map_comparison_measure(imported_runs: dict, table_data: list[dict]):
+    if imported_runs is None:
+        return plot_default_overview_map_dummy()
+
+    activated_runs = [f"{row['traject']}|{row['run_name']}" for row in table_data if row['active']]
+    _fig = plot_comparison_measures_map(imported_runs, activated_runs)
     return _fig

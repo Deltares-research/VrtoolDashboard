@@ -14,3 +14,7 @@ class BaseLinearObject:
 
     def serialize(self):
         pass
+
+    def shift_trajectory_sideways(self, distance: int, side: str):
+        self.trajectory_rd = self.trajectory_rd.parallel_offset(distance, side)
+        self.coordinates_rd = list(self.trajectory_rd.coords)

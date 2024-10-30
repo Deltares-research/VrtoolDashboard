@@ -60,7 +60,7 @@ class GreedyOPtimizationCriteria(Enum):
 class ProgramDefinitionMapType(Enum):
     SIMPLE = "Simple"
     PROJECTS = "Projects"
-    ASSESSMENT_PROBABILITIES = "Faalkasn"
+    ASSESSMENT_PROBABILITIES = "Faalkans"
 
 
 

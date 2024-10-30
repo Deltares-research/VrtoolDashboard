@@ -7,7 +7,8 @@ from src.constants import PROJECTS_COLOR_SEQUENCE, Mechanism, ResultType, ColorB
 from src.linear_objects.dike_traject import DikeTraject
 from src.linear_objects.project import DikeProject
 from src.plotly_graphs.plotly_maps import update_layout_map_box, add_section_trace, plot_default_overview_map_dummy, \
-    get_middle_point, get_average_point, get_reliability_color, add_colorscale_bar
+    get_middle_point, get_average_point, get_reliability_color, add_colorscale_bar, place_legend_left_top_corner, \
+    place_legend_right_top_corner
 from src.utils.gws_convertor import GWSRDConvertor
 from src.utils.utils import get_beta, beta_to_pf
 
@@ -93,7 +94,7 @@ def plot_project_overview_map(projects: list[DikeProject], trajects: Optional[li
                         showlegend=True if index == 0 else False,
                     )
                 )
-
+    place_legend_right_top_corner(fig)
     return fig
 
 def plot_comparison_runs_overview_map_projects(projects: list[DikeProject], trajects: list[DikeTraject])-> go.Figure:
@@ -168,6 +169,7 @@ def plot_comparison_runs_overview_map_assessment(trajects: list[DikeTraject])-> 
     # Update layout of the figure and add token for mapbox
     _middle_point = get_middle_point(sections)
     update_layout_map_box(fig, _middle_point)
+    place_legend_right_top_corner(fig)
 
     return fig
 
@@ -216,6 +218,7 @@ def plot_comparison_runs_overview_map_simple(trajects: list[DikeTraject], select
 
     _middle_point = get_average_point(sections)
     update_layout_map_box(fig, _middle_point, zoom=10)
+    place_legend_right_top_corner(fig)
 
     return fig
 
