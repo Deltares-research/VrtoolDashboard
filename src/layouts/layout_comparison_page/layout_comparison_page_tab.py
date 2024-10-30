@@ -87,7 +87,7 @@ right_side = [
             dbc.Tab(label="Kosten", tab_id="tab-11112"),
             dbc.Tab(label="Tijd", tab_id="tab-11113"),
             dbc.Tab(label="Maatregelen", tab_id="tab-11114"),
-            dbc.Tab(label="PLACEHOLDER 1", tab_id="tab-11115"),
+            dbc.Tab(label="Tafel", tab_id="tab-11115"),
             dbc.Tab(label="PLACEHOLDER 2", tab_id="tab-11116"),
         ],
         id=TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE,

@@ -100,3 +100,4 @@ OVERVIEW_COMPARISON_MAP_ID = 'overview_comparison_map_div'
 RUNS_COMPARISON_GRAPH_ID = 'project_comparison_graph_of_runs'
 RADIO_COMPARISON_PAGE_RESULT_TYPE = "radio_comparison_page_result_type"
 MEASURE_COMPARISON_MAP_ID = "measure_comparison_map_id"
+TABLE_COMPARISON_MEASURES = "table_comparison_measures"
