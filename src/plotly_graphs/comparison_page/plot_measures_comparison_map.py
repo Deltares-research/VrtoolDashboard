@@ -20,15 +20,17 @@ from src.utils.utils import to_million_euros, beta_to_pf, pf_to_beta, get_beta
 color_dict = {""}
 
 
-def plot_comparison_measures_map(imported_runs: dict) -> go.Figure:
+def plot_comparison_measures_map(imported_runs: dict, activated_runs: list[str]) -> go.Figure:
     fig = go.Figure()
-
 
     for index, (_, dike_traject_data) in enumerate(imported_runs.items()):
         dike_traject = DikeTraject.deserialize(dike_traject_data)
 
-        if index >= 2: # onyl display the first two trajects
+        if index >= 2:  # only display the first two trajects
             break
+        run_id = f"{dike_traject.name}|{dike_traject.run_name}"
+        # if run_id not in activated_runs:
+        #     continue
 
         _legend_display = {
             "ground_reinforcement": True,
@@ -46,7 +48,6 @@ def plot_comparison_measures_map(imported_runs: dict) -> go.Figure:
             side = 'left' if index == 0 else 'right'
             section.shift_trajectory_sideways(100, side)
 
-
             # if a section is not in analyse, skip it, and it turns blank on the map.
             if not section.in_analyse:
                 continue
@@ -57,14 +58,11 @@ def plot_comparison_measures_map(imported_runs: dict) -> go.Figure:
                 if _measure_results["investment_year"] == None:
                     _measure_results = None
                 else:
-                    add_measure_type_trace(fig, section, _measure_results, _legend_display, legendgroup=dike_traject.run_name)
-
-
-
+                    add_measure_type_trace(fig, section, _measure_results, _legend_display,
+                                           legendgroup=dike_traject.run_name)
 
     _middle_point = get_middle_point(dike_traject.dike_sections)
     update_layout_map_box(fig, _middle_point)
     place_legend_right_top_corner(fig)
-
 
     return fig

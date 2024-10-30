@@ -17,13 +17,16 @@ class TestCallbackComparisonPage:
     def test_make_graph_overview_comparison(self):
         # 1. Define data
         _data_base = json.load(
-            open(Path(__file__).parent.parent.parent.joinpath("data", "10-1", "dike_traject_10-1_Basisberekening_base.json"))
+            open(Path(__file__).parent.parent.parent.joinpath("data", "10-1",
+                                                              "dike_traject_10-1_Basisberekening_base.json"))
         )
         _data_omega = json.load(
-            open(Path(__file__).parent.parent.parent.joinpath("data", "10-1", "dike_traject_10-1_Basisberekening_omega.json"))
+            open(Path(__file__).parent.parent.parent.joinpath("data", "10-1",
+                                                              "dike_traject_10-1_Basisberekening_omega.json"))
         )
         _data_omega_45 = json.load(
-            open(Path(__file__).parent.parent.parent.joinpath("data", "10-1", "dike_traject_10-1_Basisberekening_omega_45.json"))
+            open(Path(__file__).parent.parent.parent.joinpath("data", "10-1",
+                                                              "dike_traject_10-1_Basisberekening_omega_45.json"))
         )
 
         _imported_runs = {
@@ -45,13 +48,16 @@ class TestCallbackComparisonPage:
     def test_make_graph_pf_project_comparison(self):
         # 1. Define data
         _data_base = json.load(
-            open(Path(__file__).parent.parent.parent.joinpath("data", "10-1", "dike_traject_10-1_Basisberekening_base.json"))
+            open(Path(__file__).parent.parent.parent.joinpath("data", "10-1",
+                                                              "dike_traject_10-1_Basisberekening_base.json"))
         )
         _data_omega = json.load(
-            open(Path(__file__).parent.parent.parent.joinpath("data", "10-1", "dike_traject_10-1_Basisberekening_omega.json"))
+            open(Path(__file__).parent.parent.parent.joinpath("data", "10-1",
+                                                              "dike_traject_10-1_Basisberekening_omega.json"))
         )
         _data_omega_45 = json.load(
-            open(Path(__file__).parent.parent.parent.joinpath("data", "10-1", "dike_traject_10-1_Basisberekening_omega_45.json"))
+            open(Path(__file__).parent.parent.parent.joinpath("data", "10-1",
+                                                              "dike_traject_10-1_Basisberekening_omega_45.json"))
         )
 
         _imported_runs = {
@@ -122,9 +128,12 @@ class TestCallbackComparisonPage:
             "10-1|Omega_45": _data_omega_45
         }
 
+        _table_data = [{'traject': '10-1', 'run_name': 'Basisberekening_base', 'active': True},
+                       {'traject': '10-1', 'run_name': 'Basisberekening_omega', 'active': True}]
+
         # 2. Define callback
         def run_callback():
-            return make_map_comparison_measure(_imported_runs)
+            return make_map_comparison_measure(_imported_runs, _table_data)
 
         ctx = copy_context()
         output = ctx.run(run_callback)
@@ -132,6 +141,3 @@ class TestCallbackComparisonPage:
 
         # 3. Assert
         assert isinstance(output, Figure)
-
-
-

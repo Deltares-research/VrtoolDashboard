@@ -4,7 +4,7 @@ from dash import html, Output, Input, callback, State, dcc
 from src.component_ids import TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE, CONTENT_TABS_COMPARISON_PAGE_ID, \
     STORED_RUNS_COMPARISONS_DATA, RUNS_COMPARISON_GRAPH_TIME_ID, \
     SLIDER_YEAR_RELIABILITY_RESULTS_ID, OVERVIEW_COMPARISON_MAP_ID, RUNS_COMPARISON_GRAPH_ID, \
-    RADIO_COMPARISON_PAGE_RESULT_TYPE, MEASURE_COMPARISON_MAP_ID
+    RADIO_COMPARISON_PAGE_RESULT_TYPE, MEASURE_COMPARISON_MAP_ID, EDITABLE_COMPARISON_TABLE_ID
 from src.layouts.layout_comparison_page.layout_output_tabs import layout_project_output_tab_one, \
     layout_project_output_tab_two, layout_project_output_tab_three, layout_project_output_tab_four
 from src.linear_objects.dike_traject import DikeTraject
@@ -120,10 +120,13 @@ def make_graph_pf_time_comparison(
     Output(MEASURE_COMPARISON_MAP_ID, "figure"),
     [
         Input(STORED_RUNS_COMPARISONS_DATA, "data"),
+        Input(EDITABLE_COMPARISON_TABLE_ID, "rowData"),
     ],
 )
-def make_map_comparison_measure(imported_runs: dict):
+def make_map_comparison_measure(imported_runs: dict, table_data: list[dict]):
     if imported_runs is None:
         return plot_default_overview_map_dummy()
-    _fig = plot_comparison_measures_map(imported_runs)
+
+    activated_runs = [f"{row['traject']}|{row['run_name']}" for row in table_data if row['active']]
+    _fig = plot_comparison_measures_map(imported_runs, activated_runs)
     return _fig
