@@ -179,3 +179,38 @@ def interpolate_beta_values(years_output: np.ndarray, betas: np.ndarray, years: 
         else:
             _betas_output[i] = np.interp(year, years, betas)
     return _betas_output
+
+
+def get_default_plotly_config(filename: str) -> dict:
+    config = {
+        'toImageButtonOptions': {
+            'format': 'png',  # one of png, svg, jpeg, webp
+            # 'filename': filename,
+            'height': 1080,
+            'width': 1920,
+            'scale': 1  # Multiply title/legend/axis/canvas sizes by this factor
+        }
+    }
+    return config
+
+def get_plotly_config(filename, height=1080, width=1920) -> dict:
+    """
+
+    Args:
+        filename:
+        height: height in pixels: pxl = DPI * inches
+        width: width in pixels: pxl = DPI * inches
+
+    Returns:
+
+    """
+    config = {
+        'toImageButtonOptions': {
+            'format': 'png',  # one of png, svg, jpeg, webp
+            'filename': filename,
+            'height': height,
+            'width': width,
+            'scale': 1  # Multiply title/legend/axis/canvas sizes by this factor
+        }
+    }
+    return config

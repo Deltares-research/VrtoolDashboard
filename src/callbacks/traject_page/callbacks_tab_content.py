@@ -31,7 +31,7 @@ from src.plotly_graphs.plotly_maps import (
     plot_dike_traject_urgency,
     dike_traject_pf_cost_helping_map,
 )
-from src.utils.utils import export_to_json
+from src.utils.utils import export_to_json, get_default_plotly_config, get_plotly_config
 
 
 @callback(Output("overview_map_div", "children"), [Input("stored-data", "data")])
@@ -90,6 +90,7 @@ def make_graph_map_initial_assessment(
     return dcc.Graph(
         figure=_fig,
         style={"width": "100%", "height": "100%"},
+        config=get_plotly_config("TESTNAME", height=500, width=700),
     )
 
 
