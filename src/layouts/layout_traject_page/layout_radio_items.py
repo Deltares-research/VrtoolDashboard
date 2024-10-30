@@ -1,4 +1,3 @@
-from dash import dcc
 import dash_bootstrap_components as dbc
 
 from src.component_ids import SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA, SELECT_DIKE_SECTION_FOR_MEASURES_ID, \

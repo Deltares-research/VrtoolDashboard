@@ -1,12 +1,14 @@
 import dash
-from dash import html, Output, Input, callback, State, dcc
+from dash import html, Output, Input, callback, State, dcc, Patch
 
 from src.component_ids import TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE, CONTENT_TABS_COMPARISON_PAGE_ID, \
     STORED_RUNS_COMPARISONS_DATA, RUNS_COMPARISON_GRAPH_TIME_ID, \
     SLIDER_YEAR_RELIABILITY_RESULTS_ID, OVERVIEW_COMPARISON_MAP_ID, RUNS_COMPARISON_GRAPH_ID, \
-    RADIO_COMPARISON_PAGE_RESULT_TYPE, MEASURE_COMPARISON_MAP_ID, EDITABLE_COMPARISON_TABLE_ID
+    RADIO_COMPARISON_PAGE_RESULT_TYPE, MEASURE_COMPARISON_MAP_ID, EDITABLE_COMPARISON_TABLE_ID, \
+    TABLE_COMPARISON_MEASURES
 from src.layouts.layout_comparison_page.layout_output_tabs import layout_project_output_tab_one, \
-    layout_project_output_tab_two, layout_project_output_tab_three, layout_project_output_tab_four
+    layout_project_output_tab_two, layout_project_output_tab_three, layout_project_output_tab_four, \
+    layout_project_output_tab_five
 from src.linear_objects.dike_traject import DikeTraject
 from src.plotly_graphs.comparison_page.plot_measures_comparison_map import plot_comparison_measures_map
 
@@ -43,7 +45,7 @@ def render_project_overview_map_content(active_tab: str) -> html.Div:
         return layout_project_output_tab_four()
 
     elif active_tab == "tab-11115":
-        return html.Div("Placeholder 1 tab")
+        return layout_project_output_tab_five()
 
     elif active_tab == "tab-11116":
         return html.Div("Placeholder 2 tab")
@@ -130,3 +132,42 @@ def make_map_comparison_measure(imported_runs: dict, table_data: list[dict]):
     activated_runs = [f"{row['traject']}|{row['run_name']}" for row in table_data if row['active']]
     _fig = plot_comparison_measures_map(imported_runs, activated_runs)
     return _fig
+
+
+@callback(
+    Output(TABLE_COMPARISON_MEASURES, "rowData"),
+    Output(TABLE_COMPARISON_MEASURES, "columnDefs"),
+    [
+        Input(STORED_RUNS_COMPARISONS_DATA, "data"),
+        Input(EDITABLE_COMPARISON_TABLE_ID, "rowData"),
+    ],
+)
+def update_table_comparison_measures(imported_runs: dict, table_imported_runs_data: list[dict]):
+    data = []
+    if imported_runs is None:
+        return [], []
+
+    dike_traject_1 = DikeTraject.deserialize(list(imported_runs.values())[0])
+    dike_traject_2 = DikeTraject.deserialize(list(imported_runs.values())[1])
+
+    def convert_measure_type_list_to_str(list_measure_type: list) -> str:
+        return ", ".join(list_measure_type)
+
+    for section_1, section_2 in zip(dike_traject_1.dike_sections, dike_traject_2.dike_sections):
+        data.append({
+            "section_name": section_1.name,
+            "run_1_measure": ", ".join(section_1.final_measure_veiligheidsrendement.get('type', ["Geen maatregel"])),
+            "run_1_dberm": section_1.final_measure_veiligheidsrendement.get('dberm'),
+            "run_1_dcrest": section_1.final_measure_veiligheidsrendement.get('dcrest'),
+            "run_1_Lscreen": section_1.final_measure_veiligheidsrendement.get('L_stab_screen'),
+            "run_2_measure": ", ".join(section_2.final_measure_veiligheidsrendement.get('type', ["Geen maatregel"])),
+            "run_2_dberm": section_2.final_measure_veiligheidsrendement.get('dberm'),
+            "run_2_dcrest": section_2.final_measure_veiligheidsrendement.get('dcrest'),
+            "run_2_Lscreen": section_2.final_measure_veiligheidsrendement.get('L_stab_screen'),
+        })
+
+    patched_grid = Patch()
+    patched_grid[1]["headerName"] = f"{dike_traject_1.name}|{dike_traject_1.run_name}"
+    patched_grid[2]["headerName"] = f"{dike_traject_2.name}|{dike_traject_2.run_name}"
+
+    return data, patched_grid
