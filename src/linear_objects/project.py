@@ -72,8 +72,8 @@ def get_projects_from_saved_data(imported_runs_data: dict, project_overview_data
             project_failure_prob_assessement=calc_prob_failure_before_reinforcement(
                 sections) if calc_failure_pro else None,
             project_failure_prob_after_reinforcement=calc_prob_failure_after_reinforcement(
-                sections) if calc_failure_pro else None,
-            flood_damage=max(traject_damages), # take the maximum flood damage of the trajects considered
+                sections) if calc_failure_pro else None,  # this is the faalkans at year 2025! be aware
+            flood_damage=max(traject_damages),  # take the maximum flood damage of the trajects considered
 
         )
         projects.append(project)
@@ -94,6 +94,14 @@ def calc_prob_failure_before_reinforcement(dike_sections: list[DikeSection]) -> 
 
 
 def calc_prob_failure_after_reinforcement(dike_sections: list[DikeSection]) -> float:
+    """
+    Calculate the probability of failure (faalkans) for the given collection of sections after reinforcement at year 2025.
+    Args:
+        dike_sections:
+
+    Returns: probability of failure for the first time step (year 2025)
+
+    """
     _beta_df_ini = get_initial_assessment_df(dike_sections)
     _beta_df = get_updated_beta_df(dike_sections, _beta_df_ini)
 
@@ -111,18 +119,23 @@ def calc_area_stats(projects: list[DikeProject], trajects: dict[str, DikeTraject
     after completion (i.e. reinforcement) of the project.
 
     :param projects: list of DikeProject objects
-    :return: tuple: the total cost, and risk
+    :return: tuple: the total cost, and current risk and the risk after reinforcement
     """
     cost = 0
     damage = 0
-    risk = 0
+    current_risk = 0
+    future_risk = 0
     for project in projects:
-        damage_project = project.flood_damage
-
         cost += project.calc_project_cost()
 
+    for dike_traject in trajects.values():
+        damage += dike_traject.flood_damage
+        _beta_df_ini = get_initial_assessment_df(dike_traject.dike_sections)
+        _traject_pf, _ = get_traject_prob(_beta_df_ini)
+        current_risk += dike_traject.flood_damage * _traject_pf[0][0]
 
-        damage += damage_project
-        risk += project.project_failure_prob_after_reinforcement * damage_project
+        _beta_df = get_updated_beta_df(dike_traject.dike_sections, _beta_df_ini)
+        _traject_pf = get_traject_prob(_beta_df)[0]
+        future_risk += dike_traject.flood_damage * _traject_pf[0][0]  # this is the faalkans at year 2025! be aware
 
-    return cost, risk
+    return cost, current_risk, future_risk
