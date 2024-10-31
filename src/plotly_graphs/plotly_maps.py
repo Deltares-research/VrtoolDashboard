@@ -538,8 +538,10 @@ def add_measure_type_trace(
             _showlegend = legend_display.get("ground_reinforcement")
             legend_display["ground_reinforcement"] = False
         if measure_results["dcrest"] == 0 and measure_results["dberm"] == 0:
-            _name = "Grondversterking binnenwaarts"
-            _color = f"rgb(0, 128, 0, {opacity})" # Green
+            # exit 2 if statement
+
+            _name = ""
+            _color = f"rgb(0, 128, 0, {0})" # Green
             _showlegend = legend_display.get("ground_reinforcement")
             legend_display["ground_reinforcement"] = False
             _visible = False
