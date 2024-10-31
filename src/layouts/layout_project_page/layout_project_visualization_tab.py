@@ -106,8 +106,8 @@ def left_side_area_stats():
                                            html.P(""),
                                            dmc.Text("Totaal kosten:", td="underline"),
                                            dmc.Text("", id=TOTAL_AREA_COST, fw=700, size="xl"),
-                                           dmc.Text("Totaal schade:", td="underline"),
-                                           dmc.Text("XXXX €", id=TOTAL_AREA_DAMAGE, fw=700, size="xl"),
+                                           # dmc.Text("Totaal schade:", td="underline"),
+                                           # dmc.Text("XXXX €", id=TOTAL_AREA_DAMAGE, fw=700, size="xl"),
                                            dmc.Text("Totaal risico:", td="underline"),
                                            dmc.Text("XXXX €", id=TOTAL_AREA_RISK, fw=700, size="xl"),
                                        ]

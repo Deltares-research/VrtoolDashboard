@@ -14,6 +14,7 @@ class DikeProject():
     end_year: int  # ending year of the project, this is the year where reinforced beta is taken.s
     project_failure_prob_assessement: Optional[float] = None
     project_failure_prob_after_reinforcement: Optional[float] = None
+    flood_damage: Optional[float] = None
 
     def calc_project_cost(self):
         cost = 0
@@ -50,11 +51,13 @@ def get_projects_from_saved_data(imported_runs_data: dict, project_overview_data
     for project_data in project_overview_data:
 
         sections = []
+        traject_damages = []  # a project can be theoretically composed of sections from multiple trajects which all have their own flood damage
         for section_traject in project_data["sections"]:  # multi_select_value
             section_name, traject_name = section_traject.split("|")
             for run_name in imported_runs_data.keys():
                 if traject_name in run_name:
                     dike_traject = dict_runs[run_name]
+                    traject_damages.append(dike_traject.flood_damage)
                     break
 
             section = dike_traject.get_section(section_name)
@@ -70,6 +73,8 @@ def get_projects_from_saved_data(imported_runs_data: dict, project_overview_data
                 sections) if calc_failure_pro else None,
             project_failure_prob_after_reinforcement=calc_prob_failure_after_reinforcement(
                 sections) if calc_failure_pro else None,
+            flood_damage=max(traject_damages), # take the maximum flood damage of the trajects considered
+
         )
         projects.append(project)
     return projects, dict_runs
@@ -96,7 +101,7 @@ def calc_prob_failure_after_reinforcement(dike_sections: list[DikeSection]) -> f
     return _traject_pf[0][0]
 
 
-def calc_area_stats(projects: list[DikeProject]):
+def calc_area_stats(projects: list[DikeProject], trajects: dict[str, DikeTraject]):
     """
     Calculate the total cost, damage and risk for the entire area.
     Cost is simply the sum of the costs of all the reinforced sections in the projects
@@ -106,13 +111,13 @@ def calc_area_stats(projects: list[DikeProject]):
     after completion (i.e. reinforcement) of the project.
 
     :param projects: list of DikeProject objects
-    :return: tuple: the total cost, damage and risk
+    :return: tuple: the total cost, and risk
     """
     cost = 0
     damage = 0
     risk = 0
     for project in projects:
-        damage_project = 0
+        damage_project = project.flood_damage
 
         cost += project.calc_project_cost()
 
@@ -120,4 +125,4 @@ def calc_area_stats(projects: list[DikeProject]):
         damage += damage_project
         risk += project.project_failure_prob_after_reinforcement * damage_project
 
-    return cost, damage, risk
+    return cost, risk

@@ -2,6 +2,7 @@
   "imported_runs_data": {
     "10-3": {
       "name": "10-3",
+      "flood_damage": 8600000000,
       "dike_sections": [
         {
           "coordinates_rd": [
@@ -7303,6 +7304,7 @@
     },
     "10-2": {
       "name": "10-2",
+      "flood_damage": 700000000,
       "dike_sections": [
         {
           "coordinates_rd": [
@@ -18492,6 +18494,7 @@
     },
     "10-1": {
       "name": "10-1",
+      "flood_damage": 3700000000,
       "dike_sections": [
         {
           "coordinates_rd": [
