@@ -115,9 +115,7 @@ def calc_area_stats(projects: list[DikeProject]):
         damage_project = 0
 
         cost += project.calc_project_cost()
-        for section in project.dike_sections:
-            if section.flood_damages is not None:
-                damage_project += section.flood_damages
+
 
         damage += damage_project
         risk += project.project_failure_prob_after_reinforcement * damage_project
