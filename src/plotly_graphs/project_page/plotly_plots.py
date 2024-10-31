@@ -98,7 +98,7 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
             y = beta_to_pf(betas_ini)
             y_ondergrens = [dike_traject.lower_bound_value] * len(years_ini)
         elif result_type == ResultType.DISTANCE_TO_NORM.name:
-            y = dike_traject.lower_bound_value / beta_to_pf(betas_ini)
+            y =  beta_to_pf(betas_ini) / dike_traject.lower_bound_value
             y_ondergrens = [1] * len(years_ini)
             pass
         else:
