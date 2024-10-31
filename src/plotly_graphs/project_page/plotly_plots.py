@@ -97,6 +97,7 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
             y_ondergrens = [pf_to_beta(dike_traject.lower_bound_value)] * len(years_ini)
             name = "Betrouwbaarheid"
             hovertemplate = "Jaar: %{x}<br>Betrouwbaarheid: %{y:.2e}"
+
         elif result_type == ResultType.PROBABILITY.name:
             y = beta_to_pf(betas_ini)
             y_ondergrens = [dike_traject.lower_bound_value] * len(years_ini)
@@ -110,8 +111,7 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
         elif result_type == ResultType.RISK.name:
             y = beta_to_pf(betas_ini) * dike_traject.flood_damage
             discount_rate = 0.03
-            y_ondergrens = [dike_traject.lower_bound_value * dike_traject.flood_damage] / (1 + discount_rate) ** (
-                        years_ini - 2025)
+            y_ondergrens = None
             name = "Risico (€)"
             hovertemplate = "Jaar: %{x}<br>Risico: %{y:.2e}"
         elif result_type == ResultType.RISK_FACTOR.name:
@@ -120,22 +120,22 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
             risk_norm = [dike_traject.lower_bound_value * dike_traject.flood_damage] / (1 + discount_rate) ** (
                         years_ini - 2025)
             y = risk / risk_norm
-            y_ondergrens = [1] * len(years_ini)
+            y_ondergrens = None
             name = "Risk factor"
             hovertemplate = "Jaar: %{x}<br>Risk factor: %{y:.2e}"
 
 
         else:
             raise ValueError(f"Result type {result_type} not recognized")
-
-        _fig.add_trace(go.Scatter(name="ondergrens",
-                                  x=years_ini,
-                                  y=y_ondergrens,
-                                  line=dict(color=color_traject, dash="dot"),
-                                  mode='lines',
-                                  legendgroup=dike_traject.name,
-                                  legendgrouptitle=dict(text=dike_traject.name),
-                                  ))
+        if y_ondergrens is not None:
+            _fig.add_trace(go.Scatter(name="ondergrens",
+                                      x=years_ini,
+                                      y=y_ondergrens,
+                                      line=dict(color=color_traject, dash="dot"),
+                                      mode='lines',
+                                      legendgroup=dike_traject.name,
+                                      legendgrouptitle=dict(text=dike_traject.name),
+                                      ))
 
         _fig.add_trace(go.Scatter(name=name,
                                   x=years_ini,
