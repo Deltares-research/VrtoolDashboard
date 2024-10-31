@@ -88,7 +88,8 @@ SAVE_PROJECTS_NAME_ID = "save_projects_name_id"
 RADIO_PROJECT_PAGE_RESULT_TYPE = "radio_project_page_result_type"
 TOTAL_AREA_COST = "total_area_cost"
 TOTAL_AREA_DAMAGE = "total_area_damage"
-TOTAL_AREA_RISK = "total_area_risk"
+TOTAL_AREA_RISK_CURRENT = "total_area_risk_current"
+TOTAL_AREA_RISK_REINFORCED = "total_area_risk_reinforced"
 
 ######## Comparison page ##########
 

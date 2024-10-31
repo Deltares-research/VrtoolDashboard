@@ -100,7 +100,8 @@ layout_radio_result_type_project_page = dbc.RadioItems(
         {"label": ResultType.RELIABILITY.value, "value": ResultType.RELIABILITY.name},
         {"label": ResultType.PROBABILITY.value, "value": ResultType.PROBABILITY.name},
         {"label": ResultType.DISTANCE_TO_NORM.value, "value": ResultType.DISTANCE_TO_NORM.name},
-
+        {"label": ResultType.RISK.value, "value": ResultType.RISK.name},
+        {"label": ResultType.RISK_FACTOR.value, "value": ResultType.RISK_FACTOR.name},
     ],
     inline=True,
     value=ResultType.RELIABILITY.name,

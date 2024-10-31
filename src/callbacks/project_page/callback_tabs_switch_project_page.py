@@ -3,7 +3,7 @@ from dash import callback, Output, Input, html, State, dash
 from src.component_ids import PROJECT_PAGE_VISUALIZATION_COST_GRAPH, PROJECT_PAGE_VISUALIZATION_RELIABILITY_GRAPH, \
     STORED_IMPORTED_RUNS_DATA, STORED_PROJECT_OVERVIEW_DATA, \
     OVERVIEW_PROJECT_MAP_ID, PROJECT_OVERVIEW_TABLE_DISPLAY, RADIO_PROJECT_PAGE_RESULT_TYPE, TOTAL_AREA_COST, \
-    TOTAL_AREA_DAMAGE, TOTAL_AREA_RISK
+    TOTAL_AREA_DAMAGE, TOTAL_AREA_RISK_CURRENT, TOTAL_AREA_RISK_REINFORCED
 from src.layouts.layout_project_page.layout_project_definition_tab import project_definition_tab_layout
 from src.layouts.layout_project_page.layout_project_visualization_tab import project_visualization_tab_layout, \
     fill_project_display_overview_table
@@ -30,8 +30,9 @@ def render_tab_content(tab_switch):
      Output(OVERVIEW_PROJECT_MAP_ID, "figure"),
      Output(PROJECT_OVERVIEW_TABLE_DISPLAY, "children"),
      Output(TOTAL_AREA_COST, "children"),
-     Output(TOTAL_AREA_DAMAGE, "children"),
-     Output(TOTAL_AREA_RISK, "children"),
+     # Output(TOTAL_AREA_DAMAGE, "children"),
+     Output(TOTAL_AREA_RISK_CURRENT, "children"),
+     Output(TOTAL_AREA_RISK_REINFORCED, "children"),
      ],
     [Input("tabs_tab_project_page", "value"),
      Input(RADIO_PROJECT_PAGE_RESULT_TYPE, "value"),
@@ -62,6 +63,6 @@ def update_project_page_visualization(tabs_switch, result_type: str, imported_ru
     project_overview_table = fill_project_display_overview_table(projects)
 
     map_fig = plot_project_overview_map(projects, trajects.values())
-    cost, damage, risk = calc_area_stats(projects)
-    return cost_fig, reliability_fig, map_fig, project_overview_table, f"{cost/1e6:.2f} M€", f"{damage/1e6:.2f} M€", f"{risk:.2f} €"
+    cost, risk, future_risk = calc_area_stats(projects, trajects)
+    return cost_fig, reliability_fig, map_fig, project_overview_table, f"{cost/1e6:.2f} M€", f"{risk/1e6:.2f} M€", f"{future_risk/1e6:.2f} M€"
 

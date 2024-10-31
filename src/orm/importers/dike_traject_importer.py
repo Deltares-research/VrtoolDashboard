@@ -84,6 +84,7 @@ class DikeTrajectImporter(OrmImporterProtocol):
         _traject_id = DikeTrajectInfo.get(DikeTrajectInfo.traject_name == _traject_name).id
         _traject_p_lower_bound = DikeTrajectInfo.get(DikeTrajectInfo.traject_name == _traject_name).p_max
         _traject_p_signal = get_signal_value(_traject_p_lower_bound)
+        _flood_damage = DikeTrajectInfo.get(DikeTrajectInfo.traject_name == _traject_name).flood_damage
 
         _dike_traject = DikeTraject(name=_traject_name,
                                     dike_sections=[],
@@ -92,6 +93,7 @@ class DikeTrajectImporter(OrmImporterProtocol):
                                     greedy_steps=[],
                                     signalering_value=_traject_p_signal,
                                     lower_bound_value=_traject_p_lower_bound,
+                                    flood_damage=_flood_damage,
                                     _run_id_vr=self.run_id_vr,
                                     _run_id_dsn=self.run_id_dsn,
                                     )
