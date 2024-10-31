@@ -3,10 +3,28 @@
 ## v0.0.0 [##/##/####]
 
 ### Added
+None.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
+## v0.7.0 [31/10/2024]
+
+### Added
 - Added a button and name field to export the traject run json
 - Added a switch for the map of the program definition to display faalkans
 - Added a comparison map for the measures of 2 runs
 - Added a comparison tables for taken measures
+- Added risk graph in Program Page
 
 ### Changed
 - Map below reliability vs cost graph now displays the selected measure
@@ -17,7 +35,7 @@
 None.
 
 ### Removed
-None.
+- Areal damage display
 
 ### Fixed
 - Fixed definition of afstand tot norm
