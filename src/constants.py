@@ -16,6 +16,8 @@ class ResultType(Enum):
     MEASURE = "Maatregel"
     INTERPRETATION_CLASS = "Duidingsklassen"
     DISTANCE_TO_NORM = "Factor afstand tot norm"
+    RISK = "Risico"
+    RISK_FACTOR = "Risico factor"
 
 
 class SubResultType(Enum):

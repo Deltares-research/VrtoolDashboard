@@ -51,6 +51,7 @@ def plot_cost_vs_time_projects(projects: list[DikeProject]):
 
     return fig
 
+
 def projects_reliability_over_time(projects: list[DikeProject], imported_runs_data: dict,
                                    result_type: str) -> go.Figure:
     _fig = go.Figure()
@@ -94,13 +95,36 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
         if result_type == ResultType.RELIABILITY.name:
             y = betas_ini
             y_ondergrens = [pf_to_beta(dike_traject.lower_bound_value)] * len(years_ini)
+            name = "Betrouwbaarheid"
+            hovertemplate = "Jaar: %{x}<br>Betrouwbaarheid: %{y:.2e}"
         elif result_type == ResultType.PROBABILITY.name:
             y = beta_to_pf(betas_ini)
             y_ondergrens = [dike_traject.lower_bound_value] * len(years_ini)
+            name = "Faalkans"
+            hovertemplate = "Jaar: %{x}<br>Faalkans: %{y:.2e}"
         elif result_type == ResultType.DISTANCE_TO_NORM.name:
-            y =  beta_to_pf(betas_ini) / dike_traject.lower_bound_value
+            y = beta_to_pf(betas_ini) / dike_traject.lower_bound_value
             y_ondergrens = [1] * len(years_ini)
-            pass
+            name = "Afstand tot norm"
+            hovertemplate = "Jaar: %{x}<br>Afstand tot norm: %{y:.2e}"
+        elif result_type == ResultType.RISK.name:
+            y = beta_to_pf(betas_ini) * dike_traject.flood_damage
+            discount_rate = 0.03
+            y_ondergrens = [dike_traject.lower_bound_value * dike_traject.flood_damage] / (1 + discount_rate) ** (
+                        years_ini - 2025)
+            name = "Risico (€)"
+            hovertemplate = "Jaar: %{x}<br>Risico: %{y:.2e}"
+        elif result_type == ResultType.RISK_FACTOR.name:
+            risk = beta_to_pf(betas_ini) * dike_traject.flood_damage
+            discount_rate = 0.03
+            risk_norm = [dike_traject.lower_bound_value * dike_traject.flood_damage] / (1 + discount_rate) ** (
+                        years_ini - 2025)
+            y = risk / risk_norm
+            y_ondergrens = [1] * len(years_ini)
+            name = "Risk factor"
+            hovertemplate = "Jaar: %{x}<br>Risk factor: %{y:.2e}"
+
+
         else:
             raise ValueError(f"Result type {result_type} not recognized")
 
@@ -110,17 +134,18 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
                                   line=dict(color=color_traject, dash="dot"),
                                   mode='lines',
                                   legendgroup=dike_traject.name,
-                                  legendgrouptitle=dict(text=dike_traject.name)
+                                  legendgrouptitle=dict(text=dike_traject.name),
                                   ))
 
-        _fig.add_trace(go.Scatter(name="Traject faalkans",
+        _fig.add_trace(go.Scatter(name=name,
                                   x=years_ini,
                                   y=y,
                                   marker=dict(color=color_traject),
                                   line=dict(color=color_traject),
                                   mode='lines+markers',
                                   legendgroup=dike_traject.name,
-                                  legendgrouptitle=dict(text=dike_traject.name)
+                                  legendgrouptitle=dict(text=dike_traject.name),
+                                  hovertemplate=hovertemplate
                                   ))
 
     def add_shapes(y0, y1, y_text, color):
@@ -189,6 +214,38 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
         ticks = [0.001, 0.01, 0.1, 1, 10]
         _fig.update_yaxes(type="log", tickvals=ticks, ticktext=[str(tick) for tick in ticks])
         _fig.update_layout(xaxis_title='Jaar', yaxis_title="Afstand tot norm")
+
+    elif result_type == ResultType.RISK.name:
+        _fig.update_layout(xaxis_title='Jaar', yaxis_title="Risico (€)")
+        y0_ini = 10e3
+        y1_ini = y0_ini * 5  # This is the range for each shape in log scale
+        # Add project shapes:
+        # Add project shapes, similar to linear case:
+        for index, project in enumerate(projects):
+            color = PROJECTS_COLOR_SEQUENCE[index]
+            y0 = y0_ini * (5 ** index)
+            y1 = y1_ini * (5 ** index)
+            y_text = y0_ini * (5 ** index)
+            add_shapes(y0, y1, y_text, color)
+        ticks = [1e5, 1e6, 1e7, 1e8, 1e9]
+        _fig.update_yaxes(type="log", tickvals=ticks, ticktext=[f"{tick:.2e}" for tick in ticks])
+
+    elif result_type == ResultType.RISK_FACTOR.name:
+        _fig.update_yaxes(type="log")
+        y0_ini = 0.001
+        y1_ini = y0_ini * 5
+        # Add project shapes, similar to linear case:
+        for index, project in enumerate(projects):
+            color = PROJECTS_COLOR_SEQUENCE[index]
+            y0 = y0_ini * (5 ** index)
+            y1 = y1_ini * (5 ** index)
+            y_text = y0_ini * (5 ** index)
+            add_shapes(y0, y1, y_text, color)
+        ticks = [0.001, 0.01, 0.1, 1, 10, 100, 1000]
+        _fig.update_yaxes(type="log", tickvals=ticks, ticktext=[str(tick) for tick in ticks])
+        _fig.update_layout(xaxis_title='Jaar', yaxis_title="Risk factor")
+
+
     else:
         raise ValueError(f"Result type {result_type} not recognized")
 

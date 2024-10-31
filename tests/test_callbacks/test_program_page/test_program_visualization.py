@@ -6,6 +6,8 @@ from plotly.graph_objs import Figure
 
 from src.callbacks.project_page.callback_tabs_switch_project_page import update_project_page_visualization
 from src.constants import ResultType
+from src.linear_objects.project import get_projects_from_saved_data
+from src.plotly_graphs.project_page.plotly_plots import projects_reliability_over_time, plot_cost_vs_time_projects
 
 
 class TestCallbackProgramPageVisualization:
@@ -38,3 +40,74 @@ class TestCallbackProgramPageVisualization:
         assert isinstance(cost, str)
         assert isinstance(damage, str)
         assert isinstance(risk, str)
+
+    def test_plot_projects_reliability_over_time_figure_reliability(self):
+        # 1. Define data
+        # 1. Define data
+        _data = json.load(
+            open(Path(__file__).parent.parent.parent.joinpath("data", "programmering_WDOD", "Programmering WDOD.json"))
+        )
+
+        _imported_runs_data = _data['imported_runs_data']
+        _projects_overview_data = _data['project_data']
+
+
+        _projects, _ = get_projects_from_saved_data(_imported_runs_data, _projects_overview_data)
+
+        # 2. Call
+        _fig = projects_reliability_over_time(_projects, _imported_runs_data, ResultType.RELIABILITY.name)
+
+        # 3. Assert
+        assert isinstance(_fig, Figure)
+
+    def test_plot_projects_reliability_over_time_figure_risk(self):
+        # 1. Define data
+        _data = json.load(
+            open(Path(__file__).parent.parent.parent.joinpath("data", "programmering_WDOD", "Programmering WDOD.json"))
+        )
+
+        _imported_runs_data = _data['imported_runs_data']
+        _projects_overview_data = _data['project_data']
+
+        _projects, _ = get_projects_from_saved_data(_imported_runs_data, _projects_overview_data)
+
+        # 2. Call
+        _fig = projects_reliability_over_time(_projects, _imported_runs_data, ResultType.RISK.name)
+
+        # 3. Assert
+        assert isinstance(_fig, Figure)
+
+    def test_plot_projects_reliability_over_time_figure_risk_factor(self):
+        # 1. Define data
+        _data = json.load(
+            open(Path(__file__).parent.parent.parent.joinpath("data", "programmering_WDOD", "Programmering WDOD.json"))
+        )
+
+        _imported_runs_data = _data['imported_runs_data']
+        _projects_overview_data = _data['project_data']
+
+        _projects, _ = get_projects_from_saved_data(_imported_runs_data, _projects_overview_data)
+
+        # 2. Call
+        _fig = projects_reliability_over_time(_projects, _imported_runs_data, ResultType.RISK_FACTOR.name)
+        _fig.show()
+
+        # 3. Assert
+        assert isinstance(_fig, Figure)
+
+    def test_plot_projects_cost_over_time(self):
+        # 1. Define data
+        _data = json.load(
+            open(Path(__file__).parent.parent.parent.joinpath("data", "programmering_WDOD", "Programmering WDOD.json"))
+        )
+
+        _imported_runs_data = _data['imported_runs_data']
+        _projects_overview_data = _data['project_data']
+
+        _projects, _ = get_projects_from_saved_data(_imported_runs_data, _projects_overview_data)
+
+        # 2. Call
+        _fig = plot_cost_vs_time_projects(_projects)
+
+        # 3. Assert
+        assert isinstance(_fig, Figure)
