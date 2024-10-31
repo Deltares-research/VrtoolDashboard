@@ -14,7 +14,7 @@ def plot_cost_vs_time_projects(projects: list[DikeProject]):
     fig = go.Figure()
     start_program = 2025
     end_program = 2100
-    years = list(range(min([p.start_year for p in projects]), max([p.end_year for p in projects]) + 1))
+    years = list(range(2025, max([p.end_year for p in projects]) + 1))
 
     for i, project in enumerate(projects):
         _color = PROJECTS_COLOR_SEQUENCE[i]

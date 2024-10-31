@@ -11,6 +11,7 @@
 ### Changed
 - Map below reliability vs cost graph now displays the selected measure
 - Map of the program definition now displays the sections selected in the MultiSelectField
+- Changed layout of program visualization
 
 ### Deprecated
 None.
@@ -19,7 +20,7 @@ None.
 None.
 
 ### Fixed
-None.
+- Fixed definition of afstand tot norm
 
 ## v0.6.3 [11/10/2024]
 
