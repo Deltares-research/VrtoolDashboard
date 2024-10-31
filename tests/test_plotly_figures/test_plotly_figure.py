@@ -9,8 +9,7 @@ from src.constants import ResultType
 from src.linear_objects.dike_traject import DikeTraject
 from src.linear_objects.project import get_projects_from_saved_data
 from src.plotly_graphs.pf_length_cost import plot_pf_length_cost
-from src.plotly_graphs.project_page.plotly_maps import plot_cost_vs_time_projects
-from src.plotly_graphs.project_page.plotly_plots import projects_reliability_over_time
+from src.plotly_graphs.project_page.plotly_plots import projects_reliability_over_time, plot_cost_vs_time_projects
 import pytest
 
 

@@ -128,7 +128,7 @@ cost_chart = dcc.Graph(id=PROJECT_PAGE_VISUALIZATION_COST_GRAPH, figure=plot_def
 reliability_chart_box = html.Div(children=[
     layout_radio_result_type_project_page,
     dcc.Graph(id=PROJECT_PAGE_VISUALIZATION_RELIABILITY_GRAPH, figure=plot_default_scatter_dummy(),
-              style={'width': '100%', 'height': '100%'})
+              style={'width': 800, 'height': 400})
 
 ])
 
@@ -139,19 +139,25 @@ map_overview_area = dcc.Graph(
 )
 
 table = html.Div(id=PROJECT_OVERVIEW_TABLE_DISPLAY, children=[dmc.Table([head, body, caption])])
+
 right_side_visualization = html.Div(
     id="project_page_visualization__",
     children=[
-        dbc.Row([
-            dbc.Col(table, md=5, style={"height": "100%"}),
-            dbc.Col(map_overview_area, md=7, style={"height": "100%"}),
-        ], className="h-60"),
+        dbc.Row(children=[
 
-        dbc.Row([
-            dbc.Col(cost_chart, md=5, style={"height": "100%"}),
-            dbc.Col(reliability_chart_box, md=7, style={"height": "100%"}),
-        ], className="h-40"),
-    ],
+            dbc.Col(children=[
+                dbc.Row(map_overview_area),
+                dbc.Row(table),
+
+            ], md=7),
+            dbc.Col(children=[
+                dbc.Row(cost_chart),
+                dbc.Row(reliability_chart_box),
+            ], md=5),
+
+        ])
+
+    ]
 )
 
 project_visualization_tab_layout = html.Div(

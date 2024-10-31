@@ -10,6 +10,47 @@ from src.utils.traject_probability import get_updated_beta_df
 from src.utils.utils import pf_to_beta, interpolate_beta_values, beta_to_pf
 
 
+def plot_cost_vs_time_projects(projects: list[DikeProject]):
+    fig = go.Figure()
+    start_program = 2025
+    end_program = 2100
+    years = list(range(2025, max([p.end_year for p in projects]) + 1))
+
+    for i, project in enumerate(projects):
+        _color = PROJECTS_COLOR_SEQUENCE[i]
+
+        # Split the cost equally over the duration of the project
+        cost = project.calc_project_cost()
+        cost_yearly = cost / (project.end_year - project.start_year + 1)
+        cost_list = np.zeros(len(years))
+        for year in range(project.start_year, project.end_year):
+            cost_list[year - start_program] = cost_yearly
+
+        fig.add_trace(go.Bar(
+            name=project.name,
+            x=years,
+            y=cost_list,
+            offset=0,
+            marker=dict(color=_color, pattern_shape='/'),
+
+            # hovertemplate with start and end year, total cost cost of project
+            hovertemplate=f"{project.name}<br>Startjaar: {project.start_year}<br>"
+                          f"Eindjaar: {project.end_year}<br>"
+                          f"Jaarlijkse Kosten: {cost_yearly / 1e6:.2f} mln €<br>"
+                          f"Totaal Kosten: {cost / 1e6:.1f} mln €<extra></extra>"
+        ))
+
+    fig.update_layout(template='plotly_white')
+    fig.update_yaxes(title="Jaarlijkse Kosten (mln €)")
+    fig.update_xaxes(title="Jaar")
+
+    # no gap between bars
+    fig.update_layout(barmode='stack', bargap=0)
+    # put legend on the right
+    fig.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
+
+    return fig
+
 def projects_reliability_over_time(projects: list[DikeProject], imported_runs_data: dict,
                                    result_type: str) -> go.Figure:
     _fig = go.Figure()
@@ -57,7 +98,7 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
             y = beta_to_pf(betas_ini)
             y_ondergrens = [dike_traject.lower_bound_value] * len(years_ini)
         elif result_type == ResultType.DISTANCE_TO_NORM.name:
-            y = dike_traject.lower_bound_value / beta_to_pf(betas_ini)
+            y =  beta_to_pf(betas_ini) / dike_traject.lower_bound_value
             y_ondergrens = [1] * len(years_ini)
             pass
         else:

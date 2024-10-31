@@ -4,7 +4,7 @@ from pandas import DataFrame
 
 from src.constants import CalcType, Mechanism
 
-#TODO: move this file to the folder src/plotly_graphs/comparison_page
+#TODO: move this file to the folder src/plotly_graphs/test_comparison_page
 def plot_measure_results_graph(
         measure_results: DataFrame,
         vr_steps: list[dict],

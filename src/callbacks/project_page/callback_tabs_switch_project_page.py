@@ -8,8 +8,8 @@ from src.layouts.layout_project_page.layout_project_definition_tab import projec
 from src.layouts.layout_project_page.layout_project_visualization_tab import project_visualization_tab_layout, \
     fill_project_display_overview_table
 from src.linear_objects.project import get_projects_from_saved_data, calc_area_stats
-from src.plotly_graphs.project_page.plotly_maps import plot_cost_vs_time_projects, plot_project_overview_map
-from src.plotly_graphs.project_page.plotly_plots import projects_reliability_over_time
+from src.plotly_graphs.project_page.plotly_maps import plot_project_overview_map
+from src.plotly_graphs.project_page.plotly_plots import projects_reliability_over_time, plot_cost_vs_time_projects
 
 
 @callback(
