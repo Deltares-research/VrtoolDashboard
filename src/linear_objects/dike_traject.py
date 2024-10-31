@@ -25,6 +25,7 @@ class DikeTraject(BaseLinearObject):
     greedy_steps: list[dict]
     _run_id_vr: int
     _run_id_dsn: int
+    flood_damage: float = 0
     run_name: str = None
     final_step_number: int = None  # the step number of the final step in the greedy optimization
     greedy_stop_type_criteria: Optional[str] = None
@@ -42,6 +43,7 @@ class DikeTraject(BaseLinearObject):
             "lower_bound_value": self.lower_bound_value,
             "greedy_steps": self.greedy_steps,
             "run_name": self.run_name,
+            "flood_damage": self.flood_damage,
             "_run_id_vr": self._run_id_vr,
             "_run_id_dsn": self._run_id_dsn,
             "final_step_number": self.final_step_number,
@@ -69,6 +71,7 @@ class DikeTraject(BaseLinearObject):
             lower_bound_value=data["lower_bound_value"],
             greedy_steps=data["greedy_steps"],
             run_name=data["run_name"],
+            flood_damage=data.get("flood_damage", -9999),
             _run_id_vr=data["_run_id_vr"],
             _run_id_dsn=data["_run_id_dsn"],
             final_step_number=data["final_step_number"],
