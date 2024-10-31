@@ -145,7 +145,10 @@ def make_map_comparison_measure(imported_runs: dict, table_data: list[dict]):
 def update_table_comparison_measures(imported_runs: dict, table_imported_runs_data: list[dict]):
     data = []
     if imported_runs is None:
-        return [], []
+        return dash.no_update, dash.no_update
+
+    if len(imported_runs) < 2:
+        return dash.no_update, dash.no_update
 
     dike_traject_1 = DikeTraject.deserialize(list(imported_runs.values())[0])
     dike_traject_2 = DikeTraject.deserialize(list(imported_runs.values())[1])

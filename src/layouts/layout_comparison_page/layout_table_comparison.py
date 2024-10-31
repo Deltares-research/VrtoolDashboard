@@ -6,7 +6,7 @@ from src.component_ids import TABLE_COMPARISON_MEASURES
 # color_higlight = "bg-danger"
 color_higlight = "mediumaquamarine"
 columnDefs = [
-    {"field": "section_name", "sortable": True, 'headerName': 'Sectie', "pinned": True, 'width': 80},
+    {"field": "section_name", "sortable": True, 'headerName': 'Sectie', "pinned": True, 'width': 100},
     {
         'headerName': 'Run 1',
         'children': [
@@ -16,7 +16,7 @@ columnDefs = [
 
              },
 
-            {'field': "run_1_dberm", 'headerName': 'Dberm', 'width': 50,
+            {'field': "run_1_dberm", 'headerName': 'Dberm', 'width': 70,
              "cellStyle": {"styleConditions": [
                  {"style": {"backgroundColor": color_higlight},
                   "condition": 'params.data.run_1_dberm != params.data.run_2_dberm'},
@@ -24,7 +24,7 @@ columnDefs = [
 
              },
 
-            {'field': "run_1_dcrest", 'headerName': 'Dcrest', 'width': 50,
+            {'field': "run_1_dcrest", 'headerName': 'Dcrest', 'width': 60,
              "cellStyle": {"styleConditions": [
                  {"style": {"backgroundColor": color_higlight},
                   "condition": 'params.data.run_1_dcrest != params.data.run_2_dcrest'},
@@ -32,7 +32,7 @@ columnDefs = [
 
              },
 
-            {'field': "run_1_Lscreen", 'headerName': 'LScherm', 'width': 50,
+            {'field': "run_1_Lscreen", 'headerName': 'LScherm', 'width': 60,
              "cellStyle": {"styleConditions": [
                  {"style": {"backgroundColor": color_higlight},
                   "condition": 'params.data.run_1_Lscreen != params.data.run_2_Lscreen'},
@@ -48,7 +48,7 @@ columnDefs = [
             {'field': "run_2_measure", 'headerName': 'Maatregel', 'cellStyle': {"border-left": "2px solid black"},
 
              },
-            {'field': "run_2_dberm", 'headerName': 'Dberm', 'width': 50,
+            {'field': "run_2_dberm", 'headerName': 'Dberm', 'width': 60,
              "cellStyle": {"styleConditions": [
                  {"style": {"backgroundColor": color_higlight},
                   "condition": 'params.data.run_1_dberm != params.data.run_2_dberm'},
@@ -56,7 +56,7 @@ columnDefs = [
 
              },
 
-            {'field': "run_2_dcrest", 'headerName': 'Dcrest', 'width': 50,
+            {'field': "run_2_dcrest", 'headerName': 'Dcrest', 'width': 60,
              "cellStyle": {"styleConditions": [
                  {"style": {"backgroundColor": color_higlight},
                   "condition": 'params.data.run_1_dcrest != params.data.run_2_dcrest'},
@@ -64,7 +64,7 @@ columnDefs = [
 
              },
 
-            {'field': "run_2_Lscreen", 'headerName': 'LScherm', 'width': 50,
+            {'field': "run_2_Lscreen", 'headerName': 'LScherm', 'width': 60,
              "cellStyle": {"styleConditions": [
                  {"style": {"backgroundColor": color_higlight},
                   "condition": 'params.data.run_1_Lscreen != params.data.run_2_Lscreen'},
