@@ -139,20 +139,6 @@ map_overview_area = dcc.Graph(
 )
 
 table = html.Div(id=PROJECT_OVERVIEW_TABLE_DISPLAY, children=[dmc.Table([head, body, caption])])
-# right_side_visualization = html.Div(
-#     id="project_page_visualization__",
-#     children=[
-#         dbc.Row([
-#             dbc.Col(table, md=5, style={"height": "100%"}),
-#             dbc.Col(map_overview_area, md=7, style={"height": "100%"}),
-#         ], className="h-60"),
-#
-#         dbc.Row([
-#             dbc.Col(cost_chart, md=5, style={"height": "100%"}),
-#             dbc.Col(reliability_chart_box, md=7, style={"height": "100%"}),
-#         ], className="h-40"),
-#     ],
-# )
 
 right_side_visualization = html.Div(
     id="project_page_visualization__",
