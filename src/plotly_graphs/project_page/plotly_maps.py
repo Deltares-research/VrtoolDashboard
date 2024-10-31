@@ -168,7 +168,7 @@ def plot_comparison_runs_overview_map_assessment(trajects: list[DikeTraject])-> 
 
     # Update layout of the figure and add token for mapbox
     _middle_point = get_middle_point(sections)
-    update_layout_map_box(fig, _middle_point)
+    update_layout_map_box(fig, _middle_point, zoom=10)
     place_legend_right_top_corner(fig)
 
     return fig
@@ -223,41 +223,4 @@ def plot_comparison_runs_overview_map_simple(trajects: list[DikeTraject], select
     return fig
 
 
-def plot_cost_vs_time_projects(projects: list[DikeProject]):
-    fig = go.Figure()
-    start_program = 2025
-    end_program = 2100
-    years = list(range(start_program, end_program + 1))
 
-    for i, project in enumerate(projects):
-        _color = PROJECTS_COLOR_SEQUENCE[i]
-
-        # Split the cost equally over the duration of the project
-        cost = project.calc_project_cost()
-        cost_yearly = cost / (project.end_year - project.start_year + 1)
-        cost_list = np.zeros(len(years))
-        for year in range(project.start_year, project.end_year):
-            cost_list[year - start_program] = cost_yearly
-
-        fig.add_trace(go.Bar(
-            name=project.name,
-            x=years,
-            y=cost_list,
-            offset=0,
-            marker=dict(color=_color, pattern_shape='/'),
-
-            # hovertemplate with start and end year, total cost cost of project
-            hovertemplate=f"{project.name}<br>Startjaar: {project.start_year}<br>"
-                          f"Eindjaar: {project.end_year}<br>"
-                          f"Jaarlijkse Kosten: {cost_yearly / 1e6:.2f} mln €<br>"
-                          f"Totaal Kosten: {cost / 1e6:.1f} mln €<extra></extra>"
-        ))
-
-    fig.update_layout(template='plotly_white')
-    fig.update_yaxes(title="Jaarlijkse Kosten (mln €)")
-    fig.update_xaxes(title="Jaar")
-
-    # no gap between bars
-    fig.update_layout(barmode='stack', bargap=0)
-
-    return fig
