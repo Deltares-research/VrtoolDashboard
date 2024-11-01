@@ -246,7 +246,7 @@ def update_section_selection_on_click_event(selected_row: dict, project_data_ove
      # Input(TABLE_PROJECT_SUMMARY_ID, "selectedRows"),
      Input(MULTI_SELECT_SECTION_FOR_PROJECT_ID, "value"),
      Input(PROGRAM_SELECTION_MAP_RADIO_SWITCH_ID, "value"),
-     State(STORED_IMPORTED_RUNS_DATA, "data"),
+     Input(STORED_IMPORTED_RUNS_DATA, "data"),
      State(STORED_PROJECT_OVERVIEW_DATA, "data")]
 )
 def update_map_project_definition_page(dummy, selected_sections: list, switch_type_map: str, imported_runs_data: dict,
