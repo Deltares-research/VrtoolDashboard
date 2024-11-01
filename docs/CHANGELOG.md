@@ -15,7 +15,24 @@ None.
 None.
 
 ### Fixed
+- Small fixes bug reported by derk-Jan
+
+## v0.7.1 [01/11/2024]
+
+### Added
 None.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+- Small fixes bug reported by derk-Jan
 
 ## v0.7.0 [31/10/2024]
 

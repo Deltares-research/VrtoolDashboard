@@ -499,7 +499,8 @@ def plot_dike_traject_measures_map(
 
 
 def add_measure_type_trace(
-        fig: go.Figure, section: DikeSection, measure_results: dict, legend_display: dict, opacity: float = 1, legendgroup: Optional[str] = None
+        fig: go.Figure, section: DikeSection, measure_results: dict, legend_display: dict, opacity: float = 1,
+        legendgroup: Optional[str] = None
 ):
     """
     This function adds a trace to the figure for the measure type.
@@ -511,6 +512,8 @@ def add_measure_type_trace(
     :param legendgroup: Optional[str]. If None, the legendgroup is based on the measures types (all VZG grouped together)
     otherwise it is based on the provided name
     """
+    if measure_results["name"] == "Geen maatregel":
+        return
     if MeasureTypeEnum.SOIL_REINFORCEMENT.name in measure_results[
         "type"] or MeasureTypeEnum.SOIL_REINFORCEMENT.legacy_name in measure_results[
         "type"] or MeasureTypeEnum.SOIL_REINFORCEMENT_WITH_STABILITY_SCREEN.name in measure_results[
@@ -534,12 +537,14 @@ def add_measure_type_trace(
 
         if measure_results["dcrest"] > 0 and measure_results["dberm"] > 0:
             _name = "Grondversterking binnenwaarts"
-            _color = f"rgb(0, 128, 0, {opacity})" # Green
+            _color = f"rgb(0, 128, 0, {opacity})"  # Green
             _showlegend = legend_display.get("ground_reinforcement")
             legend_display["ground_reinforcement"] = False
         if measure_results["dcrest"] == 0 and measure_results["dberm"] == 0:
-            _name = "Grondversterking binnenwaarts"
-            _color = f"rgb(0, 128, 0, {opacity})" # Green
+            # exit 2 if statement
+
+            _name = ""
+            _color = f"rgb(0, 128, 0, {0})"  # Green
             _showlegend = legend_display.get("ground_reinforcement")
             legend_display["ground_reinforcement"] = False
             _visible = False
@@ -558,7 +563,7 @@ def add_measure_type_trace(
                 name=_name,
                 legendgroup=_name if legendgroup is None else legendgroup,
                 legendgrouptitle_text=None if legendgroup is None else legendgroup,
-                legendgrouptitle = dict(font=dict(weight='bold')),
+                legendgrouptitle=dict(font=dict(weight='bold')),
                 mode="lines",
                 lat=[x[0] for x in _coordinates_wgs],
                 lon=[x[1] for x in _coordinates_wgs],
@@ -683,7 +688,13 @@ def add_measure_type_trace(
         _coordinates_wgs = [
             GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in _offset_ls.coords
         ]  # convert in GWS coordinates:
-
+        if "Grondversterking" in measure_results["name"] and measure_results["dcrest"] == 0 and measure_results[
+            "dberm"] == 0:
+            name_hover = "Aanpassing bekleding"
+        elif "Grondversterking" not in measure_results["name"]:
+            name_hover = "Aanpassing bekleding"
+        else:
+            name_hover = measure_results["name"]
         fig.add_trace(
             go.Scattermap(
                 name="Aanpassing bekleding",
@@ -697,7 +708,7 @@ def add_measure_type_trace(
                 opacity=opacity,
                 showlegend=legend_display.get("revetment"),
                 hovertemplate=f"Vaknaam {section.name}<br>"
-                              f"{measure_results['name']} <br>"
+                              f"{name_hover} <br>"
                               f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>"
                               f"Factor veiliger bekleding {measure_results['pf_target_ratio']} <br>"
                               f"Verhoging overgang {measure_results['diff_transition_level']}m <br>"
@@ -1016,6 +1027,7 @@ def update_layout_map_box(fig: go.Figure, center: tuple[float, float], zoom: int
         ),
     )
 
+
 def place_legend_left_top_corner(fig: go.Figure):
     fig.update_layout(legend=dict(
         yanchor="top",
@@ -1023,6 +1035,7 @@ def place_legend_left_top_corner(fig: go.Figure):
         xanchor="left",
         x=0.01,
     ))
+
 
 def place_legend_right_top_corner(fig: go.Figure):
     fig.update_layout(legend=dict(
@@ -1071,7 +1084,7 @@ def add_colorscale_bar(
                 ticks="outside",
                 len=0.5,
                 x=0.9,
-                xref="paper", # Superpose the colobar with the map
+                xref="paper",  # Superpose the colobar with the map
             ),
             showscale=True,
             cmin=beta_ondergrsns - 1.5,
