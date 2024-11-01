@@ -688,7 +688,13 @@ def add_measure_type_trace(
         _coordinates_wgs = [
             GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in _offset_ls.coords
         ]  # convert in GWS coordinates:
-
+        if "Grondversterking" in measure_results["name"] and measure_results["dcrest"] == 0 and measure_results[
+            "dberm"] == 0:
+            name_hover = "Aanpassing bekleding"
+        elif "Grondversterking" not in measure_results["name"]:
+            name_hover = "Aanpassing bekleding"
+        else:
+            name_hover = measure_results["name"]
         fig.add_trace(
             go.Scattermap(
                 name="Aanpassing bekleding",
@@ -702,7 +708,7 @@ def add_measure_type_trace(
                 opacity=opacity,
                 showlegend=legend_display.get("revetment"),
                 hovertemplate=f"Vaknaam {section.name}<br>"
-                              f"{measure_results['name']} <br>"
+                              f"{name_hover} <br>"
                               f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>"
                               f"Factor veiliger bekleding {measure_results['pf_target_ratio']} <br>"
                               f"Verhoging overgang {measure_results['diff_transition_level']}m <br>"
