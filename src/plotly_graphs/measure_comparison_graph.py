@@ -4,7 +4,8 @@ from pandas import DataFrame
 
 from src.constants import CalcType, Mechanism
 
-#TODO: move this file to the folder src/plotly_graphs/test_comparison_page
+
+# TODO: move this file to the folder src/plotly_graphs/test_comparison_page
 def plot_measure_results_graph(
         measure_results: DataFrame,
         vr_steps: list[dict],
@@ -45,7 +46,7 @@ def plot_measure_results_graph(
             text += f"Dcrest: {row['dcrest']}m<br>"
 
         text += f"Beta: {row['beta']:.2f}<br>"
-        text += f"Kost: €{row['cost'] /1e6:.2f} mln<br>"
+        text += f"Kost: €{row['cost'] / 1e6:.2f} mln<br>"
 
         text_list.append(text)
 
@@ -160,7 +161,8 @@ def add_trace_run_results(
                               + "Beta: %{y:.2f}<br>"
                               + "Cost: €%{x:.2f} mln<br>"
                               + hover_extra,
-            )
+            ),
+
         )
 
         fig.add_annotation(
@@ -168,3 +170,18 @@ def add_trace_run_results(
             x=taken_measure["cost"] / 1e6,
             y=taken_measure[mech_key][year_index],
         )
+    fig.add_trace(go.Scatter(name="VR laatste step",
+                             visible=True if calc_type == CalcType.VEILIGHEIDSRENDEMENT else False,
+                             showlegend=True,
+                             mode="markers",
+                             marker=dict(
+                                 size=10,
+                                 color='red',
+                                 symbol=(
+                                     "diamond"
+                                 ),
+                             ),
+
+                             x=[[taken_measure["cost"] / 1e6][0]],
+                             y=[[taken_measure[mech_key][year_index]][0]],
+                             ))
