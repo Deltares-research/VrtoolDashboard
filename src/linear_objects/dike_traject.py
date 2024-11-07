@@ -299,6 +299,7 @@ def get_traject_prob(beta_df: DataFrame) -> tuple[np.array, dict]:
 
     beta_df = beta_df.reset_index().set_index("mechanism").drop(columns=["name"])
     beta_df = beta_df.drop(columns=["Length", "index"])
+    beta_df = beta_df.astype(float)
     mechanisms = ['Overflow', 'Piping', 'StabilityInner', 'Revetment']
     traject_probs = dict((el, []) for el in mechanisms)
     total_traject_prob = np.empty((1, beta_df.shape[1]))
