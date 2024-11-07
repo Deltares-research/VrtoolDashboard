@@ -15,7 +15,24 @@ None.
 None.
 
 ### Fixed
-- Small fixes bug reported by derk-Jan
+None.
+
+## v0.7.2 [##/##/####]
+
+### Added
+None.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+- Fixed error with integer beta values rounded
 
 ## v0.7.1 [01/11/2024]
 
