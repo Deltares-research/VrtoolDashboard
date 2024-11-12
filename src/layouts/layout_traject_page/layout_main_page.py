@@ -30,11 +30,11 @@ def make_layout_main_page() -> dbc.Row:
                 html.Div(
                     [
 
-                        make_collapsing_menu(menu_name='Traject selectie',
+                        make_collapsing_menu(menu_name='Selectie & instellingen database',
                                              collapse_id=1,
                                              inner_layouts=[layout_traject_select]),
 
-                        make_collapsing_menu(menu_name="Instellingen",
+                        make_collapsing_menu(menu_name="Instellingen weergave",
                                              collapse_id=2,
                                              inner_layouts=[dike_settings_layout]),
 
@@ -82,7 +82,7 @@ def layout_tab_one() -> html.Div:
 
             # DataTable(id='table'),
             html.Div(
-                "De onderstaande kaart geeft een overzicht van de dijkvakken binnen het geïmporteerde dijktraject."),
+                "De onderstaande kaart geeft een overzicht van de dijkvakken in de database van het geïmporteerde dijktraject."),
             html.Div(id='overview_map_div',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
 
@@ -98,7 +98,7 @@ def layout_tab_two() -> html.Div:
             ]),
 
             html.Div(
-                "De onderstaande kaart toont de betrouwbaarheid/faalkans van de initiële beoordeling voor het gehele dijktraject. Gebruik de schuifregelaar om een ander beoordelingsjaar te visualiseren."),
+                "De onderstaande kaart toont de betrouwbaarheid/faalkans van de initiële beoordeling voor het gehele dijktraject. Gebruik de schuifregelaar om een ander beoordelingsjaar te tonen."),
             html.Div(id='dike_traject_reliability_map_initial',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
 
@@ -116,8 +116,9 @@ def layout_tab_three() -> html.Div:
                 dbc.Col([html.H2("Maatregelen")], md=10),
                 dbc.Col([layout_download_reinforced_sections], md=2)
             ]),
-            html.Div(
-                " "),
+            html.Div(" "),
+
+            html.Div("Op deze pagina kunnen de typen maatregelen worden bekeken, de dimensionering en resulterende betrouwbaarheid en kosten."),
 
             dbc.Row([
 
@@ -140,8 +141,9 @@ def layout_tab_four() -> html.Div:
         children=[
             html.H2("Optimalisatie"),
             html.Div(
-                "Onderstaande figuur toont de relatie tussen de trajectfaalkans en de kosten of lengte van de versterking voor het geselecteerde referentiejaar."),
-
+                "Onderstaande figuur toont de relatie tussen de trajectfaalkans en de kosten of lengte van de versterking voor het geselecteerde referentiejaar. Voor veiligheidsrendement geeft de stippellijn  het stapsgewijze optimalisatiepad, bij de doorgetrokken lijn zijn de maatregelen per dijkvak samengevoegd."),
+            #add white space
+            html.Br(),
             dbc.Row([
 
                 dbc.Col([layout_radio_length_switch], md=4),
@@ -177,7 +179,7 @@ def layout_tab_five() -> html.Div:
         children=[
             html.H2("Prioritering"),
             html.Div(
-                "Onderstaande kaart geeft de meest urgente dijkvakken op basis van de optimalisatievolgorde."),
+                "Onderstaande kaart geeft de meest urgente dijkvakken op basis van de optimalisatievolgorde. Daarbij worden vakken die als eerste voorkomen in het optimalisatiepad als eerste weergegeven."),
             layout_urgency_length_slider,
             html.Div(id='dike_traject_urgency_map',
                      style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
@@ -192,12 +194,13 @@ def layout_tab_six() -> html.Div:
     layout = html.Div(
         children=[
             html.H2("Maatregelen"),
+            html.Div("In dit scherm kunnen de resultaten van verschillende maatregelen per dijkvak weergegeven worden."),
             html.Div("Selecteer een dijkvak om de resultaten van de maatregelen te bekijken:"),
             layout_radio_dike_section_selection,
             # html.Div(id=GRAPH_MEASURE_COMPARISON_ID,
             #          style={'width': '130vh', 'height': '90vh', 'border': "2px solid black"}),
             html.Div(
-                "U kunt op een maatregel bolletje kliken om de betrouwbaarheid van de maatregel over tijd te bekijken."),
+                "Wanneer op een bolletje van een maatregel wordt geklikt wordt meer informatie over betrouwbaarheid in de tijd worden weergegeven."),
 
             html.Div(
                 style={'width': '130vh', 'height': '60vh', 'border': "2px solid black"},

@@ -78,9 +78,14 @@ dike_vr_optimization_layout_ag_grid = html.Div([
     # add text
     dcc.Markdown(
         '''
-        Met de onderstaande tabel, kunt u dijkvakken selecteren en de versterkingen aanpassen.
+        Vanuit dit scherm kunnen nieuwe optimalisatieberekeningen worden gestart.
+
+        In onderstaande tabel kan per dijkvak worden aangegeven of deze versterkt moet worden en in welk referentiejaar.
+
+        Daarnaast kan aangegeven worden welke maatregelen moeten worden meegenomen.
         
-        Geef een naam voor de optimizatie run en klik op de knop "Optimize" om de optimalisatie te starten.
+        Door onderaan een (unieke) naam op te geven en op 'Start optimalisatie' te drukken wordt een berekening met de VRTOOL gestart.
+        Let op: deze berekening kan enige tijd duren!
         '''
     ),    dag.AgGrid(
         id=EDITABLE_TRAJECT_TABLE_ID,
@@ -95,9 +100,9 @@ dike_vr_optimization_layout_ag_grid = html.Div([
 
     html.Div(
         [
-            dbc.Input(id=NAME_NEW_OPTIMIZATION_RUN_ID, placeholder="Optimization run naam", type="text"),
-            dbc.Button("Optimize", id=OPTIMIZE_BUTTON_ID, color="primary", className="mr-1"),
-            dbc.Tooltip("Click to call VRCore optimization routine via the new calculation constraints.",
+            dbc.Input(id=NAME_NEW_OPTIMIZATION_RUN_ID, placeholder="Naam berekening", type="text"),
+            dbc.Button("Start optimalisatieberekening", id=OPTIMIZE_BUTTON_ID, color="primary", className="mr-1"),
+            dbc.Tooltip("Klik hier om de berekening met de geselecteerde maatregelen te starten.",
                         target=OPTIMIZE_BUTTON_ID),
             html.Div(id=DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID)
         ])

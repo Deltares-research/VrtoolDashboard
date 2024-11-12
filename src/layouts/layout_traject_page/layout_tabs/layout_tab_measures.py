@@ -13,5 +13,6 @@ layout_radio_dike_section_selection = dcc.Dropdown(
                 searchable=True,  # allow user-searching of dropdown values
                 search_value='',  # remembers the value searched in dropdown
                 clearable=True,  # allow user to removes the selected value
+                placeholder='Selecteer een dijkvak...',  # gray, default text shown when no option is selected
                 style={'width': "100%"},
             )
