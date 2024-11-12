@@ -16,7 +16,7 @@ def layout_project_output_tab_one() -> html.Div:
     return html.Div(
         children=[
             dbc.Row([
-                dbc.Col([html.H2("Overzicht Projects")], md=10),
+                dbc.Col([html.H2("Overzicht dijktrajecten")], md=10),
             ]),
 
             html.Div(id=OVERVIEW_COMPARISON_MAP_ID,
@@ -29,7 +29,7 @@ def layout_project_output_tab_two() -> html.Div:
     return html.Div(
         children=[
             dbc.Row([
-                dbc.Col([html.H2("Vergelijken kosten")], md=10),
+                dbc.Col([html.H2("Vergelijking kosten en faalkans")], md=10),
             ]),
             layout_year_slider,
             html.Div(
@@ -49,7 +49,7 @@ def layout_project_output_tab_three() -> html.Div:
     return html.Div(
         children=[
             dbc.Row([
-                dbc.Col([html.H2("Tijd ")], md=10),
+                dbc.Col([html.H2("Faalkans in de tijd")], md=10),
             ]),
 
             html.Div(
