@@ -18,12 +18,12 @@ columns_defs_1 = [
      "initialWidth": 200},
 
     {"field": "run_name",
-     "headerName": "Run naam",
+     "headerName": "Naam berekening",
      "editable": False,
      "initialWidth": 200},
 
     {"field": "active",
-     "headerName": "Aktieveer",
+     "headerName": "Activeer",
      "cellRenderer": "DBC_Switch",
      "editable": True,
      "CellRendererParams": {"onColor": "success", "offColor": "danger"},
@@ -48,12 +48,12 @@ table_imported_dike_data = dag.AgGrid(
 
 
 left_side = [
-
+    #add some explanation text
     dcc.Upload(
         id='upload-dike-data-comparison',
         children=html.Div([
             '',
-            html.A('Selecteer een bestand dike_data.json')
+            html.A('Selecteer een json-bestand van een traject')
         ]),
         style={
             'width': '100%',
@@ -73,7 +73,7 @@ left_side = [
     dbc.Accordion([
         dbc.AccordionItem(
             [table_imported_dike_data],
-            title='Geimporteerde runs',
+            title='Geimporteerde berekeningen',
         ),
     ]),
 
@@ -88,7 +88,7 @@ right_side = [
             dbc.Tab(label="Tijd", tab_id="tab-11113"),
             dbc.Tab(label="Maatregelen", tab_id="tab-11114"),
             dbc.Tab(label="Tafel", tab_id="tab-11115"),
-            dbc.Tab(label="PLACEHOLDER 2", tab_id="tab-11116"),
+            # dbc.Tab(label="PLACEHOLDER 2", tab_id="tab-11116"),
         ],
         id=TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE,
         active_tab="tab-11111",  # Set the initial active tab

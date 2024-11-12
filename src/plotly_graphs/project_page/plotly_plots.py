@@ -37,11 +37,11 @@ def plot_cost_vs_time_projects(projects: list[DikeProject]):
             hovertemplate=f"{project.name}<br>Startjaar: {project.start_year}<br>"
                           f"Eindjaar: {project.end_year}<br>"
                           f"Jaarlijkse Kosten: {cost_yearly / 1e6:.2f} mln €<br>"
-                          f"Totaal Kosten: {cost / 1e6:.1f} mln €<extra></extra>"
+                          f"Totale Kosten: {cost / 1e6:.1f} mln €<extra></extra>"
         ))
 
     fig.update_layout(template='plotly_white')
-    fig.update_yaxes(title="Jaarlijkse Kosten (mln €)")
+    fig.update_yaxes(title="Kosten (mln €/jaar)")
     fig.update_xaxes(title="Jaar")
 
     # no gap between bars
@@ -95,8 +95,9 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
         if result_type == ResultType.RELIABILITY.name:
             y = betas_ini
             y_ondergrens = [pf_to_beta(dike_traject.lower_bound_value)] * len(years_ini)
-            name = "Betrouwbaarheid"
-            hovertemplate = "Jaar: %{x}<br>Betrouwbaarheid: %{y:.2e}"
+            # name = "Betrouwbaarheid"
+            name = dike_traject.name
+            hovertemplate = "Jaar: %{x}<br>	β = %{y:.2e}"
 
         elif result_type == ResultType.PROBABILITY.name:
             y = beta_to_pf(betas_ini)
@@ -112,7 +113,7 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
             y = beta_to_pf(betas_ini) * dike_traject.flood_damage
             discount_rate = 0.03
             y_ondergrens = None
-            name = "Risico (€)"
+            name = "Risico (€/jaar)"
             hovertemplate = "Jaar: %{x}<br>Risico: %{y:.2e}"
         elif result_type == ResultType.RISK_FACTOR.name:
             risk = beta_to_pf(betas_ini) * dike_traject.flood_damage
@@ -121,8 +122,8 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
                         years_ini - 2025)
             y = risk / risk_norm
             y_ondergrens = None
-            name = "Risk factor"
-            hovertemplate = "Jaar: %{x}<br>Risk factor: %{y:.2e}"
+            name = "Risicofactor"
+            hovertemplate = "Jaar: %{x}<br>Factor hoger dan bij norm: %{y:.2e}"
 
 
         else:
@@ -161,6 +162,17 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
             line_width=0,
         )
 
+        # add invisible trace for hover info
+        _fig.add_trace(go.Scatter(
+            x=[(project.start_year + project.end_year) / 2],
+            y=[(y0 + y1) / 2],
+            text=[project.name],
+            mode="markers",
+            opacity=0,
+            marker=dict(color=color, opacity=0),
+            hoverinfo="text",
+            showlegend = False,
+        ))
         # add annotation in the middle of the shape:
         # THIS IS BUGGY
         # _fig.add_annotation(
@@ -216,7 +228,7 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
         _fig.update_layout(xaxis_title='Jaar', yaxis_title="Afstand tot norm")
 
     elif result_type == ResultType.RISK.name:
-        _fig.update_layout(xaxis_title='Jaar', yaxis_title="Risico (€)")
+        _fig.update_layout(xaxis_title='Jaar', yaxis_title="Risico (€/jaar)")
         y0_ini = 10e3
         y1_ini = y0_ini * 5  # This is the range for each shape in log scale
         # Add project shapes:
@@ -243,7 +255,7 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
             add_shapes(y0, y1, y_text, color)
         ticks = [0.001, 0.01, 0.1, 1, 10, 100, 1000]
         _fig.update_yaxes(type="log", tickvals=ticks, ticktext=[str(tick) for tick in ticks])
-        _fig.update_layout(xaxis_title='Jaar', yaxis_title="Risk factor")
+        _fig.update_layout(xaxis_title='Jaar', yaxis_title="Risico factor")
 
 
     else:

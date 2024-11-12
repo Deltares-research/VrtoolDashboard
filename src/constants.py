@@ -60,9 +60,9 @@ class GreedyOPtimizationCriteria(Enum):
     TARGET_PF = "Faalkans"
 
 class ProgramDefinitionMapType(Enum):
-    SIMPLE = "Simple"
-    PROJECTS = "Projects"
-    ASSESSMENT_PROBABILITIES = "Faalkans"
+    SIMPLE = "Trajecten"
+    PROJECTS = "Projecten"
+    ASSESSMENT_PROBABILITIES = "Faalkans 2025"
 
 
 

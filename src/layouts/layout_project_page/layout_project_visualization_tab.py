@@ -35,13 +35,13 @@ head = dmc.TableThead(
     dmc.TableTr(
         [
             dmc.TableTh("Project"),
-            dmc.TableTh("Dijkvakken"),
-            dmc.TableTh("Start jaar"),
-            dmc.TableTh("Eind jaar"),
+            dmc.TableTh("Aantal vakken"),
+            dmc.TableTh("Startjaar"),
+            dmc.TableTh("Eindjaar"),
             dmc.TableTh("Lengte (km)"),
             dmc.TableTh("Kosten (M€)"),
-            dmc.TableTh("Beoordeling \n faalkans"),
-            dmc.TableTh("Versterking faalkans"),
+            dmc.TableTh("Faalkans beoordeling"),
+            dmc.TableTh("Faalkans na versterking"),
 
         ],
 
@@ -105,14 +105,14 @@ def left_side_area_stats():
                                        verticalSpacing="md",
                                        children=[
                                            html.P(""),
-                                           dmc.Text("Totaal kosten:", td="underline"),
+                                           dmc.Text("Totale versterkingskosten:", td="underline"),
                                            dmc.Text("", id=TOTAL_AREA_COST, fw=700, size="xl"),
                                            # dmc.Text("Totaal schade:", td="underline"),
                                            # dmc.Text("XXXX €", id=TOTAL_AREA_DAMAGE, fw=700, size="xl"),
-                                           dmc.Text("Totaal risico (huidige):", td="underline"),
-                                           dmc.Text("XXXX €", id=TOTAL_AREA_RISK_CURRENT, fw=700, size="xl"),
-                                           dmc.Text("Totaal risico (versterkt):", td="underline"),
-                                           dmc.Text("XXXX €", id=TOTAL_AREA_RISK_REINFORCED, fw=700, size="xl"),
+                                           dmc.Text("Risico (huidige):", td="underline"),
+                                           dmc.Text("XXXX €/jaar", id=TOTAL_AREA_RISK_CURRENT, fw=700, size="xl"),
+                                           dmc.Text("Risico (na versterking):", td="underline"),
+                                           dmc.Text("XXXX €/jaar", id=TOTAL_AREA_RISK_REINFORCED, fw=700, size="xl"),
                                        ]
                                    ),
 

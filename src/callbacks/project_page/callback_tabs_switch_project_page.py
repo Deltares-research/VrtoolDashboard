@@ -64,5 +64,5 @@ def update_project_page_visualization(tabs_switch, result_type: str, imported_ru
 
     map_fig = plot_project_overview_map(projects, trajects.values())
     cost, risk, future_risk = calc_area_stats(projects, trajects)
-    return cost_fig, reliability_fig, map_fig, project_overview_table, f"{cost/1e6:.2f} M€", f"{risk/1e6:.2f} M€", f"{future_risk/1e6:.2f} M€"
+    return cost_fig, reliability_fig, map_fig, project_overview_table, f"{cost/1e6:.2f} M€/jaar", f"{risk/1e6:.2f} M€/jaar", f"{future_risk/1e6:.2f} M€/jaar"
 
