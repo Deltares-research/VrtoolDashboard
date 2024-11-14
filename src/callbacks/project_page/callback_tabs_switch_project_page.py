@@ -57,6 +57,8 @@ def update_project_page_visualization(tabs_switch, result_type: str, imported_ru
     if project_overview_data is None:
         return dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
 
+    import time
+    t0 = time.time()
     projects, trajects = get_projects_from_saved_data(imported_runs_data, project_overview_data)
     cost_fig = plot_cost_vs_time_projects(projects)
     reliability_fig = projects_reliability_over_time(projects, imported_runs_data, result_type)
@@ -64,5 +66,7 @@ def update_project_page_visualization(tabs_switch, result_type: str, imported_ru
 
     map_fig = plot_project_overview_map(projects, trajects.values())
     cost, risk, future_risk = calc_area_stats(projects, trajects)
+    t1 = time.time()
+    print(f"Time to update project page visualization: {t1 - t0:.2f} s")
     return cost_fig, reliability_fig, map_fig, project_overview_table, f"{cost/1e6:.2f} M€/jaar", f"{risk/1e6:.2f} M€/jaar", f"{future_risk/1e6:.2f} M€/jaar"
 

@@ -6,12 +6,13 @@ from typing import Optional
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
+from vrtool.common.enums import MechanismEnum
 
 from src.constants import REFERENCE_YEAR, Mechanism
 from src.linear_objects.base_linear import BaseLinearObject
 from src.linear_objects.dike_section import DikeSection
 
-from src.utils.utils import beta_to_pf, pf_to_beta
+from src.utils.utils import beta_to_pf, pf_to_beta, calculate_traject_probability
 
 
 @dataclass
@@ -292,6 +293,59 @@ class DikeTraject(BaseLinearObject):
         _step_pf_array = get_step_traject_pf(self)[:, _year_step_index]
         _step_index = np.argmax(_step_pf_array < _target_pf)
         return int(_step_index)
+
+
+def get_traject_prob_fast(traject_reliability: dict):
+    """Calculate"""
+
+    def convert_beta_to_pf_per_section(traject_reliability):
+        time = [t for section in traject_reliability.values() for t in section["time"]]
+        beta = [b for section in traject_reliability.values() for b in section["beta"]]
+        beta_per_time = {
+            t: [b for b, t_ in zip(beta, time) if t_ == t] for t in set(time)
+        }
+        pf_per_time = {
+            t: list(beta_to_pf(np.array(beta))) for t, beta in beta_per_time.items()
+        }
+        return pf_per_time
+
+    def compute_overflow(traject_reliability):
+        pf_per_time = convert_beta_to_pf_per_section(traject_reliability)
+        traject_pf_per_time = {t: max(pf) for t, pf in pf_per_time.items()}
+        return traject_pf_per_time
+
+    def compute_piping_stability(traject_reliability):
+        pf_per_time = convert_beta_to_pf_per_section(traject_reliability)
+        traject_pf_per_time = {
+            t: 1 - np.prod(np.subtract(1, pf)) for t, pf in pf_per_time.items()
+        }
+        return traject_pf_per_time
+
+    def compute_revetment(traject_reliability):
+        pf_per_time = convert_beta_to_pf_per_section(traject_reliability)
+        traject_pf_per_time = {t: max(pf) for t, pf in pf_per_time.items()}
+        return traject_pf_per_time
+
+    def compute_system_failure_probability(traject_reliability):
+        result = {}
+        for mechanism, data in traject_reliability.items():
+            if mechanism is MechanismEnum.OVERFLOW:
+                result[mechanism] = compute_overflow(data)
+            elif (
+                    mechanism is MechanismEnum.PIPING
+                    or mechanism is MechanismEnum.STABILITY_INNER
+            ):
+                result[mechanism] = compute_piping_stability(data)
+            elif mechanism is MechanismEnum.REVETMENT:
+                result[mechanism] = compute_revetment(data)
+            else:
+                raise ValueError(f"Mechanism {mechanism} not recognized.")
+        return result
+
+
+    _traject_probability = compute_system_failure_probability(traject_reliability)
+    _traject_probs = calculate_traject_probability(_traject_probability)
+    return _traject_probs
 
 
 def get_traject_prob(beta_df: DataFrame) -> tuple[np.array, dict]:

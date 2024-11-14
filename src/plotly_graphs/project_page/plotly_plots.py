@@ -4,10 +4,11 @@ import plotly.graph_objects as go
 
 from src.constants import REFERENCE_YEAR, CLASSIC_PLOTLY_COLOR_SEQUENCE, PROJECTS_COLOR_SEQUENCE, ResultType
 from src.linear_objects.dike_section import DikeSection
-from src.linear_objects.dike_traject import get_traject_prob, get_initial_assessment_df, DikeTraject
+from src.linear_objects.dike_traject import get_traject_prob, get_initial_assessment_df, DikeTraject, \
+    get_traject_prob_fast
 from src.linear_objects.project import DikeProject
 from src.utils.traject_probability import get_updated_beta_df
-from src.utils.utils import pf_to_beta, interpolate_beta_values, beta_to_pf
+from src.utils.utils import pf_to_beta, interpolate_beta_values, beta_to_pf, get_traject_reliability
 
 
 def plot_cost_vs_time_projects(projects: list[DikeProject]):
@@ -80,17 +81,27 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
             # get all the sections of the project that are part of the traject
             dike_sections = [section for section in project.dike_sections if
                              section.parent_traject_name == dike_traject.name]
+            print(project.name)
+            print(dike_sections)
+            if dike_sections == []:
+                years = np.linspace(year_start, year_end, year_end - year_start + 1)
+                betas = interpolate_beta_values(years, _traject_betas, years_beta)
 
-            _beta_df = get_updated_beta_df(dike_sections, _beta_df)
+                years_ini = np.concatenate((years_ini, years))
+                betas_ini = np.concatenate((betas_ini, betas))
+            else:
 
-            _traject_pf = get_traject_prob(_beta_df)[0]
-            _traject_betas = pf_to_beta(_traject_pf)[0]
+                # _beta_df = get_updated_beta_df(dike_sections, _beta_df)
+                _traject_reliability = get_traject_reliability(dike_sections, 'veiligheidsrendement')
+                _traject_pf = get_traject_prob_fast(_traject_reliability)[1]
 
-            years = np.linspace(year_start, year_end, year_end - year_start + 1)
-            betas = interpolate_beta_values(years, _traject_betas, years_beta)
+                _traject_betas = pf_to_beta(_traject_pf)
 
-            years_ini = np.concatenate((years_ini, years))
-            betas_ini = np.concatenate((betas_ini, betas))
+                years = np.linspace(year_start, year_end, year_end - year_start + 1)
+                betas = interpolate_beta_values(years, _traject_betas, years_beta)
+
+                years_ini = np.concatenate((years_ini, years))
+                betas_ini = np.concatenate((betas_ini, betas))
 
         if result_type == ResultType.RELIABILITY.name:
             y = betas_ini

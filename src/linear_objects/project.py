@@ -2,8 +2,10 @@ from dataclasses import dataclass
 from typing import Optional
 
 from src.linear_objects.dike_section import DikeSection
-from src.linear_objects.dike_traject import DikeTraject, get_initial_assessment_df, get_traject_prob
+from src.linear_objects.dike_traject import DikeTraject, get_initial_assessment_df, get_traject_prob, \
+    get_traject_prob_fast
 from src.utils.traject_probability import get_updated_beta_df
+from src.utils.utils import get_traject_reliability
 
 
 @dataclass
@@ -88,9 +90,12 @@ def calc_prob_failure_before_reinforcement(dike_sections: list[DikeSection]) -> 
     :param dike_sections: list of DikeSection objects
     :return: probability of failure for the first time step (year 2025)
     """
-    _beta_df = get_initial_assessment_df(dike_sections)
-    _traject_pf, _ = get_traject_prob(_beta_df)
-    return _traject_pf[0][0]
+    # _beta_df = get_initial_assessment_df(dike_sections)
+    # _traject_pf, _ = get_traject_prob(_beta_df)
+
+    _traject_reliability = get_traject_reliability(dike_sections, 'initial')
+    _traject_pf = get_traject_prob_fast(_traject_reliability)[1]
+    return _traject_pf[0]
 
 
 def calc_prob_failure_after_reinforcement(dike_sections: list[DikeSection]) -> float:
@@ -102,11 +107,14 @@ def calc_prob_failure_after_reinforcement(dike_sections: list[DikeSection]) -> f
     Returns: probability of failure for the first time step (year 2025)
 
     """
-    _beta_df_ini = get_initial_assessment_df(dike_sections)
-    _beta_df = get_updated_beta_df(dike_sections, _beta_df_ini)
-
-    _traject_pf = get_traject_prob(_beta_df)[0]
-    return _traject_pf[0][0]
+    # _beta_df_ini = get_initial_assessment_df(dike_sections)
+    # _beta_df = get_updated_beta_df(dike_sections, _beta_df_ini)
+    #
+    # _traject_pf = get_traject_prob(_beta_df)[0]
+    #
+    _traject_reliability = get_traject_reliability(dike_sections, 'veiligheidsrendement')
+    _traject_pf = get_traject_prob_fast(_traject_reliability)[1]
+    return _traject_pf[0]
 
 
 def calc_area_stats(projects: list[DikeProject], trajects: dict[str, DikeTraject]):
@@ -130,12 +138,17 @@ def calc_area_stats(projects: list[DikeProject], trajects: dict[str, DikeTraject
 
     for dike_traject in trajects.values():
         damage += dike_traject.flood_damage
-        _beta_df_ini = get_initial_assessment_df(dike_traject.dike_sections)
-        _traject_pf, _ = get_traject_prob(_beta_df_ini)
-        current_risk += dike_traject.flood_damage * _traject_pf[0][0]
+        # _beta_df_ini = get_initial_assessment_df(dike_traject.dike_sections)
+        # _traject_pf, _ = get_traject_prob(_beta_df_ini)
 
-        _beta_df = get_updated_beta_df(dike_traject.dike_sections, _beta_df_ini)
-        _traject_pf = get_traject_prob(_beta_df)[0]
-        future_risk += dike_traject.flood_damage * _traject_pf[0][0]  # this is the faalkans at year 2025! be aware
+        _traject_reliability = get_traject_reliability(dike_traject.dike_sections, 'initial')
+        _traject_pf = get_traject_prob_fast(_traject_reliability)[1]
+        current_risk += dike_traject.flood_damage * _traject_pf[0]
+
+        # _beta_df = get_updated_beta_df(dike_traject.dike_sections, _beta_df_ini)
+        # _traject_pf = get_traject_prob(_beta_df)[0]
+        _traject_reliability = get_traject_reliability(dike_traject.dike_sections, 'veiligheidsrendement')
+        _traject_pf = get_traject_prob_fast(_traject_reliability)[1]
+        future_risk += dike_traject.flood_damage * _traject_pf[0]  # this is the faalkans at year 2025! be aware
 
     return cost, current_risk, future_risk
