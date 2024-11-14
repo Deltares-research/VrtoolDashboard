@@ -16,6 +16,7 @@ def plot_cost_vs_time_projects(projects: list[DikeProject]):
     start_program = 2025
     end_program = 2100
     years = list(range(2025, max([p.end_year for p in projects]) + 1))
+    projects = sorted(projects, key=lambda x: x.end_year)
 
     for i, project in enumerate(projects):
         _color = PROJECTS_COLOR_SEQUENCE[i]
@@ -64,6 +65,7 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
         color_traject = CLASSIC_PLOTLY_COLOR_SEQUENCE[index]
 
         dike_traject = DikeTraject.deserialize(traject_data)
+
         _beta_df = get_initial_assessment_df(dike_traject.dike_sections)
         _traject_pf, _ = get_traject_prob(_beta_df)
         _traject_betas = pf_to_beta(_traject_pf)[0]
@@ -73,35 +75,29 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
         years_beta = np.array(dike_traject.dike_sections[0].years) + REFERENCE_YEAR
         betas_ini = interpolate_beta_values(years_ini, _traject_betas, years_beta)
 
-        # Loop through projects and update betas
+        sections_to_reinforce=[]
         for index, project in enumerate(projects):
             year_start = projects[index].end_year
             year_end = projects[index + 1].end_year if index < len(projects) - 1 else 2100
+            # get all the section of the project that are part of the traject
+            dike_section_project_list = [section for section in project.dike_sections if
+                                        section.parent_traject_name == dike_traject.name]
+            sections_to_reinforce.extend(dike_section_project_list)
+            _unreinforced_sections = [section for section in dike_traject.dike_sections if
+                                      section.name not in [s.name for s in sections_to_reinforce]]
 
-            # get all the sections of the project that are part of the traject
-            dike_sections = [section for section in project.dike_sections if
-                             section.parent_traject_name == dike_traject.name]
-            print(project.name)
-            print(dike_sections)
-            if dike_sections == []:
-                years = np.linspace(year_start, year_end, year_end - year_start + 1)
-                betas = interpolate_beta_values(years, _traject_betas, years_beta)
+            _traject_reliability = get_traject_reliability(sections_to_reinforce, 'partial',
+                                                                   unreinforced_sections=_unreinforced_sections)
+            _traject_pf = get_traject_prob_fast(_traject_reliability)[1]
 
-                years_ini = np.concatenate((years_ini, years))
-                betas_ini = np.concatenate((betas_ini, betas))
-            else:
+            _traject_betas = pf_to_beta(_traject_pf)
 
-                # _beta_df = get_updated_beta_df(dike_sections, _beta_df)
-                _traject_reliability = get_traject_reliability(dike_sections, 'veiligheidsrendement')
-                _traject_pf = get_traject_prob_fast(_traject_reliability)[1]
+            years = np.linspace(year_start, year_end, year_end - year_start + 1)
+            betas = interpolate_beta_values(years, _traject_betas, years_beta)
 
-                _traject_betas = pf_to_beta(_traject_pf)
+            years_ini = np.concatenate((years_ini, years))
+            betas_ini = np.concatenate((betas_ini, betas))
 
-                years = np.linspace(year_start, year_end, year_end - year_start + 1)
-                betas = interpolate_beta_values(years, _traject_betas, years_beta)
-
-                years_ini = np.concatenate((years_ini, years))
-                betas_ini = np.concatenate((betas_ini, betas))
 
         if result_type == ResultType.RELIABILITY.name:
             y = betas_ini
@@ -130,7 +126,7 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
             risk = beta_to_pf(betas_ini) * dike_traject.flood_damage
             discount_rate = 0.03
             risk_norm = [dike_traject.lower_bound_value * dike_traject.flood_damage] / (1 + discount_rate) ** (
-                        years_ini - 2025)
+                    years_ini - 2025)
             y = risk / risk_norm
             y_ondergrens = None
             name = "Risicofactor"
@@ -182,7 +178,7 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
             opacity=0,
             marker=dict(color=color, opacity=0),
             hoverinfo="text",
-            showlegend = False,
+            showlegend=False,
         ))
         # add annotation in the middle of the shape:
         # THIS IS BUGGY
@@ -193,6 +189,8 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
         #     showarrow=False,
         #     font=dict(color="black", size=18),
         # )
+
+    projects = sorted(projects, key=lambda x: x.end_year)
 
     if result_type == ResultType.RELIABILITY.name:
         y0_ini = 0
