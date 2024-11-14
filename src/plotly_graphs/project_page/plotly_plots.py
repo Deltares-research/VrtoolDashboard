@@ -3,11 +3,8 @@ import pandas as pd
 import plotly.graph_objects as go
 
 from src.constants import REFERENCE_YEAR, CLASSIC_PLOTLY_COLOR_SEQUENCE, PROJECTS_COLOR_SEQUENCE, ResultType
-from src.linear_objects.dike_section import DikeSection
-from src.linear_objects.dike_traject import get_traject_prob, get_initial_assessment_df, DikeTraject, \
-    get_traject_prob_fast
+from src.linear_objects.dike_traject import DikeTraject, get_traject_prob_fast
 from src.linear_objects.project import DikeProject
-from src.utils.traject_probability import get_updated_beta_df
 from src.utils.utils import pf_to_beta, interpolate_beta_values, beta_to_pf, get_traject_reliability
 
 

@@ -296,7 +296,14 @@ class DikeTraject(BaseLinearObject):
 
 
 def get_traject_prob_fast(traject_reliability: dict):
-    """Calculate"""
+    """Calculate the traject probability of failure for the given traject reliability data for the whole time horizon
+    
+    Args:
+        traject_reliability: dictionary with the reliability data for each mechanism
+        Example: "Overflow": {"time": [2025, 2030, 2035], "beta": [0.1, 0.2, 0.3]}
+        
+        
+    """
 
     def convert_beta_to_pf_per_section(traject_reliability):
         time = [t for section in traject_reliability.values() for t in section["time"]]

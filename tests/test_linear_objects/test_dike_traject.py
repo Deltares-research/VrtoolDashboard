@@ -5,8 +5,7 @@ import numpy as np
 from vrtool.common.enums import MechanismEnum
 
 from src.linear_objects.dike_section import DikeSection
-from src.linear_objects.dike_traject import DikeTraject, get_traject_prob, get_initial_assessment_df, \
-    get_traject_prob_fast
+from src.linear_objects.dike_traject import DikeTraject, get_traject_prob_fast
 from src.utils.utils import get_traject_reliability
 
 

@@ -2,9 +2,7 @@ from dataclasses import dataclass
 from typing import Optional
 
 from src.linear_objects.dike_section import DikeSection
-from src.linear_objects.dike_traject import DikeTraject, get_initial_assessment_df, get_traject_prob, \
-    get_traject_prob_fast
-from src.utils.traject_probability import get_updated_beta_df
+from src.linear_objects.dike_traject import DikeTraject, get_traject_prob_fast
 from src.utils.utils import get_traject_reliability
 
 
