@@ -66,9 +66,9 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
 
         dike_traject = DikeTraject.deserialize(traject_data)
 
-        _beta_df = get_initial_assessment_df(dike_traject.dike_sections)
-        _traject_pf, _ = get_traject_prob(_beta_df)
-        _traject_betas = pf_to_beta(_traject_pf)[0]
+        _traject_reliability = get_traject_reliability(dike_traject.dike_sections, 'initial')
+        _traject_pf = get_traject_prob_fast(_traject_reliability)[1]
+        _traject_betas = pf_to_beta(_traject_pf)
 
         # Initialize years and betas
         years_ini = np.linspace(2025, projects[0].end_year, projects[0].end_year - 2025 + 1)
