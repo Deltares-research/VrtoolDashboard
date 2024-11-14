@@ -73,9 +73,9 @@ def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
 
             return html.Div(), True, json_content, _value_selection_run_dropwdown, _options,
         except:
-            return html.Div("Geen bestand geüpload"), False, {}, "", []
+            return html.Small("Geen bestand geüpload"), False, {}, "", []
     else:
-        return html.Div("Geen bestand geüpload"), False, dash.no_update, "", []
+        return html.Small("Geen bestand geüpload"), False, dash.no_update, "", []
 
 
 @callback([

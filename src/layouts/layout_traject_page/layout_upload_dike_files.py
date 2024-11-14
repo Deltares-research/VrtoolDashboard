@@ -25,7 +25,7 @@ layout_number_field_optimization_stop_criteria = html.Div(
 
 layout_button_recompute_greedy_steps = html.Div(children=[
     dbc.Button(
-        "Recompute", id=BUTTON_RECOMPUTE_GREEDY_STEPS, className="ml-auto"),
+        "Ververs resultaten", id=BUTTON_RECOMPUTE_GREEDY_STEPS, className="ml-auto"),
     dcc.Input(id=BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, value=0, type='hidden'), ],
     hidden=True,
     id=DIV_BUTTON_RECOMPUTE_GREEDY_STEPS_ID
@@ -33,19 +33,19 @@ layout_button_recompute_greedy_steps = html.Div(children=[
 
 layout_button_save_run_as_json = html.Div(
     children=[
-        dmc.TextInput(label="Run naam", id=RUN_SAVE_NAME_ID, style={"width": "50%"}),
+        dmc.TextInput(placeholder="Bestandsnaam", id=RUN_SAVE_NAME_ID),
         dbc.Button("Opslaan", id=BUTTON_SAVE_RUN_AS_JSON, color="primary", className="mr-1"),
         dcc.Download(id=DOWNLOAD_RUN_JSON_ID),
     ]
 )
 
 layout_traject_select = html.Div([
-
+    html.Div("Selecteer een database en hoe de resultaten moeten worden weergegeven"),
     dcc.Upload(
         id='upload-data-config-json',
         children=html.Div([
             '',
-            html.A('Selecteer een bestand config.json')
+            html.A('Importeer een configuratiebestand (config.json)')
         ]),
         style={
             'width': '100%',
@@ -90,6 +90,7 @@ layout_traject_select = html.Div([
                 searchable=True,  # allow user-searching of dropdown values
                 search_value='',  # remembers the value searched in dropdown
                 clearable=True,  # allow user to removes the selected value
+                placeholder='Selecteer een berekening',  # gray, default text shown when no option is selected
                 style={'width': "100%"},
 
             ),
@@ -101,6 +102,8 @@ layout_traject_select = html.Div([
     ]),
     # add vertical space
     html.Br(),
+    html.Hr(style={"border-top": "2px solid black"}),
+    html.Div("Geef aan welke oplossing moet worden weergegeven"),
     dbc.Row([
         dbc.Col([layout_radio_greedy_optimization_stop_criteria], md=4),
         dbc.Col([layout_number_field_optimization_stop_criteria], md=4),
@@ -108,6 +111,8 @@ layout_traject_select = html.Div([
 
     ]),
     html.Br(),  # add vertical space
+    html.Hr(style={"border-top": "2px solid black"}),
+    html.Div("Opslaan van de resultaten in JSON formaat"),
     dbc.Row([layout_button_save_run_as_json]),
-
+    #insert bold line
 ])

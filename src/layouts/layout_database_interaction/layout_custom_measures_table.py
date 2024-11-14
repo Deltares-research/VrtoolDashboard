@@ -9,7 +9,7 @@ from src.constants import Mechanism
 
 columns_defs = [
     {"field": "measure_name",
-     "headerName": "Maatregel naam",
+     "headerName": "Naam maatregel",
      "editable": True,
      "initialWidth": 180},
 
@@ -18,7 +18,7 @@ columns_defs = [
     #  "editable": True,
     #  "initialWidth": 100, },
     {"field": "section_name",
-     "headerName": "Sectie",
+     "headerName": "Dijkvak",
      "editable": True,
      'cellEditor': 'agSelectCellEditor',
      'cellEditorParams': {
@@ -27,7 +27,7 @@ columns_defs = [
      "initialWidth": 140, },
 
     {"field": "mechanism",
-     "headerName": "Mechanism",
+     "headerName": "Mechanisme",
      "editable": True,
      'cellEditor': 'agSelectCellEditor',
      'cellEditorParams': {
@@ -41,14 +41,14 @@ columns_defs = [
      "initialWidth": 100, },
 
     {"field": "cost",
-     "headerName": "Kost (€)",
+     "headerName": "Kosten (€)",
      "editable": True,
      "initialWidth": 140, },
 
     {"field": "beta",
-     "headerName": "Beta",
+     "headerName": "Betrouwbaarheid (β)",
      "editable": True,
-     "initialWidth": 100, },
+     "initialWidth": 140, },
 
 ]
 df = pd.DataFrame(columns=[col["field"] for col in columns_defs],
@@ -61,17 +61,16 @@ left_side = html.Div([
     # add text
     dcc.Markdown(
         '''
-        Met de onderstaande tabel, kunt u custom maatregelen aan de database toevoegen.
-
-        Geef een naam voor de optimizatie run en klik op de knop "Custom maatregel toevoegen" om de optimalisatie te starten.
+        Met de onderstaande tabel, kunt u custom maatregelen aan de database toevoegen en verwijderen.
         '''
     ),
     dbc.Row([
-        dbc.Col([html.Button("Add Row", id="add-row-button")], md=1),
-        dbc.Col([html.Button("Copy Row", id="copy-row-button")], md=1),
-        dbc.Col([html.Button("Del Row", id="delete-row-button")]),
+        dbc.Col(dbc.Button("Voeg rij toe", id="add-row-button", color="light", className="me-2", style={"width": "100%", "height": "60px"}), md=2),
+        dbc.Col(dbc.Button("Kopieer geselecteerde rij", id="copy-row-button", color="light", className="me-2", style={"width": "100%", "height": "60px"}), md=2),
+        dbc.Col(dbc.Button("Verwijder rij", id="delete-row-button", color="light", className="me-2", style={"width": "100%", "height": "60px"}), md=2),
     ]),
-
+    #add white space
+    html.Br(),
     dag.AgGrid(
         id=EDITABLE_CUSTOM_MEASURE_TABLE_ID,
         rowData=df.to_dict('records'),
@@ -82,10 +81,12 @@ left_side = html.Div([
         dashGridOptions={"rowSelection": "multiple", "enableCellTextSelection": True, "ensureDomOrder": True},
 
     ),
+    #add white space
+    html.Br(),
     dbc.Row([
         dbc.Col([dbc.Button("Custom maatregel toevoegen", id=ADD_CUSTOM_MEASURE_BUTTON_ID, color="primary",
                             className="mr-1")], md=3),
-        dbc.Col([dbc.Button("Remove custom maatereglen from database", id=REMOVE_CUSTOM_MEASURE_BUTTON_ID,
+        dbc.Col([dbc.Button("Verwijder custom maatregelen uit database", id=REMOVE_CUSTOM_MEASURE_BUTTON_ID,
                             color="primary", className="mr-1")], md=3),
     ]),
 

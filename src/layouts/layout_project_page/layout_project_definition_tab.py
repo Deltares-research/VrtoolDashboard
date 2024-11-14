@@ -26,12 +26,12 @@ columns_defs_1 = [
      "initialWidth": 200},
 
     {"field": "run_name",
-     "headerName": "Run naam",
+     "headerName": "Naam berekening",
      "editable": False,
      "initialWidth": 200},
 
     {"field": "active",
-     "headerName": "Aktieveer",
+     "headerName": "Activeer",
      "cellRenderer": "DBC_Switch",
      "editable": True,
      "CellRendererParams": {"onColor": "success", "offColor": "danger"},
@@ -50,12 +50,12 @@ columns_defs_2 = [
      "initialWidth": 150},
 
     {"field": "start_year",
-     "headerName": "Jaar begin",
+     "headerName": "Startjaar",
      "editable": False,
      "initialWidth": 100},
 
     {"field": "end_year",
-     "headerName": "Jaar eind",
+     "headerName": "Eindjaar",
      "editable": False,
      "initialWidth": 100},
 
@@ -88,7 +88,7 @@ table_project_summary = dag.AgGrid(
 
 multi_select = dmc.MultiSelect(
     label="Selecteer dijkvakken",
-    placeholder="Select all you like!",
+    placeholder="",
     id=MULTI_SELECT_SECTION_FOR_PROJECT_ID,
     value=[],
     data=[
@@ -110,12 +110,21 @@ layout_radio_helper_map_switch = dbc.RadioItems(
 )
 
 left_side = [
+    #add white space
+    Br(),
+    dcc.Markdown(
+        '''
 
+        Selecteer hieronder of een json-bestand van 1 of meerdere dijktrajecten, of een json-bestand wat eerder is opgeslagen met daarin de projectdefinitie & trajectgegevens. 
+        
+        Let op: het gaat hier om json-bestanden gemaakt met het dashboard (dus geen configuratiebestanden).
+        '''
+    ),
     dcc.Upload(
         id='upload-dike-data',
         children=html.Div([
             '',
-            html.A('Selecteer een bestand dike_data.json')
+            html.A('Upload een json-bestand van een traject')
         ]),
         style={
             'width': '100%',
@@ -139,7 +148,7 @@ left_side = [
         id=UPLOAD_SAVED_PROJECTS,
         children=html.Div([
             '',
-            html.A('Upload een project bestand .json')
+            html.A('Upload een json-bestand met projectdefinities')
         ]),
         style={
             'width': '100%',
@@ -160,25 +169,25 @@ left_side = [
     dbc.Accordion([
         dbc.AccordionItem(
             [table_importe_dike_data],
-            title='Geimporteerde runs',
+            title='Geimporteerde berekeningen',
         ),
         dbc.AccordionItem(
             [
                 dmc.Group([
-                    dmc.TextInput(label="Project naam", id=PROJECT_NAME_INPUT_FIELD_ID, style={"width": "15%"}),
+                    dmc.TextInput(label="Naam project", id=PROJECT_NAME_INPUT_FIELD_ID, style={"width": "15%"}),
                     multi_select,
                     dmc.NumberInput(id=PROJECT_START_YEAR_INPUT_FIELD_ID, min=2025, max=2125, step=5,
-                                    label="Jaar begin",
+                                    label="Startjaar",
                                     style={"width": "11%"}),
-                    dmc.NumberInput(id=PROJECT_END_YEAR_INPUT_FIELD_ID, min=2025, max=2125, step=5, label="Jaar eind",
+                    dmc.NumberInput(id=PROJECT_END_YEAR_INPUT_FIELD_ID, min=2025, max=2125, step=5, label="Eindjaar",
                                     style={"width": "11%"}),
                     dbc.Alert(children="", id=ALERT_PROJECT_CREATION_ID, color="danger", is_open=False,
                               dismissable=True),
-                    dmc.Button("Maak project aan", id=ADD_PROJECT_BUTTON_ID),
+                    dmc.Button("Maak project", id=ADD_PROJECT_BUTTON_ID),
                     dmc.Button("Update project", id=UPDATE_PROJECT_BUTTON_ID),
                     dmc.Button("Verwijder project", id=DELETE_PROJECT_BUTTON_ID),
 
-                ]),
+                ],align = "top"),
                 dmc.Group([
                     table_project_summary,
                     layout_download_projects,
@@ -186,7 +195,7 @@ left_side = [
                 ])
 
             ],
-            title='Projects overzicht')
+            title='Overzicht projecten')
     ]),
 
 ]
