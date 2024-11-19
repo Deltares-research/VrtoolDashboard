@@ -90,7 +90,6 @@ class TestCallbackProgramPageVisualization:
 
         # 2. Call
         _fig = projects_reliability_over_time(_projects, _imported_runs_data, ResultType.RISK_FACTOR.name)
-        _fig.show()
 
         # 3. Assert
         assert isinstance(_fig, Figure)

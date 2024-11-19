@@ -154,30 +154,28 @@ def update_table_comparison_measures(imported_runs: dict, table_imported_runs_da
     Returns:
 
     """
-    data = []
-    if imported_runs is None:
+    if imported_runs is None or len(imported_runs) < 2:
         return dash.no_update, dash.no_update
 
-    if len(imported_runs) < 2:
-        return dash.no_update, dash.no_update
+    # Initialize variables
+    id_1, id_2 = None, None
 
-    id_1, id_2, i = None, None, 0
-    while id_1 is None or id_2 is None:
-        if table_imported_runs_data[i]['active']:
+    # Iterate through the data to find the first two active items
+    for i, item in enumerate(table_imported_runs_data):
+        if item.get('active'):
             if id_1 is None:
                 id_1 = i
             elif id_2 is None:
                 id_2 = i
-        i += 1
-        if i > len(table_imported_runs_data):
-            break
+                break  # Exit loop once both IDs are found
+
+
+    if id_1 is None or id_2 is None:
+        return dash.no_update, dash.no_update
 
     dike_traject_1 = DikeTraject.deserialize(list(imported_runs.values())[id_1])
     dike_traject_2 = DikeTraject.deserialize(list(imported_runs.values())[id_2])
-
-    def convert_measure_type_list_to_str(list_measure_type: list) -> str:
-        return ", ".join(list_measure_type)
-
+    data = []
     for section_1, section_2 in zip(dike_traject_1.dike_sections, dike_traject_2.dike_sections):
         data.append({
             "section_name": section_1.name,

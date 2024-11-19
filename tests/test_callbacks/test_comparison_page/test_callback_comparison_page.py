@@ -168,7 +168,7 @@ class TestCallbackComparisonPage:
 
         # 2. Define callback
         def run_callback():
-            return update_table_comparison_measures(_imported_runs, _table_data)
+            return update_table_comparison_measures(_imported_runs, _table_data, dummy={})
 
         ctx = copy_context()
         output = ctx.run(run_callback)
