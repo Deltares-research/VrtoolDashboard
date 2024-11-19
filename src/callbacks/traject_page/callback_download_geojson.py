@@ -27,6 +27,7 @@ def download_traject_run_json(dike_traject_data: dict, n_clicks: int, run_name: 
         return dash.no_update
 
     else:
+        dike_traject_data["run_name"] = run_name
         content = json.dumps(dike_traject_data)
         return dict(content=content, filename=f"{run_name}.json")
 

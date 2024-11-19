@@ -138,24 +138,44 @@ def make_map_comparison_measure(imported_runs: dict, table_data: list[dict]):
     Output(TABLE_COMPARISON_MEASURES, "rowData"),
     Output(TABLE_COMPARISON_MEASURES, "columnDefs"),
     [
-        Input(STORED_RUNS_COMPARISONS_DATA, "data"),
+        State(STORED_RUNS_COMPARISONS_DATA, "data"),
         Input(EDITABLE_COMPARISON_TABLE_ID, "rowData"),
+        Input(EDITABLE_COMPARISON_TABLE_ID, "cellValueChanged")
     ],
 )
-def update_table_comparison_measures(imported_runs: dict, table_imported_runs_data: list[dict]):
+def update_table_comparison_measures(imported_runs: dict, table_imported_runs_data: list[dict], dummy: dict):
+    """
+
+    Args:
+        imported_runs:
+        table_imported_runs_data:
+        dummy: KEEP THIS ONE, otherwise the callback does not trigger when editing the table
+
+    Returns:
+
+    """
+    if imported_runs is None or len(imported_runs) < 2:
+        return dash.no_update, dash.no_update
+
+    # Initialize variables
+    id_1, id_2 = None, None
+
+    # Iterate through the data to find the first two active items
+    for i, item in enumerate(table_imported_runs_data):
+        if item.get('active'):
+            if id_1 is None:
+                id_1 = i
+            elif id_2 is None:
+                id_2 = i
+                break  # Exit loop once both IDs are found
+
+
+    if id_1 is None or id_2 is None:
+        return dash.no_update, dash.no_update
+
+    dike_traject_1 = DikeTraject.deserialize(list(imported_runs.values())[id_1])
+    dike_traject_2 = DikeTraject.deserialize(list(imported_runs.values())[id_2])
     data = []
-    if imported_runs is None:
-        return dash.no_update, dash.no_update
-
-    if len(imported_runs) < 2:
-        return dash.no_update, dash.no_update
-
-    dike_traject_1 = DikeTraject.deserialize(list(imported_runs.values())[0])
-    dike_traject_2 = DikeTraject.deserialize(list(imported_runs.values())[1])
-
-    def convert_measure_type_list_to_str(list_measure_type: list) -> str:
-        return ", ".join(list_measure_type)
-
     for section_1, section_2 in zip(dike_traject_1.dike_sections, dike_traject_2.dike_sections):
         data.append({
             "section_name": section_1.name,

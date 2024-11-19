@@ -19,7 +19,7 @@ columns_defs_1 = [
 
     {"field": "run_name",
      "headerName": "Naam berekening",
-     "editable": False,
+     "editable": True,
      "initialWidth": 200},
 
     {"field": "active",
@@ -38,8 +38,10 @@ table_imported_dike_data = dag.AgGrid(
                    "wrapHeaderText": True,
                    "autoHeaderHeight": True, },
     dashGridOptions={"rowSelection": "multiple", "enableCellTextSelection": True, "ensureDomOrder": True},
-    persistence=True,
-    persistence_type="session",
+
+
+    # persistence=True,
+    # persistence_type="session",
 
 )
 

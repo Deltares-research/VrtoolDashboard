@@ -218,10 +218,12 @@ def delete_project(n_clicks: int, project_name: str, stored_project_data: list) 
 
 @callback(Output(MULTI_SELECT_SECTION_FOR_PROJECT_ID, "value"),
           Output(PROJECT_NAME_INPUT_FIELD_ID, "value"),
+          Output(PROJECT_START_YEAR_INPUT_FIELD_ID, "value"),
+            Output(PROJECT_END_YEAR_INPUT_FIELD_ID, "value"),
           Input(TABLE_PROJECT_SUMMARY_ID, "selectedRows"),
           State(STORED_PROJECT_OVERVIEW_DATA, "data"),
           )
-def update_section_selection_on_click_event(selected_row: dict, project_data_overview) -> tuple[list[str], str]:
+def update_section_selection_on_click_event(selected_row: dict, project_data_overview) -> tuple[list[str], str, int, int]:
     """
     Update the selected sections in the multi select dropdown when a row is selected in the project overview table.
     :param selected_row:
@@ -229,15 +231,14 @@ def update_section_selection_on_click_event(selected_row: dict, project_data_ove
     :return:
     """
     if selected_row is None:
-        return dash.no_update, dash.no_update
-    if selected_row == []:
-        return dash.no_update
+        return dash.no_update, dash.no_update, dash.no_update, dash.no_update
+    if not selected_row:
+        return dash.no_update, dash.no_update, dash.no_update, dash.no_update
     selected_project_name = selected_row[0]['project']
     for project in project_data_overview:
         if project['project'] == selected_project_name:
-            selected_sections = project['sections']
-            return selected_sections, selected_project_name
-    return dash.no_update, dash.no_update
+            return project['sections'], selected_project_name, project['start_year'], project['end_year']
+    return dash.no_update, dash.no_update, dash.no_update, dash.no_update
 
 
 @callback(
