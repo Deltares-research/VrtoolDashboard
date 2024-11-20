@@ -4,6 +4,7 @@ import dash_bootstrap_components as dbc
 from src.component_ids import OVERVIEW_COMPARISON_MAP_ID, RUNS_COMPARISON_GRAPH_ID, RUNS_COMPARISON_GRAPH_TIME_ID, \
     MEASURE_COMPARISON_MAP_ID
 from src.layouts.layout_comparison_page.layout_table_comparison import table_ag_grid_comparison_measures
+from src.layouts.layout_comparison_page.layout_table_comparison_order_section import table_ag_grid_order_measures
 from src.layouts.layout_traject_page.layout_radio_items import layout_radio_result_type_comparison_page
 from src.layouts.layout_traject_page.layout_sliders import layout_year_slider
 from src.plotly_graphs.pf_length_cost import plot_default_scatter_dummy
@@ -88,4 +89,12 @@ def layout_project_output_tab_five() -> html.Div:
         children=[
 
             table_ag_grid_comparison_measures,
+        ])
+
+
+def layout_project_output_tab_six() -> html.Div:
+    return html.Div(
+        children=[
+
+            table_ag_grid_order_measures,
         ])
