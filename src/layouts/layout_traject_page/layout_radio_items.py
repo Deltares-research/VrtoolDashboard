@@ -86,7 +86,7 @@ layout_radio_greedy_optimization_stop_criteria = dbc.RadioItems(
 layout_radio_helper_map_switch = dbc.RadioItems(
     id="select_helper_map_switch",
     options=[{"label": "Simpel", "value": "SIMPLE"},
-             {"label": "Gedetaileerd", "value": "DETAILED"},
+             {"label": "Gedetailleerd", "value": "DETAILED"},
              ],
     value="SIMPLE",
     inline=True

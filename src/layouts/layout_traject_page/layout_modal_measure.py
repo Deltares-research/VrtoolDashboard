@@ -6,7 +6,7 @@ from src.plotly_graphs.pf_length_cost import plot_default_scatter_dummy
 
 modal_measure_reliability = dbc.Modal(
     [
-        dbc.ModalBody("Maateregelen"),
+        dbc.ModalBody("Maatregelen"),
 
         html.Div(
             children=[

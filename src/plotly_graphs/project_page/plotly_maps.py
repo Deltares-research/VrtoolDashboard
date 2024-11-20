@@ -26,6 +26,8 @@ def plot_project_overview_map(projects: list[DikeProject], trajects: Optional[li
     sections = []
     if len(projects) == 0:
         return plot_default_overview_map_dummy()
+    projects = sorted(projects, key=lambda x: x.end_year)
+
     for i, project in enumerate(projects):
         _color = PROJECTS_COLOR_SEQUENCE[i]
         for index, section in enumerate(project.dike_sections):

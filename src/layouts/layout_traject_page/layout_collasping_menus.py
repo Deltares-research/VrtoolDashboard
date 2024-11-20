@@ -14,7 +14,7 @@ def make_collapsing_menu(menu_name: str, inner_layouts: list, collapse_id: id, i
         [
             html.Hr(style={"margin": "0px"}),
             dbc.Button(
-                f"{menu_name}",
+                html.Strong(f"{menu_name}"),
                 id=f"collapse_button_{collapse_id}",
                 outline=False,
                 color='white',

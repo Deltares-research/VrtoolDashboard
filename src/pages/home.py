@@ -7,13 +7,18 @@ dash.register_page(__name__, path='/')
 
 layout = html.Div([
 
-    html.H1("Welkom bij het dashboard van Versterkingsaanpak vanuit VR tool 🌊",
+    html.H1("Welkom bij het Dashboard Veiligheidsrendement 🌊",
             style={"textAlign": "center", "marginTop": "100px"}),
 
-    dmc.Text(
-        " Dit dashboard kan worden gebruikt om de resultaten van veiligheidsrendementberekeningen te visualiseren, en deze te vertalen naar de scope van dijkversterkingsprojecten.",
+    html.Div([
+        dcc.Markdown(
+        '''
+        Dit dashboard kan worden gebruikt om de resultaten van veiligheidsrendementberekeningen te visualiseren. Daarnaast kunnen nieuwe optimalisatieberekeningen worden uitgevoerd, en kan op basis van meerdere trajecten een programmering voor meerdere dijktrajecten worden gemaakt. 
+
+        Voor toelichting bij het gebruik wordt verwezen naar de [gebruikershandleiding](https://deltares-research.github.io/VrtoolDocumentation/Gebruikershandleiding/Postprocessing/index.html).
+        ''',
         style={"textAlign": "center", "marginTop": "20px", "marginBottom": "40px"}
-    ),
+    )], style={"width": "50%", "margin": "auto", "marginTop": "20px", "marginBottom": "40px"}),
 
     # Clickable Card Layout
     dbc.Container([
@@ -24,15 +29,14 @@ layout = html.Div([
                         [
                             dbc.CardBody(
                                 [
-                                    html.H4("Traject analyse", className="card-title"),
+                                    html.H4("Analyse per traject", className="card-title"),
                                     dmc.List(
                                         [
-                                            dmc.ListItem("Importeer een dijktraject", className="card-text"),
-                                            dmc.ListItem("Visualiseer de resultaten van de VR optimalisatie",
+                                            dmc.ListItem("Visualiseer de resultaten van een veiligheidsrendementberekening",
                                                          className="card-text"),
-                                            dmc.ListItem("Bekijk de veiligheid van de dijkvakken",
+                                            dmc.ListItem("Bekijk de veiligheid per vak voor en na versterking",
                                                          className="card-text"),
-                                            dmc.ListItem("Bekijk de toegepaste maatregelen", className="card-text"),
+                                            dmc.ListItem("Bekijk welke maatregelen te verwachten zijn", className="card-text"),
                                         ]
                                     ),
 
@@ -52,13 +56,14 @@ layout = html.Div([
                         [
                             dbc.CardBody(
                                 [
-                                    html.H4("Gebied analyse ", className="card-title"),
+                                    html.H4("Analyse op gebiedsniveau", className="card-title"),
                                     dmc.List(
                                         [
-                                            dmc.ListItem("Importeer dijktrajecten", className="card-text"),
-                                            dmc.ListItem("Genereer versterking plannen",
+                                            dmc.ListItem("Definieer versterkingsprojecten",
                                                          className="card-text"),
-                                            dmc.ListItem("Visualiseer analytics op gebiedsniveau",
+                                            dmc.ListItem("Visualiseer risicoafname op gebiedsniveau",
+                                                         className="card-text"),
+                                            dmc.ListItem("Inzicht in kosten op programmaniveau",
                                                          className="card-text"),
                                         ]
                                     )
@@ -79,11 +84,13 @@ layout = html.Div([
                         [
                             dbc.CardBody(
                                 [
-                                    html.H4("Vergelijken", className="card-title"),
+                                    html.H4("Vergelijken berekeningen", className="card-title"),
                                     dmc.List(
                                         [
-                                            dmc.ListItem("Importeer meerdere dijktrajecten", className="card-text"),
-                                            dmc.ListItem("Vergelijk de resultaten van de VR optimalisatie",
+                                            dmc.ListItem("Importeer meerdere berekeningen", className="card-text"),
+                                            dmc.ListItem("Vergelijk kosten en faalkans uit optimalisatie",
+                                                         className="card-text"),
+                                            dmc.ListItem("Vergelijk maatregelen van beide berekeningen",
                                                          className="card-text"),
 
                                         ]

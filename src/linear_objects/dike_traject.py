@@ -6,12 +6,13 @@ from typing import Optional
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
+from vrtool.common.enums import MechanismEnum
 
 from src.constants import REFERENCE_YEAR, Mechanism
 from src.linear_objects.base_linear import BaseLinearObject
 from src.linear_objects.dike_section import DikeSection
 
-from src.utils.utils import beta_to_pf, pf_to_beta
+from src.utils.utils import beta_to_pf, pf_to_beta, calculate_traject_probability
 
 
 @dataclass
@@ -163,6 +164,11 @@ class DikeTraject(BaseLinearObject):
                 return section
         raise ValueError(f"Section with name {name} not found")
 
+    def get_sections_in_reinforcement_order(self) -> list[DikeSection]:
+        """Get the sections in the reinforcement order"""
+        return [self.get_section(name) for name in self.reinforcement_order_vr]
+
+
     @staticmethod
     def get_initial_assessment_df(sections: list[DikeSection]) -> DataFrame:
         """Get the initial assessment dataframe from all children sections"""
@@ -294,11 +300,72 @@ class DikeTraject(BaseLinearObject):
         return int(_step_index)
 
 
+def get_traject_prob_fast(traject_reliability: dict):
+    """Calculate the traject probability of failure for the given traject reliability data for the whole time horizon
+    
+    Args:
+        traject_reliability: dictionary with the reliability data for each mechanism
+        Example: "Overflow": {"time": [2025, 2030, 2035], "beta": [0.1, 0.2, 0.3]}
+        
+        
+    """
+
+    def convert_beta_to_pf_per_section(traject_reliability):
+        time = [t for section in traject_reliability.values() for t in section["time"]]
+        beta = [b for section in traject_reliability.values() for b in section["beta"]]
+        beta_per_time = {
+            t: [b for b, t_ in zip(beta, time) if t_ == t] for t in set(time)
+        }
+        pf_per_time = {
+            t: list(beta_to_pf(np.array(beta))) for t, beta in beta_per_time.items()
+        }
+        return pf_per_time
+
+    def compute_overflow(traject_reliability):
+        pf_per_time = convert_beta_to_pf_per_section(traject_reliability)
+        traject_pf_per_time = {t: max(pf) for t, pf in pf_per_time.items()}
+        return traject_pf_per_time
+
+    def compute_piping_stability(traject_reliability):
+        pf_per_time = convert_beta_to_pf_per_section(traject_reliability)
+        traject_pf_per_time = {
+            t: 1 - np.prod(np.subtract(1, pf)) for t, pf in pf_per_time.items()
+        }
+        return traject_pf_per_time
+
+    def compute_revetment(traject_reliability):
+        pf_per_time = convert_beta_to_pf_per_section(traject_reliability)
+        traject_pf_per_time = {t: max(pf) for t, pf in pf_per_time.items()}
+        return traject_pf_per_time
+
+    def compute_system_failure_probability(traject_reliability):
+        result = {}
+        for mechanism, data in traject_reliability.items():
+            if mechanism is MechanismEnum.OVERFLOW:
+                result[mechanism] = compute_overflow(data)
+            elif (
+                    mechanism is MechanismEnum.PIPING
+                    or mechanism is MechanismEnum.STABILITY_INNER
+            ):
+                result[mechanism] = compute_piping_stability(data)
+            elif mechanism is MechanismEnum.REVETMENT:
+                result[mechanism] = compute_revetment(data)
+            else:
+                raise ValueError(f"Mechanism {mechanism} not recognized.")
+        return result
+
+
+    _traject_probability = compute_system_failure_probability(traject_reliability)
+    _traject_probs = calculate_traject_probability(_traject_probability)
+    return _traject_probs
+
+
 def get_traject_prob(beta_df: DataFrame) -> tuple[np.array, dict]:
     """Determines the probability of failure for a traject based on the standardized beta input"""
 
     beta_df = beta_df.reset_index().set_index("mechanism").drop(columns=["name"])
     beta_df = beta_df.drop(columns=["Length", "index"])
+    beta_df = beta_df.astype(float)
     mechanisms = ['Overflow', 'Piping', 'StabilityInner', 'Revetment']
     traject_probs = dict((el, []) for el in mechanisms)
     total_traject_prob = np.empty((1, beta_df.shape[1]))

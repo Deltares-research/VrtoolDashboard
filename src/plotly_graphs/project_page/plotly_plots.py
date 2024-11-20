@@ -3,11 +3,9 @@ import pandas as pd
 import plotly.graph_objects as go
 
 from src.constants import REFERENCE_YEAR, CLASSIC_PLOTLY_COLOR_SEQUENCE, PROJECTS_COLOR_SEQUENCE, ResultType
-from src.linear_objects.dike_section import DikeSection
-from src.linear_objects.dike_traject import get_traject_prob, get_initial_assessment_df, DikeTraject
+from src.linear_objects.dike_traject import DikeTraject, get_traject_prob_fast
 from src.linear_objects.project import DikeProject
-from src.utils.traject_probability import get_updated_beta_df
-from src.utils.utils import pf_to_beta, interpolate_beta_values, beta_to_pf
+from src.utils.utils import pf_to_beta, interpolate_beta_values, beta_to_pf, get_traject_reliability
 
 
 def plot_cost_vs_time_projects(projects: list[DikeProject]):
@@ -15,6 +13,7 @@ def plot_cost_vs_time_projects(projects: list[DikeProject]):
     start_program = 2025
     end_program = 2100
     years = list(range(2025, max([p.end_year for p in projects]) + 1))
+    projects = sorted(projects, key=lambda x: x.end_year)
 
     for i, project in enumerate(projects):
         _color = PROJECTS_COLOR_SEQUENCE[i]
@@ -37,11 +36,11 @@ def plot_cost_vs_time_projects(projects: list[DikeProject]):
             hovertemplate=f"{project.name}<br>Startjaar: {project.start_year}<br>"
                           f"Eindjaar: {project.end_year}<br>"
                           f"Jaarlijkse Kosten: {cost_yearly / 1e6:.2f} mln €<br>"
-                          f"Totaal Kosten: {cost / 1e6:.1f} mln €<extra></extra>"
+                          f"Totale Kosten: {cost / 1e6:.1f} mln €<extra></extra>"
         ))
 
     fig.update_layout(template='plotly_white')
-    fig.update_yaxes(title="Jaarlijkse Kosten (mln €)")
+    fig.update_yaxes(title="Kosten (mln €/jaar)")
     fig.update_xaxes(title="Jaar")
 
     # no gap between bars
@@ -63,28 +62,32 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
         color_traject = CLASSIC_PLOTLY_COLOR_SEQUENCE[index]
 
         dike_traject = DikeTraject.deserialize(traject_data)
-        _beta_df = get_initial_assessment_df(dike_traject.dike_sections)
-        _traject_pf, _ = get_traject_prob(_beta_df)
-        _traject_betas = pf_to_beta(_traject_pf)[0]
+
+        _traject_reliability = get_traject_reliability(dike_traject.dike_sections, 'initial')
+        _traject_pf = get_traject_prob_fast(_traject_reliability)[1]
+        _traject_betas = pf_to_beta(_traject_pf)
 
         # Initialize years and betas
         years_ini = np.linspace(2025, projects[0].end_year, projects[0].end_year - 2025 + 1)
         years_beta = np.array(dike_traject.dike_sections[0].years) + REFERENCE_YEAR
         betas_ini = interpolate_beta_values(years_ini, _traject_betas, years_beta)
 
-        # Loop through projects and update betas
+        sections_to_reinforce=[]
         for index, project in enumerate(projects):
             year_start = projects[index].end_year
             year_end = projects[index + 1].end_year if index < len(projects) - 1 else 2100
+            # get all the section of the project that are part of the traject
+            dike_section_project_list = [section for section in project.dike_sections if
+                                        section.parent_traject_name == dike_traject.name]
+            sections_to_reinforce.extend(dike_section_project_list)
+            _unreinforced_sections = [section for section in dike_traject.dike_sections if
+                                      section.name not in [s.name for s in sections_to_reinforce]]
 
-            # get all the sections of the project that are part of the traject
-            dike_sections = [section for section in project.dike_sections if
-                             section.parent_traject_name == dike_traject.name]
+            _traject_reliability = get_traject_reliability(sections_to_reinforce, 'partial',
+                                                                   unreinforced_sections=_unreinforced_sections)
+            _traject_pf = get_traject_prob_fast(_traject_reliability)[1]
 
-            _beta_df = get_updated_beta_df(dike_sections, _beta_df)
-
-            _traject_pf = get_traject_prob(_beta_df)[0]
-            _traject_betas = pf_to_beta(_traject_pf)[0]
+            _traject_betas = pf_to_beta(_traject_pf)
 
             years = np.linspace(year_start, year_end, year_end - year_start + 1)
             betas = interpolate_beta_values(years, _traject_betas, years_beta)
@@ -92,11 +95,13 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
             years_ini = np.concatenate((years_ini, years))
             betas_ini = np.concatenate((betas_ini, betas))
 
+
         if result_type == ResultType.RELIABILITY.name:
             y = betas_ini
             y_ondergrens = [pf_to_beta(dike_traject.lower_bound_value)] * len(years_ini)
-            name = "Betrouwbaarheid"
-            hovertemplate = "Jaar: %{x}<br>Betrouwbaarheid: %{y:.2e}"
+            # name = "Betrouwbaarheid"
+            name = dike_traject.name
+            hovertemplate = "Jaar: %{x}<br>	β = %{y:.2e}"
 
         elif result_type == ResultType.PROBABILITY.name:
             y = beta_to_pf(betas_ini)
@@ -112,17 +117,17 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
             y = beta_to_pf(betas_ini) * dike_traject.flood_damage
             discount_rate = 0.03
             y_ondergrens = None
-            name = "Risico (€)"
+            name = "Risico (€/jaar)"
             hovertemplate = "Jaar: %{x}<br>Risico: %{y:.2e}"
         elif result_type == ResultType.RISK_FACTOR.name:
             risk = beta_to_pf(betas_ini) * dike_traject.flood_damage
             discount_rate = 0.03
             risk_norm = [dike_traject.lower_bound_value * dike_traject.flood_damage] / (1 + discount_rate) ** (
-                        years_ini - 2025)
+                    years_ini - 2025)
             y = risk / risk_norm
             y_ondergrens = None
-            name = "Risk factor"
-            hovertemplate = "Jaar: %{x}<br>Risk factor: %{y:.2e}"
+            name = "Risicofactor"
+            hovertemplate = "Jaar: %{x}<br>Factor hoger dan bij norm: %{y:.2e}"
 
 
         else:
@@ -161,6 +166,17 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
             line_width=0,
         )
 
+        # add invisible trace for hover info
+        _fig.add_trace(go.Scatter(
+            x=[(project.start_year + project.end_year) / 2],
+            y=[(y0 + y1) / 2],
+            text=[project.name],
+            mode="markers",
+            opacity=0,
+            marker=dict(color=color, opacity=0),
+            hoverinfo="text",
+            showlegend=False,
+        ))
         # add annotation in the middle of the shape:
         # THIS IS BUGGY
         # _fig.add_annotation(
@@ -170,6 +186,8 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
         #     showarrow=False,
         #     font=dict(color="black", size=18),
         # )
+
+    projects = sorted(projects, key=lambda x: x.end_year)
 
     if result_type == ResultType.RELIABILITY.name:
         y0_ini = 0
@@ -216,7 +234,7 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
         _fig.update_layout(xaxis_title='Jaar', yaxis_title="Afstand tot norm")
 
     elif result_type == ResultType.RISK.name:
-        _fig.update_layout(xaxis_title='Jaar', yaxis_title="Risico (€)")
+        _fig.update_layout(xaxis_title='Jaar', yaxis_title="Risico (€/jaar)")
         y0_ini = 10e3
         y1_ini = y0_ini * 5  # This is the range for each shape in log scale
         # Add project shapes:
@@ -243,7 +261,7 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
             add_shapes(y0, y1, y_text, color)
         ticks = [0.001, 0.01, 0.1, 1, 10, 100, 1000]
         _fig.update_yaxes(type="log", tickvals=ticks, ticktext=[str(tick) for tick in ticks])
-        _fig.update_layout(xaxis_title='Jaar', yaxis_title="Risk factor")
+        _fig.update_layout(xaxis_title='Jaar', yaxis_title="Risico factor")
 
 
     else:

@@ -60,9 +60,9 @@ class GreedyOPtimizationCriteria(Enum):
     TARGET_PF = "Faalkans"
 
 class ProgramDefinitionMapType(Enum):
-    SIMPLE = "Simple"
-    PROJECTS = "Projects"
-    ASSESSMENT_PROBABILITIES = "Faalkans"
+    SIMPLE = "Trajecten"
+    PROJECTS = "Projecten"
+    ASSESSMENT_PROBABILITIES = "Faalkans 2025"
 
 
 
@@ -86,5 +86,5 @@ conversion_dict_measure_names = {"GROUND_IMPROVEMENT": "Soil reinforcement",
 
 import plotly.express as px
 
-PROJECTS_COLOR_SEQUENCE = px.colors.qualitative.Pastel
+PROJECTS_COLOR_SEQUENCE = px.colors.qualitative.Pastel + px.colors.qualitative.Prism # this is 22 colors
 CLASSIC_PLOTLY_COLOR_SEQUENCE = px.colors.qualitative.Plotly

@@ -6,6 +6,7 @@ from src.layouts.layout_traject_page.layout_radio_items import layout_radio_resu
 from src.layouts.layout_traject_page.layout_sliders import layout_year_slider
 
 dike_settings_layout = html.Div([
+    html.Div("Kies hier de instellingen voor de weergave van de resultaten."),
     layout_year_slider,
 
     dbc.Row([

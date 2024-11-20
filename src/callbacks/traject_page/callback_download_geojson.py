@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 import dash
 from dash import Output, callback, Input, State
@@ -6,8 +7,10 @@ from dash import Output, callback, Input, State
 from src.component_ids import DOWNLOAD_OVERVIEW_ID, DOWNLOAD_OVERVIEW_BUTTON_ID, DOWNLOAD_ASSESSMENT_BUTTON_ID, \
     DOWNLOAD_ASSESSMENT_ID, SLIDER_YEAR_RELIABILITY_RESULTS_ID, DOWNLOAD_REINFORCED_SECTIONS_ID, \
     DOWNLOAD_REINFORCED_SECTIONS_BUTTON_ID, BUTTON_DOWNLOAD_OVERVIEW_NB_CLICKS, BUTTON_DOWNLOAD_ASSESSMENT_NB_CLICKS, \
-    BUTTON_DOWNLOAD_REINFORCED_SECTIONS_NB_CLICKS, DOWNLOAD_RUN_JSON_ID, BUTTON_SAVE_RUN_AS_JSON, RUN_SAVE_NAME_ID
+    BUTTON_DOWNLOAD_REINFORCED_SECTIONS_NB_CLICKS, DOWNLOAD_RUN_JSON_ID, BUTTON_SAVE_RUN_AS_JSON, RUN_SAVE_NAME_ID, \
+    STORE_CONFIG
 from src.linear_objects.dike_traject import DikeTraject
+from src.utils.utils import export_to_json, get_vr_config_from_dict
 
 
 @callback(
@@ -15,9 +18,9 @@ from src.linear_objects.dike_traject import DikeTraject
     [State('stored-data', 'data'),
      Input(BUTTON_SAVE_RUN_AS_JSON, 'n_clicks'),
      State(RUN_SAVE_NAME_ID, 'value'),
-     ]
+     State(STORE_CONFIG, "data"),     ]
 )
-def download_traject_run_json(dike_traject_data: dict, n_clicks: int, run_name: str):
+def download_traject_run_json(dike_traject_data: dict, n_clicks: int, run_name: str, vr_config: dict):
     if run_name is None or run_name == "":
         return dash.no_update
     if dike_traject_data is None or n_clicks == 0 or n_clicks is None:
@@ -27,7 +30,12 @@ def download_traject_run_json(dike_traject_data: dict, n_clicks: int, run_name: 
         return dash.no_update
 
     else:
+        dike_traject_data["run_name"] = run_name
         content = json.dumps(dike_traject_data)
+        _vr_config = get_vr_config_from_dict(vr_config)
+        _path_save_dike_traject = _vr_config.input_directory.joinpath(f"{run_name}.json")
+        export_to_json(dike_traject_data, _path_save_dike_traject)
+
         return dict(content=content, filename=f"{run_name}.json")
 
 

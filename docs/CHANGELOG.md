@@ -3,6 +3,25 @@
 ## v0.0.0 [##/##/####]
 
 ### Added
+- Comparison table for reinforcement order
+
+### Changed
+- Grammar and spelling dutch UI
+- Comparison page: activeer button to activate the comparison
+- Traject page: download button creates copy in local dir
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+- Program Page: up to 22 projects can be defined (bug color)
+
+## v0.7.2 [##/##/####]
+
+### Added
 None.
 
 ### Changed
@@ -15,7 +34,7 @@ None.
 None.
 
 ### Fixed
-- Small fixes bug reported by derk-Jan
+- Fixed error with integer beta values rounded
 
 ## v0.7.1 [01/11/2024]
 

@@ -28,6 +28,7 @@ def plot_pf_project_comparison(project_data: dict, selected_year: int, result_ty
     """
 
     fig = go.Figure()
+
     for index, (_, dike_traject_data) in enumerate(project_data.items()):
         dike_traject = DikeTraject.deserialize(dike_traject_data)
         _year_index = bisect_right(dike_traject.dike_sections[0].years, selected_year - REFERENCE_YEAR) - 1

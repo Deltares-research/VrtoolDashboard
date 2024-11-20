@@ -8,14 +8,14 @@ modal_custom_measure = dbc.Modal(
         dbc.ModalBody("Custom maatregelen toevoegen"),
         html.Div(
             [
-                html.P(id=MESSAGE_MODAL_CUSTOM_MEASURE_ID, children=["Custom maatregele toegevoegd!"]),
+                html.P(id=MESSAGE_MODAL_CUSTOM_MEASURE_ID, children=["Custom maatregelen toegevoegd!"]),
             ],
             style={"padding": "20px"},
         ),
 
         dbc.ModalFooter(
             # add a button to close the modal
-            dbc.Button("Close", id=CLOSE_CUSTOM_MEAS_MODAL_BUTTON_ID, className="ml-auto")
+            dbc.Button("Afsluiten", id=CLOSE_CUSTOM_MEAS_MODAL_BUTTON_ID, className="ml-auto")
         ),
     ],
     id=CUSTOM_MEASURE_MODEL_ID,

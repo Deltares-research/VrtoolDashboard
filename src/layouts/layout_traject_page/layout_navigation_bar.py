@@ -15,10 +15,10 @@ nav_bar_layout_1 = html.Div([
         children=[
             # dbc.NavItem(dbc.NavLink("Home", href="/", style={"color": "white"})),
             dbc.DropdownMenu([
-                dbc.DropdownMenuItem("Traject", href="/traject-page"),
-                dbc.DropdownMenuItem("Database interactie", href="/database-interaction-page"),
-                dbc.DropdownMenuItem("Gebied", href="/project-page"),
-                dbc.DropdownMenuItem("Vergelijken runs", href="/comparison-run-page"),
+                dbc.DropdownMenuItem("Trajectanalyse", href="/traject-page"),
+                dbc.DropdownMenuItem("Draaien optimalisatieberekeningen", href="/database-interaction-page"),
+                dbc.DropdownMenuItem("Gebiedsanalyse", href="/project-page"),
+                dbc.DropdownMenuItem("Vergelijken berekeningen", href="/comparison-run-page"),
             ],
                 nav=True,
                 label="Paginas",
