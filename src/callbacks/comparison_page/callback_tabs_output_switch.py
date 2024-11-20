@@ -179,18 +179,21 @@ def update_table_comparison_measures(imported_runs: dict, table_imported_runs_da
     for section_1, section_2 in zip(dike_traject_1.dike_sections, dike_traject_2.dike_sections):
         data.append({
             "section_name": section_1.name,
+            "section_length": section_1.length,
             "run_1_measure": ", ".join(section_1.final_measure_veiligheidsrendement.get('type', ["Geen maatregel"])),
             "run_1_dberm": section_1.final_measure_veiligheidsrendement.get('dberm'),
             "run_1_dcrest": section_1.final_measure_veiligheidsrendement.get('dcrest'),
             "run_1_Lscreen": section_1.final_measure_veiligheidsrendement.get('L_stab_screen'),
+            "run_1_cost": section_1.final_measure_veiligheidsrendement.get('LCC') / 1e6,
             "run_2_measure": ", ".join(section_2.final_measure_veiligheidsrendement.get('type', ["Geen maatregel"])),
             "run_2_dberm": section_2.final_measure_veiligheidsrendement.get('dberm'),
             "run_2_dcrest": section_2.final_measure_veiligheidsrendement.get('dcrest'),
             "run_2_Lscreen": section_2.final_measure_veiligheidsrendement.get('L_stab_screen'),
+            "run_2_cost": section_2.final_measure_veiligheidsrendement.get('LCC') / 1e6,
         })
 
     patched_grid = Patch()
-    patched_grid[1]["headerName"] = f"{dike_traject_1.name}|{dike_traject_1.run_name}"
-    patched_grid[2]["headerName"] = f"{dike_traject_2.name}|{dike_traject_2.run_name}"
+    patched_grid[2]["headerName"] = f"{dike_traject_1.name}|{dike_traject_1.run_name}"
+    patched_grid[3]["headerName"] = f"{dike_traject_2.name}|{dike_traject_2.run_name}"
 
     return data, patched_grid

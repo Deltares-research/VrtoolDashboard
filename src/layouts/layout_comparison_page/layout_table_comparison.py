@@ -7,6 +7,7 @@ from src.component_ids import TABLE_COMPARISON_MEASURES
 color_higlight = "mediumaquamarine"
 columnDefs = [
     {"field": "section_name", "sortable": True, 'headerName': 'Sectie', "pinned": True, 'width': 100},
+    {"field": "section_length", 'headerName': 'L (m)', 'width': 55},
     {
         'headerName': 'Run 1',
         'children': [
@@ -40,6 +41,10 @@ columnDefs = [
 
              },
 
+            {
+            "field": "run_1_cost", "headerName": "Kosten (M€)", "width": 60,
+            }
+
         ],
     },
     {
@@ -71,6 +76,9 @@ columnDefs = [
              ]},
 
              },
+            {
+                "field": "run_2_cost", "headerName": "Kosten (M€)", "width": 60,
+            }
         ]
     }
 ]
@@ -86,6 +94,7 @@ getRowStyle = {
 
 df = pd.DataFrame({
     "section_name": [],
+    "section_length": [],
     "run_1_measure": [],
     "run_1_dberm": [],
     "run_2_measure": [],
