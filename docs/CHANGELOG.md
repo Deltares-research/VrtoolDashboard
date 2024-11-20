@@ -3,6 +3,23 @@
 ## v0.0.0 [##/##/####]
 
 ### Added
+None.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
+## v0.7.3 [20/11/2024]
+
+### Added
 - Comparison table for reinforcement order
 
 ### Changed
