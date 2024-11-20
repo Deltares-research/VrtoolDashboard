@@ -164,6 +164,11 @@ class DikeTraject(BaseLinearObject):
                 return section
         raise ValueError(f"Section with name {name} not found")
 
+    def get_sections_in_reinforcement_order(self) -> list[DikeSection]:
+        """Get the sections in the reinforcement order"""
+        return [self.get_section(name) for name in self.reinforcement_order_vr]
+
+
     @staticmethod
     def get_initial_assessment_df(sections: list[DikeSection]) -> DataFrame:
         """Get the initial assessment dataframe from all children sections"""

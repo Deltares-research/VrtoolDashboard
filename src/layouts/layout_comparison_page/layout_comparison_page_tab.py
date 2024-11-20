@@ -90,7 +90,7 @@ right_side = [
             dbc.Tab(label="Faalkans in tijd", tab_id="tab-11113"),
             dbc.Tab(label="Maatregelen op kaart", tab_id="tab-11114"),
             dbc.Tab(label="Overzichtstabel maatregelen", tab_id="tab-11115"),
-            # dbc.Tab(label="PLACEHOLDER 2", tab_id="tab-11116"),
+            dbc.Tab(label="Sectie volgorde", tab_id="tab-11116"),
         ],
         id=TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE,
         active_tab="tab-11111",  # Set the initial active tab

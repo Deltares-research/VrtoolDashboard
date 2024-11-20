@@ -5,10 +5,10 @@ from src.component_ids import TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE, CONTENT
     STORED_RUNS_COMPARISONS_DATA, RUNS_COMPARISON_GRAPH_TIME_ID, \
     SLIDER_YEAR_RELIABILITY_RESULTS_ID, OVERVIEW_COMPARISON_MAP_ID, RUNS_COMPARISON_GRAPH_ID, \
     RADIO_COMPARISON_PAGE_RESULT_TYPE, MEASURE_COMPARISON_MAP_ID, EDITABLE_COMPARISON_TABLE_ID, \
-    TABLE_COMPARISON_MEASURES
+    TABLE_COMPARISON_MEASURES, TABLE_ORDER_COMPARISON_MEASURES
 from src.layouts.layout_comparison_page.layout_output_tabs import layout_project_output_tab_one, \
     layout_project_output_tab_two, layout_project_output_tab_three, layout_project_output_tab_four, \
-    layout_project_output_tab_five
+    layout_project_output_tab_five, layout_project_output_tab_six
 from src.linear_objects.dike_traject import DikeTraject
 from src.plotly_graphs.comparison_page.plot_measures_comparison_map import plot_comparison_measures_map
 
@@ -48,7 +48,7 @@ def render_project_overview_map_content(active_tab: str) -> html.Div:
         return layout_project_output_tab_five()
 
     elif active_tab == "tab-11116":
-        return html.Div("Placeholder 2 tab")
+        return layout_project_output_tab_six()
 
     else:
         return html.Div("Invalid tab selected")
@@ -169,7 +169,6 @@ def update_table_comparison_measures(imported_runs: dict, table_imported_runs_da
                 id_2 = i
                 break  # Exit loop once both IDs are found
 
-
     if id_1 is None or id_2 is None:
         return dash.no_update, dash.no_update
 
@@ -179,18 +178,81 @@ def update_table_comparison_measures(imported_runs: dict, table_imported_runs_da
     for section_1, section_2 in zip(dike_traject_1.dike_sections, dike_traject_2.dike_sections):
         data.append({
             "section_name": section_1.name,
+            "section_length": section_1.length,
             "run_1_measure": ", ".join(section_1.final_measure_veiligheidsrendement.get('type', ["Geen maatregel"])),
             "run_1_dberm": section_1.final_measure_veiligheidsrendement.get('dberm'),
             "run_1_dcrest": section_1.final_measure_veiligheidsrendement.get('dcrest'),
             "run_1_Lscreen": section_1.final_measure_veiligheidsrendement.get('L_stab_screen'),
+            "run_1_cost": section_1.final_measure_veiligheidsrendement.get('LCC') / 1e6,
             "run_2_measure": ", ".join(section_2.final_measure_veiligheidsrendement.get('type', ["Geen maatregel"])),
             "run_2_dberm": section_2.final_measure_veiligheidsrendement.get('dberm'),
             "run_2_dcrest": section_2.final_measure_veiligheidsrendement.get('dcrest'),
             "run_2_Lscreen": section_2.final_measure_veiligheidsrendement.get('L_stab_screen'),
+            "run_2_cost": section_2.final_measure_veiligheidsrendement.get('LCC') / 1e6,
         })
 
     patched_grid = Patch()
-    patched_grid[1]["headerName"] = f"{dike_traject_1.name}|{dike_traject_1.run_name}"
-    patched_grid[2]["headerName"] = f"{dike_traject_2.name}|{dike_traject_2.run_name}"
+    patched_grid[2]["headerName"] = f"{dike_traject_1.name}|{dike_traject_1.run_name}"
+    patched_grid[3]["headerName"] = f"{dike_traject_2.name}|{dike_traject_2.run_name}"
+
+    return data, patched_grid
+
+
+@callback(
+    Output(TABLE_ORDER_COMPARISON_MEASURES, "rowData"),
+    Output(TABLE_ORDER_COMPARISON_MEASURES, "columnDefs"),
+    [
+        State(STORED_RUNS_COMPARISONS_DATA, "data"),
+        Input(EDITABLE_COMPARISON_TABLE_ID, "rowData"),
+        Input(EDITABLE_COMPARISON_TABLE_ID, "cellValueChanged")
+    ],
+)
+def update_table_comparison_order_measures(imported_runs: dict, table_imported_runs_data: list[dict], dummy: dict):
+    """
+
+    Args:
+        imported_runs:
+        table_imported_runs_data:
+        dummy: KEEP THIS ONE, otherwise the callback does not trigger when editing the table
+
+    Returns:
+
+    """
+    if imported_runs is None or len(imported_runs) < 2:
+        return dash.no_update, dash.no_update
+
+    # Initialize variables
+    id_1, id_2 = None, None
+
+    # Iterate through the data to find the first two active items
+    for i, item in enumerate(table_imported_runs_data):
+        if item.get('active'):
+            if id_1 is None:
+                id_1 = i
+            elif id_2 is None:
+                id_2 = i
+                break  # Exit loop once both IDs are found
+
+    if id_1 is None or id_2 is None:
+        return dash.no_update, dash.no_update
+
+    dike_traject_1 = DikeTraject.deserialize(list(imported_runs.values())[id_1])
+    dike_traject_2 = DikeTraject.deserialize(list(imported_runs.values())[id_2])
+    data = []
+
+    for section_1, section_2 in zip(dike_traject_1.get_sections_in_reinforcement_order(),
+                                    dike_traject_2.get_sections_in_reinforcement_order()):
+        data.append({
+
+            "run_1_section_name": section_1.name,
+            "run_1_measure": ", ".join(section_1.final_measure_veiligheidsrendement.get('type', ["Geen maatregel"])),
+            "run_2_section_name": section_2.name,
+            "run_2_measure": ", ".join(section_2.final_measure_veiligheidsrendement.get('type', ["Geen maatregel"])),
+
+        })
+
+    patched_grid = Patch()
+    patched_grid[0]["headerName"] = f"{dike_traject_1.name}|{dike_traject_1.run_name}"
+    patched_grid[1]["headerName"] = f"{dike_traject_2.name}|{dike_traject_2.run_name}"
 
     return data, patched_grid
