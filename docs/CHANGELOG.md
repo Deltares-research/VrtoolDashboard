@@ -3,10 +3,12 @@
 ## v0.0.0 [##/##/####]
 
 ### Added
-None.
+- Comparison table for reinforcement order
 
 ### Changed
-None.
+- Grammar and spelling dutch UI
+- Comparison page: activeer button to activate the comparison
+- Traject page: download button creates copy in local dir
 
 ### Deprecated
 None.
@@ -15,7 +17,7 @@ None.
 None.
 
 ### Fixed
-None.
+- Program Page: up to 22 projects can be defined (bug color)
 
 ## v0.7.2 [##/##/####]
 
