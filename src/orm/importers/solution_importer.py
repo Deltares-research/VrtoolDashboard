@@ -45,6 +45,8 @@ from src.orm.importers.optimization_step_importer import (
     _get_final_measure_betas,
 )
 from src.orm.orm_controller_custom import get_optimization_steps_ordered
+
+
 from src.utils.database_analytics import get_minimal_tc_step, get_measures_per_step_number, \
     get_reliability_for_each_step, assessment_for_each_step, calculate_traject_probability_for_steps, \
     get_measures_per_section_for_step, calculate_traject_probability
@@ -64,6 +66,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
     economic_optimal_final_step_id: int
     final_step: int  # this is the step number of the last optimization step (either from the economic optimal or
     # the target beta/year, this needs to be returned to DikeTraject object)
+    database_path: Optional[Path] = None
 
     def __init__(
             self,
@@ -74,6 +77,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             greedy_criteria_year: Optional[int] = None,
             greedy_criteria_beta: Optional[float] = None,
             assessment_years: list[int] = None,
+            database_path: Optional[Path] = None,
     ):
         self.dike_traject = dike_traject
         self.dike_section_mapping = {
@@ -86,12 +90,13 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         self.greedy_criteria_year = greedy_criteria_year
         self.greedy_criteria_beta = greedy_criteria_beta
         self.set_economic_optimal_final_step_id()
+        self.database_path = database_path
 
     def import_orm(self):
         """Import the final measures for both Veiligheidsrendement and Doorsnede"""
         self.get_final_measure_vr()
         self.get_final_measure_dsn()
-        # self.get_forward_vr_order()
+        self.get_modified_vr_order(database_path=self.database_path)
         self.dike_traject.final_step_number = self.final_step
         self.dike_traject.greedy_stop_type_criteria = self.greedy_optimization_criteria
         self.dike_traject.greedy_stop_criteria_year = self.greedy_criteria_year
@@ -394,11 +399,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         :return: dictionary with the followings keys: "name", "LCC", "Piping", "StabilityInner", "Overflow", "Revetment"
         , "Section"
         """
-
-        database_path = Path(r"C:\Users\hauth\OneDrive - Stichting Deltares\projects\VRTool\databases\10-3\database_10-3.sqlite")
-        run_list = get_overview_of_runs(database_path)
-        run_list = [run for run in run_list if run['optimization_type_name'] == 'VEILIGHEIDSRENDEMENT']
-
         # Get the betas for the measure:
         _final_measure = _get_final_measure_betas(optimization_steps, active_mechanisms, assessment_time)
 
@@ -426,14 +426,24 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         _final_measure.update(_get_measure_parameters(optimization_steps))
         return _final_measure
 
-    def get_forward_vr_order(self):
+    def get_modified_vr_order(self, database_path):
+        """
+        Script from Stephan to obtain the reinforcement order based on the index.
 
-        database_path = Path(
-            r'C:\Users\hauth\OneDrive - Stichting Deltares\projects\VRTool\databases\10-2\database_10-2.sqlite')
+        Args:
+            database_path:
+
+        Returns:
+
+        """
+
+        # database_path = Path(
+        #     # r'C:\Users\hauth\OneDrive - Stichting Deltares\projects\VRTool\databases\10-2\database_10-2.sqlite'
+        #     r'N:\Projects\11209000\11209353\B. Measurements and calculations\008 - Resultaten Proefvlucht\Alle_Databases\38-1\38-1_basis.db'
+        #
+        # )
         run_list = get_overview_of_runs(database_path)
         run_list = [run for run in run_list if run['optimization_type_name'] == 'VEILIGHEIDSRENDEMENT']
-        pd.DataFrame(run_list)
-        print(run_list)
 
         optimization_steps = {run['name']: get_optimization_steps_for_run_id(database_path, run['id']) for run in
                               run_list}
@@ -494,8 +504,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         initial_traject_probability_per_mechanism = calculate_traject_probability(assessment_results)
         print(f"Initial traject probability is {initial_traject_probability_per_mechanism}")
 
-        n_time_steps = len(initial_traject_probability_per_mechanism[MechanismEnum.OVERFLOW])
-        time_steps = initial_traject_probability_per_mechanism[MechanismEnum.OVERFLOW].keys()
 
         for count, run in enumerate(run_list):
             final_traject_probability_per_mechanism = traject_prob[run['id']][minimal_tc_steps[run['name']]]
@@ -506,9 +514,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
                 DikeTrajectInfo.id == 1).get().flood_damage
 
         discount_rate = 0.03
-
-        damage_per_year = np.divide(damage, np.power(1 + discount_rate, np.arange(0, 100)))
-        damage_per_year = damage_per_year.reshape(1, 100)
 
         def calculate_total_risk(traject_reliability, damage, discount_rate):
             n_years = 100
@@ -532,8 +537,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
 
         total_risk = calculate_total_risk(final_traject_probability_per_mechanism, damage, discount_rate)
 
-        increase_in_traject_risk = []
-        section_costs = []
         vr_index = {}
 
         for section in section_names:
@@ -563,7 +566,5 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
                 vr_index[section] = 0
 
         sorted_vr_index = dict(sorted(vr_index.items(), key=lambda item: item[1], reverse=True))
-        print(sorted_vr_index)
 
-
-        self.dike_traject.reinforcement_order_forward_vr = []
+        self.dike_traject.reinforcement_modified_order_vr = sorted_vr_index
