@@ -90,6 +90,7 @@ class DikeTrajectImporter(OrmImporterProtocol):
                                     dike_sections=[],
                                     reinforcement_order_vr=[],
                                     reinforcement_order_dsn=[],
+                                    reinforcement_order_forward_vr=[],
                                     greedy_steps=[],
                                     signalering_value=_traject_p_signal,
                                     lower_bound_value=_traject_p_lower_bound,
