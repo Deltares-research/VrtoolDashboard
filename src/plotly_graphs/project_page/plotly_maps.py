@@ -226,3 +226,43 @@ def plot_comparison_runs_overview_map_simple(trajects: list[DikeTraject], select
 
 
 
+def plot_order_reinforcement_index_map(trajects: list[DikeTraject])-> go.Figure:
+
+    fig = go.Figure()
+
+    for traject in trajects:
+
+        if traject.reinforcement_modified_order_vr is None:
+            raise ValueError("Use a dike traject saved with version >= 1.0.0")
+
+        for section in traject.dike_sections:
+            _coordinates_wgs = [
+                GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in section.coordinates_rd
+            ]  # convert in GWS coordinates:
+
+            # if a section is not in analyse, skip it, and it turns blank on the map.
+            if not section.in_analyse:
+                continue
+
+            _color = "red"
+            _hovertemplate = (
+                    f"Traject {traject.name}<br>" +
+                    f"Vaknaam {section.name}<br>" + f"Lengte: {section.length}m <extra></extra>"
+            )
+
+
+            fig.add_trace(
+                go.Scattermap(
+                    mode="lines",
+                    lat=[x[0] for x in _coordinates_wgs],
+                    lon=[x[1] for x in _coordinates_wgs],
+                    marker={"size": 10, "color": _color},
+                    line={"width": 4, "color": _color},
+                    name=traject.name,
+                    legendgroup=traject.name,
+                    hovertemplate=_hovertemplate,
+                    opacity=0.9,
+                )
+            )
+
+    return fig

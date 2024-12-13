@@ -63,6 +63,7 @@ class ProgramDefinitionMapType(Enum):
     SIMPLE = "Trajecten"
     PROJECTS = "Projecten"
     ASSESSMENT_PROBABILITIES = "Faalkans 2025"
+    VEILIGHEIDSRENDEMENT_INDEX = "VR index"
 
 
 

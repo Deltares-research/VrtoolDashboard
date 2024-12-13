@@ -47,6 +47,9 @@ def get_projects_from_saved_data(imported_runs_data: dict, project_overview_data
         dike_traject = DikeTraject.deserialize(imported_runs_data[run_name])
         dict_runs[run_name] = dike_traject
 
+    if project_overview_data is None:
+        return projects, dict_runs
+
     # assemble project data:
     for project_data in project_overview_data:
 

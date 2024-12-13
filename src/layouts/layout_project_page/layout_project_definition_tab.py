@@ -104,6 +104,8 @@ layout_radio_helper_map_switch = dbc.RadioItems(
         {"label": ProgramDefinitionMapType.SIMPLE.value, "value": ProgramDefinitionMapType.SIMPLE.name},
         {"label": ProgramDefinitionMapType.PROJECTS.value, "value": ProgramDefinitionMapType.PROJECTS.name},
         {"label": ProgramDefinitionMapType.ASSESSMENT_PROBABILITIES.value, "value": ProgramDefinitionMapType.ASSESSMENT_PROBABILITIES.name},
+        {"label": ProgramDefinitionMapType.VEILIGHEIDSRENDEMENT_INDEX.value, "value": ProgramDefinitionMapType.VEILIGHEIDSRENDEMENT_INDEX.name},
+
     ],
     value="SIMPLE",
     inline=True
