@@ -8,16 +8,18 @@ import numpy as np
 import pandas as pd
 from peewee import JOIN, ModelBase, DoesNotExist
 from scipy.interpolate import interp1d
-from vrtool.common.enums import MechanismEnum
 from vrtool.orm.io.importers.optimization.optimization_step_importer import (
     OptimizationStepImporter,
 )
+from vrtool.common.enums import MechanismEnum
+
 from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol
 from vrtool.orm.models import (
     OptimizationStep,
     SectionData,
     MeasurePerSection,
     MeasureResult,
+
     OptimizationSelectedMeasure,
     Measure,
     MeasureResultParameter, DikeTrajectInfo,
