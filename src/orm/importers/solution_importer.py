@@ -436,12 +436,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         Returns:
 
         """
-
-        # database_path = Path(
-        #     # r'C:\Users\hauth\OneDrive - Stichting Deltares\projects\VRTool\databases\10-2\database_10-2.sqlite'
-        #     r'N:\Projects\11209000\11209353\B. Measurements and calculations\008 - Resultaten Proefvlucht\Alle_Databases\38-1\38-1_basis.db'
-        #
-        # )
         run_list = get_overview_of_runs(database_path)
         run_list = [run for run in run_list if run['optimization_type_name'] == 'VEILIGHEIDSRENDEMENT']
 
@@ -478,14 +472,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         section_names = [list(measures_per_section[run].keys()) for run in measures_per_section.keys()]
         section_names = list(set([item for sublist in section_names for item in sublist]))
 
-        for section in section_names:
-            for run in measures_per_section.keys():
-                try:
-                    print(
-                        f"Section {section} in run {run} has measures {measures_per_section[run][section][0]} at time {measures_per_section[run][section][1]}")
-                except:
-                    print(f"Section {section} in run {run} has no measures in run {run}")
-
         section_parameters = defaultdict(dict)
 
         for run in measures_per_section.keys():
@@ -502,8 +488,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             in run_list}
 
         initial_traject_probability_per_mechanism = calculate_traject_probability(assessment_results)
-        print(f"Initial traject probability is {initial_traject_probability_per_mechanism}")
-
 
         for count, run in enumerate(run_list):
             final_traject_probability_per_mechanism = traject_prob[run['id']][minimal_tc_steps[run['name']]]
@@ -532,7 +516,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             total_failure_probability = 1 - total_non_failure_probability
             expected_risk_per_year = np.multiply(damage_per_year, total_failure_probability)
             total_risk = np.sum(expected_risk_per_year)
-            print(f"Total risk is {int(total_risk)}")
             return total_risk
 
         total_risk = calculate_total_risk(final_traject_probability_per_mechanism, damage, discount_rate)
@@ -543,8 +526,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             final_section_probability_per_mechanism_temp = copy.deepcopy(final_section_probability_per_mechanism)
 
             for mechanism in assessment_results.keys():
-                print("section =", section)
-                print("mechanism =", mechanism)
                 final_section_probability_per_mechanism_temp[mechanism][section]['beta'] = \
                 assessment_results[mechanism][section]['beta']
 
@@ -554,15 +535,12 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
 
             # calculate_total_risk
             risk_increased = calculate_total_risk(final_traject_probability_per_mechanism_temp, damage, discount_rate)
-            print(f"Risk increases to {risk_increased} if {section} is not reinforced")
             delta_risk = risk_increased - total_risk
 
             if section in list(measure_parameters[1]['section_id']):
-                print(f"Section {section} is in the list of sections with measures")
                 section_costs = measure_parameters[1][measure_parameters[1]['section_id'] == section]['LCC'].values[0]
                 vr_index[section] = delta_risk / section_costs
             else:
-                print(f"Section {section} is not in the list of sections with measures")
                 vr_index[section] = 0
 
         sorted_vr_index = dict(sorted(vr_index.items(), key=lambda item: item[1], reverse=True))
