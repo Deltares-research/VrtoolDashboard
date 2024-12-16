@@ -1,7 +1,7 @@
 from typing import Optional
 
-import numpy as np
 import plotly.graph_objects as go
+import plotly.express as px
 
 from src.constants import PROJECTS_COLOR_SEQUENCE, Mechanism, ResultType, ColorBarResultType, SubResultType
 from src.linear_objects.dike_traject import DikeTraject
@@ -230,6 +230,7 @@ def plot_order_reinforcement_index_map(trajects: list[DikeTraject]) -> go.Figure
     fig = go.Figure()
 
     sections = []
+    colorscale = px.colors.diverging.Geyser
     for traject in trajects:
 
         if traject.reinforcement_modified_order_vr is None:
@@ -277,7 +278,7 @@ def plot_order_reinforcement_index_map(trajects: list[DikeTraject]) -> go.Figure
     place_legend_right_top_corner(fig)
 
     marker = dict(
-        colorscale="Cividis",
+        colorscale=colorscale,
         colorbar=dict(
             title="VR index",
             titleside="right",

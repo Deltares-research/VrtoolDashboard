@@ -71,12 +71,10 @@ _vr_config = VrtoolConfig().from_json(Path(
 ))
 # _vr_config = VrtoolConfig().from_json(Path(__file__).parent.parent / "tests/data/TestCase1_38-1_no_housing/vr_config.json")
 t0 = time.time()
-print(_vr_config)
 _traject_db = get_dike_traject_from_config_ORM(vr_config=_vr_config, run_is_vr=1, run_id_dsn=2)
 data = _traject_db.serialize()
-print(data)
 print(_traject_db.reinforcement_modified_order_vr)
-export_to_json(data)
+# export_to_json(data)
 # print(data)
 t1 = time.time()  # TIME 6.3 s for 10-2
 # print(data)
