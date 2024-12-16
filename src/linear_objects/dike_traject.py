@@ -32,6 +32,8 @@ class DikeTraject(BaseLinearObject):
     greedy_stop_type_criteria: Optional[str] = None
     greedy_stop_criteria_year: Optional[int] = None
     greedy_stop_criteria_beta: Optional[float] = None
+    reinforcement_modified_order_vr: Optional[dict] = None  # set as Optional with default value to prevent necessary migration for users
+
 
     def serialize(self) -> dict:
         """Serialize the DikeTraject object to a dict, in order to be saved in dcc.Store"""
@@ -40,6 +42,7 @@ class DikeTraject(BaseLinearObject):
             "dike_sections": [section.serialize() for section in self.dike_sections],
             "reinforcement_order_vr": self.reinforcement_order_vr,
             "reinforcement_order_dsn": self.reinforcement_order_dsn,
+            "reinforcement_modified_order_vr": self.reinforcement_modified_order_vr,
             "signalering_value": self.signalering_value,
             "lower_bound_value": self.lower_bound_value,
             "greedy_steps": self.greedy_steps,
@@ -68,6 +71,7 @@ class DikeTraject(BaseLinearObject):
             dike_sections=sections,
             reinforcement_order_vr=data["reinforcement_order_vr"],
             reinforcement_order_dsn=data["reinforcement_order_dsn"],
+            reinforcement_modified_order_vr=data.get("reinforcement_modified_order_vr", None),
             signalering_value=data["signalering_value"],
             lower_bound_value=data["lower_bound_value"],
             greedy_steps=data["greedy_steps"],

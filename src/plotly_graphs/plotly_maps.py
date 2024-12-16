@@ -3,8 +3,11 @@ from typing import Tuple, Optional
 
 import numpy as np
 import plotly.graph_objects as go
+import plotly.colors
 from matplotlib import pyplot as plt, colors
-from shapely import Polygon, MultiPolygon, LineString
+import plotly.express as px
+
+from shapely import LineString
 from vrtool.common.enums import MeasureTypeEnum
 
 from src.constants import (
@@ -1331,13 +1334,34 @@ def get_color(value: float, cmap, vmin: float, vmax: float) -> str:
     :param vmax: max value of the color scale
     :return: color as rbg string
     """
-    # if value > vmax:
-    #     value = vmax
-    # elif value < vmin:
-    #     value = vmin
+
     norm = colors.Normalize(vmin=vmin, vmax=vmax)  # Hardcoded boundaries
     rgb = cmap(norm(value))
     return f"rgb({rgb[0]}, {rgb[1]}, {rgb[2]})"
+
+
+
+def get_color_plotly(value: float, colorscale: "PlotlyColorscale", vmin: float, vmax: float) -> str:
+    """
+    Return the color of the value on a colorscale, as an RGB string using Plotly.
+    :param value: value for which a color must be assigned
+    :param colorscale: color scale theme (e.g., 'Viridis', 'Cividis', etc.)
+    :param vmin: min value of the color scale
+    :param vmax: max value of the color scale
+    :return: color as an RGB string
+    """
+    # Normalize the value to the range [0, 1]
+    normalized_value = (value - vmin) / (vmax - vmin)
+    normalized_value = max(0, min(1, normalized_value))  # Clamp to [0, 1]
+
+    # Sample the color from the colorscale
+    rgb_tuple = plotly.colors.sample_colorscale(colorscale, [normalized_value], colortype='rgb')[0]
+    return rgb_tuple
+
+
+
+
+
 
 
 def get_reliability_color(reliability_value: float, center_pf: float) -> str:
@@ -1399,6 +1423,11 @@ def get_berm_widening_color(berm_widening_value: float) -> str:
     """
     cmap = plt.cm.Greens
     return get_color(berm_widening_value, cmap, 0, 30)
+
+def get_veiligheidsrendemeent_index_color(vr_index: int) -> str:
+    colorscale = px.colors.diverging.Geyser
+    power = int(np.log10(vr_index))
+    return get_color_plotly(power, colorscale, 0, 3)
 
 
 def get_color_hover_prob_ratio(

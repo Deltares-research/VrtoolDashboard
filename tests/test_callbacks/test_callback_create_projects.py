@@ -16,7 +16,8 @@ class TestCallbackCreateProjects:
     @pytest.mark.parametrize("map_type", [
         ProgramDefinitionMapType.SIMPLE.name,
         ProgramDefinitionMapType.PROJECTS.name,
-        ProgramDefinitionMapType.ASSESSMENT_PROBABILITIES.name
+        ProgramDefinitionMapType.ASSESSMENT_PROBABILITIES.name,
+        ProgramDefinitionMapType.VEILIGHEIDSRENDEMENT_INDEX.name
     ])
     def test_update_map_project_definition_page(self, map_type):
         # 1. Define data

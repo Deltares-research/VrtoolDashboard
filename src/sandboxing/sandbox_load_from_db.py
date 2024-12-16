@@ -56,7 +56,9 @@ _vr_config = VrtoolConfig().from_json(Path(
     # r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\31-1 base coastal case\config.json"
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Desktop\projects\VRTools\databases\10-1\config.json"
     # r"C:\Users\hauth\TEMPO\try_databases\config.json"
-    r"C:\Users\hauth\OneDrive - Stichting Deltares\projects\VRTool\databases\38-1\automation\config.json"
+    # r"C:\Users\hauth\OneDrive - Stichting Deltares\projects\VRTool\databases\10-2\config.json",
+    # r"N:\Projects\11209000\11209353\B. Measurements and calculations\008 - Resultaten Proefvlucht\Alle_Databases\38-1\config.json"
+    r"N:\Projects\11209000\11209353\B. Measurements and calculations\008 - Resultaten Proefvlucht\Alle_Databases\10-2\config.json"
 
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\COP demo\38-1 base river case\config.json"
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\38-1 test/config.json"
@@ -69,13 +71,12 @@ _vr_config = VrtoolConfig().from_json(Path(
 ))
 # _vr_config = VrtoolConfig().from_json(Path(__file__).parent.parent / "tests/data/TestCase1_38-1_no_housing/vr_config.json")
 t0 = time.time()
-print(_vr_config)
 _traject_db = get_dike_traject_from_config_ORM(vr_config=_vr_config, run_is_vr=1, run_id_dsn=2)
 data = _traject_db.serialize()
-print(data)
-export_to_json(data)
+print(_traject_db.reinforcement_modified_order_vr)
+# export_to_json(data)
 # print(data)
-t1 = time.time()
+t1 = time.time()  # TIME 6.3 s for 10-2
 # print(data)
 print(f"Time to get dike traject from ORM: {t1 - t0}")
 # _fig = plot_overview_map(_traject_db)

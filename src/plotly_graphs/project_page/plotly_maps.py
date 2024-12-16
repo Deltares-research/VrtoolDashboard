@@ -1,19 +1,19 @@
 from typing import Optional
 
-import numpy as np
 import plotly.graph_objects as go
+import plotly.express as px
 
 from src.constants import PROJECTS_COLOR_SEQUENCE, Mechanism, ResultType, ColorBarResultType, SubResultType
 from src.linear_objects.dike_traject import DikeTraject
 from src.linear_objects.project import DikeProject
 from src.plotly_graphs.plotly_maps import update_layout_map_box, add_section_trace, plot_default_overview_map_dummy, \
-    get_middle_point, get_average_point, get_reliability_color, add_colorscale_bar, place_legend_left_top_corner, \
-    place_legend_right_top_corner
+    get_middle_point, get_average_point, get_reliability_color, add_colorscale_bar, place_legend_right_top_corner, \
+    get_veiligheidsrendemeent_index_color
 from src.utils.gws_convertor import GWSRDConvertor
 from src.utils.utils import get_beta, beta_to_pf
 
 
-def plot_project_overview_map(projects: list[DikeProject], trajects: Optional[list[DikeTraject]]=None) -> go.Figure:
+def plot_project_overview_map(projects: list[DikeProject], trajects: Optional[list[DikeTraject]] = None) -> go.Figure:
     """
     This function plots an overview Map of the current dike in data. It uses plotly Mapbox for the visualization.
 
@@ -99,11 +99,12 @@ def plot_project_overview_map(projects: list[DikeProject], trajects: Optional[li
     place_legend_right_top_corner(fig)
     return fig
 
-def plot_comparison_runs_overview_map_projects(projects: list[DikeProject], trajects: list[DikeTraject])-> go.Figure:
+
+def plot_comparison_runs_overview_map_projects(projects: list[DikeProject], trajects: list[DikeTraject]) -> go.Figure:
     return plot_project_overview_map(projects, trajects)
 
-def plot_comparison_runs_overview_map_assessment(trajects: list[DikeTraject])-> go.Figure:
 
+def plot_comparison_runs_overview_map_assessment(trajects: list[DikeTraject]) -> go.Figure:
     fig = go.Figure()
     sections = []  # add section to a list to find the middle point for all trajects
     for dike_traject in trajects:
@@ -128,7 +129,6 @@ def plot_comparison_runs_overview_map_assessment(trajects: list[DikeTraject])-> 
                     if meca != "Section"
                 }
                 _color = get_reliability_color(_beta, dike_traject.lower_bound_value)
-
 
                 _hover_res = f"Pf sectie: {beta_to_pf(_beta):.2e}<br>"
 
@@ -175,7 +175,8 @@ def plot_comparison_runs_overview_map_assessment(trajects: list[DikeTraject])-> 
 
     return fig
 
-def plot_comparison_runs_overview_map_simple(trajects: list[DikeTraject], selected_sections)-> go.Figure:
+
+def plot_comparison_runs_overview_map_simple(trajects: list[DikeTraject], selected_sections) -> go.Figure:
     """
     This function plots an overview Map of the current dike in data. It uses plotly Mapbox for the visualization.
 
@@ -225,4 +226,84 @@ def plot_comparison_runs_overview_map_simple(trajects: list[DikeTraject], select
     return fig
 
 
+def plot_order_reinforcement_index_map(trajects: list[DikeTraject]) -> go.Figure:
+    fig = go.Figure()
 
+    sections = []
+    colorscale = px.colors.diverging.Geyser
+    for traject in trajects:
+
+        if traject.reinforcement_modified_order_vr is None:
+            raise ValueError("Use a dike traject saved with version >= 1.0.0")
+
+        for section_id, section in enumerate(traject.dike_sections, 1):
+            sections.append(section)
+            _coordinates_wgs = [
+                GWSRDConvertor().to_wgs(pt[0], pt[1]) for pt in section.coordinates_rd
+            ]  # convert in GWS coordinates:
+
+            # if a section is not in analyse, skip it, and it turns blank on the map.
+
+            _hovertemplate = (
+                    f"Traject {traject.name}<br>" +
+                    f"Vaknaam {section.name}<br>" + f"Lengte: {section.length}m <br>"
+            )
+            if not section.in_analyse:
+                continue
+
+            if str(section_id) not in traject.reinforcement_modified_order_vr.keys():
+                _color = "black"
+                _hovertemplate += "Geen versterking"
+            else:
+                _color = get_veiligheidsrendemeent_index_color(traject.reinforcement_modified_order_vr[str(section_id)])
+                _hovertemplate += f"Veiligheidsrendement index: {traject.reinforcement_modified_order_vr[str(section_id)]:.0f}"
+
+            fig.add_trace(
+                go.Scattermap(
+                    mode="lines",
+                    lat=[x[0] for x in _coordinates_wgs],
+                    lon=[x[1] for x in _coordinates_wgs],
+                    marker={"size": 10, "color": _color},
+                    line={"width": 4, "color": _color},
+                    name=traject.name,
+                    legendgroup=traject.name,
+                    hovertemplate=_hovertemplate,
+                    opacity=0.9,
+                    showlegend=False
+                )
+            )
+
+    _middle_point = get_average_point(sections)
+    update_layout_map_box(fig, _middle_point, zoom=10)
+    place_legend_right_top_corner(fig)
+
+    marker = dict(
+        colorscale=colorscale,
+        colorbar=dict(
+            title="VR index",
+            titleside="right",
+            tickmode="array",
+            tickvals=[0, 1, 2, 3],
+            ticktext=["1", "10", "100", "1000"],
+            ticks="outside",
+            len=0.5,
+            x=0.9,
+            xref="paper",  # Superpose the colobar with the map
+        ),
+        showscale=True,
+        cmin=0,
+        cmax=3,
+    )
+
+    fig.add_trace(
+        go.Scatter(
+            x=[None, None],
+            y=[None, None],
+            mode="markers",
+            showlegend=False,
+            marker=marker,
+            hoverinfo="none",
+        )
+    )
+
+    return fig
