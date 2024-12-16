@@ -46,7 +46,7 @@ def plot_measure_results_graph(
             text += f"Dcrest: {row['dcrest']}m<br>"
 
         text += f"Beta: {row['beta']:.2f}<br>"
-        text += f"Kost: €{row['cost'] / 1e6:.2f} mln<br>"
+        text += f"Kosten: €{row['cost'] / 1e6:.2f} mln<br>"
 
         text_list.append(text)
 
@@ -76,7 +76,7 @@ def plot_measure_results_graph(
     ## Update layout
     fig.update_layout(
         title=f"Maatregelen dijkvak {section_name} {mechanism}",
-        xaxis_title="Kost (mln €)",
+        xaxis_title="Kosten (mln €)",
         yaxis_title="Beta",
         template="ggplot2",
     )

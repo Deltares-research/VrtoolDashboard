@@ -1146,7 +1146,7 @@ def add_colorscale_bar(
             colorscale="RdYlGn",
             reversescale=True,
             colorbar=dict(
-                title="Kost (M€/km)",
+                title="Kosten (M€/km)",
                 titleside="right",
                 tickmode="array",
                 tickvals=[0, 5, 10, 15, 20],
@@ -1167,7 +1167,7 @@ def add_colorscale_bar(
             colorscale="RdYlGn",
             reversescale=True,
             colorbar=dict(
-                title="Kost (M€/km)",
+                title="Kosten (M€/km)",
                 titleside="right",
                 tickmode="array",
                 tickvals=[-10, 0, 10],
@@ -1491,8 +1491,8 @@ def get_color_hover_absolute_cost(
     _hovertemplate = (
         f"Vaknaam {section.name} : {section.length}m<br>"
         f'Maatregel: {measure_results["name"]}<br>'
-        f'Kost sectie: {to_million_euros(measure_results["LCC"])} M€<br>'
-        f"Kost per kilometers: {_cost_per_kilometer} M€/km<br>"
+        f'Kosten sectie: {to_million_euros(measure_results["LCC"])} M€<br>'
+        f"Kosten per kilometers: {_cost_per_kilometer} M€/km<br>"
         f"Beta sectie: {beta_section:.2}<br>"
         f"Pf sectie: {beta_to_pf(beta_section):.2e}<br>"
         f"<extra></extra>"
