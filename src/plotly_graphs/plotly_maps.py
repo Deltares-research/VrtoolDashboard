@@ -1400,6 +1400,11 @@ def get_berm_widening_color(berm_widening_value: float) -> str:
     cmap = plt.cm.Greens
     return get_color(berm_widening_value, cmap, 0, 30)
 
+def get_veiligheidsrendemeent_index_color(vr_index: int) -> str:
+    cmap = plt.cm.cividis
+    power = int(np.log10(vr_index))
+    return get_color(power, cmap, 0, 3)
+
 
 def get_color_hover_prob_ratio(
         section: DikeSection, year_index: int, mechanism_type: str

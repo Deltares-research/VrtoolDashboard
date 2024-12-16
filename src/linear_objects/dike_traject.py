@@ -32,7 +32,7 @@ class DikeTraject(BaseLinearObject):
     greedy_stop_type_criteria: Optional[str] = None
     greedy_stop_criteria_year: Optional[int] = None
     greedy_stop_criteria_beta: Optional[float] = None
-    reinforcement_modified_order_vr: Optional[list[str]] = None  # set as Optional with default value to prevent necessary migration for users
+    reinforcement_modified_order_vr: Optional[dict] = None  # set as Optional with default value to prevent necessary migration for users
 
 
     def serialize(self) -> dict:
