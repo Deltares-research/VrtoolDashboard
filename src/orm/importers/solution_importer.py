@@ -94,13 +94,13 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
     def import_orm(self):
         """Import the final measures for both Veiligheidsrendement and Doorsnede"""
         # New
-        self.final_step = self.set_minial_tc_step_number()
+        # self.final_step = self.set_minimal_tc_step_number()
         self.lists_of_measures = self.get_lists_of_measures()
 
         # Old
         self.get_final_measure_vr()
         self.get_final_measure_dsn()
-        self.get_modified_vr_order(database_path=self.database_path)
+        self.get_modified_vr_order()
         self.dike_traject.final_step_number = self.final_step
         self.dike_traject.greedy_stop_type_criteria = self.greedy_optimization_criteria
         self.dike_traject.greedy_stop_criteria_year = self.greedy_criteria_year
@@ -434,7 +434,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
 
         pass
 
-    def set_minial_tc_step_number(self) -> int:
+    def set_minimal_tc_step_number(self) -> int:
         optimization_steps = get_optimization_steps_for_run_id(self.database_path, self.run_id_vr)
         minimal_tc_steps = get_minimal_tc_step(optimization_steps)
         return minimal_tc_steps
@@ -458,20 +458,16 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
          [MechanismEnum.OVERFLOW, MechanismEnum.PIPING, MechanismEnum.STABILITY_INNER]}
         return assess_res_dict
 
-    def get_modified_vr_order(self, database_path):
+    def get_modified_vr_order(self):
         """
         Modified script from Stephan to obtain the reinforcement order based on the index.
-
-        Args:
-            database_path:
-
         Returns:
 
         """
 
         measures_per_step = self.get_measures_per_steps()
         assessment_results = self.get_assessment_results()
-        reliability_per_step = get_reliability_for_each_step(database_path, measures_per_step)
+        reliability_per_step = get_reliability_for_each_step(self.database_path, measures_per_step)
         stepwise_assessment = assessment_for_each_step(copy.deepcopy(assessment_results), reliability_per_step)
         traject_prob = calculate_traject_probability_for_steps(stepwise_assessment)
 
@@ -484,7 +480,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         final_traject_probability_per_mechanism = traject_prob[self.final_step]
         final_section_probability_per_mechanism = stepwise_assessment[self.final_step]
 
-        with open_database(database_path) as db:
+        with open_database(self.database_path) as db:
             damage = DikeTrajectInfo.select(DikeTrajectInfo.flood_damage).where(
                 DikeTrajectInfo.id == 1).get().flood_damage
 
