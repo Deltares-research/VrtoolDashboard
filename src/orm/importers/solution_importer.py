@@ -1,12 +1,11 @@
 import copy
 from bisect import bisect_right
-from collections import defaultdict
 from pathlib import Path
 from typing import Optional
 
 import numpy as np
 import pandas as pd
-from peewee import JOIN, ModelBase, DoesNotExist
+from peewee import DoesNotExist
 from scipy.interpolate import interp1d
 from vrtool.orm.io.importers.optimization.optimization_step_importer import (
     OptimizationStepImporter,
@@ -19,10 +18,8 @@ from vrtool.orm.models import (
     SectionData,
     MeasurePerSection,
     MeasureResult,
-
     OptimizationSelectedMeasure,
-    Measure,
-    MeasureResultParameter, DikeTrajectInfo,
+    DikeTrajectInfo,
 )
 from vrtool.orm.orm_controllers import open_database
 
@@ -48,11 +45,10 @@ from src.orm.orm_controller_custom import get_optimization_steps_ordered
 
 from src.utils.database_analytics import get_minimal_tc_step, get_measures_per_step_number, \
     get_reliability_for_each_step, assessment_for_each_step, calculate_traject_probability_for_steps, \
-    get_measures_per_section_for_step, calculate_traject_probability
-from src.utils.generate_output import measure_per_section_to_df
-from src.utils.utils import beta_to_pf, pf_to_beta
-from src.utils.vrutils import get_overview_of_runs, get_optimization_steps_for_run_id, get_measures_for_run_id, \
-    import_original_assessment, get_measure_parameters, get_measure_costs, get_measure_type
+    calculate_traject_probability
+
+from src.utils.utils import pf_to_beta
+from src.utils.vrutils import get_optimization_steps_for_run_id, get_measures_for_run_id, import_original_assessment
 
 
 class TrajectSolutionRunImporter(OrmImporterProtocol):
@@ -454,8 +450,8 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
 
     def get_assessment_results(self):
         assess_res_dict = {mechanism: import_original_assessment(self.database_path, mechanism)
-         for mechanism in
-         [MechanismEnum.OVERFLOW, MechanismEnum.PIPING, MechanismEnum.STABILITY_INNER]}
+                           for mechanism in
+                           [MechanismEnum.OVERFLOW, MechanismEnum.PIPING, MechanismEnum.STABILITY_INNER]}
         return assess_res_dict
 
     def get_modified_vr_order(self):
@@ -524,7 +520,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             delta_risk = risk_increased - total_risk
 
             if section in section_ids:
-                section_costs = self.dike_traject.dike_sections[section-1].final_measure_veiligheidsrendement['LCC']
+                section_costs = self.dike_traject.dike_sections[section - 1].final_measure_veiligheidsrendement['LCC']
                 vr_index[section] = delta_risk / section_costs
             else:
                 vr_index[section] = 0
