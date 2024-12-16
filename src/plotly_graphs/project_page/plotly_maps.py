@@ -230,10 +230,6 @@ def plot_order_reinforcement_index_map(trajects: list[DikeTraject]) -> go.Figure
     fig = go.Figure()
 
     sections = []
-
-    # for trajects in trajects:
-    #     a =1
-
     for traject in trajects:
 
         if traject.reinforcement_modified_order_vr is None:

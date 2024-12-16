@@ -426,6 +426,12 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         _final_measure.update(_get_measure_parameters(optimization_steps))
         return _final_measure
 
+
+    def get_import_db_attr(self, database_path: Path):
+        pass
+
+
+
     def get_modified_vr_order(self, database_path):
         """
         Script from Stephan to obtain the reinforcement order based on the index.
@@ -436,62 +442,43 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         Returns:
 
         """
-        run_list = get_overview_of_runs(database_path)
-        run_list = [run for run in run_list if run['optimization_type_name'] == 'VEILIGHEIDSRENDEMENT']
+        # run_list = get_overview_of_runs(database_path)
+        # run_list = [run for run in run_list if run['optimization_type_name'] == 'VEILIGHEIDSRENDEMENT']
 
-        optimization_steps = {run['name']: get_optimization_steps_for_run_id(database_path, run['id']) for run in
-                              run_list}
+        run_id = self.run_id_vr
+
+        # optimization_steps = {run['name']: get_optimization_steps_for_run_id(database_path, run['id']) for run in
+        #                       run_list}
         # add total cost as sum of total_lcc and total_risk in each step
 
-        minimal_tc_steps = {run: get_minimal_tc_step(steps) for run, steps in optimization_steps.items()}
-
-        lists_of_measures = {run['id']: get_measures_for_run_id(database_path, run['id']) for run in run_list}
-
-        measures_per_step = {run['id']: get_measures_per_step_number(lists_of_measures[run['id']]) for run in run_list}
-
+        # minimal_tc_steps = {run: get_minimal_tc_step(steps) for run, steps in optimization_steps.items()}
+        minimal_tc_step = self.final_step
+        lists_of_measures = get_measures_for_run_id(database_path, run_id=run_id)
+        measures_per_step = get_measures_per_step_number(lists_of_measures)
         assessment_results = {mechanism: import_original_assessment(database_path, mechanism)
                               for mechanism in
                               [MechanismEnum.OVERFLOW, MechanismEnum.PIPING, MechanismEnum.STABILITY_INNER]}
+        reliability_per_step = get_reliability_for_each_step(database_path, measures_per_step)
+        stepwise_assessment = assessment_for_each_step(copy.deepcopy(assessment_results), reliability_per_step)
+        traject_prob = calculate_traject_probability_for_steps(stepwise_assessment)
 
-        reliability_per_step = {run['id']: get_reliability_for_each_step(database_path, measures_per_step[run['id']])
-                                for run in run_list}
-
-        stepwise_assessment = {
-            run['id']: assessment_for_each_step(copy.deepcopy(assessment_results), reliability_per_step[run['id']]) for
-            run in run_list}
-
-        traject_prob = {run['id']: calculate_traject_probability_for_steps(stepwise_assessment[run['id']]) for run in
-                        run_list}
-
-        for count, run in enumerate(run_list):
-            print(traject_prob[run['id']][minimal_tc_steps[run['name']]])
-
-        measures_per_section = {
-            run['id']: get_measures_per_section_for_step(measures_per_step[run['id']], minimal_tc_steps[run['name']])
-            for run in run_list}
-        section_names = [list(measures_per_section[run].keys()) for run in measures_per_section.keys()]
-        section_names = list(set([item for sublist in section_names for item in sublist]))
+        measures_per_section = get_measures_per_section_for_step(measures_per_step, self.final_step)
+        section_ids = list(measures_per_section.keys())
 
         section_parameters = defaultdict(dict)
 
-        for run in measures_per_section.keys():
-            for section in measures_per_section[run].keys():
-                section_parameters[run][section] = []
-                for measure in measures_per_section[run][section][0]:
-                    parameters = get_measure_parameters(measure, database_path)
-                    parameters.update(get_measure_costs(measure, database_path))
-                    parameters.update(get_measure_type(measure, database_path))
-                    section_parameters[run][section].append(parameters)
+        for section in measures_per_section.keys():
+            section_parameters[section] = []
+            for measure in measures_per_section[section][0]:
+                parameters = get_measure_parameters(measure, database_path)
+                parameters.update(get_measure_costs(measure, database_path))
+                parameters.update(get_measure_type(measure, database_path))
+                section_parameters[section].append(parameters)
 
-        measure_parameters = {
-            run['id']: measure_per_section_to_df(measures_per_section[run['id']], section_parameters[run['id']]) for run
-            in run_list}
+        measure_parameters = measure_per_section_to_df(measures_per_section, section_parameters)
 
-        initial_traject_probability_per_mechanism = calculate_traject_probability(assessment_results)
-
-        for count, run in enumerate(run_list):
-            final_traject_probability_per_mechanism = traject_prob[run['id']][minimal_tc_steps[run['name']]]
-            final_section_probability_per_mechanism = stepwise_assessment[run['id']][minimal_tc_steps[run['name']]]
+        final_traject_probability_per_mechanism = traject_prob[self.final_step]
+        final_section_probability_per_mechanism = stepwise_assessment[self.final_step]
 
         with open_database(database_path) as db:
             damage = DikeTrajectInfo.select(DikeTrajectInfo.flood_damage).where(
@@ -522,7 +509,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
 
         vr_index = {}
 
-        for section in section_names:
+        for section in section_ids:
             final_section_probability_per_mechanism_temp = copy.deepcopy(final_section_probability_per_mechanism)
 
             for mechanism in assessment_results.keys():
@@ -537,8 +524,8 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             risk_increased = calculate_total_risk(final_traject_probability_per_mechanism_temp, damage, discount_rate)
             delta_risk = risk_increased - total_risk
 
-            if section in list(measure_parameters[1]['section_id']):
-                section_costs = measure_parameters[1][measure_parameters[1]['section_id'] == section]['LCC'].values[0]
+            if section in list(measure_parameters['section_id']):
+                section_costs = measure_parameters[measure_parameters['section_id'] == section]['LCC'].values[0]
                 vr_index[section] = delta_risk / section_costs
             else:
                 vr_index[section] = 0
