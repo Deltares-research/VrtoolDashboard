@@ -264,7 +264,7 @@ def plot_order_reinforcement_index_map(trajects: list[DikeTraject]) -> go.Figure
                     lat=[x[0] for x in _coordinates_wgs],
                     lon=[x[1] for x in _coordinates_wgs],
                     marker={"size": 10, "color": _color},
-                    line={"width": 4, "color": _color},
+                    line={"width": 10, "color": _color},
                     name=traject.name,
                     legendgroup=traject.name,
                     hovertemplate=_hovertemplate,

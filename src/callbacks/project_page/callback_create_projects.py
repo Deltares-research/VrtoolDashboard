@@ -7,7 +7,7 @@ from src.component_ids import MULTI_SELECT_SECTION_FOR_PROJECT_ID, EDITABLE_IMPO
     PROJECT_END_YEAR_INPUT_FIELD_ID, OVERVIEW_PROJECT_MAP_ID_2, PROGRAM_SELECTION_MAP_RADIO_SWITCH_ID
 from src.constants import ProgramDefinitionMapType
 from src.linear_objects.dike_traject import DikeTraject
-from src.linear_objects.project import get_projects_from_saved_data
+from src.linear_objects.reinforcement_program import get_projects_from_saved_data
 from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
 from src.plotly_graphs.project_page.plotly_maps import plot_project_overview_map, \
     plot_comparison_runs_overview_map_simple, plot_comparison_runs_overview_map_projects, \
