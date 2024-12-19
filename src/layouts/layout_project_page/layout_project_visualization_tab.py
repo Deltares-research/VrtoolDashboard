@@ -10,7 +10,6 @@ from src.linear_objects.project import DikeProject
 from src.plotly_graphs.pf_length_cost import plot_default_scatter_dummy
 from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
 import pandas as pd
-from collections import OrderedDict
 
 max_length = 100
 
@@ -123,9 +122,6 @@ def get_risk_table():
         # columnSize="sizeToFit",
         dashGridOptions={"animateRows": False},
         style={'height': "100%"},
-        # className="ag-theme-alpine", default
-        className="ag-theme-balham",
-
     )
     return risk_table
 
@@ -148,14 +144,20 @@ def left_side_area_stats():
                                            html.P(""),
                                            dmc.Text("Totale versterkingskosten:", td="underline"),
                                            dmc.Text("", id=TOTAL_AREA_COST, fw=700, size="xl"),
+                                           # add white vertical space
+                                           html.P(""),
+                                           html.P(""),
                                        ]
                                    ),
 
                                ]),
-                    get_risk_table(),
+                    html.Div(
+                        [get_risk_table()],
+                        style={"height": "220px"}  # Set container height to ensure the grid is displayed
+                    )
+
 
                 ],
-
 
             ),
 
