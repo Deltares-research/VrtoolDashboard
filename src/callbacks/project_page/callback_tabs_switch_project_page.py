@@ -71,16 +71,19 @@ def update_project_page_visualization(tabs_switch, result_type: str, imported_ru
     project_overview_table = fill_project_display_overview_table(projects)
 
     map_fig = plot_project_overview_map(projects, trajects.values())
-    # cost, risk, future_risk = calc_area_stats(projects, trajects)
+    cost, risk, future_risk = calc_area_stats(projects, trajects)
     t1 = time.time()
     print(f"Time to update project page visualization: {t1 - t0:.2f} s")
 
     risk_table = []
 
     cost, risk_metrics = calc_area_stats_new(program)
-    risk, future_risk = 0, 0
+    # risk, future_risk = 0, 0
     for year in [2025, 2050, 2075]:
-        risk_table.append({"year": year, "current_risk": risk_metrics["current"][year], "program_risk": risk_metrics["program"][year]})
+        risk_table.append({"year": year,
+                           "current_risk": round(risk_metrics["current"][year] / 1e6,2),
+                           "program_risk": round(risk_metrics["program"][year] /1e6, 2)
+                           })
     print(risk_table)
     return cost_fig, reliability_fig, map_fig, project_overview_table, f"{cost/1e6:.2f} M€/jaar", f"{risk/1e6:.2f} M€/jaar", f"{future_risk/1e6:.2f} M€/jaar", risk_table
 

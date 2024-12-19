@@ -74,23 +74,23 @@ def projects_reliability_over_time(program: DikeProgram, result_type: str) -> go
             hovertemplate = "Jaar: %{x}<br>	β = %{y:.2e}"
 
         elif result_type == ResultType.PROBABILITY.name:
-            y = betas_ini
+            y = beta_to_pf(betas_ini)
             y_ondergrens = [dike_traject.lower_bound_value] * len(years_ini)
             name = "Faalkans"
             hovertemplate = "Jaar: %{x}<br>Faalkans: %{y:.2e}"
         elif result_type == ResultType.DISTANCE_TO_NORM.name:
-            y = betas_ini / dike_traject.lower_bound_value
+            y = beta_to_pf(betas_ini) / dike_traject.lower_bound_value
             y_ondergrens = [1] * len(years_ini)
             name = "Afstand tot norm"
             hovertemplate = "Jaar: %{x}<br>Afstand tot norm: %{y:.2e}"
         elif result_type == ResultType.RISK.name:
-            y = betas_ini * dike_traject.flood_damage
+            y = beta_to_pf(betas_ini) * dike_traject.flood_damage
             discount_rate = 0.03
             y_ondergrens = None
             name = "Risico (€/jaar)"
             hovertemplate = "Jaar: %{x}<br>Risico: %{y:.2e}"
         elif result_type == ResultType.RISK_FACTOR.name:
-            risk = betas_ini * dike_traject.flood_damage
+            risk = beta_to_pf(betas_ini) * dike_traject.flood_damage
             discount_rate = 0.03
             risk_norm = [dike_traject.lower_bound_value * dike_traject.flood_damage] / (1 + discount_rate) ** (
                     years_ini - 2025)

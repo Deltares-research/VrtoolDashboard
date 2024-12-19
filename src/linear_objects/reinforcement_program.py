@@ -4,7 +4,7 @@ from src.constants import REFERENCE_YEAR
 from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import get_traject_prob_fast, DikeTraject
 from src.linear_objects.project import DikeProject
-from src.utils.utils import get_traject_reliability, pf_to_beta, interpolate_beta_values
+from src.utils.utils import get_traject_reliability, pf_to_beta, interpolate_beta_values, beta_to_pf
 
 
 class DikeProgram():
@@ -38,6 +38,7 @@ class DikeProgram():
         the same year: the beta before and after the reinforcement of the project.
 
         """
+        # sort projects by ending year
         projects = sorted(self.projects, key=lambda x: x.end_year)
         traject_res = {}
         for dike_traject in self.dike_trajects.values():
@@ -247,9 +248,9 @@ def calc_area_stats_new(program: DikeProgram):
         # Get the risk for the program
         idx_2050 = np.where(program.trajects_pf_over_time[f"{dike_traject.name}"]["years"] == 2050)[0][-1]
         idx_2075 = np.where(program.trajects_pf_over_time[f"{dike_traject.name}"]["years"] == 2075)[0][-1]
-        risk_metrics["program"][2025] += program.trajects_pf_over_time[f"{dike_traject.name}"]["betas"][0] * dike_traject.flood_damage
-        risk_metrics["program"][2050] += program.trajects_pf_over_time[f"{dike_traject.name}"]["betas"][idx_2050] * dike_traject.flood_damage
-        risk_metrics["program"][2075] += program.trajects_pf_over_time[f"{dike_traject.name}"]["betas"][idx_2075] * dike_traject.flood_damage
+        risk_metrics["program"][2025] += beta_to_pf(program.trajects_pf_over_time[f"{dike_traject.name}"]["betas"][0]) * dike_traject.flood_damage
+        risk_metrics["program"][2050] += beta_to_pf(program.trajects_pf_over_time[f"{dike_traject.name}"]["betas"][idx_2050]) * dike_traject.flood_damage
+        risk_metrics["program"][2075] += beta_to_pf(program.trajects_pf_over_time[f"{dike_traject.name}"]["betas"][idx_2075]) * dike_traject.flood_damage
 
 
     return cost, risk_metrics
