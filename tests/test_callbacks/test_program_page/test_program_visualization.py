@@ -6,7 +6,7 @@ from plotly.graph_objs import Figure
 
 from src.callbacks.project_page.callback_tabs_switch_project_page import update_project_page_visualization
 from src.constants import ResultType
-from src.linear_objects.project import get_projects_from_saved_data
+from src.linear_objects.reinforcement_program import get_projects_from_saved_data
 from src.plotly_graphs.project_page.plotly_plots import projects_reliability_over_time, plot_cost_vs_time_projects
 
 
@@ -29,7 +29,7 @@ class TestCallbackProgramPageVisualization:
 
         ctx = copy_context()
         # output = ctx.run(run_callback)
-        cost_fig, reliability_fig, map_fig, project_overview_table, cost, damage, risk = ctx.run(run_callback)
+        cost_fig, reliability_fig, map_fig, project_overview_table, cost, damage, risk, risk_table = ctx.run(run_callback)
 
 
         # 3. Assert
@@ -40,6 +40,7 @@ class TestCallbackProgramPageVisualization:
         assert isinstance(cost, str)
         assert isinstance(damage, str)
         assert isinstance(risk, str)
+        assert isinstance(risk_table, list)
 
     def test_plot_projects_reliability_over_time_figure_reliability(self):
         # 1. Define data

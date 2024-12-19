@@ -24,6 +24,3 @@ class DikeProject():
     @property
     def total_length(self):
         return sum([section.length for section in self.dike_sections])
-
-
-

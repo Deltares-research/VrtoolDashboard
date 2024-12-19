@@ -7,7 +7,8 @@ from src.component_ids import PROJECT_PAGE_VISUALIZATION_COST_GRAPH, PROJECT_PAG
 from src.layouts.layout_project_page.layout_project_definition_tab import project_definition_tab_layout
 from src.layouts.layout_project_page.layout_project_visualization_tab import project_visualization_tab_layout, \
     fill_project_display_overview_table
-from src.linear_objects.reinforcement_program import get_projects_from_saved_data, calc_area_stats, calc_area_stats_new
+from src.linear_objects.reinforcement_program import get_projects_from_saved_data, calc_area_stats, calc_area_stats_new, \
+    DikeProgram
 from src.plotly_graphs.project_page.plotly_maps import plot_project_overview_map
 from src.plotly_graphs.project_page.plotly_plots import projects_reliability_over_time, plot_cost_vs_time_projects
 
@@ -60,21 +61,26 @@ def update_project_page_visualization(tabs_switch, result_type: str, imported_ru
 
     import time
     t0 = time.time()
-    projects, trajects = get_projects_from_saved_data(imported_runs_data, project_overview_data)
+    program = DikeProgram(imported_runs_data, project_overview_data)
+    projects, trajects = program.projects, program.dike_trajects
+
+    # program_pf_res = program.calc_trajects_failure_proba()
+    # projects, trajects = get_projects_from_saved_data(imported_runs_data, project_overview_data)
     cost_fig = plot_cost_vs_time_projects(projects)
-    reliability_fig = projects_reliability_over_time(projects, imported_runs_data, result_type)
+    reliability_fig = projects_reliability_over_time(program, result_type)
     project_overview_table = fill_project_display_overview_table(projects)
 
     map_fig = plot_project_overview_map(projects, trajects.values())
-    cost, risk, future_risk = calc_area_stats(projects, trajects)
+    # cost, risk, future_risk = calc_area_stats(projects, trajects)
     t1 = time.time()
     print(f"Time to update project page visualization: {t1 - t0:.2f} s")
 
     risk_table = []
 
-    a = calc_area_stats_new(projects, trajects)
+    cost, risk_metrics = calc_area_stats_new(program)
+    risk, future_risk = 0, 0
     for year in [2025, 2050, 2075]:
-        risk_table.append({"year": year, "current_risk": 1234, "program_risk": 234567})
+        risk_table.append({"year": year, "current_risk": risk_metrics["current"][year], "program_risk": risk_metrics["program"][year]})
     print(risk_table)
     return cost_fig, reliability_fig, map_fig, project_overview_table, f"{cost/1e6:.2f} M€/jaar", f"{risk/1e6:.2f} M€/jaar", f"{future_risk/1e6:.2f} M€/jaar", risk_table
 
