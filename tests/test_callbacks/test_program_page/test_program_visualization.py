@@ -29,7 +29,7 @@ class TestCallbackProgramPageVisualization:
 
         ctx = copy_context()
         # output = ctx.run(run_callback)
-        cost_fig, reliability_fig, map_fig, project_overview_table, cost, damage, risk, risk_table = ctx.run(run_callback)
+        cost_fig, reliability_fig, map_fig, project_overview_table, cost, risk_table = ctx.run(run_callback)
 
 
         # 3. Assert
@@ -38,8 +38,6 @@ class TestCallbackProgramPageVisualization:
         assert isinstance(map_fig, Figure)
         assert isinstance(project_overview_table, list)
         assert isinstance(cost, str)
-        assert isinstance(damage, str)
-        assert isinstance(risk, str)
         assert isinstance(risk_table, list)
 
     def test_plot_projects_reliability_over_time_figure_reliability(self):

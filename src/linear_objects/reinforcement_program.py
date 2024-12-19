@@ -174,44 +174,6 @@ def calc_prob_failure_after_reinforcement(dike_sections: list[DikeSection]) -> f
     _traject_pf = get_traject_prob_fast(_traject_reliability)[1]
     return _traject_pf[0]
 
-
-def calc_area_stats(projects: list[DikeProject], trajects: dict[str, DikeTraject]):
-    """
-    Calculate the total cost, damage and risk for the entire area.
-    Cost is simply the sum of the costs of all the reinforced sections in the projects
-    Damage is the sum of the flood damages of all the sections in the projects
-
-    Risk is the sum of the flood damages of all the sections in the projects multiplied by the probability of failure
-    after completion (i.e. reinforcement) of the project.
-
-    :param projects: list of DikeProject objects
-    :return: tuple: the total cost, and current risk and the risk after reinforcement
-    """
-    cost = 0
-    damage = 0
-    current_risk = 0
-    future_risk = 0
-    for project in projects:
-        cost += project.calc_project_cost()
-
-    for dike_traject in trajects.values():
-        damage += dike_traject.flood_damage
-        # _beta_df_ini = get_initial_assessment_df(dike_traject.dike_sections)
-        # _traject_pf, _ = get_traject_prob(_beta_df_ini)
-
-        _traject_reliability = get_traject_reliability(dike_traject.dike_sections, 'initial')
-        _traject_pf = get_traject_prob_fast(_traject_reliability)[1]
-        current_risk += dike_traject.flood_damage * _traject_pf[0]
-
-        # _beta_df = get_updated_beta_df(dike_traject.dike_sections, _beta_df_ini)
-        # _traject_pf = get_traject_prob(_beta_df)[0]
-        _traject_reliability = get_traject_reliability(dike_traject.dike_sections, 'veiligheidsrendement')
-        _traject_pf = get_traject_prob_fast(_traject_reliability)[1]
-        future_risk += dike_traject.flood_damage * _traject_pf[0]  # this is the faalkans at year 2025! be aware
-
-    return cost, current_risk, future_risk
-
-
 def calc_area_stats_new(program: DikeProgram):
     """
     Calculate the total cost, damage and risk for the entire area.
@@ -251,6 +213,5 @@ def calc_area_stats_new(program: DikeProgram):
         risk_metrics["program"][2025] += beta_to_pf(program.trajects_pf_over_time[f"{dike_traject.name}"]["betas"][0]) * dike_traject.flood_damage
         risk_metrics["program"][2050] += beta_to_pf(program.trajects_pf_over_time[f"{dike_traject.name}"]["betas"][idx_2050]) * dike_traject.flood_damage
         risk_metrics["program"][2075] += beta_to_pf(program.trajects_pf_over_time[f"{dike_traject.name}"]["betas"][idx_2075]) * dike_traject.flood_damage
-
 
     return cost, risk_metrics

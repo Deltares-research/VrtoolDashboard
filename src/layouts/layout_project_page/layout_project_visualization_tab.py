@@ -4,8 +4,7 @@ import dash_mantine_components as dmc
 import dash_ag_grid as dag
 
 from src.component_ids import PROJECT_PAGE_VISUALIZATION_COST_GRAPH, PROJECT_PAGE_VISUALIZATION_RELIABILITY_GRAPH, \
-    OVERVIEW_PROJECT_MAP_ID, PROJECT_OVERVIEW_TABLE_DISPLAY, TOTAL_AREA_COST, TOTAL_AREA_RISK_CURRENT, \
-    TOTAL_AREA_RISK_REINFORCED, TOTAL_AREA_RISK_TABLE
+    OVERVIEW_PROJECT_MAP_ID, PROJECT_OVERVIEW_TABLE_DISPLAY, TOTAL_AREA_COST, TOTAL_AREA_RISK_TABLE
 from src.layouts.layout_traject_page.layout_radio_items import layout_radio_result_type_project_page
 from src.linear_objects.project import DikeProject
 from src.plotly_graphs.pf_length_cost import plot_default_scatter_dummy
@@ -149,12 +148,6 @@ def left_side_area_stats():
                                            html.P(""),
                                            dmc.Text("Totale versterkingskosten:", td="underline"),
                                            dmc.Text("", id=TOTAL_AREA_COST, fw=700, size="xl"),
-                                           # dmc.Text("Totaal schade:", td="underline"),
-                                           # dmc.Text("XXXX €", id=TOTAL_AREA_DAMAGE, fw=700, size="xl"),
-                                           dmc.Text("Risico (huidige):", td="underline"),
-                                           dmc.Text("XXXX €/jaar", id=TOTAL_AREA_RISK_CURRENT, fw=700, size="xl"),
-                                           dmc.Text("Risico (na versterking):", td="underline"),
-                                           dmc.Text("XXXX €/jaar", id=TOTAL_AREA_RISK_REINFORCED, fw=700, size="xl"),
                                        ]
                                    ),
 
