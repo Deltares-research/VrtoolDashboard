@@ -58,6 +58,7 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
     # first sort projects by ending year
     projects = sorted(projects, key=lambda x: x.end_year)
 
+    # Loop over traject
     for index, traject_data in enumerate(imported_runs_data.values()):
         color_traject = CLASSIC_PLOTLY_COLOR_SEQUENCE[index]
 
@@ -73,6 +74,7 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
         betas_ini = interpolate_beta_values(years_ini, _traject_betas, years_beta)
 
         sections_to_reinforce=[]
+        # loop over projects of the traject
         for index, project in enumerate(projects):
             year_start = projects[index].end_year
             year_end = projects[index + 1].end_year if index < len(projects) - 1 else 2100

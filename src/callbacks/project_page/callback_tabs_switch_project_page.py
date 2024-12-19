@@ -7,7 +7,7 @@ from src.component_ids import PROJECT_PAGE_VISUALIZATION_COST_GRAPH, PROJECT_PAG
 from src.layouts.layout_project_page.layout_project_definition_tab import project_definition_tab_layout
 from src.layouts.layout_project_page.layout_project_visualization_tab import project_visualization_tab_layout, \
     fill_project_display_overview_table
-from src.linear_objects.project import get_projects_from_saved_data, calc_area_stats
+from src.linear_objects.reinforcement_program import get_projects_from_saved_data, calc_area_stats, calc_area_stats_new
 from src.plotly_graphs.project_page.plotly_maps import plot_project_overview_map
 from src.plotly_graphs.project_page.plotly_plots import projects_reliability_over_time, plot_cost_vs_time_projects
 
@@ -71,6 +71,8 @@ def update_project_page_visualization(tabs_switch, result_type: str, imported_ru
     print(f"Time to update project page visualization: {t1 - t0:.2f} s")
 
     risk_table = []
+
+    a = calc_area_stats_new(projects, trajects)
     for year in [2025, 2050, 2075]:
         risk_table.append({"year": year, "current_risk": 1234, "program_risk": 234567})
     print(risk_table)
