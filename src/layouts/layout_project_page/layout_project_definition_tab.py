@@ -29,13 +29,6 @@ columns_defs_1 = [
      "headerName": "Naam berekening",
      "editable": False,
      "initialWidth": 200},
-
-    {"field": "active",
-     "headerName": "Activeer",
-     "cellRenderer": "DBC_Switch",
-     "editable": True,
-     "CellRendererParams": {"onColor": "success", "offColor": "danger"},
-     "initialWidth": 200, }
 ]
 
 columns_defs_2 = [
