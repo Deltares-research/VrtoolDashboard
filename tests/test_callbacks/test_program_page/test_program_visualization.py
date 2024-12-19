@@ -6,7 +6,7 @@ from plotly.graph_objs import Figure
 
 from src.callbacks.project_page.callback_tabs_switch_project_page import update_project_page_visualization
 from src.constants import ResultType
-from src.linear_objects.reinforcement_program import get_projects_from_saved_data
+from src.linear_objects.reinforcement_program import get_projects_from_saved_data, DikeProgram
 from src.plotly_graphs.project_page.plotly_plots import projects_reliability_over_time, plot_cost_vs_time_projects
 
 
@@ -49,12 +49,10 @@ class TestCallbackProgramPageVisualization:
 
         _imported_runs_data = _data['imported_runs_data']
         _projects_overview_data = _data['project_data']
-
-
-        _projects, _ = get_projects_from_saved_data(_imported_runs_data, _projects_overview_data)
+        program = DikeProgram(_imported_runs_data, _projects_overview_data)
 
         # 2. Call
-        _fig = projects_reliability_over_time(_projects, _imported_runs_data, ResultType.RELIABILITY.name)
+        _fig = projects_reliability_over_time(program, ResultType.RELIABILITY.name)
 
         # 3. Assert
         assert isinstance(_fig, Figure)
@@ -68,10 +66,10 @@ class TestCallbackProgramPageVisualization:
         _imported_runs_data = _data['imported_runs_data']
         _projects_overview_data = _data['project_data']
 
-        _projects, _ = get_projects_from_saved_data(_imported_runs_data, _projects_overview_data)
+        program = DikeProgram(_imported_runs_data, _projects_overview_data)
 
         # 2. Call
-        _fig = projects_reliability_over_time(_projects, _imported_runs_data, ResultType.RISK.name)
+        _fig = projects_reliability_over_time(program, ResultType.RISK.name)
 
         # 3. Assert
         assert isinstance(_fig, Figure)
@@ -84,11 +82,10 @@ class TestCallbackProgramPageVisualization:
 
         _imported_runs_data = _data['imported_runs_data']
         _projects_overview_data = _data['project_data']
-
-        _projects, _ = get_projects_from_saved_data(_imported_runs_data, _projects_overview_data)
+        program = DikeProgram(_imported_runs_data, _projects_overview_data)
 
         # 2. Call
-        _fig = projects_reliability_over_time(_projects, _imported_runs_data, ResultType.RISK_FACTOR.name)
+        _fig = projects_reliability_over_time(program, ResultType.RISK_FACTOR.name)
 
         # 3. Assert
         assert isinstance(_fig, Figure)

@@ -60,8 +60,6 @@ def update_project_page_visualization(tabs_switch, result_type: str, imported_ru
     program = DikeProgram(imported_runs_data, project_overview_data)
     projects, trajects = program.projects, program.dike_trajects
 
-    # program_pf_res = program.calc_trajects_failure_proba()
-    # projects, trajects = get_projects_from_saved_data(imported_runs_data, project_overview_data)
     cost_fig = plot_cost_vs_time_projects(projects)
     reliability_fig = projects_reliability_over_time(program, result_type)
     project_overview_table = fill_project_display_overview_table(projects)

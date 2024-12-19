@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from src.linear_objects.project import get_projects_from_saved_data
+from src.linear_objects.reinforcement_program import get_projects_from_saved_data
 from src.plotly_graphs.project_page.plotly_maps import plot_project_overview_map
 
 
