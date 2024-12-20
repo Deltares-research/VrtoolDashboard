@@ -29,7 +29,6 @@ def render_tab_content(tab_switch):
      Output(OVERVIEW_PROJECT_MAP_ID, "figure"),
      Output(PROJECT_OVERVIEW_TABLE_DISPLAY, "children"),
      Output(TOTAL_AREA_COST, "children"),
-     # Output(TOTAL_AREA_DAMAGE, "children"),
      Output(TOTAL_AREA_RISK_TABLE, "rowData")
      ],
     [Input("tabs_tab_project_page", "value"),
@@ -76,5 +75,5 @@ def update_project_page_visualization(tabs_switch, result_type: str, imported_ru
                            "current_risk": round(risk_metrics["current"][year] / 1e6,2),
                            "program_risk": round(risk_metrics["program"][year] /1e6, 2)
                            })
-    return cost_fig, reliability_fig, map_fig, project_overview_table, f"{cost/1e6:.2f} M€/jaar", risk_table
+    return cost_fig, reliability_fig, map_fig, project_overview_table, f"{cost/1e6:.2f} M€", risk_table
 
