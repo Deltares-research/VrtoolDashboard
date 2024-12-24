@@ -2,7 +2,8 @@ import numpy as np
 
 from src.constants import REFERENCE_YEAR
 from src.linear_objects.dike_section import DikeSection
-from src.linear_objects.dike_traject import get_traject_prob_fast, DikeTraject
+from src.linear_objects.dike_traject import get_traject_prob_fast, DikeTraject, get_initial_assessment_df, \
+    get_traject_prob, calc_traject_probability_array
 from src.linear_objects.project import DikeProject
 from src.utils.utils import get_traject_reliability, pf_to_beta, interpolate_beta_values, beta_to_pf
 
@@ -42,7 +43,7 @@ class DikeProgram():
         projects = sorted(self.projects, key=lambda x: x.end_year)
         traject_res = {}
         for dike_traject in self.dike_trajects.values():
-            years_ini, betas_ini = self.calc_traject_failure_proba_from_program(dike_traject, projects)
+            years_ini, betas_ini = self.calc_traject_failure_proba_from_program_old_df(dike_traject, projects)
             traject_res[dike_traject.name] = {"years": years_ini, "betas": betas_ini}
         return traject_res
 
@@ -51,8 +52,10 @@ class DikeProgram():
     def calc_traject_failure_proba_from_program(dike_traject: DikeTraject, projects: list[DikeProject]):
         _traject_reliability = get_traject_reliability(dike_traject.dike_sections, 'initial')
         _traject_pf = get_traject_prob_fast(_traject_reliability)[1]
-        _traject_betas = pf_to_beta(_traject_pf)
 
+        _traject_betas = pf_to_beta(_traject_pf)
+        # _beta_df = get_initial_assessment_df(dike_traject.dike_sections)
+        # _a, b = get_traject_prob(_beta_df)
         # Initialize years and betas
         years_ini = np.linspace(2025, projects[0].end_year, projects[0].end_year - 2025 + 1)
         years_beta = np.array(dike_traject.dike_sections[0].years) + REFERENCE_YEAR
@@ -70,11 +73,48 @@ class DikeProgram():
             _unreinforced_sections = [section for section in dike_traject.dike_sections if
                                       section.name not in [s.name for s in sections_to_reinforce]]
 
-            _traject_reliability = get_traject_reliability(sections_to_reinforce, 'partial',
-                                                           unreinforced_sections=_unreinforced_sections)
+            # _traject_reliability = get_traject_reliability(sections_to_reinforce, 'partial',
+            #                                                unreinforced_sections=_unreinforced_sections)
+            _traject_reliability = get_traject_reliability(dike_traject.dike_sections, 'veiligheidsrendement')
+            # _traject_reliability = get_traject_reliability(dike_traject.dike_sections, 'initial')
             _traject_pf = get_traject_prob_fast(_traject_reliability)[1]
 
             _traject_betas = pf_to_beta(_traject_pf)
+
+            years = np.linspace(year_start, year_end, year_end - year_start + 1)
+            betas = interpolate_beta_values(years, _traject_betas, years_beta)
+
+            years_ini = np.concatenate((years_ini, years))
+            betas_ini = np.concatenate((betas_ini, betas))
+
+        return years_ini, betas_ini
+
+    @staticmethod
+    def calc_traject_failure_proba_from_program_old_df(dike_traject: DikeTraject, projects: list[DikeProject]):
+
+
+        _beta_df = get_initial_assessment_df(dike_traject.dike_sections)
+        _traject_pf, b = get_traject_prob(_beta_df)
+        _traject_betas = pf_to_beta(_traject_pf)[0]
+
+        # Initialize years and betas
+        years_ini = np.linspace(2025, projects[0].end_year, projects[0].end_year - 2025 + 1)
+        years_beta = np.array(dike_traject.dike_sections[0].years) + REFERENCE_YEAR
+        betas_ini = interpolate_beta_values(years_ini, _traject_betas, years_beta)
+
+        sections_to_reinforce = []
+        # loop over projects of the traject
+        for index, project in enumerate(projects):
+            year_start = projects[index].end_year
+            year_end = projects[index + 1].end_year if index < len(projects) - 1 else 2100
+            # get all the section of the project that are part of the traject
+            dike_section_project_list = [section for section in project.dike_sections if
+                                         section.parent_traject_name == dike_traject.name]
+            sections_to_reinforce.extend(dike_section_project_list)
+
+
+            _traject_array = calc_traject_probability_array(dike_traject.dike_sections, sections_to_reinforce, "veiligheidsrendement")
+            _traject_betas = pf_to_beta(_traject_array)[-1]
 
             years = np.linspace(year_start, year_end, year_end - year_start + 1)
             betas = interpolate_beta_values(years, _traject_betas, years_beta)
@@ -170,8 +210,9 @@ def calc_prob_failure_after_reinforcement(dike_sections: list[DikeSection]) -> f
     #
     # _traject_pf = get_traject_prob(_beta_df)[0]
     #
-    _traject_reliability = get_traject_reliability(dike_sections, 'veiligheidsrendement')
-    _traject_pf = get_traject_prob_fast(_traject_reliability)[1]
+    # _traject_reliability = get_traject_reliability(dike_sections, 'veiligheidsrendement')
+    # _traject_pf = get_traject_prob_fast(_traject_reliability)[1]
+    _traject_pf = calc_traject_probability_array(dike_sections, dike_sections, 'veiligheidsrendement')[-1]
     return _traject_pf[0]
 
 def calc_area_stats_new(program: DikeProgram):

@@ -436,3 +436,64 @@ def get_step_traject_pf(dike_traject: DikeTraject) -> np.array:
         pf_array.append(step["pf"])
 
     return np.array(pf_array)
+
+
+
+def calc_traject_probability_array(all_dike_sections: list[DikeSection], sections_to_reinforce: list[DikeSection],calc_type: str) -> np.array:
+    """
+    TEMPORARY FUNCTION
+    Return an array of the traject probability of failure forevery year and each step. Columns are the years and
+    rows are the steps. The first row is the probability of failure of the unreinforced dike traject.
+    :param calc_type:
+    :return:
+    """
+
+    _beta_df = get_initial_assessment_df(all_dike_sections)
+    _traject_pf, _ = get_traject_prob(_beta_df)
+    years = all_dike_sections[0].years
+
+    # if calc_type == "vr":
+    #     _section_order = self.reinforcement_order_vr
+    #     _section_measure = "final_measure_veiligheidsrendement"
+    #
+    # elif calc_type == "dsn":
+    #     _section_order = self.reinforcement_order_dsn
+    #     _section_measure = "final_measure_doorsnede"
+    #
+    # else:
+    #     raise ValueError("calc_type should be either 'vr' or 'dsn' ")
+
+    for section in sections_to_reinforce:
+        # section = self.get_section(section_name)
+
+        if not section.in_analyse:  # skip if the section is not reinforced
+            continue
+
+        if (calc_type == "doorsnede") and (
+                not section.is_reinforced_doorsnede
+        ):  # skip if the section is not reinforced
+            continue
+
+        if (calc_type == "veiligheidsrendement") and (
+                not section.is_reinforced_veiligheidsrendement
+        ):  # skip if the section is not reinforced
+            continue
+        _active_mechanisms = ["Overflow", "Piping", "StabilityInner"]
+        if section.revetment:
+            _active_mechanisms.append("Revetment")
+        # add a row to the dataframe with the initial assessment of the section
+        for mechanism in _active_mechanisms:
+            mask = (_beta_df["name"] == section.name) & (
+                    _beta_df["mechanism"] == mechanism
+            )
+            # replace the row in the dataframe with the betas of the section if both the name and mechanism match
+
+            for year, beta in zip(
+                    years, getattr(section, "final_measure_veiligheidsrendement")[mechanism]
+            ):
+                _beta_df.loc[mask, year] = beta
+
+        _reinforced_traject_pf, _ = get_traject_prob(_beta_df)
+
+        _traject_pf = np.concatenate((_traject_pf, _reinforced_traject_pf), axis=0)
+    return np.array(_traject_pf)
