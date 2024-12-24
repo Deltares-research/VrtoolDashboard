@@ -29,6 +29,7 @@ def plot_pf_project_comparison(project_data: dict, selected_year: int, result_ty
 
     fig = go.Figure()
 
+    x_max = 0
     for index, (_, dike_traject_data) in enumerate(project_data.items()):
         dike_traject = DikeTraject.deserialize(dike_traject_data)
         _year_index = bisect_right(dike_traject.dike_sections[0].years, selected_year - REFERENCE_YEAR) - 1
@@ -40,6 +41,7 @@ def plot_pf_project_comparison(project_data: dict, selected_year: int, result_ty
         # x_step = cum_cost_steps(dike_traject)
         title_x_axis = "Kosten (mln €)"
         max_x = x_vr[-1]
+        x_max = np.max([max_x, x_max])
         title_extra = "Faalkans i.r.t kosten"
 
         if result_type == ResultType.RELIABILITY.name:
@@ -72,19 +74,18 @@ def plot_pf_project_comparison(project_data: dict, selected_year: int, result_ty
                                                "Trajectfaalkans: %{y:.2e}<br>"
                                  ))
 
-        x_max = np.max([np.max(x_vr)])
-        fig.update_xaxes(range=[0, x_max], title=title_x_axis)
-        fig.update_layout(title=title_extra, yaxis_title=title_y_axis, xaxis_title=title_x_axis)
-        if result_type == ResultType.RELIABILITY.name:
-            fig.update_yaxes(range=[None, 6])
-        elif result_type == ResultType.PROBABILITY.name:
+    fig.update_xaxes(range=[0, x_max], title=title_x_axis)
+    fig.update_layout(title=title_extra, yaxis_title=title_y_axis, xaxis_title=title_x_axis)
+    if result_type == ResultType.RELIABILITY.name:
+        fig.update_yaxes(range=[None, 6])
+    elif result_type == ResultType.PROBABILITY.name:
 
-            fig.update_yaxes(range=[None, 1e-7],
-                             type='log',
-                             exponentformat='power',
-                             )
+        fig.update_yaxes(range=[None, 1e-7],
+                         type='log',
+                         exponentformat='power',
+                         )
 
-        fig.update_layout(showlegend=True, template='plotly_white')
+    fig.update_layout(showlegend=True, template='plotly_white')
 
     return fig
 

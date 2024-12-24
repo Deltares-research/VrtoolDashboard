@@ -183,12 +183,12 @@ def update_table_comparison_measures(imported_runs: dict, table_imported_runs_da
             "run_1_dberm": section_1.final_measure_veiligheidsrendement.get('dberm'),
             "run_1_dcrest": section_1.final_measure_veiligheidsrendement.get('dcrest'),
             "run_1_Lscreen": section_1.final_measure_veiligheidsrendement.get('L_stab_screen'),
-            "run_1_cost": section_1.final_measure_veiligheidsrendement.get('LCC') / 1e6,
+            "run_1_cost": round(section_1.final_measure_veiligheidsrendement.get('LCC') / 1e6, 2),
             "run_2_measure": ", ".join(section_2.final_measure_veiligheidsrendement.get('type', ["Geen maatregel"])),
             "run_2_dberm": section_2.final_measure_veiligheidsrendement.get('dberm'),
             "run_2_dcrest": section_2.final_measure_veiligheidsrendement.get('dcrest'),
             "run_2_Lscreen": section_2.final_measure_veiligheidsrendement.get('L_stab_screen'),
-            "run_2_cost": section_2.final_measure_veiligheidsrendement.get('LCC') / 1e6,
+            "run_2_cost": round(section_2.final_measure_veiligheidsrendement.get('LCC') / 1e6, 2),
         })
 
     patched_grid = Patch()
