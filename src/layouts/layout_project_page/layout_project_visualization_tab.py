@@ -153,7 +153,7 @@ def left_side_area_stats():
                                ]),
                     html.Div(
                         [get_risk_table()],
-                        style={"height": "220px"}  # Set container height to ensure the grid is displayed
+                        style={"height": "300px"}  # Set container height to ensure the grid is displayed
                     )
 
 

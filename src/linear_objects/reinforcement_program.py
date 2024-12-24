@@ -230,8 +230,9 @@ def calc_area_stats_new(program: DikeProgram):
     cost = 0
     damage = 0
 
-    risk_metrics = {"current": {2025: 0, 2050: 0, 2075: 0},
-                    "program": {2025: 0, 2050: 0, 2075: 0}}
+    risk_metrics = {"current": {2030: 0, 2040: 0, 2050: 0, 2075: 0},
+                    "program": {2030: 0, 2040: 0, 2050: 0, 2075: 0}}
+
     for project in projects:
         cost += project.calc_project_cost()
 
@@ -244,15 +245,32 @@ def calc_area_stats_new(program: DikeProgram):
         idx_2050 = np.where(np.array(dike_traject.dike_sections[0].years) == 25)[0][0]
         idx_2075 = np.where(np.array(dike_traject.dike_sections[0].years) == 50)[0][0]
 
-        risk_metrics["current"][2025] += dike_traject.flood_damage * _traject_pf[0]
-        risk_metrics["current"][2050] += dike_traject.flood_damage * _traject_pf[idx_2050]
-        risk_metrics["current"][2075] += dike_traject.flood_damage * _traject_pf[idx_2075]
+        risk_2025 = dike_traject.flood_damage * _traject_pf[0]
+        risk_2050 = dike_traject.flood_damage * _traject_pf[idx_2050]
+        risk_2075 = dike_traject.flood_damage * _traject_pf[idx_2075]
 
-        # Get the risk for the program
+        #interpolate the risk for the years 2030 and 2040
+        risk_2030 = np.interp(2030, [2025, 2050], [risk_2025, risk_2050])
+        risk_2040 = np.interp(2040, [2025, 2050], [risk_2025, risk_2050])
+
+        risk_metrics["current"][2030] += risk_2030
+        risk_metrics["current"][2040] += risk_2040
+        risk_metrics["current"][2050] += risk_2050
+        risk_metrics["current"][2075] += risk_2075
+
+        ###  Get the risk for the program
         idx_2050 = np.where(program.trajects_pf_over_time[f"{dike_traject.name}"]["years"] == 2050)[0][-1]
         idx_2075 = np.where(program.trajects_pf_over_time[f"{dike_traject.name}"]["years"] == 2075)[0][-1]
-        risk_metrics["program"][2025] += beta_to_pf(program.trajects_pf_over_time[f"{dike_traject.name}"]["betas"][0]) * dike_traject.flood_damage
-        risk_metrics["program"][2050] += beta_to_pf(program.trajects_pf_over_time[f"{dike_traject.name}"]["betas"][idx_2050]) * dike_traject.flood_damage
-        risk_metrics["program"][2075] += beta_to_pf(program.trajects_pf_over_time[f"{dike_traject.name}"]["betas"][idx_2075]) * dike_traject.flood_damage
+        risk_2025 = dike_traject.flood_damage * beta_to_pf(program.trajects_pf_over_time[f"{dike_traject.name}"]["betas"][0])
+        risk_2050 = dike_traject.flood_damage * beta_to_pf(program.trajects_pf_over_time[f"{dike_traject.name}"]["betas"][idx_2050])
+        risk_2075 = dike_traject.flood_damage * beta_to_pf(program.trajects_pf_over_time[f"{dike_traject.name}"]["betas"][idx_2075])
+
+        risk_2030 = np.interp(2030, [2025, 2050], [risk_2025, risk_2050])
+        risk_2040 = np.interp(2040, [2025, 2050], [risk_2025, risk_2050])
+
+        risk_metrics["program"][2030] += risk_2030
+        risk_metrics["program"][2040] += risk_2040
+        risk_metrics["program"][2050] += risk_2050
+        risk_metrics["program"][2075] += risk_2075
 
     return cost, risk_metrics

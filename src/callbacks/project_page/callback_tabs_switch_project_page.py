@@ -54,8 +54,6 @@ def update_project_page_visualization(tabs_switch, result_type: str, imported_ru
     if project_overview_data is None:
         return dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
 
-    import time
-    t0 = time.time()
     program = DikeProgram(imported_runs_data, project_overview_data)
     projects, trajects = program.projects, program.dike_trajects
 
@@ -64,13 +62,12 @@ def update_project_page_visualization(tabs_switch, result_type: str, imported_ru
     project_overview_table = fill_project_display_overview_table(projects)
 
     map_fig = plot_project_overview_map(projects, trajects.values())
-    t1 = time.time()
-    print(f"Time to update project page visualization: {t1 - t0:.2f} s")
+
 
     risk_table = []
 
     cost, risk_metrics = calc_area_stats_new(program)
-    for year in [2025, 2050, 2075]:
+    for year in [2030, 2040, 2050, 2075]:
         risk_table.append({"year": year,
                            "current_risk": round(risk_metrics["current"][year] / 1e6,2),
                            "program_risk": round(risk_metrics["program"][year] /1e6, 2)

@@ -8,7 +8,7 @@
 - Calcultation of VR index during import of traject
 
 ### Changed
-None.
+- Program page: traject faalkans are calculated with dataframes
 
 ### Deprecated
 None.
