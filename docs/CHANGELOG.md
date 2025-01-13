@@ -17,7 +17,7 @@ None.
 - current and VR risks
 
 ### Fixed
-None.
+- fix bug with database name for custom measure
 
 ## v0.7.3 [20/11/2024]
 

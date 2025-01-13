@@ -45,7 +45,7 @@ class CustomMeasureImporter(OrmImporterProtocol):
 
             _cm_data = dict(beta=cm_detail.beta,
                             cost=cm_detail.cost,
-                            time=cm_detail.year,
+                            time=cm_detail.time,
                             section_name=_section.section_name,
                             mechanism=meca,
                             measure_name=_measure.name,
