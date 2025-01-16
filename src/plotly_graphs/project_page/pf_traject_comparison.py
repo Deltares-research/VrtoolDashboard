@@ -70,7 +70,13 @@ def plot_pf_project_comparison(project_data: dict, selected_year: int, result_ty
                                  hovertemplate="<b>%{customdata}</b><br><br>" +
                                                "Trajectfaalkans: %{y:.2e}<br>"
                                  ))
-    add_signaleringswaarde(fig, x_max, y_signalering, y_ondergrens)
+
+    iterated_trajects = []  # add the safety standard for a traject only once
+    for index, (_, dike_traject_data) in enumerate(
+            project_data.items()):  # we reloop again to get the order right in the legend
+        if dike_traject.name not in iterated_trajects:
+            iterated_trajects.append(dike_traject.name)
+            add_signaleringswaarde(fig, x_max, 0, y_signalering, y_ondergrens, dike_traject.name)
 
     fig.update_xaxes(range=[0, x_max], title=title_x_axis)
     fig.update_layout(title=title_extra, yaxis_title=title_y_axis, xaxis_title=title_x_axis)
@@ -88,23 +94,23 @@ def plot_pf_project_comparison(project_data: dict, selected_year: int, result_ty
     return fig
 
 
-def add_signaleringswaarde(fig, max_x, y_signalering, y_ondergrens):
+def add_signaleringswaarde(fig, max_x, min_x, y_signalering, y_ondergrens, traject_name: str = ''):
     fig.add_trace(go.Scatter(
-        x=[0, max_x],
+        x=[min_x, max_x],
         y=[y_ondergrens, y_ondergrens],
         mode="lines",
         marker=dict(size=0),
         showlegend=True,
-        name="Ondergrens",
+        name=f"Ondergrens {traject_name}",
         line=dict(color='black', dash='dash')
     ))
     fig.add_trace(go.Scatter(
-        x=[0, max_x],
+        x=[min_x, max_x],
         y=[y_signalering, y_signalering],
         mode="lines",
         marker=dict(size=0),
         showlegend=True,
-        name="Signaleringswaarde",
+        name=f"Signaleringswaarde {traject_name}",
         line=dict(color='black', dash='dot')
     ))
 
@@ -112,13 +118,14 @@ def add_signaleringswaarde(fig, max_x, y_signalering, y_ondergrens):
 def plot_pf_time_runs_comparison(imported_runs_data: dict):
     fig = go.Figure()
 
+    x_max = 0
     for index, (_, dike_traject_data) in enumerate(imported_runs_data.items()):
         dike_traject = DikeTraject.deserialize(dike_traject_data)
         legend_group = dike_traject.name + "|" + dike_traject.run_name
         color = CLASSIC_PLOTLY_COLOR_SEQUENCE[index]
 
         x_vr = dike_traject.get_cum_cost("vr")
-        max_x = x_vr[-1]
+        x_max = np.max([x_vr[-1], x_max])
         hover_extra = "Jaar: €%{x:.2f} mln<br>"
 
         initial_df = get_initial_assessment_df(dike_traject.dike_sections)
@@ -126,7 +133,6 @@ def plot_pf_time_runs_comparison(imported_runs_data: dict):
         initial_traject_pf = pf_to_beta(initial_traject_pf_array[0, 0])
 
         y_vr = pf_to_beta(dike_traject.calc_traject_probability_array("vr")[-1, :])
-        y_dsn = pf_to_beta(dike_traject.calc_traject_probability_array("dsn")[-1, :])
 
         # add initial pf at first position:
         y_vr = np.insert(y_vr, 0, initial_traject_pf)
@@ -142,6 +148,15 @@ def plot_pf_time_runs_comparison(imported_runs_data: dict):
                                  marker=dict(size=6, color=color),
                                  hovertemplate="Trajectfaalkans: %{y:.2e}<br>" + hover_extra
                                  ))
+
+    iterated_trajects = []  # add the safety standard for a traject only once
+    for index, (_, dike_traject_data) in enumerate(
+            imported_runs_data.items()):  # we reloop again to get the order right in the legend
+        if dike_traject.name not in iterated_trajects:
+            iterated_trajects.append(dike_traject.name)
+            y_ondergrens = pf_to_beta(dike_traject.lower_bound_value)
+            y_signalering = pf_to_beta(dike_traject.signalering_value)
+            add_signaleringswaarde(fig, years[-1], 2020, y_signalering, y_ondergrens, dike_traject.name)
 
     fig.update_layout(template='plotly_white')
     fig.update_yaxes(title="Betrouwbaarheid")
