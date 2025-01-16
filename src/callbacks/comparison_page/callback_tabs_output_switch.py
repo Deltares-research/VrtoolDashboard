@@ -123,13 +123,23 @@ def make_graph_pf_time_comparison(
     [
         Input(STORED_RUNS_COMPARISONS_DATA, "data"),
         Input(EDITABLE_COMPARISON_TABLE_ID, "rowData"),
+        Input(EDITABLE_COMPARISON_TABLE_ID, "cellValueChanged")
+
     ],
 )
-def make_map_comparison_measure(imported_runs: dict, table_data: list[dict]):
+def make_map_comparison_measure(imported_runs: dict, table_imported_runs_data: list[dict], dummy: dict):
     if imported_runs is None:
         return plot_default_overview_map_dummy()
 
-    activated_runs = [f"{row['traject']}|{row['run_name']}" for row in table_data if row['active']]
+    id_1, id_2 = get_ids_activated_runs(table_imported_runs_data)
+
+    if id_1 is None or id_2 is None:
+        return dash.no_update
+
+    dike_traject_1 = DikeTraject.deserialize(list(imported_runs.values())[id_1])
+    dike_traject_2 = DikeTraject.deserialize(list(imported_runs.values())[id_2])
+    activated_runs = [dike_traject_1, dike_traject_2]
+
     _fig = plot_comparison_measures_map(imported_runs, activated_runs)
     return _fig
 
@@ -158,16 +168,7 @@ def update_table_comparison_measures(imported_runs: dict, table_imported_runs_da
         return dash.no_update, dash.no_update
 
     # Initialize variables
-    id_1, id_2 = None, None
-
-    # Iterate through the data to find the first two active items
-    for i, item in enumerate(table_imported_runs_data):
-        if item.get('active'):
-            if id_1 is None:
-                id_1 = i
-            elif id_2 is None:
-                id_2 = i
-                break  # Exit loop once both IDs are found
+    id_1, id_2 = get_ids_activated_runs(table_imported_runs_data)
 
     if id_1 is None or id_2 is None:
         return dash.no_update, dash.no_update
@@ -256,3 +257,17 @@ def update_table_comparison_order_measures(imported_runs: dict, table_imported_r
     patched_grid[1]["headerName"] = f"{dike_traject_2.name}|{dike_traject_2.run_name}"
 
     return data, patched_grid
+
+
+def get_ids_activated_runs(table_imported_runs_data: list[dict]) -> tuple[int, int]:
+    id_1, id_2 = None, None
+
+    # Iterate through the data to find the first two active items
+    for i, item in enumerate(table_imported_runs_data):
+        if item.get('active'):
+            if id_1 is None:
+                id_1 = i
+            elif id_2 is None:
+                id_2 = i
+                break  # Exit loop once both IDs are found
+    return id_1, id_2
