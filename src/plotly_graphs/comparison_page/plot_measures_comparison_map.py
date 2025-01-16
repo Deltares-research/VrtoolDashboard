@@ -23,8 +23,8 @@ color_dict = {""}
 def plot_comparison_measures_map(imported_runs: dict, activated_runs: list[str]) -> go.Figure:
     fig = go.Figure()
 
-    for index, (_, dike_traject_data) in enumerate(imported_runs.items()):
-        dike_traject = DikeTraject.deserialize(dike_traject_data)
+    for index, dike_traject in enumerate(activated_runs):
+        # dike_traject = DikeTraject.deserialize(dike_traject_data)
 
         if index >= 2:  # only display the first two trajects
             break

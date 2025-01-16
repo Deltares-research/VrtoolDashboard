@@ -170,22 +170,23 @@ def add_trace_run_results(
             x=taken_measure["cost"] / 1e6,
             y=taken_measure[mech_key][year_index],
         )
-    fig.add_trace(go.Scatter(name="VR laatste stap",
-                             visible=True if calc_type == CalcType.VEILIGHEIDSRENDEMENT else False,
-                             showlegend=True,
-                             mode="markers",
-                             hovertemplate=f"Investment year: {taken_measure['investment_year']}<br>"
-                                           + "Beta: %{y:.2f}<br>"
-                                           + "Cost: €%{x:.2f} mln<br>"
-                                            + hover_extra,
-                             marker=dict(
-                                 size=10,
-                                 color='red',
-                                 symbol=(
-                                     "diamond"
+    if step_measures:
+        fig.add_trace(go.Scatter(name="VR laatste stap",
+                                 visible=True if calc_type == CalcType.VEILIGHEIDSRENDEMENT else False,
+                                 showlegend=True,
+                                 mode="markers",
+                                 hovertemplate=f"Investment year: {taken_measure['investment_year']}<br>"
+                                               + "Beta: %{y:.2f}<br>"
+                                               + "Cost: €%{x:.2f} mln<br>"
+                                                + hover_extra,
+                                 marker=dict(
+                                     size=10,
+                                     color='red',
+                                     symbol=(
+                                         "diamond"
+                                     ),
                                  ),
-                             ),
 
-                             x=[[taken_measure["cost"] / 1e6][0]],
-                             y=[[taken_measure[mech_key][year_index]][0]],
-                             ))
+                                 x=[[taken_measure["cost"] / 1e6][0]],
+                                 y=[[taken_measure[mech_key][year_index]][0]],
+                                 ))

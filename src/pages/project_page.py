@@ -9,11 +9,11 @@ dash.register_page(__name__)
 layout = html.Div([
     dcc.Tabs(
         [
-            dcc.Tab(label="Project definitie",
+            dcc.Tab(label="Definitie van projecten",
                     id="tab-111",
                     className="custom-tab",
                     selected_className="custom-tab--selected"),
-            dcc.Tab(label="Gebied resultaten",
+            dcc.Tab(label="Resultaten op gebiedsniveau",
                     id="tab-112",
                     className="custom-tab",
                     selected_className="custom-tab--selected"),
