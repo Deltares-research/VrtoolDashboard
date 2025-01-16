@@ -40,8 +40,7 @@ def plot_pf_project_comparison(project_data: dict, selected_year: int, result_ty
         x_vr = dike_traject.get_cum_cost("vr")
         # x_step = cum_cost_steps(dike_traject)
         title_x_axis = "Kosten (mln €)"
-        max_x = x_vr[-1]
-        x_max = np.max([max_x, x_max])
+        x_max = np.max([x_vr[-1], x_max])
         title_extra = "Faalkans i.r.t kosten"
 
         if result_type == ResultType.RELIABILITY.name:
@@ -60,8 +59,6 @@ def plot_pf_project_comparison(project_data: dict, selected_year: int, result_ty
             title_y_axis = "Trajectfaalkans per jaar"
 
         color = CLASSIC_PLOTLY_COLOR_SEQUENCE[index]
-        if index == 0:
-            add_signaleringswaarde(fig, max_x, y_signalering, y_ondergrens)
 
         fig.add_trace(go.Scatter(x=x_vr,
                                  y=y_vr,
@@ -73,6 +70,7 @@ def plot_pf_project_comparison(project_data: dict, selected_year: int, result_ty
                                  hovertemplate="<b>%{customdata}</b><br><br>" +
                                                "Trajectfaalkans: %{y:.2e}<br>"
                                  ))
+    add_signaleringswaarde(fig, x_max, y_signalering, y_ondergrens)
 
     fig.update_xaxes(range=[0, x_max], title=title_x_axis)
     fig.update_layout(title=title_extra, yaxis_title=title_y_axis, xaxis_title=title_x_axis)

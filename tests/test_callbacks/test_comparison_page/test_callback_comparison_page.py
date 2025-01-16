@@ -69,7 +69,7 @@ class TestCallbackComparisonPage:
 
         # 2. Define callback
         def run_callback():
-            return make_graph_pf_project_comparison(_imported_runs, 0, ResultType.PROBABILITY.name)
+            return make_graph_pf_project_comparison(_imported_runs, 0, ResultType.RELIABILITY.name)
 
         ctx = copy_context()
         output = ctx.run(run_callback)
