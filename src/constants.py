@@ -72,7 +72,8 @@ conversion_dict_measure_names = {"GROUND_IMPROVEMENT": "Soil reinforcement",
                                  "GEOTEXTILE": "Vertical Piping Solution",
                                  "DIAPHRAGM_WALL": "Diaphragm Wall",
                                  "STABILITY_SCREEN": "Stability Screen",
-                                 "ANCHORED_SHEETPILE": "Anchored sheetpile"}
+                                 "ANCHORED_SHEETPILE": "Anchored sheetpile",
+                                 "CUSTOM": "Custom"}
 
 # PROJECTS_COLOR_SEQUENCE = ['rgb(214, 244, 134)',
 #                            'rgb(79, 204, 40)',

@@ -82,7 +82,9 @@ df = pd.DataFrame(columns=["section_col", "reinforcement_col", "reference_year",
                            Measures.GROUND_IMPROVEMENT.value,
                            Measures.GEOTEXTILE.value,
                            Measures.DIAPHRAGM_WALL.value,
-                           Measures.STABILITY_SCREEN.value
+                           Measures.STABILITY_SCREEN.value,
+                           Measures.ANCHORED_SHEETPILE.value,
+                           Measures.CUSTOM.value
 
                            ])  # empty dataframe
 
@@ -99,7 +101,7 @@ dike_vr_optimization_layout_ag_grid = html.Div([
         Door onderaan een (unieke) naam op te geven en op 'Start optimalisatie' te drukken wordt een berekening met de VRTOOL gestart.
         Let op: deze berekening kan enige tijd duren!
         '''
-    ),    dag.AgGrid(
+    ), dag.AgGrid(
         id=EDITABLE_TRAJECT_TABLE_ID,
         rowData=df.to_dict('records'),
         columnDefs=columns_defs,

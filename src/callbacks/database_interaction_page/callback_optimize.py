@@ -192,7 +192,7 @@ def get_selected_measure(
     if dike_traject_table is None:
         raise NotImplementedError()
     else:
-
+        print(dike_traject_table)
         list_selected_measures = []
         for section_row in dike_traject_table:
             _investment_year = int(section_row["reference_year"]) - REFERENCE_YEAR
