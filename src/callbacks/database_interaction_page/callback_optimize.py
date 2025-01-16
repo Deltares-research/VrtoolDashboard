@@ -174,7 +174,10 @@ def run_vrtool_optimization(
     """Runs the optimization algorithm in a separate thread of the VRTool core"""
 
     api = ApiRunWorkflows(_vr_config)
-    api.run_optimization(optimization_run_name, selected_measures)
+    try:
+        api.run_optimization(optimization_run_name, selected_measures)
+    except KeyError as e:
+        raise(f"Error during optimization: {e}. Make sure config.T is consistent with database")
 
 
 def get_selected_measure(
@@ -192,7 +195,6 @@ def get_selected_measure(
     if dike_traject_table is None:
         raise NotImplementedError()
     else:
-        print(dike_traject_table)
         list_selected_measures = []
         for section_row in dike_traject_table:
             _investment_year = int(section_row["reference_year"]) - REFERENCE_YEAR
@@ -202,10 +204,7 @@ def get_selected_measure(
                 continue
             # for measure in Measures:
             for measure in Measures:
-                if measure == Measures.ANCHORED_SHEETPILE:
-                    continue
 
-                measure_name = measure.value
                 if not section_row[measure.name]:
                     continue
 

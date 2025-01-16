@@ -42,7 +42,7 @@ with open(_path_config, 'r') as f:
 traject_optimization_table = [
     {'section_col': '2', 'reinforcement_col': True, 'reference_year': 2025, 'GROUND_IMPROVEMENT': True,
      'GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN': True, 'GEOTEXTILE': True, 'DIAPHRAGM_WALL': True,
-     'STABILITY_SCREEN': True, 'ANCHORED_SHEETPILE': False, 'CUSTOM': True},
+     'STABILITY_SCREEN': True, 'ANCHORED_SHEETPILE': True, 'CUSTOM': True},
     {'section_col': '3', 'reinforcement_col': True, 'reference_year': 2025, 'GROUND_IMPROVEMENT': True,
      'GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN': True, 'GEOTEXTILE': True, 'DIAPHRAGM_WALL': True,
      'STABILITY_SCREEN': True, 'ANCHORED_SHEETPILE': False, 'CUSTOM': True},
@@ -70,11 +70,12 @@ traject_optimization_table = [
     {'section_col': '11', 'reinforcement_col': True, 'reference_year': 2025, 'GROUND_IMPROVEMENT': True,
      'GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN': True, 'GEOTEXTILE': True, 'DIAPHRAGM_WALL': True,
      'STABILITY_SCREEN': True, 'ANCHORED_SHEETPILE': False, 'CUSTOM': False}]
-optimization_run_name = '13:13'
+optimization_run_name = '13:39'
 
 ### run_optimize_algorithm
 
 _vr_config = VrtoolConfig()
+_vr_config.T = vr_config["T"]
 _vr_config.traject = vr_config['traject']
 _vr_config.input_directory = Path(vr_config['input_directory'])
 _vr_config.output_directory = Path(vr_config['output_directory'])
@@ -104,4 +105,3 @@ api.run_optimization(optimization_run_name, selected_measures)
 # _options = [{"label": name, "value": name} for name in _names_optimization_run]
 
 
-# TODO: Reactivate anchored pile
