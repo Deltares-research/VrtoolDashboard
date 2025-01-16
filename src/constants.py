@@ -48,11 +48,11 @@ class Measures(Enum):
     GROUND_IMPROVEMENT = "Grondversterking"
     GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN = "Grondversterking met stabiliteitsscherm"
     STABILITY_SCREEN = "Stabiliteitsscherm"
-    GEOTEXTILE = "VZG"
+    GEOTEXTILE = "Verticale Pipingoplossing"
     DIAPHRAGM_WALL = "Zelfkerende constructie"
     ANCHORED_SHEETPILE = "Verankerde damwand"
     # REVETMENT = "Bekleding"
-    # CUSTOM = "Custom"
+    CUSTOM = "Custom"
 
 
 class GreedyOPtimizationCriteria(Enum):
@@ -72,7 +72,8 @@ conversion_dict_measure_names = {"GROUND_IMPROVEMENT": "Soil reinforcement",
                                  "GEOTEXTILE": "Vertical Piping Solution",
                                  "DIAPHRAGM_WALL": "Diaphragm Wall",
                                  "STABILITY_SCREEN": "Stability Screen",
-                                 "ANCHORED_SHEETPILE": "Anchored sheetpile"}
+                                 "ANCHORED_SHEETPILE": "Anchored sheetpile",
+                                 "CUSTOM": "Custom"}
 
 # PROJECTS_COLOR_SEQUENCE = ['rgb(214, 244, 134)',
 #                            'rgb(79, 204, 40)',
