@@ -9,7 +9,7 @@ columnDefs = [
         'headerName': 'Run 1',
         'children': [
 
-            {"field": "run_1_section_name", "sortable": False, 'headerName': 'Sectie', 'width': 100},
+            {"field": "run_1_section_name", "sortable": False, 'headerName': 'Dijkvak', 'width': 100},
 
             {'field': "run_1_measure", 'headerName': 'Maatregel', "wrapText": True},
 
@@ -18,7 +18,7 @@ columnDefs = [
     {
         'headerName': 'Run 2',
         'children': [
-            {"field": "run_2_section_name", "sortable": False, 'headerName': 'Sectie', 'width': 100,
+            {"field": "run_2_section_name", "sortable": False, 'headerName': 'Dijkvak', 'width': 100,
              'cellStyle': {"border-left": "2px solid black"}, },
 
             {'field': "run_2_measure", 'headerName': 'Maatregel'},
