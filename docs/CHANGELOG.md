@@ -6,9 +6,11 @@
 - Risk table for area
 - VR index map in program page
 - Calcultation of VR index during import of traject
+- Custom measures and damwand added to Optimization input table
 
 ### Changed
 - Program page: traject faalkans are calculated with dataframes
+- Minor UI changes
 
 ### Deprecated
 None.
@@ -18,6 +20,7 @@ None.
 
 ### Fixed
 - fix bug with database name for custom measure
+- Minor visualization fixes
 
 ## v0.7.3 [20/11/2024]
 
