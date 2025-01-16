@@ -48,11 +48,11 @@ class Measures(Enum):
     GROUND_IMPROVEMENT = "Grondversterking"
     GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN = "Grondversterking met stabiliteitsscherm"
     STABILITY_SCREEN = "Stabiliteitsscherm"
-    GEOTEXTILE = "VZG"
+    GEOTEXTILE = "Verticale Pipingoplossing"
     DIAPHRAGM_WALL = "Zelfkerende constructie"
     ANCHORED_SHEETPILE = "Verankerde damwand"
     # REVETMENT = "Bekleding"
-    # CUSTOM = "Custom"
+    CUSTOM = "Custom"
 
 
 class GreedyOPtimizationCriteria(Enum):

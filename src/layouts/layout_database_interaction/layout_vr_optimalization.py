@@ -50,7 +50,7 @@ columns_defs = [
      "editable": True,
      "cellRenderer": "DBC_Switch",
      "CellRendererParams": {"onColor": "success", "offColor": "danger"},
-     "initialWidth": 80, },
+     "initialWidth": 160, },
 
     {"field": Measures.DIAPHRAGM_WALL.name,
      "headerName": Measures.DIAPHRAGM_WALL.value,
@@ -60,6 +60,18 @@ columns_defs = [
 
     {"field": Measures.STABILITY_SCREEN.name,
      "headerName": Measures.STABILITY_SCREEN.value,
+     "editable": True,
+     "cellRenderer": "DBC_Switch",
+     "CellRendererParams": {"onColor": "success", "offColor": "danger"}},
+
+    {"field": Measures.ANCHORED_SHEETPILE.name,
+     "headerName": Measures.ANCHORED_SHEETPILE.value,
+     "editable": True,
+     "cellRenderer": "DBC_Switch",
+     "CellRendererParams": {"onColor": "success", "offColor": "danger"}},
+
+    {"field": Measures.CUSTOM.name,
+     "headerName": Measures.CUSTOM.value,
      "editable": True,
      "cellRenderer": "DBC_Switch",
      "CellRendererParams": {"onColor": "success", "offColor": "danger"}},
