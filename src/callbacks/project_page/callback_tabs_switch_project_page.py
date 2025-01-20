@@ -72,5 +72,6 @@ def update_project_page_visualization(tabs_switch, result_type: str, imported_ru
                            "current_risk": round(risk_metrics["current"][year] / 1e6,2),
                            "program_risk": round(risk_metrics["program"][year] /1e6, 2)
                            })
+    print(risk_table)
     return cost_fig, reliability_fig, map_fig, project_overview_table, f"{cost/1e6:.2f} M€", risk_table
 

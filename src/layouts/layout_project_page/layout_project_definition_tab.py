@@ -1,7 +1,6 @@
 import pandas as pd
 from dash import html, dcc
 import dash_bootstrap_components as dbc
-from dash.dash_table import DataTable
 from dash.html import Br
 import dash_ag_grid as dag
 import dash_mantine_components as dmc
