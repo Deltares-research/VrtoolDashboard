@@ -336,7 +336,7 @@ def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
                                                  Measures.GEOTEXTILE.name: True,
                                                  Measures.DIAPHRAGM_WALL.name: True,
                                                  Measures.STABILITY_SCREEN.name: True,
-                                                 Measures.ANCHORED_SHEETPILE.name: False,
+                                                 Measures.ANCHORED_SHEETPILE.name: True,
                                                  Measures.CUSTOM.name: False
                                                  }])
             df = pd.concat([df.infer_objects(), df_add], ignore_index=True)
