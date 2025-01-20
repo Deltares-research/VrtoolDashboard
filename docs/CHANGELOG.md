@@ -17,7 +17,24 @@ None.
 ### Fixed
 None.
 
-## v1.0.0 [##/##/####]
+## v1.0.1 [20/01/2025]
+
+### Added
+None.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+- Import of database with revetment
+
+## v1.0.0 [20/01/2025]
 
 ### Added
 - Risk table for area
