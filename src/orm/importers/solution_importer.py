@@ -451,7 +451,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
     def get_assessment_results(self):
         assess_res_dict = {mechanism: import_original_assessment(self.database_path, mechanism)
                            for mechanism in
-                           [MechanismEnum.OVERFLOW, MechanismEnum.PIPING, MechanismEnum.STABILITY_INNER]}
+                           [MechanismEnum.OVERFLOW, MechanismEnum.PIPING, MechanismEnum.STABILITY_INNER, MechanismEnum.REVETMENT]}
         return assess_res_dict
 
     def get_modified_vr_order(self):
@@ -489,6 +489,8 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             total_non_failure_probability = np.ones([1, n_years])
             traject_reliability_interp = {}
             for key in traject_reliability.keys():
+                if len(traject_reliability[key]) == 0:
+                    continue
                 times, betas = zip(*traject_reliability[key].items())
                 time_beta_interpolation = interp1d(times, betas, kind='linear', fill_value='extrapolate')
                 traject_reliability_interp[key] = time_beta_interpolation(list(range(0, 100)))
@@ -508,6 +510,8 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             final_section_probability_per_mechanism_temp = copy.deepcopy(final_section_probability_per_mechanism)
 
             for mechanism in assessment_results.keys():
+                if final_section_probability_per_mechanism_temp[mechanism] == {}: # is traject has no revetment,
+                    continue
                 final_section_probability_per_mechanism_temp[mechanism][section]['beta'] = \
                     assessment_results[mechanism][section]['beta']
 
