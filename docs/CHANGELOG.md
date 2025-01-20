@@ -3,6 +3,23 @@
 ## v0.0.0 [##/##/####]
 
 ### Added
+None.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
+## v1.0.0 [##/##/####]
+
+### Added
 - Risk table for area
 - VR index map in program page
 - Calcultation of VR index during import of traject
