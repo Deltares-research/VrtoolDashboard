@@ -32,6 +32,8 @@ class DikeTraject(BaseLinearObject):
     greedy_stop_type_criteria: Optional[str] = None
     greedy_stop_criteria_year: Optional[int] = None
     greedy_stop_criteria_beta: Optional[float] = None
+    reinforcement_modified_order_vr: Optional[dict] = None  # set as Optional with default value to prevent necessary migration for users
+
 
     def serialize(self) -> dict:
         """Serialize the DikeTraject object to a dict, in order to be saved in dcc.Store"""
@@ -40,6 +42,7 @@ class DikeTraject(BaseLinearObject):
             "dike_sections": [section.serialize() for section in self.dike_sections],
             "reinforcement_order_vr": self.reinforcement_order_vr,
             "reinforcement_order_dsn": self.reinforcement_order_dsn,
+            "reinforcement_modified_order_vr": self.reinforcement_modified_order_vr,
             "signalering_value": self.signalering_value,
             "lower_bound_value": self.lower_bound_value,
             "greedy_steps": self.greedy_steps,
@@ -68,6 +71,7 @@ class DikeTraject(BaseLinearObject):
             dike_sections=sections,
             reinforcement_order_vr=data["reinforcement_order_vr"],
             reinforcement_order_dsn=data["reinforcement_order_dsn"],
+            reinforcement_modified_order_vr=data.get("reinforcement_modified_order_vr", None),
             signalering_value=data["signalering_value"],
             lower_bound_value=data["lower_bound_value"],
             greedy_steps=data["greedy_steps"],
@@ -432,3 +436,64 @@ def get_step_traject_pf(dike_traject: DikeTraject) -> np.array:
         pf_array.append(step["pf"])
 
     return np.array(pf_array)
+
+
+
+def calc_traject_probability_array(all_dike_sections: list[DikeSection], sections_to_reinforce: list[DikeSection],calc_type: str) -> np.array:
+    """
+    TEMPORARY FUNCTION
+    Return an array of the traject probability of failure forevery year and each step. Columns are the years and
+    rows are the steps. The first row is the probability of failure of the unreinforced dike traject.
+    :param calc_type:
+    :return:
+    """
+
+    _beta_df = get_initial_assessment_df(all_dike_sections)
+    _traject_pf, _ = get_traject_prob(_beta_df)
+    years = all_dike_sections[0].years
+
+    # if calc_type == "vr":
+    #     _section_order = self.reinforcement_order_vr
+    #     _section_measure = "final_measure_veiligheidsrendement"
+    #
+    # elif calc_type == "dsn":
+    #     _section_order = self.reinforcement_order_dsn
+    #     _section_measure = "final_measure_doorsnede"
+    #
+    # else:
+    #     raise ValueError("calc_type should be either 'vr' or 'dsn' ")
+
+    for section in sections_to_reinforce:
+        # section = self.get_section(section_name)
+
+        if not section.in_analyse:  # skip if the section is not reinforced
+            continue
+
+        if (calc_type == "doorsnede") and (
+                not section.is_reinforced_doorsnede
+        ):  # skip if the section is not reinforced
+            continue
+
+        if (calc_type == "veiligheidsrendement") and (
+                not section.is_reinforced_veiligheidsrendement
+        ):  # skip if the section is not reinforced
+            continue
+        _active_mechanisms = ["Overflow", "Piping", "StabilityInner"]
+        if section.revetment:
+            _active_mechanisms.append("Revetment")
+        # add a row to the dataframe with the initial assessment of the section
+        for mechanism in _active_mechanisms:
+            mask = (_beta_df["name"] == section.name) & (
+                    _beta_df["mechanism"] == mechanism
+            )
+            # replace the row in the dataframe with the betas of the section if both the name and mechanism match
+
+            for year, beta in zip(
+                    years, getattr(section, "final_measure_veiligheidsrendement")[mechanism]
+            ):
+                _beta_df.loc[mask, year] = beta
+
+        _reinforced_traject_pf, _ = get_traject_prob(_beta_df)
+
+        _traject_pf = np.concatenate((_traject_pf, _reinforced_traject_pf), axis=0)
+    return np.array(_traject_pf)

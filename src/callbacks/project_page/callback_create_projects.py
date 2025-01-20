@@ -7,11 +7,11 @@ from src.component_ids import MULTI_SELECT_SECTION_FOR_PROJECT_ID, EDITABLE_IMPO
     PROJECT_END_YEAR_INPUT_FIELD_ID, OVERVIEW_PROJECT_MAP_ID_2, PROGRAM_SELECTION_MAP_RADIO_SWITCH_ID
 from src.constants import ProgramDefinitionMapType
 from src.linear_objects.dike_traject import DikeTraject
-from src.linear_objects.project import get_projects_from_saved_data
+from src.linear_objects.reinforcement_program import get_projects_from_saved_data
 from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
 from src.plotly_graphs.project_page.plotly_maps import plot_project_overview_map, \
     plot_comparison_runs_overview_map_simple, plot_comparison_runs_overview_map_projects, \
-    plot_comparison_runs_overview_map_assessment
+    plot_comparison_runs_overview_map_assessment, plot_order_reinforcement_index_map
 
 
 @callback(
@@ -254,8 +254,6 @@ def update_map_project_definition_page(dummy, selected_sections: list, switch_ty
                                        project_overview_data: list):
     if imported_runs_data is None:
         return dash.no_update
-    if project_overview_data is None:
-        return dash.no_update
 
     projects, trajects = get_projects_from_saved_data(imported_runs_data, project_overview_data, calc_failure_pro=False)
 
@@ -265,6 +263,8 @@ def update_map_project_definition_page(dummy, selected_sections: list, switch_ty
         _fig = plot_comparison_runs_overview_map_projects(projects, list(trajects.values()))
     elif switch_type_map == ProgramDefinitionMapType.ASSESSMENT_PROBABILITIES.name:
         _fig = plot_comparison_runs_overview_map_assessment(list(trajects.values()))
+    elif switch_type_map == ProgramDefinitionMapType.VEILIGHEIDSRENDEMENT_INDEX.name:
+        _fig = plot_order_reinforcement_index_map(list(trajects.values()))
     else:
         _fig = plot_default_overview_map_dummy()
     return _fig

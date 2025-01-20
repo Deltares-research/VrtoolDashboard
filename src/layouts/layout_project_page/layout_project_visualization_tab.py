@@ -1,14 +1,15 @@
-from dash import html, dcc
+from dash import html, dcc, dash_table
 import dash_bootstrap_components as dbc
 import dash_mantine_components as dmc
+import dash_ag_grid as dag
 
 from src.component_ids import PROJECT_PAGE_VISUALIZATION_COST_GRAPH, PROJECT_PAGE_VISUALIZATION_RELIABILITY_GRAPH, \
-    OVERVIEW_PROJECT_MAP_ID, PROJECT_OVERVIEW_TABLE_DISPLAY, TOTAL_AREA_COST, TOTAL_AREA_DAMAGE, \
-    TOTAL_AREA_RISK_CURRENT, TOTAL_AREA_RISK_REINFORCED
+    OVERVIEW_PROJECT_MAP_ID, PROJECT_OVERVIEW_TABLE_DISPLAY, TOTAL_AREA_COST, TOTAL_AREA_RISK_TABLE
 from src.layouts.layout_traject_page.layout_radio_items import layout_radio_result_type_project_page
 from src.linear_objects.project import DikeProject
 from src.plotly_graphs.pf_length_cost import plot_default_scatter_dummy
 from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
+import pandas as pd
 
 max_length = 100
 
@@ -89,6 +90,42 @@ def fill_project_display_overview_table(projects: list[DikeProject]):
                       )]
 
 
+def get_risk_table():
+    """Get Ag Grid table for the risk display (current situation and after reinforcement)"""
+
+    df = pd.DataFrame([])
+    columnDefs = [
+        {"field": "year", 'headerName': 'Jaar', "pinned": True, 'width': 80},
+        {
+            'headerName': 'Risico (M€/jaar)',
+            'children': [
+
+                {'field': "current_risk", 'headerName': 'Huidig', "width": 100,
+                 },
+
+                {
+                    "field": "program_risk", "headerName": "Programma", "width": 120,
+                }
+
+            ]
+        }
+    ]
+
+    risk_table = dag.AgGrid(
+        id=TOTAL_AREA_RISK_TABLE,
+        rowData=df.to_dict("records"),
+        defaultColDef={
+            "wrapHeaderText": True,
+            "autoHeaderHeight": True,
+        },
+        columnDefs=columnDefs,
+        # columnSize="sizeToFit",
+        dashGridOptions={"animateRows": False},
+        style={'height': "100%"},
+    )
+    return risk_table
+
+
 def left_side_area_stats():
     return html.Div(
         id="quick-stats",
@@ -107,18 +144,21 @@ def left_side_area_stats():
                                            html.P(""),
                                            dmc.Text("Totale versterkingskosten:", td="underline"),
                                            dmc.Text("", id=TOTAL_AREA_COST, fw=700, size="xl"),
-                                           # dmc.Text("Totaal schade:", td="underline"),
-                                           # dmc.Text("XXXX €", id=TOTAL_AREA_DAMAGE, fw=700, size="xl"),
-                                           dmc.Text("Risico (huidige):", td="underline"),
-                                           dmc.Text("XXXX €/jaar", id=TOTAL_AREA_RISK_CURRENT, fw=700, size="xl"),
-                                           dmc.Text("Risico (na versterking):", td="underline"),
-                                           dmc.Text("XXXX €/jaar", id=TOTAL_AREA_RISK_REINFORCED, fw=700, size="xl"),
+                                           # add white vertical space
+                                           html.P(""),
+                                           html.P(""),
                                        ]
                                    ),
 
                                ]),
+                    html.Div(
+                        [get_risk_table()],
+                        style={"height": "300px"}  # Set container height to ensure the grid is displayed
+                    )
+
 
                 ],
+
             ),
 
         ],

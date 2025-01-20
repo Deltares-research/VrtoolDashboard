@@ -1,12 +1,17 @@
+import copy
 from bisect import bisect_right
+from pathlib import Path
 from typing import Optional
 
 import numpy as np
 import pandas as pd
-from peewee import JOIN, ModelBase, DoesNotExist
+from peewee import DoesNotExist
+from scipy.interpolate import interp1d
 from vrtool.orm.io.importers.optimization.optimization_step_importer import (
     OptimizationStepImporter,
 )
+from vrtool.common.enums import MechanismEnum
+
 from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol
 from vrtool.orm.models import (
     OptimizationStep,
@@ -14,9 +19,9 @@ from vrtool.orm.models import (
     MeasurePerSection,
     MeasureResult,
     OptimizationSelectedMeasure,
-    Measure,
-    MeasureResultParameter,
+    DikeTrajectInfo,
 )
+from vrtool.orm.orm_controllers import open_database
 
 from src.constants import REFERENCE_YEAR, GreedyOPtimizationCriteria
 from src.linear_objects.dike_section import DikeSection
@@ -37,7 +42,13 @@ from src.orm.importers.optimization_step_importer import (
     _get_final_measure_betas,
 )
 from src.orm.orm_controller_custom import get_optimization_steps_ordered
-from src.utils.utils import beta_to_pf, pf_to_beta
+
+from src.utils.database_analytics import get_minimal_tc_step, get_measures_per_step_number, \
+    get_reliability_for_each_step, assessment_for_each_step, calculate_traject_probability_for_steps, \
+    calculate_traject_probability
+
+from src.utils.utils import pf_to_beta
+from src.utils.vrutils import get_optimization_steps_for_run_id, get_measures_for_run_id, import_original_assessment
 
 
 class TrajectSolutionRunImporter(OrmImporterProtocol):
@@ -50,6 +61,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
     economic_optimal_final_step_id: int
     final_step: int  # this is the step number of the last optimization step (either from the economic optimal or
     # the target beta/year, this needs to be returned to DikeTraject object)
+    database_path: Optional[Path] = None
 
     def __init__(
             self,
@@ -60,6 +72,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             greedy_criteria_year: Optional[int] = None,
             greedy_criteria_beta: Optional[float] = None,
             assessment_years: list[int] = None,
+            database_path: Optional[Path] = None,
     ):
         self.dike_traject = dike_traject
         self.dike_section_mapping = {
@@ -72,11 +85,18 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         self.greedy_criteria_year = greedy_criteria_year
         self.greedy_criteria_beta = greedy_criteria_beta
         self.set_economic_optimal_final_step_id()
+        self.database_path = database_path
 
     def import_orm(self):
         """Import the final measures for both Veiligheidsrendement and Doorsnede"""
+        # New
+        # self.final_step = self.set_minimal_tc_step_number()
+        self.lists_of_measures = self.get_lists_of_measures()
+
+        # Old
         self.get_final_measure_vr()
         self.get_final_measure_dsn()
+        self.get_modified_vr_order()
         self.dike_traject.final_step_number = self.final_step
         self.dike_traject.greedy_stop_type_criteria = self.greedy_optimization_criteria
         self.dike_traject.greedy_stop_criteria_year = self.greedy_criteria_year
@@ -379,7 +399,6 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         :return: dictionary with the followings keys: "name", "LCC", "Piping", "StabilityInner", "Overflow", "Revetment"
         , "Section"
         """
-
         # Get the betas for the measure:
         _final_measure = _get_final_measure_betas(optimization_steps, active_mechanisms, assessment_time)
 
@@ -406,3 +425,106 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             )
         _final_measure.update(_get_measure_parameters(optimization_steps))
         return _final_measure
+
+    def get_import_db_attr(self, database_path: Path):
+
+        pass
+
+    def set_minimal_tc_step_number(self) -> int:
+        optimization_steps = get_optimization_steps_for_run_id(self.database_path, self.run_id_vr)
+        minimal_tc_steps = get_minimal_tc_step(optimization_steps)
+        return minimal_tc_steps
+
+    def get_lists_of_measures(self):
+        """
+            Returns: list of dicts, each dict contains the optimization step number, optimization_selected_measure_id,
+            measure_result_id, investment_year, measure_per_section_id, section_id
+        """
+        lists_of_measures = get_measures_for_run_id(self.database_path, run_id=self.run_id_vr)
+        return lists_of_measures
+
+    def get_measures_per_steps(self):
+        if len(self.lists_of_measures) == 0:
+            raise ValueError("No measures found for the given run_id")
+        return get_measures_per_step_number(self.lists_of_measures)
+
+    def get_assessment_results(self):
+        assess_res_dict = {mechanism: import_original_assessment(self.database_path, mechanism)
+                           for mechanism in
+                           [MechanismEnum.OVERFLOW, MechanismEnum.PIPING, MechanismEnum.STABILITY_INNER]}
+        return assess_res_dict
+
+    def get_modified_vr_order(self):
+        """
+        Modified script from Stephan to obtain the reinforcement order based on the index.
+        Returns:
+
+        """
+
+        measures_per_step = self.get_measures_per_steps()
+        assessment_results = self.get_assessment_results()
+        reliability_per_step = get_reliability_for_each_step(self.database_path, measures_per_step)
+        stepwise_assessment = assessment_for_each_step(copy.deepcopy(assessment_results), reliability_per_step)
+        traject_prob = calculate_traject_probability_for_steps(stepwise_assessment)
+
+        # Get section ids for which a measure is taken.
+        section_ids = []
+        for section_id, section in enumerate(self.dike_traject.dike_sections, 1):
+            if section.final_measure_veiligheidsrendement['name'] != "Geen maatregel":
+                section_ids.append(section_id)
+
+        final_traject_probability_per_mechanism = traject_prob[self.final_step]
+        final_section_probability_per_mechanism = stepwise_assessment[self.final_step]
+
+        with open_database(self.database_path) as db:
+            damage = DikeTrajectInfo.select(DikeTrajectInfo.flood_damage).where(
+                DikeTrajectInfo.id == 1).get().flood_damage
+
+        discount_rate = 0.03
+
+        def calculate_total_risk(traject_reliability, damage, discount_rate):
+            n_years = 100
+            damage_per_year = np.divide(damage, np.power(1 + discount_rate, np.arange(0, n_years)))
+            damage_per_year = damage_per_year.reshape(1, n_years)
+            total_non_failure_probability = np.ones([1, n_years])
+            traject_reliability_interp = {}
+            for key in traject_reliability.keys():
+                times, betas = zip(*traject_reliability[key].items())
+                time_beta_interpolation = interp1d(times, betas, kind='linear', fill_value='extrapolate')
+                traject_reliability_interp[key] = time_beta_interpolation(list(range(0, 100)))
+                traject_reliability_interp[key] = np.array(traject_reliability_interp[key]).reshape(1, 100)
+            for key in traject_reliability_interp.keys():
+                total_non_failure_probability = np.multiply(total_non_failure_probability,
+                                                            1 - traject_reliability_interp[key])
+            total_failure_probability = 1 - total_non_failure_probability
+            expected_risk_per_year = np.multiply(damage_per_year, total_failure_probability)
+            total_risk = np.sum(expected_risk_per_year)
+            return total_risk
+
+        total_risk = calculate_total_risk(final_traject_probability_per_mechanism, damage, discount_rate)
+
+        vr_index = {}
+        for section in section_ids:
+            final_section_probability_per_mechanism_temp = copy.deepcopy(final_section_probability_per_mechanism)
+
+            for mechanism in assessment_results.keys():
+                final_section_probability_per_mechanism_temp[mechanism][section]['beta'] = \
+                    assessment_results[mechanism][section]['beta']
+
+            # recalculate final traject probability
+            final_traject_probability_per_mechanism_temp = calculate_traject_probability(
+                final_section_probability_per_mechanism_temp)
+
+            # calculate_total_risk
+            risk_increased = calculate_total_risk(final_traject_probability_per_mechanism_temp, damage, discount_rate)
+            delta_risk = risk_increased - total_risk
+
+            if section in section_ids:
+                section_costs = self.dike_traject.dike_sections[section - 1].final_measure_veiligheidsrendement['LCC']
+                vr_index[section] = delta_risk / section_costs
+            else:
+                vr_index[section] = 0
+
+        sorted_vr_index = dict(sorted(vr_index.items(), key=lambda item: item[1], reverse=True))
+
+        self.dike_traject.reinforcement_modified_order_vr = sorted_vr_index

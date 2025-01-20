@@ -1144,7 +1144,7 @@
     },
     "xaxis": {
       "title": {
-        "text": "Kost (mln €)"
+        "text": "Kosten (mln €)"
       },
       "type": "linear",
       "range": [

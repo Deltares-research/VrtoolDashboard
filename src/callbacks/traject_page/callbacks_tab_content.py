@@ -408,7 +408,6 @@ def open_modal_measure_reliability_time(click_data: dict, selected_mechanism, vr
 
 
     """
-
     if click_data is None:
         return False, plot_default_scatter_dummy(), dash.no_update
 
@@ -436,8 +435,7 @@ def open_modal_measure_reliability_time(click_data: dict, selected_mechanism, vr
         _years = _dike_traject.get_section(section_name).years
 
         _betas_ini = _dike_traject.get_section(section_name).initial_assessment[_mechanism_name]
-        return True, plot_measure_results_over_time_graph(betas_meas, _betas_ini, selected_mechanism, section_name,
-                                                          _years, _measure_data), dash.no_update
+        return True, plot_measure_results_over_time_graph(betas_meas, _betas_ini, _years, _measure_data), dash.no_update
     else:
         _fig = update_measure_results_over_time_graph(fig, click_data)
 

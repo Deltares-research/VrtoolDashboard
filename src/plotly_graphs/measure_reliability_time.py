@@ -7,8 +7,6 @@ from src.constants import Mechanism, REFERENCE_YEAR
 def plot_measure_results_over_time_graph(
         meas_betas: list[float],
         init_betas: list[float],
-        mechanism: Mechanism,
-        section_name: str,
         years: list[float],
         measure_data: dict,
 ) -> go.Figure:
@@ -16,8 +14,6 @@ def plot_measure_results_over_time_graph(
 
     :param meas_betas: betas for the clicked measure_result (combination Section/Mechanism)
     :param init_betas: betas of the initial assessment for the corresponding section & mechanism
-    :param mechanism: mechanism of the clicked measure_result
-    :param section_name: section name of the clicked measure_result
     :param years: years for which the betas are available
     :param measure_data: dictionary with metadata of the measure result: name, dberm, dcrest, ...
     :return:

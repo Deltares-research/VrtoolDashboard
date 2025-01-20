@@ -77,7 +77,7 @@ class DikeTrajectImporter(OrmImporterProtocol):
 
         return _traject_gdf[["geometry", "section_name"]]
 
-    def import_orm(self, orm_model) -> DikeTraject:
+    def import_orm(self, orm_model, path_database) -> DikeTraject:
         """Import a DikeTraject object from the ORM """
         _traject_name = orm_model.DikeTrajectInfo.get(
             orm_model.DikeTrajectInfo.traject_name == self.traject_name).traject_name
@@ -90,6 +90,7 @@ class DikeTrajectImporter(OrmImporterProtocol):
                                     dike_sections=[],
                                     reinforcement_order_vr=[],
                                     reinforcement_order_dsn=[],
+                                    reinforcement_modified_order_vr=[],
                                     greedy_steps=[],
                                     signalering_value=_traject_p_signal,
                                     lower_bound_value=_traject_p_lower_bound,
@@ -111,7 +112,8 @@ class DikeTrajectImporter(OrmImporterProtocol):
                                                         greedy_optimization_criteria=self.greedy_optimization_criteria,
                                                         greedy_criteria_beta=self.greedy_criteria_beta,
                                                         greedy_criteria_year=self.greedy_criteria_year,
-                                                        assessment_years=self.vr_config.T
+                                                        assessment_years=self.vr_config.T,
+                                                        database_path=path_database,
                                                         )
         _solution_importer.import_orm()
 

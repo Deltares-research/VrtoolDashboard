@@ -1,7 +1,6 @@
 import pandas as pd
 from dash import html, dcc
 import dash_bootstrap_components as dbc
-from dash.dash_table import DataTable
 from dash.html import Br
 import dash_ag_grid as dag
 import dash_mantine_components as dmc
@@ -29,13 +28,6 @@ columns_defs_1 = [
      "headerName": "Naam berekening",
      "editable": False,
      "initialWidth": 200},
-
-    {"field": "active",
-     "headerName": "Activeer",
-     "cellRenderer": "DBC_Switch",
-     "editable": True,
-     "CellRendererParams": {"onColor": "success", "offColor": "danger"},
-     "initialWidth": 200, }
 ]
 
 columns_defs_2 = [
@@ -104,6 +96,8 @@ layout_radio_helper_map_switch = dbc.RadioItems(
         {"label": ProgramDefinitionMapType.SIMPLE.value, "value": ProgramDefinitionMapType.SIMPLE.name},
         {"label": ProgramDefinitionMapType.PROJECTS.value, "value": ProgramDefinitionMapType.PROJECTS.name},
         {"label": ProgramDefinitionMapType.ASSESSMENT_PROBABILITIES.value, "value": ProgramDefinitionMapType.ASSESSMENT_PROBABILITIES.name},
+        {"label": ProgramDefinitionMapType.VEILIGHEIDSRENDEMENT_INDEX.value, "value": ProgramDefinitionMapType.VEILIGHEIDSRENDEMENT_INDEX.name},
+
     ],
     value="SIMPLE",
     inline=True

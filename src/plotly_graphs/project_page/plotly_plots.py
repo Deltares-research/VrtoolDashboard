@@ -5,6 +5,7 @@ import plotly.graph_objects as go
 from src.constants import REFERENCE_YEAR, CLASSIC_PLOTLY_COLOR_SEQUENCE, PROJECTS_COLOR_SEQUENCE, ResultType
 from src.linear_objects.dike_traject import DikeTraject, get_traject_prob_fast
 from src.linear_objects.project import DikeProject
+from src.linear_objects.reinforcement_program import DikeProgram
 from src.utils.utils import pf_to_beta, interpolate_beta_values, beta_to_pf, get_traject_reliability
 
 
@@ -51,50 +52,19 @@ def plot_cost_vs_time_projects(projects: list[DikeProject]):
     return fig
 
 
-def projects_reliability_over_time(projects: list[DikeProject], imported_runs_data: dict,
-                                   result_type: str) -> go.Figure:
+def projects_reliability_over_time(program: DikeProgram, result_type: str) -> go.Figure:
     _fig = go.Figure()
 
     # first sort projects by ending year
-    projects = sorted(projects, key=lambda x: x.end_year)
 
-    for index, traject_data in enumerate(imported_runs_data.values()):
+    # Loop over traject
+    for index, dike_traject in enumerate(program.dike_trajects.values()):
         color_traject = CLASSIC_PLOTLY_COLOR_SEQUENCE[index]
 
-        dike_traject = DikeTraject.deserialize(traject_data)
-
-        _traject_reliability = get_traject_reliability(dike_traject.dike_sections, 'initial')
-        _traject_pf = get_traject_prob_fast(_traject_reliability)[1]
-        _traject_betas = pf_to_beta(_traject_pf)
-
-        # Initialize years and betas
-        years_ini = np.linspace(2025, projects[0].end_year, projects[0].end_year - 2025 + 1)
-        years_beta = np.array(dike_traject.dike_sections[0].years) + REFERENCE_YEAR
-        betas_ini = interpolate_beta_values(years_ini, _traject_betas, years_beta)
-
-        sections_to_reinforce=[]
-        for index, project in enumerate(projects):
-            year_start = projects[index].end_year
-            year_end = projects[index + 1].end_year if index < len(projects) - 1 else 2100
-            # get all the section of the project that are part of the traject
-            dike_section_project_list = [section for section in project.dike_sections if
-                                        section.parent_traject_name == dike_traject.name]
-            sections_to_reinforce.extend(dike_section_project_list)
-            _unreinforced_sections = [section for section in dike_traject.dike_sections if
-                                      section.name not in [s.name for s in sections_to_reinforce]]
-
-            _traject_reliability = get_traject_reliability(sections_to_reinforce, 'partial',
-                                                                   unreinforced_sections=_unreinforced_sections)
-            _traject_pf = get_traject_prob_fast(_traject_reliability)[1]
-
-            _traject_betas = pf_to_beta(_traject_pf)
-
-            years = np.linspace(year_start, year_end, year_end - year_start + 1)
-            betas = interpolate_beta_values(years, _traject_betas, years_beta)
-
-            years_ini = np.concatenate((years_ini, years))
-            betas_ini = np.concatenate((betas_ini, betas))
-
+        years_ini, betas_ini = (
+            program.trajects_pf_over_time[f"{dike_traject.name}"]["years"],
+            program.trajects_pf_over_time[f"{dike_traject.name}"]["betas"]
+        )
 
         if result_type == ResultType.RELIABILITY.name:
             y = betas_ini
@@ -187,7 +157,7 @@ def projects_reliability_over_time(projects: list[DikeProject], imported_runs_da
         #     font=dict(color="black", size=18),
         # )
 
-    projects = sorted(projects, key=lambda x: x.end_year)
+    projects = sorted(program.projects, key=lambda x: x.end_year)
 
     if result_type == ResultType.RELIABILITY.name:
         y0_ini = 0

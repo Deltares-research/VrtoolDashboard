@@ -336,13 +336,15 @@ def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
                                                  Measures.GEOTEXTILE.name: True,
                                                  Measures.DIAPHRAGM_WALL.name: True,
                                                  Measures.STABILITY_SCREEN.name: True,
+                                                 Measures.ANCHORED_SHEETPILE.name: True,
+                                                 Measures.CUSTOM.name: False
                                                  }])
             df = pd.concat([df.infer_objects(), df_add], ignore_index=True)
 
         bool_columns = ["reinforcement_col", Measures.GROUND_IMPROVEMENT.name,
                         Measures.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.name,
                         Measures.GEOTEXTILE.name, Measures.DIAPHRAGM_WALL.name,
-                        Measures.STABILITY_SCREEN.name]
+                        Measures.STABILITY_SCREEN.name, Measures.ANCHORED_SHEETPILE.name, Measures.CUSTOM.name]
         df[bool_columns] = df[bool_columns].astype(bool)
 
         return df.to_dict('records')
@@ -366,5 +368,3 @@ def update_slider_years_from_database(dike_traject_data: dict):
         _assessment_years = _dike_traject.dike_sections[0].years  # all sections should have the same assessment years
         _marks = {year + REFERENCE_YEAR: {'label': f"{year + REFERENCE_YEAR}"} for year in _assessment_years}
         return _marks
-
-

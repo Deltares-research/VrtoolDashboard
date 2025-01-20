@@ -128,7 +128,7 @@ def get_dike_traject_from_config_ORM(
         greedy_optimization_criteria=greedy_optimization_criteria,
         greedy_criteria_year=greedy_criteria_year,
         greedy_criteria_beta=greedy_criteria_beta,
-    ).import_orm(orm_model)
+    ).import_orm(orm_model, _path_database)
 
     return _dike_traject
 

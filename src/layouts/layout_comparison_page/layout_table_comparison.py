@@ -6,7 +6,7 @@ from src.component_ids import TABLE_COMPARISON_MEASURES
 # color_higlight = "bg-danger"
 color_higlight = "mediumaquamarine"
 columnDefs = [
-    {"field": "section_name", "sortable": True, 'headerName': 'Sectie', "pinned": True, 'width': 100},
+    {"field": "section_name", "sortable": True, 'headerName': 'Dijkvak', "pinned": True, 'width': 100},
     {"field": "section_length", 'headerName': 'L (m)', 'width': 55},
     {
         'headerName': 'Run 1',

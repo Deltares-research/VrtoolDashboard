@@ -10,7 +10,6 @@ from vrtool.orm.orm_controllers import clear_assessment_results, clear_measure_r
 
 from src.callbacks.database_interaction_page.callback_optimize import get_selected_measure
 from src.orm.import_database import get_name_optimization_runs
-from tests.test_callbacks.test_callback_optimize import optimization_table_1, optimization_table_2
 from src.orm import models as orm_model
 
 
