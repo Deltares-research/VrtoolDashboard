@@ -97,10 +97,10 @@ def get_risk_table():
     columnDefs = [
         {"field": "year", 'headerName': 'Jaar', "pinned": True, 'width': 80},
         {
-            'headerName': 'Risico (M€)',
+            'headerName': 'Risico (M€/jaar)',
             'children': [
 
-                {'field': "current_risk", 'headerName': 'Huidige', "width": 100,
+                {'field': "current_risk", 'headerName': 'Huidig', "width": 100,
                  },
 
                 {
