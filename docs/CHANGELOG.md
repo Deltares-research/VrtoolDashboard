@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.0.0 [##/##/####]
+## v0.0.0 [/##/####]
 
 ### Added
 None.
@@ -16,6 +16,23 @@ None.
 
 ### Fixed
 None.
+
+## v1.0.2 [23/01/2025]
+
+### Added
+None.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+- Fixed bug precision beta in initial assessment map
 
 ## v1.0.1 [20/01/2025]
 
