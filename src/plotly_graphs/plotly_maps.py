@@ -128,7 +128,7 @@ def plot_dike_traject_reliability_initial_assessment_map(
                 _color = get_reliability_color(_beta, dike_traject.lower_bound_value)
 
                 if result_type == ResultType.RELIABILITY.name:
-                    _hover_res = f"Beta sectie: {_beta:.2}<br>"
+                    _hover_res = f"Beta sectie: {_beta:.2e}<br>"
                 elif result_type == ResultType.PROBABILITY.name:
                     _hover_res = f"Pf sectie: {beta_to_pf(_beta):.2e}<br>"
                 elif result_type == ResultType.INTERPRETATION_CLASS.name:
