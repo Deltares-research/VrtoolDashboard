@@ -512,8 +512,10 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             for mechanism in assessment_results.keys():
                 if final_section_probability_per_mechanism_temp[mechanism] == {}: # is traject has no revetment,
                     continue
-                final_section_probability_per_mechanism_temp[mechanism][section]['beta'] = \
-                    assessment_results[mechanism][section]['beta']
+
+                if section in final_section_probability_per_mechanism_temp[mechanism].keys():  # if not, this mean that the section has no assessment data for the mechanism (for example a section with no revetment)
+                    final_section_probability_per_mechanism_temp[mechanism][section]['beta'] = \
+                        assessment_results[mechanism][section]['beta']
 
             # recalculate final traject probability
             final_traject_probability_per_mechanism_temp = calculate_traject_probability(
