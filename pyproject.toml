@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vr_dash"
-version = "1.0.2"
+version = "1.0.3"
 description = ""
 authors = ["Matthias Hauth <matthias.hauth@deltares.nl>"]
 maintainers = [

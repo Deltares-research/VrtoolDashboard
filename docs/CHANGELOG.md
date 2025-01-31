@@ -17,6 +17,23 @@ None.
 ### Fixed
 None.
 
+## v1.0.3 [31/01/2025]
+
+### Added
+None.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+- Fixed bug 13-6 where one section had no revetment data
+
 ## v1.0.2 [23/01/2025]
 
 ### Added
