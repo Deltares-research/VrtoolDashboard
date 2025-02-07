@@ -17,6 +17,23 @@ None.
 ### Fixed
 None.
 
+## v1.0.4 [07/02/2025]
+
+### Added
+- Revetment column to optimization table
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
 ## v1.0.3 [31/01/2025]
 
 ### Added
