@@ -323,7 +323,6 @@ def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
     :return:
     """
     df = pd.DataFrame(columns=["section_col", "reinforcement_col"])
-
     if dike_traject_data is not None:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
 
@@ -337,6 +336,7 @@ def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
                                                  Measures.DIAPHRAGM_WALL.name: True,
                                                  Measures.STABILITY_SCREEN.name: True,
                                                  Measures.ANCHORED_SHEETPILE.name: True,
+                                                 Measures.REVETMENT.name: True if section.revetment else False,
                                                  Measures.CUSTOM.name: False
                                                  }])
             df = pd.concat([df.infer_objects(), df_add], ignore_index=True)
@@ -344,10 +344,9 @@ def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
         bool_columns = ["reinforcement_col", Measures.GROUND_IMPROVEMENT.name,
                         Measures.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.name,
                         Measures.GEOTEXTILE.name, Measures.DIAPHRAGM_WALL.name,
-                        Measures.STABILITY_SCREEN.name, Measures.ANCHORED_SHEETPILE.name, Measures.REVETMENT,
+                        Measures.STABILITY_SCREEN.name, Measures.ANCHORED_SHEETPILE.name, Measures.REVETMENT.name,
                         Measures.CUSTOM.name]
         df[bool_columns] = df[bool_columns].astype(bool)
-
         return df.to_dict('records')
 
 
