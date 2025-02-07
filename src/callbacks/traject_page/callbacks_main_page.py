@@ -344,7 +344,8 @@ def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
         bool_columns = ["reinforcement_col", Measures.GROUND_IMPROVEMENT.name,
                         Measures.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.name,
                         Measures.GEOTEXTILE.name, Measures.DIAPHRAGM_WALL.name,
-                        Measures.STABILITY_SCREEN.name, Measures.ANCHORED_SHEETPILE.name, Measures.CUSTOM.name]
+                        Measures.STABILITY_SCREEN.name, Measures.ANCHORED_SHEETPILE.name, Measures.REVETMENT,
+                        Measures.CUSTOM.name]
         df[bool_columns] = df[bool_columns].astype(bool)
 
         return df.to_dict('records')

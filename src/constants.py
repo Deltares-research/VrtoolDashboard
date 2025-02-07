@@ -51,7 +51,7 @@ class Measures(Enum):
     GEOTEXTILE = "Verticale Pipingoplossing"
     DIAPHRAGM_WALL = "Zelfkerende constructie"
     ANCHORED_SHEETPILE = "Verankerde damwand"
-    # REVETMENT = "Bekleding"
+    REVETMENT = "Bekleding"
     CUSTOM = "Custom"
 
 
