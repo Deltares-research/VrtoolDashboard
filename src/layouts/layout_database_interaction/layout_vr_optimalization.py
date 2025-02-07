@@ -70,6 +70,12 @@ columns_defs = [
      "cellRenderer": "DBC_Switch",
      "CellRendererParams": {"onColor": "success", "offColor": "danger"}},
 
+    {"field": Measures.REVETMENT.name,
+     "headerName": Measures.REVETMENT.value,
+     "editable": True,
+     "cellRenderer": "DBC_Switch",
+     "CellRendererParams": {"onColor": "success", "offColor": "danger"}},
+
     {"field": Measures.CUSTOM.name,
      "headerName": Measures.CUSTOM.value,
      "editable": True,
@@ -84,6 +90,7 @@ df = pd.DataFrame(columns=["section_col", "reinforcement_col", "reference_year",
                            Measures.DIAPHRAGM_WALL.value,
                            Measures.STABILITY_SCREEN.value,
                            Measures.ANCHORED_SHEETPILE.value,
+                           Measures.REVETMENT.value,
                            Measures.CUSTOM.value
 
                            ])  # empty dataframe

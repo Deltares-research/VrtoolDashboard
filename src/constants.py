@@ -51,7 +51,7 @@ class Measures(Enum):
     GEOTEXTILE = "Verticale Pipingoplossing"
     DIAPHRAGM_WALL = "Zelfkerende constructie"
     ANCHORED_SHEETPILE = "Verankerde damwand"
-    # REVETMENT = "Bekleding"
+    REVETMENT = "Bekleding"
     CUSTOM = "Custom"
 
 
@@ -73,6 +73,7 @@ conversion_dict_measure_names = {"GROUND_IMPROVEMENT": "Soil reinforcement",
                                  "DIAPHRAGM_WALL": "Diaphragm Wall",
                                  "STABILITY_SCREEN": "Stability Screen",
                                  "ANCHORED_SHEETPILE": "Anchored sheetpile",
+                                 "REVETMENT": "Revetment",
                                  "CUSTOM": "Custom"}
 
 # PROJECTS_COLOR_SEQUENCE = ['rgb(214, 244, 134)',
