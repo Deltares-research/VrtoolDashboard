@@ -1,12 +1,30 @@
 # Changelog
 
-## v0.0.0 [/##/####]
+## vX.X.X [/##/####]
 
 ### Added
 None.
 
 ### Changed
 None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
+
+## v1.0.5 [25/03/2025]
+
+### Added
+None.
+
+### Changed
+Force dash version below <3.0.0
 
 ### Deprecated
 None.

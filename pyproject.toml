@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vr_dash"
-version = "1.0.4"
+version = "1.0.5"
 description = ""
 authors = ["Matthias Hauth <matthias.hauth@deltares.nl>"]
 maintainers = [
@@ -23,15 +23,15 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.9, <3.11"
-dash = { extras = ["diskcache"], version = "^2.17.0" }
-dash-bootstrap-components = "^1.4.1"
-geopandas = "^1.0.1"
+dash = { extras = ["diskcache"], version = ">=2.17.0,<3.0.0"}
+dash-bootstrap-components = "1.6.0"
+geopandas = "1.0.1"
 vrtool = "1.0.1"
 tabulate = "^0.9.0"
-dash-ag-grid = "^2.4.0"
+dash-ag-grid = "2.4.0"
 diskcache = "^5.6.3"
 dash-iconify = "^0.1.2"
-dash-mantine-components = "^0.14.0"
+dash-mantine-components = "0.14.4"
 
 
 [tool.poetry.group.test.dependencies]
