@@ -22,10 +22,10 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.9, <3.11"
+python = "^3.10"
 dash = { extras = ["diskcache"], version = ">=2.17.0,<3.0.0"}
 dash-bootstrap-components = "1.6.0"
-geopandas = "1.0.1"
+geopandas = "^1.0.1"
 vrtool = "1.0.1"
 tabulate = "^0.9.0"
 dash-ag-grid = "2.4.0"
@@ -44,7 +44,7 @@ teamcity-messages = "^1.32"
 black = "^22.8.0"
 isort = "^5.10.1"
 commitizen = "^3.0.1"
-urllib3 = "1.26.15"
+urllib3 = "^1.26.15"
 
 
 [tool.black]
