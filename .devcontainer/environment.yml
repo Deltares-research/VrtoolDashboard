@@ -5,6 +5,6 @@ channels:
 dependencies:
   - conda-forge::python=3.12
   - conda-forge::openturns
-  - conda-forge::poetry
+  - conda-forge::poetry=1.8.5
   # If this does not work, try adding in pyproject.toml the following PINNED dependency:
   # urllib3 = "1.26.15"
