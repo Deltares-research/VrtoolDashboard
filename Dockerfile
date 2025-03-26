@@ -1,20 +1,30 @@
-# To build this docker run:
-# `docker build -t vrtool_dashboard`
+# To build this docker:
+# `docker build -t vrtool_dash .`
+# To run this docker:
+# `docker run -p 8000:8080 vrtool_dash`
 
-FROM python:3.12
+FROM python:3.12 as builder
 
 RUN apt-get update
 
-# Copy the directories with the local vrtool_dashboard.
-WORKDIR /vrtool_dash_src
-COPY README.md LICENSE pyproject.toml poetry.lock /vrtool_dash_src/
-COPY src /vrtool_dash_src/src
+ARG SRC_ROOT="/vrtool_dash_src"
+
+# Copy the directories with the local vrtool_dash
+WORKDIR $SRC_ROOT
+
+# Generate requirements files with:
+COPY README.md LICENSE poetry.lock pyproject.toml $SRC_ROOT
+COPY src $SRC_ROOT/src
+copy externals $SRC_ROOT/externals
 
 # Install the required packages
 RUN pip install poetry
 RUN poetry config virtualenvs.create false
 RUN poetry install --without dev,test
-RUN apt-get clean autoclean
+# poetry export --without-hashes --format=requirements.txt > requirements.txt
+# RUN pip install -r requirements.txt
 
 # Define the endpoint
-CMD ["python3", "-m", "src.index"]
+# CMD ["/bin/bash"]
+
+CMD ["python", "-m", "src.index"]
