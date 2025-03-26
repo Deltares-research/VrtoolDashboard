@@ -21,10 +21,6 @@ copy externals $SRC_ROOT/externals
 RUN pip install poetry
 RUN poetry config virtualenvs.create false
 RUN poetry install --without dev,test
-# poetry export --without-hashes --format=requirements.txt > requirements.txt
-# RUN pip install -r requirements.txt
 
 # Define the endpoint
-# CMD ["/bin/bash"]
-
 CMD ["python", "-m", "src.index"]
