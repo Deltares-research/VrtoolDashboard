@@ -1,7 +1,7 @@
 import dash_bootstrap_components as dbc
 
 from src.component_ids import SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA, SELECT_DIKE_SECTION_FOR_MEASURES_ID, \
-    RADIO_PROJECT_PAGE_RESULT_TYPE, RADIO_COMPARISON_PAGE_RESULT_TYPE
+    RADIO_PROJECT_PAGE_RESULT_TYPE, RADIO_COMPARISON_PAGE_RESULT_TYPE, SELECT_LENGTH_COST_SWITCH
 from src.constants import ColorBarResultType, ResultType, CalcType, Mechanism, SubResultType, GreedyOPtimizationCriteria
 
 """
@@ -66,7 +66,7 @@ layout_radio_sub_type_result = dbc.RadioItems(
 )
 
 layout_radio_length_switch = dbc.RadioItems(
-    id="select_length_cost_switch",
+    id=SELECT_LENGTH_COST_SWITCH,
     options=[{"label": "Kosten", "value": "COST"},
              {"label": "Lengte", "value": "LENGTH"},
              ],

@@ -5,7 +5,7 @@ from src.component_ids import TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE, CONTENT
     STORED_RUNS_COMPARISONS_DATA, RUNS_COMPARISON_GRAPH_TIME_ID, \
     SLIDER_YEAR_RELIABILITY_RESULTS_ID, OVERVIEW_COMPARISON_MAP_ID, RUNS_COMPARISON_GRAPH_ID, \
     RADIO_COMPARISON_PAGE_RESULT_TYPE, MEASURE_COMPARISON_MAP_ID, EDITABLE_COMPARISON_TABLE_ID, \
-    TABLE_COMPARISON_MEASURES, TABLE_ORDER_COMPARISON_MEASURES
+    TABLE_COMPARISON_MEASURES, TABLE_ORDER_COMPARISON_MEASURES, SELECT_LENGTH_COST_SWITCH
 from src.layouts.layout_comparison_page.layout_output_tabs import layout_project_output_tab_one, \
     layout_project_output_tab_two, layout_project_output_tab_three, layout_project_output_tab_four, \
     layout_project_output_tab_five, layout_project_output_tab_six
@@ -81,13 +81,15 @@ def make_graph_overview_comparison(imported_runs_data: dict) -> dcc.Graph:
     [
         Input(STORED_RUNS_COMPARISONS_DATA, "data"),
         Input(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "value"),
-        Input(RADIO_COMPARISON_PAGE_RESULT_TYPE, "value")
+        Input(RADIO_COMPARISON_PAGE_RESULT_TYPE, "value"),
+        Input(SELECT_LENGTH_COST_SWITCH, "value"),
     ],
 )
 def make_graph_pf_project_comparison(
         project_data: dict,
         selected_year: float,
-        result_type: str
+        result_type: str,
+        switch_length_cost: str
 ):
     """
 
@@ -95,7 +97,7 @@ def make_graph_pf_project_comparison(
     if project_data is None:
         return plot_default_scatter_dummy()
     else:
-        _fig = plot_pf_project_comparison(project_data, selected_year, result_type)
+        _fig = plot_pf_project_comparison(project_data, selected_year, result_type, switch_length_cost)
     return _fig
 
 

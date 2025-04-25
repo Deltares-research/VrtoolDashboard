@@ -5,7 +5,8 @@ from src.component_ids import OVERVIEW_COMPARISON_MAP_ID, RUNS_COMPARISON_GRAPH_
     MEASURE_COMPARISON_MAP_ID
 from src.layouts.layout_comparison_page.layout_table_comparison import table_ag_grid_comparison_measures
 from src.layouts.layout_comparison_page.layout_table_comparison_order_section import table_ag_grid_order_measures
-from src.layouts.layout_traject_page.layout_radio_items import layout_radio_result_type_comparison_page
+from src.layouts.layout_traject_page.layout_radio_items import layout_radio_result_type_comparison_page, \
+    layout_radio_length_switch
 from src.layouts.layout_traject_page.layout_sliders import layout_year_slider
 from src.plotly_graphs.pf_length_cost import plot_default_scatter_dummy
 from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
@@ -18,13 +19,13 @@ def layout_project_output_tab_one() -> html.Div:
         children=[
             dbc.Row([
                 dbc.Col([html.H2("Overzicht dijktrajecten")], md=10),
+
             ]),
 
             html.Div(id=OVERVIEW_COMPARISON_MAP_ID,
                      style={'width': '110vh', 'height': '80vh', 'border': "2px solid black"}),
 
         ])
-
 
 def layout_project_output_tab_two() -> html.Div:
     return html.Div(
@@ -33,6 +34,12 @@ def layout_project_output_tab_two() -> html.Div:
                 dbc.Col([html.H2("Vergelijking kosten en faalkans")], md=10),
             ]),
             layout_year_slider,
+            html.Br(),
+            dbc.Row([
+
+                dbc.Col([layout_radio_length_switch], md=4),
+
+            ]),
             html.Div(
                 style={'width': '110vh', 'height': '55vh', 'border': "2px solid black"},
                 children=[
