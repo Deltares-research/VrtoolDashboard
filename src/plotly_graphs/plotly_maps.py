@@ -625,7 +625,7 @@ def add_measure_type_trace(
                 hovertemplate=f"Vaknaam {section.name}<br>"
                               f"{measure_results['name']} <br>"
                               f"Investeringsjaar: {get_investment_year_str(measure_results['investment_year'])} <br>"
-                              f"Stabiliteitsscherm: {measure_results['L_stab_screen']}m <br>"
+                              f"Stabiliteitsscherm: {measure_results.get('L_stab_screen')}m <br>"
                               f"<extra></extra>",
             )
         )
