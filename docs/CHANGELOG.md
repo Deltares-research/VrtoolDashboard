@@ -17,6 +17,23 @@ None.
 ### Fixed
 None.
 
+## v1.1.0 [25/04/2025]
+
+### Added
+None.
+
+### Changed
+-VR Core bumped tov ersion 1.1.0
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
 ## v1.0.6 [25/04/2025]
 
 ### Added
