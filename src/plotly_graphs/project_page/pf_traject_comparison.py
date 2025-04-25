@@ -22,7 +22,7 @@ def plot_default_scatter_dummy() -> go.Figure:
     return fig
 
 
-def plot_pf_project_comparison(project_data: dict, selected_year: int, result_type: str) -> go.Figure:
+def plot_pf_project_comparison(project_data: dict, selected_year: int, result_type: str, cost_length_switch: str) -> go.Figure:
     """
     :return:
     """
@@ -37,11 +37,20 @@ def plot_pf_project_comparison(project_data: dict, selected_year: int, result_ty
         section_order_vr = ["Geen maatregel"] + dike_traject.reinforcement_order_vr
         # greedy_step_order = ["Geen maatregel"] + [f"Stap {o}" for o in range(1, len(dike_traject.greedy_steps))]
 
-        x_vr = dike_traject.get_cum_cost("vr")
-        # x_step = cum_cost_steps(dike_traject)
-        title_x_axis = "Kosten (mln €)"
-        x_max = np.max([x_vr[-1], x_max])
-        title_extra = "Faalkans i.r.t kosten"
+        if cost_length_switch == "COST":
+            x_vr = dike_traject.get_cum_cost("vr")
+            title_x_axis = "Kosten (mln €)"
+            x_max = max(x_vr[-1], x_max)
+            title_extra = "Faalkans i.r.t. kosten"
+
+        elif cost_length_switch == "LENGTH":
+            x_vr = dike_traject.get_cum_length("vr")
+            title_x_axis = "Lengte (km)"
+            x_max = max(x_vr[-1], x_max)
+            title_extra = "Faalkans i.r.t. lengte"
+        else:
+            raise ValueError("Wrong cost_length_switch value")
+
 
         if result_type == ResultType.RELIABILITY.name:
             y_vr = pf_to_beta(dike_traject.calc_traject_probability_array("vr")[:, _year_index])

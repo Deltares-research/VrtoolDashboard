@@ -11,7 +11,7 @@ from src.component_ids import (
     SELECT_DIKE_SECTION_FOR_MEASURES_ID,
     GRAPH_MEASURE_COMPARISON_ID,
     STORE_CONFIG, MEASURE_MODAL_ID, CLOSE_MEASURE_MODAL_BUTTON_ID, DIKE_TRAJECT_PF_COST_GRAPH_ID,
-    GRAPH_MEASURE_RELIABILITY_TIME_ID
+    GRAPH_MEASURE_RELIABILITY_TIME_ID, SELECT_LENGTH_COST_SWITCH
 )
 from src.constants import REFERENCE_YEAR, Mechanism
 from src.linear_objects.dike_traject import DikeTraject
@@ -155,7 +155,7 @@ def make_graph_map_measures(
         Input("stored-data", "data"),
         Input(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "value"),
         Input("select_result_type", "value"),
-        Input("select_length_cost_switch", "value"),
+        Input(SELECT_LENGTH_COST_SWITCH, "value"),
     ],
 )
 def make_graph_pf_vs_cost(
