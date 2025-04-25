@@ -17,6 +17,23 @@ None.
 ### Fixed
 None.
 
+## v1.0.6 [25/04/2025]
+
+### Added
+Added cost/length switch to comparison page
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
 
 ## v1.0.5 [25/03/2025]
 
