@@ -52,7 +52,6 @@ def upload_csv_and_add_measure(contents: str, vr_config: dict, dike_traject_data
         row_data = [df.columns.tolist()] + df.values.tolist()
         custom_measure_list_1 = convert_custom_table_to_input(row_data)
 
-        print(custom_measure_list_1)
 
         # 3. Create a copy of the database for backup
         def get_next_backup_filename(dir: Path):
@@ -100,7 +99,6 @@ def upload_csv_and_add_measure(contents: str, vr_config: dict, dike_traject_data
                 return self.format(record)
 
         with ModalPopupLogHandler() as handler:
-            print(11111)
             _added_measures = add_custom_measures(
                 _vr_config, custom_measure_list_1
             )

@@ -59,24 +59,7 @@ df = pd.DataFrame(columns=[col["field"] for col in columns_defs],
 
 right_side = html.Div([
     # add text
-    dcc.Markdown(
-        '''
-        Met de onderstaande tabel, kunt u custom maatregelen aan de database toevoegen en verwijderen.
-        '''
-    ),
 
-    #add white space
-    html.Br(),
-    dag.AgGrid(
-        id=EDITABLE_CUSTOM_MEASURE_TABLE_ID,
-        rowData=df.to_dict('records'),
-        columnDefs=columns_defs,
-        defaultColDef={"resizable": True,
-                       "wrapHeaderText": True,
-                       "autoHeaderHeight": True, },
-        dashGridOptions={"rowSelection": "multiple", "enableCellTextSelection": True, "ensureDomOrder": True},
-
-    ),
     #add white space
     html.Br(),
     dbc.Row([
@@ -110,6 +93,25 @@ left_side = html.Div([
         multiple=False,
         accept='.csv'
     ),
+    dcc.Markdown(
+        '''
+        Met de onderstaande tabel, kunt u custom maatregelen aan de database toevoegen en verwijderen.
+        '''
+    ),
+
+    # add white space
+    html.Br(),
+    dag.AgGrid(
+        id=EDITABLE_CUSTOM_MEASURE_TABLE_ID,
+        rowData=df.to_dict('records'),
+        columnDefs=columns_defs,
+        defaultColDef={"resizable": True,
+                       "wrapHeaderText": True,
+                       "autoHeaderHeight": True, },
+        dashGridOptions={"rowSelection": "multiple", "enableCellTextSelection": True, "ensureDomOrder": True},
+
+    ),
+
 ])
 
 custom_measure_tab_layout = html.Div([
