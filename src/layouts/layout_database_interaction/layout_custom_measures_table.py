@@ -4,7 +4,7 @@ import dash_ag_grid as dag
 import dash_bootstrap_components as dbc
 
 from src.component_ids import EDITABLE_CUSTOM_MEASURE_TABLE_ID, ADD_CUSTOM_MEASURE_BUTTON_ID, \
-    REMOVE_CUSTOM_MEASURE_BUTTON_ID
+    REMOVE_CUSTOM_MEASURE_BUTTON_ID, IMPORTER_CUSTOM_MEASURE_CSV_ID
 from src.constants import Mechanism
 
 columns_defs = [
@@ -57,7 +57,7 @@ df = pd.DataFrame(columns=[col["field"] for col in columns_defs],
                   ]
                   )  # empty dataframe
 
-left_side = html.Div([
+right_side = html.Div([
     # add text
     dcc.Markdown(
         '''
@@ -84,15 +84,37 @@ left_side = html.Div([
     #add white space
     html.Br(),
     dbc.Row([
-        dbc.Col([dbc.Button("Custom maatregel toevoegen", id=ADD_CUSTOM_MEASURE_BUTTON_ID, color="primary",
-                            className="mr-1")], md=3),
+        # dbc.Col([dbc.Button("Custom maatregel toevoegen", id=ADD_CUSTOM_MEASURE_BUTTON_ID, color="primary",
+        #                     className="mr-1")], md=3),
         dbc.Col([dbc.Button("Verwijder custom maatregelen uit database", id=REMOVE_CUSTOM_MEASURE_BUTTON_ID,
                             color="primary", className="mr-1")], md=3),
     ]),
 
 ])
 
-right_side = html.Div([])
+left_side = html.Div([
+
+    dcc.Upload(
+        id=IMPORTER_CUSTOM_MEASURE_CSV_ID,
+        children=html.Div([
+            '',
+            html.A('Importeer een maatregelen bestand (.csv)')
+        ]),
+        style={
+            'width': '100%',
+            'height': '60px',
+            'lineHeight': '60px',
+            'borderWidth': '1px',
+            'borderStyle': 'dashed',
+            'borderRadius': '5px',
+            'textAlign': 'center',
+            'margin': '10px'
+        },
+        # Allow multiple files to be uploaded
+        multiple=False,
+        accept='.csv'
+    ),
+])
 
 custom_measure_tab_layout = html.Div([
     dbc.Row([

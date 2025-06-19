@@ -62,7 +62,8 @@ _vr_config = VrtoolConfig().from_json(Path(
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\TEMPOOO\config.json"
     # r"C:\Users\hauth\repositories\VrtoolDashboard\tests\data\31-1 base coastal case\config.json"
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\stephan_31_01_2025\config.json"
-r"C:\Users\hauth\repositories\VrtoolDashboard\tests\data\Case_38_1\config.json"
+# r"C:\Users\hauth\repositories\VrtoolDashboard\tests\data\Case_38_1\config.json"
+    r"C:\Users\hauth\repositories\VrtoolDashboard\tests\data\38-1 custom measures\config.json"
 
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\COP demo\38-1 base river case\config.json"
     # r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\38-1 test/config.json"

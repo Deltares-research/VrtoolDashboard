@@ -53,6 +53,8 @@ app.layout = dmc.MantineProvider(dbc.Container(
 
 # Run the app on localhost:8050
 if __name__ == '__main__':
+    print("============================= STARTING THE APP ====================================")
+    print("Please wait while the app is starting...")
     ascii_art = """
     ____    ____ .______         .___________.  ______     ______     __
     \   \  /   / |   _  \        |           | /  __  \   /  __  \   |  |
@@ -62,7 +64,7 @@ if __name__ == '__main__':
         \__/     |_|  `._____ |       |_|      \______/    \______/  |_______|
 
     """
-    print("============================= RERUN THE APP ====================================")
+    print("=============================                   ====================================")
     print(ascii_art)
 
     # Supress GET and POST messages in the console for production mode
