@@ -64,11 +64,7 @@ right_side = html.Div([
         Met de onderstaande tabel, kunt u custom maatregelen aan de database toevoegen en verwijderen.
         '''
     ),
-    dbc.Row([
-        dbc.Col(dbc.Button("Voeg rij toe", id="add-row-button", color="light", className="me-2", style={"width": "100%", "height": "60px"}), md=2),
-        dbc.Col(dbc.Button("Kopieer geselecteerde rij", id="copy-row-button", color="light", className="me-2", style={"width": "100%", "height": "60px"}), md=2),
-        dbc.Col(dbc.Button("Verwijder rij", id="delete-row-button", color="light", className="me-2", style={"width": "100%", "height": "60px"}), md=2),
-    ]),
+
     #add white space
     html.Br(),
     dag.AgGrid(
@@ -86,7 +82,7 @@ right_side = html.Div([
     dbc.Row([
         # dbc.Col([dbc.Button("Custom maatregel toevoegen", id=ADD_CUSTOM_MEASURE_BUTTON_ID, color="primary",
         #                     className="mr-1")], md=3),
-        dbc.Col([dbc.Button("Verwijder custom maatregelen uit database", id=REMOVE_CUSTOM_MEASURE_BUTTON_ID,
+        dbc.Col([dbc.Button("Verwijder alle custom maatregelen uit database", id=REMOVE_CUSTOM_MEASURE_BUTTON_ID,
                             color="primary", className="mr-1")], md=3),
     ]),
 
