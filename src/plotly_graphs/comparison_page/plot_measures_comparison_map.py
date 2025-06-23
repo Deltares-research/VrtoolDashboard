@@ -43,10 +43,11 @@ def plot_comparison_measures_map(imported_runs: dict, activated_runs: list[str])
             "revetment": True,
             "custom": True,
         }
-
+        i =0
         for section in dike_traject.dike_sections:
             side = 'left' if index == 0 else 'right'
             section.shift_trajectory_sideways(100, side)
+
 
             # if a section is not in analyse, skip it, and it turns blank on the map.
             if not section.in_analyse:

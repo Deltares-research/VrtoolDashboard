@@ -698,6 +698,10 @@ def add_measure_type_trace(
             name_hover = "Aanpassing bekleding"
         else:
             name_hover = measure_results["name"]
+
+        if measure_results['diff_transition_level'] == 0 and measure_results['pf_target_ratio'] == 1:
+            return
+
         fig.add_trace(
             go.Scattermap(
                 name="Aanpassing bekleding",
