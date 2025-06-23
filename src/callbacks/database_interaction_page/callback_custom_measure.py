@@ -29,13 +29,11 @@ from src.utils.utils import get_vr_config_from_dict
     Output(EDITABLE_CUSTOM_MEASURE_TABLE_ID, "rowData", allow_duplicate=True),
     [Input(IMPORTER_CUSTOM_MEASURE_CSV_ID, 'contents')],
     State(STORE_CONFIG, "data"),
-    # State("stored-data", "data"),
     allow_duplicate=True,
     prevent_initial_call=True,
 )
 def upload_csv_and_add_measure(contents: str, vr_config: dict) -> tuple[bool, list[str], list[dict]]:
     # 1. Get VrConfig from stored_config
-    print(contents)
     _vr_config = get_vr_config_from_dict(vr_config)
     # get the names of the custom measures that are already in the database
     custom_measures_ini = get_all_custom_measures(_vr_config)

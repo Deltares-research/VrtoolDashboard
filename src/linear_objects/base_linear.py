@@ -21,5 +21,4 @@ class BaseLinearObject:
             self.coordinates_rd = list(self.trajectory_rd.coords)
         else:
             # assuming only 2 LineStrings are returned
-            self.coordinates_rd = (list(self.trajectory_rd.parallel_offset(100, side).geoms[0].coords) +
-                                   list(self.trajectory_rd.parallel_offset(100, side).geoms[1].coords))
+            self.coordinates_rd = (list(self.trajectory_rd.geoms[0].coords) + list(self.trajectory_rd.geoms[1].coords))
