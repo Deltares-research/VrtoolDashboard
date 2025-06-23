@@ -17,4 +17,8 @@ class BaseLinearObject:
 
     def shift_trajectory_sideways(self, distance: int, side: str):
         self.trajectory_rd = self.trajectory_rd.parallel_offset(distance, side)
-        self.coordinates_rd = list(self.trajectory_rd.coords)
+        if isinstance(self.trajectory_rd, LineString):
+            self.coordinates_rd = list(self.trajectory_rd.coords)
+        else:
+            # assuming only 2 LineStrings are returned
+            self.coordinates_rd = (list(self.trajectory_rd.geoms[0].coords) + list(self.trajectory_rd.geoms[1].coords))

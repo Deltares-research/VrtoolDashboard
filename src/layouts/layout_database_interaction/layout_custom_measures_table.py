@@ -4,7 +4,7 @@ import dash_ag_grid as dag
 import dash_bootstrap_components as dbc
 
 from src.component_ids import EDITABLE_CUSTOM_MEASURE_TABLE_ID, ADD_CUSTOM_MEASURE_BUTTON_ID, \
-    REMOVE_CUSTOM_MEASURE_BUTTON_ID
+    REMOVE_CUSTOM_MEASURE_BUTTON_ID, IMPORTER_CUSTOM_MEASURE_CSV_ID
 from src.constants import Mechanism
 
 columns_defs = [
@@ -57,19 +57,49 @@ df = pd.DataFrame(columns=[col["field"] for col in columns_defs],
                   ]
                   )  # empty dataframe
 
-left_side = html.Div([
+right_side = html.Div([
     # add text
+
+    #add white space
+    html.Br(),
+    dbc.Row([
+        # dbc.Col([dbc.Button("Custom maatregel toevoegen", id=ADD_CUSTOM_MEASURE_BUTTON_ID, color="primary",
+        #                     className="mr-1")], md=3),
+        dbc.Col([dbc.Button("Verwijder alle custom maatregelen uit database", id=REMOVE_CUSTOM_MEASURE_BUTTON_ID,
+                            color="primary", className="mr-1")], md=3),
+    ]),
+
+])
+
+left_side = html.Div([
+
+    dcc.Upload(
+        id=IMPORTER_CUSTOM_MEASURE_CSV_ID,
+        children=html.Div([
+            '',
+            html.A('Importeer een maatregelen bestand (.csv)')
+        ]),
+        style={
+            'width': '100%',
+            'height': '60px',
+            'lineHeight': '60px',
+            'borderWidth': '1px',
+            'borderStyle': 'dashed',
+            'borderRadius': '5px',
+            'textAlign': 'center',
+            'margin': '10px'
+        },
+        # Allow multiple files to be uploaded
+        multiple=False,
+        accept='.csv'
+    ),
     dcc.Markdown(
         '''
         Met de onderstaande tabel, kunt u custom maatregelen aan de database toevoegen en verwijderen.
         '''
     ),
-    dbc.Row([
-        dbc.Col(dbc.Button("Voeg rij toe", id="add-row-button", color="light", className="me-2", style={"width": "100%", "height": "60px"}), md=2),
-        dbc.Col(dbc.Button("Kopieer geselecteerde rij", id="copy-row-button", color="light", className="me-2", style={"width": "100%", "height": "60px"}), md=2),
-        dbc.Col(dbc.Button("Verwijder rij", id="delete-row-button", color="light", className="me-2", style={"width": "100%", "height": "60px"}), md=2),
-    ]),
-    #add white space
+
+    # add white space
     html.Br(),
     dag.AgGrid(
         id=EDITABLE_CUSTOM_MEASURE_TABLE_ID,
@@ -81,18 +111,8 @@ left_side = html.Div([
         dashGridOptions={"rowSelection": "multiple", "enableCellTextSelection": True, "ensureDomOrder": True},
 
     ),
-    #add white space
-    html.Br(),
-    dbc.Row([
-        dbc.Col([dbc.Button("Custom maatregel toevoegen", id=ADD_CUSTOM_MEASURE_BUTTON_ID, color="primary",
-                            className="mr-1")], md=3),
-        dbc.Col([dbc.Button("Verwijder custom maatregelen uit database", id=REMOVE_CUSTOM_MEASURE_BUTTON_ID,
-                            color="primary", className="mr-1")], md=3),
-    ]),
 
 ])
-
-right_side = html.Div([])
 
 custom_measure_tab_layout = html.Div([
     dbc.Row([
