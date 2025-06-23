@@ -35,9 +35,10 @@ from src.utils.utils import get_vr_config_from_dict
 )
 def upload_csv_and_add_measure(contents: str, vr_config: dict) -> tuple[bool, list[str], list[dict]]:
     # 1. Get VrConfig from stored_config
+    print(contents)
     _vr_config = get_vr_config_from_dict(vr_config)
-    custom_measures_ini = get_all_custom_measures(_vr_config)  # custom measure that are already in the database
     # get the names of the custom measures that are already in the database
+    custom_measures_ini = get_all_custom_measures(_vr_config)
     custom_measure_names = list(set([measure['measure_name'] for measure in custom_measures_ini]))
 
     # 2. Get custom measures from the table
@@ -54,6 +55,9 @@ def upload_csv_and_add_measure(contents: str, vr_config: dict) -> tuple[bool, li
         # Convert to list of lists (including headers)
         row_data = [df.columns.tolist()] + df.values.tolist()
         custom_measure_list_1 = convert_custom_table_to_input(row_data)  #"MEASURE_NAME"
+
+        if row_data[0][0].lower() != 'maatregelen,dijkvak,mechanism,tijd,kosten,beta':
+            return True, ["Incorrect header: make sure they are among: 'maatregelen,dijkvak,mechanism,tijd,kosten,beta'"], dash.no_update
 
 
         # 3. Create a copy of the database for backup
@@ -116,7 +120,7 @@ def upload_csv_and_add_measure(contents: str, vr_config: dict) -> tuple[bool, li
             if meas["MEASURE_NAME"] in custom_measure_names:
                 return True, [f"Custom maatregel {meas['MEASURE_NAME']} bestaat al in de database en was niet aangepast."], df.to_dict('records')
 
-        return True, ["Custom measures added successfully."],
+        return True, ["Custom measures added successfully."], df.to_dict('records')
     return dash.no_update, dash.no_update, dash.no_update
 
 
