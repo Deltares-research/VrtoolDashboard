@@ -17,6 +17,23 @@ None.
 ### Fixed
 None.
 
+## v1.1.1 [24/06/2025]
+
+### Added
+None.
+
+### Changed
+- Custom measure tables is revamped, import csv
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
 ## v1.1.0 [25/04/2025]
 
 ### Added
