@@ -15,7 +15,7 @@ from vrtool.vrtool_logger import VrToolLogger
 
 from src.component_ids import EDITABLE_CUSTOM_MEASURE_TABLE_ID, ADD_CUSTOM_MEASURE_BUTTON_ID, STORE_CONFIG, \
     CUSTOM_MEASURE_MODEL_ID, CLOSE_CUSTOM_MEAS_MODAL_BUTTON_ID, MESSAGE_MODAL_CUSTOM_MEASURE_ID, \
-    REMOVE_CUSTOM_MEASURE_BUTTON_ID, IMPORTER_CUSTOM_MEASURE_CSV_ID
+    REMOVE_CUSTOM_MEASURE_BUTTON_ID, IMPORTER_CUSTOM_MEASURE_CSV_ID, MESSAGE_ERASE_CUSTOM_MEASURE_ID
 from src.constants import Mechanism
 from src.layouts.layout_database_interaction.layout_custom_measures_table import columns_defs
 from src.linear_objects.dike_traject import DikeTraject
@@ -61,7 +61,8 @@ def process(row_data, _vr_config, custom_measure_names):
     custom_measure_list_1 = convert_custom_table_to_input(row_data)  # "MEASURE_NAME
 
     if custom_measure_list_1 == "Invalid error name":
-        return True, ["Onjuiste mechanism in het csv bestand, zorg ervroor dat deze correct is: Piping, Stabiliteit, Overslag, Bekleding"], dash.no_update
+        return True, [
+            "Onjuiste mechanism in het csv bestand, zorg ervroor dat deze correct is: Piping, Stabiliteit, Overslag, Bekleding"], dash.no_update
 
     if row_data[0][0].lower() != 'maatregelen,dijkvak,mechanism,tijd,kosten,beta':
         return True, [
@@ -143,6 +144,7 @@ def process(row_data, _vr_config, custom_measure_names):
 
 @callback(
     Output(EDITABLE_CUSTOM_MEASURE_TABLE_ID, "rowData", allow_duplicate=True),
+    Output(MESSAGE_ERASE_CUSTOM_MEASURE_ID, "children"),
 
     Input(REMOVE_CUSTOM_MEASURE_BUTTON_ID, "n_clicks"),
     State(STORE_CONFIG, "data"),
@@ -158,12 +160,18 @@ def remove_all_custom_measure_in_db(n_clicks, vr_config: dict):
     :return:
     """
     _vr_config = get_vr_config_from_dict(vr_config)
+
+    custom_measures_ini = get_all_custom_measures(_vr_config)
+    custom_measure_names_ini = list(set([measure['measure_name'] for measure in custom_measures_ini]))
+
     safe_clear_custom_measure(_vr_config)
     custom_measures = get_all_custom_measures(_vr_config)
+    custom_measure_names_after = list(set([measure['measure_name'] for measure in custom_measures]))
 
     df = pd.DataFrame(columns=[col["field"] for col in columns_defs], data=custom_measures)
 
-    return df.to_dict('records')
+    return df.to_dict('records'), [
+        f"{len(custom_measure_names_ini) - len(custom_measure_names_after)} maatregelen verwijderd uit de database."]
 
 
 def convert_custom_table_to_input(row_data: list) -> list[dict]:

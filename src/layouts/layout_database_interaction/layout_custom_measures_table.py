@@ -4,7 +4,7 @@ import dash_ag_grid as dag
 import dash_bootstrap_components as dbc
 
 from src.component_ids import EDITABLE_CUSTOM_MEASURE_TABLE_ID, ADD_CUSTOM_MEASURE_BUTTON_ID, \
-    REMOVE_CUSTOM_MEASURE_BUTTON_ID, IMPORTER_CUSTOM_MEASURE_CSV_ID
+    REMOVE_CUSTOM_MEASURE_BUTTON_ID, IMPORTER_CUSTOM_MEASURE_CSV_ID, MESSAGE_ERASE_CUSTOM_MEASURE_ID
 from src.constants import Mechanism
 
 columns_defs = [
@@ -60,13 +60,16 @@ df = pd.DataFrame(columns=[col["field"] for col in columns_defs],
 right_side = html.Div([
     # add text
 
-    #add white space
+    # add white space
     html.Br(),
     dbc.Row([
         # dbc.Col([dbc.Button("Custom maatregel toevoegen", id=ADD_CUSTOM_MEASURE_BUTTON_ID, color="primary",
         #                     className="mr-1")], md=3),
         dbc.Col([dbc.Button("Verwijder alle custom maatregelen uit database", id=REMOVE_CUSTOM_MEASURE_BUTTON_ID,
-                            color="primary", className="mr-1")], md=3),
+                            color="primary", className="mr-1"),
+                 html.Div(id=MESSAGE_ERASE_CUSTOM_MEASURE_ID, children=[''])
+
+                 ], md=3),
     ]),
 
 ])
