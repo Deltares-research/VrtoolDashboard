@@ -10,7 +10,7 @@ from src.constants import Mechanism
 columns_defs = [
     {"field": "measure_name",
      "headerName": "Naam maatregel",
-     "editable": True,
+     "editable": False,
      "initialWidth": 180},
 
     # {"field": "section_name",
@@ -19,7 +19,7 @@ columns_defs = [
     #  "initialWidth": 100, },
     {"field": "section_name",
      "headerName": "Dijkvak",
-     "editable": True,
+     "editable": False,
      'cellEditor': 'agSelectCellEditor',
      'cellEditorParams': {
          'values': [],
@@ -28,7 +28,7 @@ columns_defs = [
 
     {"field": "mechanism",
      "headerName": "Mechanisme",
-     "editable": True,
+     "editable": False,
      'cellEditor': 'agSelectCellEditor',
      'cellEditorParams': {
          'values': [mecha.value for mecha in Mechanism if mecha != Mechanism.SECTION],
@@ -37,17 +37,17 @@ columns_defs = [
 
     {"field": "time",
      "headerName": "Tijd",
-     "editable": True,
+     "editable": False,
      "initialWidth": 100, },
 
     {"field": "cost",
      "headerName": "Kosten (€)",
-     "editable": True,
+     "editable": False,
      "initialWidth": 140, },
 
     {"field": "beta",
      "headerName": "Betrouwbaarheid (β)",
-     "editable": True,
+     "editable": False,
      "initialWidth": 140, },
 
 ]
