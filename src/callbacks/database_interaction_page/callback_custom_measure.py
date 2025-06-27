@@ -7,7 +7,7 @@ from pathlib import Path
 
 import dash
 import pandas as pd
-from dash import callback, Input, Output, State
+from dash import callback, Input, Output, State, html
 from vrtool.common.enums import MechanismEnum, CombinableTypeEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.orm.orm_controllers import add_custom_measures, safe_clear_custom_measure
@@ -123,13 +123,23 @@ def process(row_data, _vr_config, custom_measure_names):
     df = pd.DataFrame(columns=[col["field"] for col in columns_defs], data=custom_measures)
 
     # 6. Check if a custom measure was already in database:
-    for meas in custom_measure_list_1:
-        if meas["MEASURE_NAME"] in custom_measure_names:
-            return True, [
-                f"Custom maatregel {meas['MEASURE_NAME']} bestaat al in de database en was niet aangepast."], df.to_dict(
-                'records')
+    processed_measures_name = []
+    children_list_to_display = []
 
-    return True, ["Custom measures added successfully."], df.to_dict('records')
+    for meas in custom_measure_list_1:
+        if meas["MEASURE_NAME"] in processed_measures_name:
+            continue
+        if meas["MEASURE_NAME"] in custom_measure_names:
+            children_list_to_display.append(f'{meas["MEASURE_NAME"]} zit al in de database en was niet toegevoegd.')
+
+        else:
+            children_list_to_display.append(f'{meas["MEASURE_NAME"]} toegevoegd aan database.')
+
+        children_list_to_display.append(html.Br())
+        processed_measures_name.append(meas["MEASURE_NAME"])
+
+    return True, children_list_to_display, df.to_dict('records')
+
 
 @callback(
     Output(EDITABLE_CUSTOM_MEASURE_TABLE_ID, "rowData", allow_duplicate=True),
