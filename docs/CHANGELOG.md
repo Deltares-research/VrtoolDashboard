@@ -7,6 +7,8 @@ None.
 
 ### Changed
 None.
+custom maatregel table not editable.
+return user message when wrong mechanism is provided.
 
 ### Deprecated
 None.

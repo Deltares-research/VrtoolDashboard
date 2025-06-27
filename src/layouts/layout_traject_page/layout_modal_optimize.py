@@ -21,4 +21,5 @@ modal_optimize = dbc.Modal(
     ],
     id=OPTIMIZE_MODAL_ID,
     is_open=False,
+    size="lg",
 )
