@@ -29,6 +29,7 @@ from src.orm.import_database import (
     output=[
         Output(OPTIMIZE_MODAL_ID, "is_open", allow_duplicate=True),
         Output(CLOSE_OPTIMAL_MODAL_BUTTON_ID, "n_clicks"),
+        Output("latest-timestamp", "children", allow_duplicate=True),
     ],
     inputs=[
         Input(OPTIMIZE_BUTTON_ID, "n_clicks"),
@@ -44,10 +45,10 @@ def open_canvas_logging_and_cancel(
     can output the vrtool logging.
     """
     if optimize_n_click is None:
-        return False, 0
+        return False, 0, dash.no_update
     if close_n_click and close_n_click > 0:
-        return False, 0
-    return True, 0
+        return False, 0, ['b']
+    return True, 0, ["Nog geen feedback van de berekening"]
 
 
 @callback(
@@ -165,6 +166,7 @@ def run_optimize_algorithm(
 
         _options = [{"label": name, "value": name} for name in _names_optimization_run]
 
+        set_progress("Optimalisatie run is voltooid! Je kunt dit venster sluiten.")
         return _options, ["Optimalisatie run is voltooid! Je kunt dit venster sluiten."]
 
 

@@ -7,7 +7,7 @@ from pathlib import Path
 
 import dash
 import pandas as pd
-from dash import callback, Input, Output, State
+from dash import callback, Input, Output, State, html
 from vrtool.common.enums import MechanismEnum, CombinableTypeEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.orm.orm_controllers import add_custom_measures, safe_clear_custom_measure
@@ -15,7 +15,7 @@ from vrtool.vrtool_logger import VrToolLogger
 
 from src.component_ids import EDITABLE_CUSTOM_MEASURE_TABLE_ID, ADD_CUSTOM_MEASURE_BUTTON_ID, STORE_CONFIG, \
     CUSTOM_MEASURE_MODEL_ID, CLOSE_CUSTOM_MEAS_MODAL_BUTTON_ID, MESSAGE_MODAL_CUSTOM_MEASURE_ID, \
-    REMOVE_CUSTOM_MEASURE_BUTTON_ID, IMPORTER_CUSTOM_MEASURE_CSV_ID
+    REMOVE_CUSTOM_MEASURE_BUTTON_ID, IMPORTER_CUSTOM_MEASURE_CSV_ID, MESSAGE_ERASE_CUSTOM_MEASURE_ID
 from src.constants import Mechanism
 from src.layouts.layout_database_interaction.layout_custom_measures_table import columns_defs
 from src.linear_objects.dike_traject import DikeTraject
@@ -52,78 +52,99 @@ def upload_csv_and_add_measure(contents: str, vr_config: dict) -> tuple[bool, li
 
         # Convert to list of lists (including headers)
         row_data = [df.columns.tolist()] + df.values.tolist()
-        custom_measure_list_1 = convert_custom_table_to_input(row_data)  #"MEASURE_NAME"
+        return process(row_data, _vr_config, custom_measure_names)
 
-        if row_data[0][0].lower() != 'maatregelen,dijkvak,mechanism,tijd,kosten,beta':
-            return True, ["Incorrect header: make sure they are among: 'maatregelen,dijkvak,mechanism,tijd,kosten,beta'"], dash.no_update
-
-
-        # 3. Create a copy of the database for backup
-        def get_next_backup_filename(dir: Path):
-            version = 1
-            while True:
-                if version == 1:
-                    version_str = "original"
-                else:
-                    version_str = f"v{version}"
-                backup_file_path = dir.joinpath(f"{_vr_config.input_database_name}_backup_{version_str}.db")
-                if not backup_file_path.exists():
-                    return backup_file_path
-                version += 1
-
-        source_db = _vr_config.input_directory / _vr_config.input_database_name
-        target_backup_db = get_next_backup_filename(_vr_config.input_directory)
-
-        shutil.copy2(source_db, target_backup_db)
-        _vr_config.input_database_name = f"{_vr_config.input_database_name}"
-
-        # 4. Add custom measures to the initial database, backup is left untouched.
-        class ModalPopupLogHandler(logging.StreamHandler):
-            """
-            Custom handler declared within this method so it is aware of the provided context
-            and able to trigger the `set_progress` method whilst running in the background.
-            """
-
-            def __enter__(self):
-                """
-                This is required for the `with` statement that allows disposal of the object.
-                """
-                # Add this handler to the VrToolLogger to trace the messages
-                # of the given logging level.
-                VrToolLogger.add_handler(self, logging.INFO)
-                return self
-
-            def __exit__(self, exc_type, exc_value, traceback):
-                """
-                We are only interested into closing the handler stream.
-                This needs to be done here explicitely.
-                """
-                self.close()
-
-            def emit(self, record):
-                return self.format(record)
-
-        with ModalPopupLogHandler() as handler:
-            _added_measures = add_custom_measures(
-                _vr_config, custom_measure_list_1
-            )
-
-        # 5. Update table displaying ALL custom measures
-        custom_measures = get_all_custom_measures(_vr_config)
-
-        df = pd.DataFrame(columns=[col["field"] for col in columns_defs], data=custom_measures)
-
-        # 6. Check if a custom measure was already in database:
-        for meas in custom_measure_list_1:
-            if meas["MEASURE_NAME"] in custom_measure_names:
-                return True, [f"Custom maatregel {meas['MEASURE_NAME']} bestaat al in de database en was niet aangepast."], df.to_dict('records')
-
-        return True, ["Custom measures added successfully."], df.to_dict('records')
     return dash.no_update, dash.no_update, dash.no_update
+
+
+def process(row_data, _vr_config, custom_measure_names):
+    custom_measure_list_1 = convert_custom_table_to_input(row_data)  # "MEASURE_NAME
+
+    if custom_measure_list_1 == "Invalid error name":
+        return True, [
+            "Onjuiste mechanism in het csv bestand, zorg ervroor dat deze correct is: Piping, Stabiliteit, Overslag, Bekleding"], dash.no_update
+
+    if row_data[0][0].lower() != 'maatregel,dijkvaknaam,mechanisme,tijd,kosten,betrouwbaarheidsindex':
+        return True, [
+            "Onjuiste csv-header: zorg ervoor dat deze correct is: Maatregel,Dijkvaknaam,Mechanisme,Tijd,Kosten,Betrouwbaarheidsindex"], dash.no_update
+
+    # 3. Create a copy of the database for backup
+    def get_next_backup_filename(dir: Path):
+        version = 1
+        while True:
+            if version == 1:
+                version_str = "original"
+            else:
+                version_str = f"v{version}"
+            backup_file_path = dir.joinpath(f"{_vr_config.input_database_name}_backup_{version_str}.db")
+            if not backup_file_path.exists():
+                return backup_file_path
+            version += 1
+
+    source_db = _vr_config.input_directory / _vr_config.input_database_name
+    target_backup_db = get_next_backup_filename(_vr_config.input_directory)
+
+    shutil.copy2(source_db, target_backup_db)
+    _vr_config.input_database_name = f"{_vr_config.input_database_name}"
+
+    # 4. Add custom measures to the initial database, backup is left untouched.
+    class ModalPopupLogHandler(logging.StreamHandler):
+        """
+        Custom handler declared within this method so it is aware of the provided context
+        and able to trigger the `set_progress` method whilst running in the background.
+        """
+
+        def __enter__(self):
+            """
+            This is required for the `with` statement that allows disposal of the object.
+            """
+            # Add this handler to the VrToolLogger to trace the messages
+            # of the given logging level.
+            VrToolLogger.add_handler(self, logging.INFO)
+            return self
+
+        def __exit__(self, exc_type, exc_value, traceback):
+            """
+            We are only interested into closing the handler stream.
+            This needs to be done here explicitely.
+            """
+            self.close()
+
+        def emit(self, record):
+            return self.format(record)
+
+    with ModalPopupLogHandler() as handler:
+        _added_measures = add_custom_measures(
+            _vr_config, custom_measure_list_1
+        )
+
+    # 5. Update table displaying ALL custom measures
+    custom_measures = get_all_custom_measures(_vr_config)
+
+    df = pd.DataFrame(columns=[col["field"] for col in columns_defs], data=custom_measures)
+
+    # 6. Check if a custom measure was already in database:
+    processed_measures_name = []
+    children_list_to_display = []
+
+    for meas in custom_measure_list_1:
+        if meas["MEASURE_NAME"] in processed_measures_name:
+            continue
+        if meas["MEASURE_NAME"] in custom_measure_names:
+            children_list_to_display.append(f'{meas["MEASURE_NAME"]} zit al in de database en was niet toegevoegd.')
+
+        else:
+            children_list_to_display.append(f'{meas["MEASURE_NAME"]} toegevoegd aan database.')
+
+        children_list_to_display.append(html.Br())
+        processed_measures_name.append(meas["MEASURE_NAME"])
+
+    return True, children_list_to_display, df.to_dict('records')
 
 
 @callback(
     Output(EDITABLE_CUSTOM_MEASURE_TABLE_ID, "rowData", allow_duplicate=True),
+    Output(MESSAGE_ERASE_CUSTOM_MEASURE_ID, "children"),
 
     Input(REMOVE_CUSTOM_MEASURE_BUTTON_ID, "n_clicks"),
     State(STORE_CONFIG, "data"),
@@ -139,12 +160,18 @@ def remove_all_custom_measure_in_db(n_clicks, vr_config: dict):
     :return:
     """
     _vr_config = get_vr_config_from_dict(vr_config)
+
+    custom_measures_ini = get_all_custom_measures(_vr_config)
+    custom_measure_names_ini = list(set([measure['measure_name'] for measure in custom_measures_ini]))
+
     safe_clear_custom_measure(_vr_config)
     custom_measures = get_all_custom_measures(_vr_config)
+    custom_measure_names_after = list(set([measure['measure_name'] for measure in custom_measures]))
 
     df = pd.DataFrame(columns=[col["field"] for col in columns_defs], data=custom_measures)
 
-    return df.to_dict('records')
+    return df.to_dict('records'), [
+        f"{len(custom_measure_names_ini) - len(custom_measure_names_after)} maatregelen verwijderd uit de database."]
 
 
 def convert_custom_table_to_input(row_data: list) -> list[dict]:
@@ -170,7 +197,7 @@ def convert_custom_table_to_input(row_data: list) -> list[dict]:
         elif splitted_row[2] == Mechanism.REVETMENT.value:
             _mechanism = MechanismEnum.REVETMENT.name
         else:
-            raise ValueError(f"Mechanism {row['mechanism']} is not recognized")
+            return "Invalid error name"
 
         converted_row = {
             "MEASURE_NAME": splitted_row[0],
