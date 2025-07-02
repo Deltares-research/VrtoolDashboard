@@ -51,6 +51,7 @@ GRAPH_MEASURE_RELIABILITY_TIME_ID = "graph_measure_reliability_time_id"
 ADD_CUSTOM_MEASURE_BUTTON_ID = "add_custom_measure_button_id"  # REMOVE ID
 REMOVE_CUSTOM_MEASURE_BUTTON_ID = "remove_custom_measure_button_id"
 IMPORTER_CUSTOM_MEASURE_CSV_ID = "importer_custom_measure_csv_id"
+MESSAGE_ERASE_CUSTOM_MEASURE_ID = "message_erase_custom_measure_id"
 
 CUSTOM_MEASURE_MODEL_ID = "custom_measure_model_id"
 CLOSE_CUSTOM_MEAS_MODAL_BUTTON_ID = "close-modal-custom-measure"

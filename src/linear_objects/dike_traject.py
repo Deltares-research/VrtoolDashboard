@@ -396,7 +396,7 @@ def get_traject_prob(beta_df: DataFrame) -> tuple[np.array, dict]:
 def get_initial_assessment_df(sections: list[DikeSection]) -> DataFrame:
     """Get the initial assessment dataframe from all children sections"""
     years = sections[0].years
-    df = pd.DataFrame(columns=["name", "mechanism"] + years + ["Length"])
+    data = []
 
     for section in sections:
         if not section.in_analyse:
@@ -406,19 +406,24 @@ def get_initial_assessment_df(sections: list[DikeSection]) -> DataFrame:
                 and not section.is_reinforced_veiligheidsrendement
         ):
             continue
-        # add a row to the dataframe with the initial assessment of the section
+
         mechanisms = ["Overflow", "StabilityInner", "Piping"]
         if section.revetment:
             mechanisms.append("Revetment")
 
         for mechanism in mechanisms:
-            d = {"name": section.name, "mechanism": mechanism, "Length": section.length}
+            d = {
+                "name": section.name,
+                "mechanism": mechanism,
+                "Length": section.length
+            }
 
             for year, beta in zip(years, section.initial_assessment[mechanism]):
                 d[year] = beta
-            s = pd.DataFrame(d, index=[0])
-            df = pd.concat([df, s])
 
+            data.append(d)
+
+    df = pd.DataFrame(data, columns=["name", "mechanism"] + years + ["Length"])
     return df
 
 
