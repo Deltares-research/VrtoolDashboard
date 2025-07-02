@@ -1,12 +1,28 @@
 # Changelog
 
-## vX.X.X [/##/####]
+## vX.X.X [##/##/####]
 
 ### Added
 None.
 
 ### Changed
 None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
+## v1.1.2 [02/07/2025]
+
+### Added
+None.
+
+### Changed
 custom maatregel table not editable.
 return user message when wrong mechanism is provided.
 
