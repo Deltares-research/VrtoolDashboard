@@ -64,9 +64,9 @@ def process(row_data, _vr_config, custom_measure_names):
         return True, [
             "Onjuiste mechanism in het csv bestand, zorg ervroor dat deze correct is: Piping, Stabiliteit, Overslag, Bekleding"], dash.no_update
 
-    if row_data[0][0].lower() != 'maatregelen,dijkvak,mechanism,tijd,kosten,beta':
+    if row_data[0][0].lower() != 'maatregel,dijkvaknaam,mechanisme,tijd,kosten,betrouwbaarheidsindex':
         return True, [
-            "Onjuiste csv-header: zorg ervoor dat deze correct is: maatregelen,dijkvak,mechanism,tijd,kosten,beta"], dash.no_update
+            "Onjuiste csv-header: zorg ervoor dat deze correct is: Maatregel,Dijkvaknaam,Mechanisme,Tijd,Kosten,Betrouwbaarheidsindex"], dash.no_update
 
     # 3. Create a copy of the database for backup
     def get_next_backup_filename(dir: Path):
