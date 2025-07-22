@@ -17,6 +17,23 @@ None.
 ### Fixed
 None.
 
+## v1.1.3 [22/07/2025]
+
+### Added
+None.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+restricted numpy version <2.0.0
+
 ## v1.1.2 [02/07/2025]
 
 ### Added
