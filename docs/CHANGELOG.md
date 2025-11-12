@@ -1,6 +1,6 @@
 # Changelog
 
-## vX.X.X [##/##/####]
+## v1.1.4 [12/11/2025]
 
 ### Added
 None.
@@ -15,7 +15,7 @@ None.
 None.
 
 ### Fixed
-None.
+Deprecation numpy fixed for pnonf_traject
 
 ## v1.1.3 [22/07/2025]
 

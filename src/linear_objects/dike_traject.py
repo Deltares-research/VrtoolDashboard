@@ -385,7 +385,7 @@ def get_traject_prob(beta_df: DataFrame) -> tuple[np.array, dict]:
         else:
             pf_df = beta_to_pf(beta_df.loc[mechanism].values)
             pnonf_df = np.subtract(1, pf_df)
-            pnonf_traject = np.product(pnonf_df, axis=0)
+            pnonf_traject = np.prod(pnonf_df, axis=0)
             traject_probs[mechanism] = 1 - pnonf_traject
             # convert to probability
             # 1-prod(1-p)
