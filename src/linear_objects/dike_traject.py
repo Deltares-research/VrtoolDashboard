@@ -142,7 +142,7 @@ class DikeTraject(BaseLinearObject):
             ):  # skip if the section is not reinforced
                 continue
             _active_mechanisms = ["Overflow", "Piping", "StabilityInner"]
-            if section.revetment:
+            if section.revetment and "Revetment" in _beta_df and _beta_df['Revetment']:
                 _active_mechanisms.append("Revetment")
             # add a row to the dataframe with the initial assessment of the section
             for mechanism in _active_mechanisms:
@@ -190,7 +190,7 @@ class DikeTraject(BaseLinearObject):
                 continue
             # add a row to the dataframe with the initial assessment of the section
             mechanisms = ["Overflow", "StabilityInner", "Piping"]
-            if section.revetment:
+            if section.revetment and section.initial_assessment['Revetment']:
                 mechanisms.append("Revetment")
 
             for mechanism in mechanisms:
@@ -385,7 +385,7 @@ def get_traject_prob(beta_df: DataFrame) -> tuple[np.array, dict]:
         else:
             pf_df = beta_to_pf(beta_df.loc[mechanism].values)
             pnonf_df = np.subtract(1, pf_df)
-            pnonf_traject = np.product(pnonf_df, axis=0)
+            pnonf_traject = np.prod(pnonf_df, axis=0)
             traject_probs[mechanism] = 1 - pnonf_traject
             # convert to probability
             # 1-prod(1-p)
@@ -408,7 +408,7 @@ def get_initial_assessment_df(sections: list[DikeSection]) -> DataFrame:
             continue
 
         mechanisms = ["Overflow", "StabilityInner", "Piping"]
-        if section.revetment:
+        if section.revetment and len(section.initial_assessment['Revetment']) > 0:
             mechanisms.append("Revetment")
 
         for mechanism in mechanisms:
@@ -484,7 +484,7 @@ def calc_traject_probability_array(all_dike_sections: list[DikeSection], section
         ):  # skip if the section is not reinforced
             continue
         _active_mechanisms = ["Overflow", "Piping", "StabilityInner"]
-        if section.revetment:
+        if section.revetment and "Revetment" in _beta_df and _beta_df['Revetment']:
             _active_mechanisms.append("Revetment")
         # add a row to the dataframe with the initial assessment of the section
         for mechanism in _active_mechanisms:

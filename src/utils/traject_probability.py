@@ -19,7 +19,7 @@ def get_updated_beta_df(dike_sections: list[DikeSection], beta_df: pd.DataFrame)
         ):  # skip if the section is not reinforced
             continue
         _active_mechanisms = ["Overflow", "Piping", "StabilityInner"]
-        if section.revetment:
+        if section.revetment and "Revetment" in beta_df  and beta_df['Revetment']:
             _active_mechanisms.append("Revetment")
         # add a row to the dataframe with the initial assessment of the section
         for mechanism in _active_mechanisms:

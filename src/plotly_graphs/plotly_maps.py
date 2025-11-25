@@ -116,6 +116,8 @@ def plot_dike_traject_reliability_initial_assessment_map(
                         f"Beta: NO DATA<br>" + "<extra></extra>"
                 )
             else:
+                if not _initial_results["Revetment"]:
+                    raise ValueError("Geen bekleding gegevens voor beoordeling, please check Database")
                 _year_index = (
                         bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
                 )
@@ -123,7 +125,7 @@ def plot_dike_traject_reliability_initial_assessment_map(
                 _beta_dict = {
                     meca: beta[_year_index]
                     for meca, beta in _initial_results.items()
-                    if meca != "Section"
+                    if meca != "Section" and len(beta) > 0
                 }
                 _color = get_reliability_color(_beta, dike_traject.lower_bound_value)
 
@@ -236,6 +238,8 @@ def plot_dike_traject_reliability_measures_assessment_map(
                         f"Beta: NO DATA<br>" + "<extra></extra>"
                 )
             else:
+                if not _measure_results["Revetment"]:
+                    raise ValueError("Geen bekleding gegevens voor versterkingsmaatregelen, please check Database")
 
                 _year_index = (
                         bisect_right(section.years, selected_year - REFERENCE_YEAR) - 1
@@ -301,7 +305,7 @@ def plot_dike_traject_reliability_measures_assessment_map(
                     _beta_dict = {
                         key: value[_year_index]
                         for key, value in _measure_results.items()
-                        if key in ["StabilityInner", "Piping", "Overflow", "Revetment"]
+                        if key in ["StabilityInner", "Piping", "Overflow", "Revetment"] and len(value) > 0
                     }
                     _mechanism = min(
                         _beta_dict, key=_beta_dict.get

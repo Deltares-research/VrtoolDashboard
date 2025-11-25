@@ -1,14 +1,133 @@
 # Changelog
 
-## v0.0.0 [/##/####]
+## v1.1.4 [12/11/2025]
 
 ### Added
 None.
 
 ### Changed
 None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+Deprecation numpy fixed for pnonf_traject
+
+## v1.1.3 [22/07/2025]
+
+### Added
+None.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+restricted numpy version <2.0.0
+
+## v1.1.2 [02/07/2025]
+
+### Added
+None.
+
+### Changed
 custom maatregel table not editable.
 return user message when wrong mechanism is provided.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
+## v1.1.1 [24/06/2025]
+
+### Added
+None.
+
+### Changed
+- Custom measure tables is revamped, import csv
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
+## v1.1.0 [25/04/2025]
+
+### Added
+None.
+
+### Changed
+-VR Core bumped tov ersion 1.1.0
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
+## v1.0.6 [25/04/2025]
+
+### Added
+Added cost/length switch to comparison page
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
+
+## v1.0.5 [25/03/2025]
+
+### Added
+None.
+
+### Changed
+Force dash version below <3.0.0
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+None.
+
+## v1.0.4 [07/02/2025]
+
+### Added
+- Revetment column to optimization table
+
+### Changed
+None.
 
 ### Deprecated
 None.
