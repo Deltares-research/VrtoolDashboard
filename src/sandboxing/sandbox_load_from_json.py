@@ -16,7 +16,7 @@ _dike_data = json.load(
     open(Path(
         # r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_38_1_sterker_VZG2\reference\dike_data.json"
         # r"N:\Projects\11209000\11209353\B. Measurements and calculations\008 - Resultaten Proefvlucht\HHNK\HHNK_20240528\vrtool_database/data.json"
-        r"C:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\investigation dberm\38-1_modified_beta.json"
+        r"c:\Users\hauth\OneDrive - Stichting Deltares\Documents\tempo\VRM\debug_nov2025\testV2.json"
          # r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_31_1\config.json"
     )))
 # print(_dike_data)
@@ -27,11 +27,14 @@ cost_length_switch = "COST"
 # _fig = plot_overview_map(_dike_traject)
 # _fig = plot_pf_length_cost(_dike_traject, 2025, result_type.name, cost_length_switch)
 
-_fig = plot_dike_traject_reliability_measures_assessment_map(_dike_traject, 2026, result_type.name,
-                                                             calc_type=CalcType.VEILIGHEIDSRENDEMENT.name,
-                                                             colorbar_result_type=ColorBarResultType.MEASURE.name,
-                                                             mechanism_type=Mechanism.SECTION.name,
-                                                             sub_result_type=SubResultType.MEASURE_TYPE.name, )
+_fig = plot_dike_traject_reliability_initial_assessment_map(_dike_traject, 2025, ResultType.RELIABILITY.name,
+                                                            mechanism_type=Mechanism.REVETMENT.name, )
+
+# _fig = plot_dike_traject_reliability_measures_assessment_map(_dike_traject, 2026, result_type.name,
+#                                                              calc_type=CalcType.VEILIGHEIDSRENDEMENT.name,
+#                                                              colorbar_result_type=ColorBarResultType.MEASURE.name,
+#                                                              mechanism_type=Mechanism.SECTION.name,
+#                                                              sub_result_type=SubResultType.MEASURE_TYPE.name, )
 # #
 # _fig = plot_dike_traject_reliability_initial_assessment_map(_dike_traject, 2025, result_type.name,
 #                                                             mechanism_type=Mechanism.REVETMENT.name, )

@@ -126,7 +126,7 @@ def plot_comparison_runs_overview_map_assessment(trajects: list[DikeTraject]) ->
                 _beta_dict = {
                     meca: beta[_year_index]
                     for meca, beta in _initial_results.items()
-                    if meca != "Section"
+                    if meca != "Section" and len(beta) > 0
                 }
                 _color = get_reliability_color(_beta, dike_traject.lower_bound_value)
 
