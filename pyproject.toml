@@ -19,7 +19,7 @@ classifiers = [
     'Topic :: Scientific/Engineering :: Hydrology',
 ]
 requires-python = ">=3.12,<3.13"
-dependencies = ["geopandas", "numpy", "tabulate", "diskcache", "plotly", "openturns", "dash", "dash-ag-grid", "dash-iconify", "dash-mantine-components", "dash-bootstrap-components", "vrtool @ git+https://github.com/Deltares/Veiligheidsrendement.git"]
+dependencies = ["vrtool @ https://github.com/Deltares/Veiligheidsrendement/releases/download/v1.2.0-rc/vrtool-1.1.1-py3-none-any.whl"]
 
 [project.urls]
 homepage = "https://deltares-research.github.io/VrtoolDocumentation/"
