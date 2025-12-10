@@ -81,7 +81,6 @@ class TestDikeTrajectImporter:
         # Define the VrtoolConfig
         _test_config = VrtoolConfig()
         _test_config.input_directory = _test_input_directory
-        _test_config.output_directory = _test_results_directory
         _test_config.traject = _test_case.traject_name
         _test_config.excluded_mechanisms = _test_case.excluded_mechanisms
 
