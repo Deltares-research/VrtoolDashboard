@@ -30,7 +30,7 @@ class TestRunOptimize:
     def test_get_selected_measure(self):
         traject_optimization_table = optimization_table_38_1
 
-        _test_input_directory = Path.joinpath(test_data, "38-1 base river case/config.json")
+        _test_input_directory = Path.joinpath(test_data, "38-1 base river case","config.json")
 
         # load json:
         with open(_test_input_directory, 'r') as f:
@@ -40,9 +40,6 @@ class TestRunOptimize:
         _vr_config = VrtoolConfig()
         _vr_config.traject = vr_config['traject']
         _vr_config.input_directory = Path.joinpath(test_data, "38-1 base river case")
-
-        _vr_config.output_directory = Path(vr_config['output_directory'])
-
         _vr_config.input_database_name = vr_config['input_database_name']
         _vr_config.excluded_mechanisms = [MechanismEnum.REVETMENT, MechanismEnum.HYDRAULIC_STRUCTURES]
 
@@ -54,7 +51,7 @@ class TestRunOptimize:
     def test_run_optimize_no_revetment(self):
         traject_optimization_table = optimization_table_38_1
 
-        _test_input_directory = Path.joinpath(test_data, "38-1 base river case/config.json")
+        _test_input_directory = Path.joinpath(test_data, "38-1 base river case", "config.json")
 
         # load json:
         with open(_test_input_directory, 'r') as f:
@@ -64,7 +61,6 @@ class TestRunOptimize:
         _vr_config = VrtoolConfig()
         _vr_config.traject = vr_config['traject']
         _vr_config.input_directory = Path.joinpath(test_data, "38-1 base river case")
-        _vr_config.output_directory = Path(vr_config['output_directory'])
         _vr_config.input_database_name = "copy_" + vr_config['input_database_name']
 
         # Create a copy of the database file:
@@ -87,7 +83,7 @@ class TestRunOptimize:
     def test_run_optimize_with_revetment(self):
         traject_optimization_table = optimization_table_31_1
 
-        _test_input_directory = Path.joinpath(test_data, "31-1 base coastal case/config.json")
+        _test_input_directory = Path.joinpath(test_data, "31-1 base coastal case", "config.json")
 
         # load json:
         with open(_test_input_directory, 'r') as f:
@@ -97,7 +93,6 @@ class TestRunOptimize:
         _vr_config = VrtoolConfig()
         _vr_config.traject = vr_config['traject']
         _vr_config.input_directory = Path.joinpath(test_data, "31-1 base coastal case")
-        _vr_config.output_directory = Path(vr_config['output_directory'])
         _vr_config.input_database_name = "copy_" + vr_config['input_database_name']
 
         # Create a copy of the database file:
