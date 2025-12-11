@@ -54,6 +54,8 @@ pytest = ">=7.2.1"
 pytest-cov = ">=3.0.0"
 coverage = ">=6.4.4"
 teamcity-messages = ">=1.32"
+pytest-xdist = ">=3.3.1"
+pytest-profiling = ">=1.7.0"
 
 [tool.pixi.feature.dev.dependencies]
 black = ">=22.8.0"
