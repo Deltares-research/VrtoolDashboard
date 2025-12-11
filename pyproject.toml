@@ -41,8 +41,6 @@ packages = ["src"]
 vr_dash = { path = ".", editable = true }
 build = "*"
 
-
-
 [tool.pixi.workspace]
 channels = ["conda-forge"]
 platforms = ["linux-64","osx-arm64", "osx-64", "win-64"]
