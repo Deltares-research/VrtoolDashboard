@@ -18,19 +18,17 @@ The dashboard currently runs locally on your own machine. To install and use the
     git clone https://github.com/Deltares/VrtoolDashboard.git
     ```
 
-2. Navigate to your 'VrtoolDashboard' directory and create a virtual environment (make sure you already have anaconda installed).
+2. Navigate to your 'VrtoolDashboard' directory and create a virtual environment (make sure you already have Pixi installed).
     ```bash
     cd C:\repos\VrtoolDashboard
-    conda env create -f .config\environment.yml
-    conda activate vrtool_dash
-    poetry install
+    pixi install -e dev
     ```
 If the installation of all the packages is not successful and error messages are appearing, run ```poetry install``` again.
    
 3. The dashboard is now installed and ready to use. To run the dashboard, run the following command:
 
    ```bash
-   python -m src.index
+   pixi run -e dev python -m src.index
    ```
 
 The dashboard should pop up in your default browser. If not, navigate to http address displayed in the terminal.
