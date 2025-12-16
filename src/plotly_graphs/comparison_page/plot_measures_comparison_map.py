@@ -1,26 +1,34 @@
 import numpy as np
 import plotly.graph_objects as go
-from matplotlib import pyplot as plt, colors
+from matplotlib import colors
+from matplotlib import pyplot as plt
 
 from src.constants import (
     REFERENCE_YEAR,
+    CalcType,
     ColorBarResultType,
     Mechanism,
-    SubResultType,
-    CalcType,
     ResultType,
+    SubResultType,
 )
 from src.linear_objects.dike_section import DikeSection
 from src.linear_objects.dike_traject import DikeTraject
-from src.plotly_graphs.plotly_maps import add_measure_type_trace, update_layout_map_box, get_middle_point, \
-    place_legend_left_top_corner, place_legend_right_top_corner
+from src.plotly_graphs.plotly_maps import (
+    add_measure_type_trace,
+    get_middle_point,
+    place_legend_left_top_corner,
+    place_legend_right_top_corner,
+    update_layout_map_box,
+)
 from src.utils.gws_convertor import GWSRDConvertor
-from src.utils.utils import to_million_euros, beta_to_pf, pf_to_beta, get_beta
+from src.utils.utils import beta_to_pf, get_beta, pf_to_beta, to_million_euros
 
 color_dict = {""}
 
 
-def plot_comparison_measures_map(imported_runs: dict, activated_runs: list[str]) -> go.Figure:
+def plot_comparison_measures_map(
+    imported_runs: dict, activated_runs: list[str]
+) -> go.Figure:
     fig = go.Figure()
 
     for index, dike_traject in enumerate(activated_runs):
@@ -43,11 +51,10 @@ def plot_comparison_measures_map(imported_runs: dict, activated_runs: list[str])
             "revetment": True,
             "custom": True,
         }
-        i =0
+        i = 0
         for section in dike_traject.dike_sections:
-            side = 'left' if index == 0 else 'right'
+            side = "left" if index == 0 else "right"
             section.shift_trajectory_sideways(100, side)
-
 
             # if a section is not in analyse, skip it, and it turns blank on the map.
             if not section.in_analyse:
@@ -59,8 +66,13 @@ def plot_comparison_measures_map(imported_runs: dict, activated_runs: list[str])
                 if _measure_results["investment_year"] == None:
                     _measure_results = None
                 else:
-                    add_measure_type_trace(fig, section, _measure_results, _legend_display,
-                                           legendgroup=dike_traject.run_name)
+                    add_measure_type_trace(
+                        fig,
+                        section,
+                        _measure_results,
+                        _legend_display,
+                        legendgroup=dike_traject.run_name,
+                    )
 
     _middle_point = get_middle_point(dike_traject.dike_sections)
     update_layout_map_box(fig, _middle_point)

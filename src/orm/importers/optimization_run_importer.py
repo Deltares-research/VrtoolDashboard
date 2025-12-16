@@ -1,4 +1,3 @@
-
 def import_optimization_runs_name(orm_model) -> list[str]:
     """
     Returns a list of the names of the optimization runs in the database

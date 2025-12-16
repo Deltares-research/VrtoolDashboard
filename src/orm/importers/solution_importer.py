@@ -7,19 +7,18 @@ import numpy as np
 import pandas as pd
 from peewee import DoesNotExist
 from scipy.interpolate import interp1d
+from vrtool.common.enums import MechanismEnum
 from vrtool.orm.io.importers.optimization.optimization_step_importer import (
     OptimizationStepImporter,
 )
-from vrtool.common.enums import MechanismEnum
-
 from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol
 from vrtool.orm.models import (
-    OptimizationStep,
-    SectionData,
+    DikeTrajectInfo,
     MeasurePerSection,
     MeasureResult,
     OptimizationSelectedMeasure,
-    DikeTrajectInfo,
+    OptimizationStep,
+    SectionData,
 )
 from vrtool.orm.orm_controllers import open_database
 
@@ -31,24 +30,33 @@ from src.linear_objects.dike_traject import (
     get_traject_prob,
 )
 from src.orm.importers.importer_utils import (
-    _get_single_measure,
-    _get_investment_year,
-    _get_combined_measure_name,
     _get_combined_measure_investment_year,
-    _get_measure_parameters, _get_single_measure_type, _get_combined_measure_type,
+    _get_combined_measure_name,
+    _get_combined_measure_type,
+    _get_investment_year,
+    _get_measure_parameters,
+    _get_single_measure,
+    _get_single_measure_type,
 )
 from src.orm.importers.optimization_step_importer import (
-    _get_section_lcc,
     _get_final_measure_betas,
+    _get_section_lcc,
 )
 from src.orm.orm_controller_custom import get_optimization_steps_ordered
-
-from src.utils.database_analytics import get_minimal_tc_step, get_measures_per_step_number, \
-    get_reliability_for_each_step, assessment_for_each_step, calculate_traject_probability_for_steps, \
-    calculate_traject_probability
-
+from src.utils.database_analytics import (
+    assessment_for_each_step,
+    calculate_traject_probability,
+    calculate_traject_probability_for_steps,
+    get_measures_per_step_number,
+    get_minimal_tc_step,
+    get_reliability_for_each_step,
+)
 from src.utils.utils import pf_to_beta
-from src.utils.vrutils import get_optimization_steps_for_run_id, get_measures_for_run_id, import_original_assessment
+from src.utils.vrutils import (
+    get_measures_for_run_id,
+    get_optimization_steps_for_run_id,
+    import_original_assessment,
+)
 
 
 class TrajectSolutionRunImporter(OrmImporterProtocol):
@@ -64,15 +72,15 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
     database_path: Optional[Path] = None
 
     def __init__(
-            self,
-            dike_traject: DikeTraject,
-            run_id_vr: int,
-            run_id_dsn: int,
-            greedy_optimization_criteria: str,
-            greedy_criteria_year: Optional[int] = None,
-            greedy_criteria_beta: Optional[float] = None,
-            assessment_years: list[int] = None,
-            database_path: Optional[Path] = None,
+        self,
+        dike_traject: DikeTraject,
+        run_id_vr: int,
+        run_id_dsn: int,
+        greedy_optimization_criteria: str,
+        greedy_criteria_year: Optional[int] = None,
+        greedy_criteria_beta: Optional[float] = None,
+        assessment_years: list[int] = None,
+        database_path: Optional[Path] = None,
     ):
         self.dike_traject = dike_traject
         self.dike_section_mapping = {
@@ -168,12 +176,12 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
                     .join(OptimizationSelectedMeasure)
                     .where(
                         (
-                                OptimizationSelectedMeasure.optimization_run
-                                == self.run_id_dsn
+                            OptimizationSelectedMeasure.optimization_run
+                            == self.run_id_dsn
                         )
                         & (
-                                OptimizationStep.step_number
-                                == _optimization_step.step_number
+                            OptimizationStep.step_number
+                            == _optimization_step.step_number
                         )
                     )
                 )
@@ -290,7 +298,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         self.dike_traject.reinforcement_order_vr = _ordered_reinforced_sections
 
     def continue_next_step(
-            self, optimization_step: OptimizationStep, traject_pf: list[float]
+        self, optimization_step: OptimizationStep, traject_pf: list[float]
     ) -> bool:
         """
         This function determines whether the next OptimizationStep should be imported/processed or not.
@@ -307,23 +315,23 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         """
 
         if (
-                self.greedy_optimization_criteria
-                == GreedyOPtimizationCriteria.ECONOMIC_OPTIMAL.name
+            self.greedy_optimization_criteria
+            == GreedyOPtimizationCriteria.ECONOMIC_OPTIMAL.name
         ):
             if optimization_step.id + 1 > self.economic_optimal_final_step_id:
                 return False
             return True
 
         elif (
-                self.greedy_optimization_criteria
-                == GreedyOPtimizationCriteria.TARGET_PF.name
+            self.greedy_optimization_criteria
+            == GreedyOPtimizationCriteria.TARGET_PF.name
         ):
 
             _year_step_index = (
-                    bisect_right(
-                        self.assessment_time, self.greedy_criteria_year - REFERENCE_YEAR
-                    )
-                    - 1
+                bisect_right(
+                    self.assessment_time, self.greedy_criteria_year - REFERENCE_YEAR
+                )
+                - 1
             )
             pf_traject_stop = traject_pf[_year_step_index]
             beta_traject_stop = pf_to_beta(pf_traject_stop)
@@ -332,13 +340,13 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             return True
 
     def _add_greedy_step(
-            self,
-            dike_section: DikeSection,
-            optimization_step: OptimizationStep,
-            _beta_df: pd.DataFrame,
-            greedy_steps_res: list[dict],
-            step_measure: dict,
-            recorded__previous_section_LCC: dict[str, float],
+        self,
+        dike_section: DikeSection,
+        optimization_step: OptimizationStep,
+        _beta_df: pd.DataFrame,
+        greedy_steps_res: list[dict],
+        step_measure: dict,
+        recorded__previous_section_LCC: dict[str, float],
     ):
         """
         Add the results of the step to the list greedy_steps_list
@@ -357,7 +365,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         """
         for mechanism in dike_section.active_mechanisms:
             mask = (_beta_df["name"] == dike_section.name) & (
-                    _beta_df["mechanism"] == mechanism
+                _beta_df["mechanism"] == mechanism
             )
 
             for year, beta in zip(dike_section.years, step_measure[mechanism]):
@@ -373,7 +381,7 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         greedy_steps_res.append({"pf": _reinforced_traject_pf[0].tolist(), "LCC": LCC})
 
     def _get_reinforced_section_order(
-            self, optimization_step: OptimizationStep, section_ordered_list: list[str]
+        self, optimization_step: OptimizationStep, section_ordered_list: list[str]
     ):
         """Add in place the section name to the list of reinforced sections if it is not already in the list."""
         optimization_selected_measure = OptimizationSelectedMeasure.get(
@@ -391,7 +399,9 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             section_ordered_list.append(section.section_name)
 
     @staticmethod
-    def _get_measure(optimization_steps, active_mechanisms: list, assessment_time) -> dict:
+    def _get_measure(
+        optimization_steps, active_mechanisms: list, assessment_time
+    ) -> dict:
         """
         Retrieve from the database the information related to the selected optimization steps: betas, name, measure
         paramaters.
@@ -400,7 +410,9 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         , "Section"
         """
         # Get the betas for the measure:
-        _final_measure = _get_final_measure_betas(optimization_steps, active_mechanisms, assessment_time)
+        _final_measure = _get_final_measure_betas(
+            optimization_steps, active_mechanisms, assessment_time
+        )
 
         # Get the extra information measure name and the corresponding parameter values for the most (combined or not) optimal step
         if optimization_steps.count() == 1:
@@ -408,7 +420,9 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
             _final_measure["investment_year"] = [
                 _get_investment_year(optimization_steps[0])
             ]
-            _final_measure["type"] = [_get_single_measure_type(optimization_steps[0]).name]
+            _final_measure["type"] = [
+                _get_single_measure_type(optimization_steps[0]).name
+            ]
 
         elif optimization_steps.count() in [2, 3]:
             _final_measure["name"] = _get_combined_measure_name(optimization_steps)
@@ -431,16 +445,20 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         pass
 
     def set_minimal_tc_step_number(self) -> int:
-        optimization_steps = get_optimization_steps_for_run_id(self.database_path, self.run_id_vr)
+        optimization_steps = get_optimization_steps_for_run_id(
+            self.database_path, self.run_id_vr
+        )
         minimal_tc_steps = get_minimal_tc_step(optimization_steps)
         return minimal_tc_steps
 
     def get_lists_of_measures(self):
         """
-            Returns: list of dicts, each dict contains the optimization step number, optimization_selected_measure_id,
-            measure_result_id, investment_year, measure_per_section_id, section_id
+        Returns: list of dicts, each dict contains the optimization step number, optimization_selected_measure_id,
+        measure_result_id, investment_year, measure_per_section_id, section_id
         """
-        lists_of_measures = get_measures_for_run_id(self.database_path, run_id=self.run_id_vr)
+        lists_of_measures = get_measures_for_run_id(
+            self.database_path, run_id=self.run_id_vr
+        )
         return lists_of_measures
 
     def get_measures_per_steps(self):
@@ -449,9 +467,15 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
         return get_measures_per_step_number(self.lists_of_measures)
 
     def get_assessment_results(self):
-        assess_res_dict = {mechanism: import_original_assessment(self.database_path, mechanism)
-                           for mechanism in
-                           [MechanismEnum.OVERFLOW, MechanismEnum.PIPING, MechanismEnum.STABILITY_INNER, MechanismEnum.REVETMENT]}
+        assess_res_dict = {
+            mechanism: import_original_assessment(self.database_path, mechanism)
+            for mechanism in [
+                MechanismEnum.OVERFLOW,
+                MechanismEnum.PIPING,
+                MechanismEnum.STABILITY_INNER,
+                MechanismEnum.REVETMENT,
+            ]
+        }
         return assess_res_dict
 
     def get_modified_vr_order(self):
@@ -463,28 +487,38 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
 
         measures_per_step = self.get_measures_per_steps()
         assessment_results = self.get_assessment_results()
-        reliability_per_step = get_reliability_for_each_step(self.database_path, measures_per_step)
-        stepwise_assessment = assessment_for_each_step(copy.deepcopy(assessment_results), reliability_per_step)
+        reliability_per_step = get_reliability_for_each_step(
+            self.database_path, measures_per_step
+        )
+        stepwise_assessment = assessment_for_each_step(
+            copy.deepcopy(assessment_results), reliability_per_step
+        )
         traject_prob = calculate_traject_probability_for_steps(stepwise_assessment)
 
         # Get section ids for which a measure is taken.
         section_ids = []
         for section_id, section in enumerate(self.dike_traject.dike_sections, 1):
-            if section.final_measure_veiligheidsrendement['name'] != "Geen maatregel":
+            if section.final_measure_veiligheidsrendement["name"] != "Geen maatregel":
                 section_ids.append(section_id)
 
         final_traject_probability_per_mechanism = traject_prob[self.final_step]
         final_section_probability_per_mechanism = stepwise_assessment[self.final_step]
 
         with open_database(self.database_path) as db:
-            damage = DikeTrajectInfo.select(DikeTrajectInfo.flood_damage).where(
-                DikeTrajectInfo.id == 1).get().flood_damage
+            damage = (
+                DikeTrajectInfo.select(DikeTrajectInfo.flood_damage)
+                .where(DikeTrajectInfo.id == 1)
+                .get()
+                .flood_damage
+            )
 
         discount_rate = 0.03
 
         def calculate_total_risk(traject_reliability, damage, discount_rate):
             n_years = 100
-            damage_per_year = np.divide(damage, np.power(1 + discount_rate, np.arange(0, n_years)))
+            damage_per_year = np.divide(
+                damage, np.power(1 + discount_rate, np.arange(0, n_years))
+            )
             damage_per_year = damage_per_year.reshape(1, n_years)
             total_non_failure_probability = np.ones([1, n_years])
             traject_reliability_interp = {}
@@ -492,45 +526,73 @@ class TrajectSolutionRunImporter(OrmImporterProtocol):
                 if len(traject_reliability[key]) == 0:
                     continue
                 times, betas = zip(*traject_reliability[key].items())
-                time_beta_interpolation = interp1d(times, betas, kind='linear', fill_value='extrapolate')
-                traject_reliability_interp[key] = time_beta_interpolation(list(range(0, 100)))
-                traject_reliability_interp[key] = np.array(traject_reliability_interp[key]).reshape(1, 100)
+                time_beta_interpolation = interp1d(
+                    times, betas, kind="linear", fill_value="extrapolate"
+                )
+                traject_reliability_interp[key] = time_beta_interpolation(
+                    list(range(0, 100))
+                )
+                traject_reliability_interp[key] = np.array(
+                    traject_reliability_interp[key]
+                ).reshape(1, 100)
             for key in traject_reliability_interp.keys():
-                total_non_failure_probability = np.multiply(total_non_failure_probability,
-                                                            1 - traject_reliability_interp[key])
+                total_non_failure_probability = np.multiply(
+                    total_non_failure_probability, 1 - traject_reliability_interp[key]
+                )
             total_failure_probability = 1 - total_non_failure_probability
-            expected_risk_per_year = np.multiply(damage_per_year, total_failure_probability)
+            expected_risk_per_year = np.multiply(
+                damage_per_year, total_failure_probability
+            )
             total_risk = np.sum(expected_risk_per_year)
             return total_risk
 
-        total_risk = calculate_total_risk(final_traject_probability_per_mechanism, damage, discount_rate)
+        total_risk = calculate_total_risk(
+            final_traject_probability_per_mechanism, damage, discount_rate
+        )
 
         vr_index = {}
         for section in section_ids:
-            final_section_probability_per_mechanism_temp = copy.deepcopy(final_section_probability_per_mechanism)
+            final_section_probability_per_mechanism_temp = copy.deepcopy(
+                final_section_probability_per_mechanism
+            )
 
             for mechanism in assessment_results.keys():
-                if final_section_probability_per_mechanism_temp[mechanism] == {}: # is traject has no revetment,
+                if (
+                    final_section_probability_per_mechanism_temp[mechanism] == {}
+                ):  # is traject has no revetment,
                     continue
 
-                if section in final_section_probability_per_mechanism_temp[mechanism].keys():  # if not, this mean that the section has no assessment data for the mechanism (for example a section with no revetment)
-                    final_section_probability_per_mechanism_temp[mechanism][section]['beta'] = \
-                        assessment_results[mechanism][section]['beta']
+                if (
+                    section
+                    in final_section_probability_per_mechanism_temp[mechanism].keys()
+                ):  # if not, this mean that the section has no assessment data for the mechanism (for example a section with no revetment)
+                    final_section_probability_per_mechanism_temp[mechanism][section][
+                        "beta"
+                    ] = assessment_results[mechanism][section]["beta"]
 
             # recalculate final traject probability
-            final_traject_probability_per_mechanism_temp = calculate_traject_probability(
-                final_section_probability_per_mechanism_temp)
+            final_traject_probability_per_mechanism_temp = (
+                calculate_traject_probability(
+                    final_section_probability_per_mechanism_temp
+                )
+            )
 
             # calculate_total_risk
-            risk_increased = calculate_total_risk(final_traject_probability_per_mechanism_temp, damage, discount_rate)
+            risk_increased = calculate_total_risk(
+                final_traject_probability_per_mechanism_temp, damage, discount_rate
+            )
             delta_risk = risk_increased - total_risk
 
             if section in section_ids:
-                section_costs = self.dike_traject.dike_sections[section - 1].final_measure_veiligheidsrendement['LCC']
+                section_costs = self.dike_traject.dike_sections[
+                    section - 1
+                ].final_measure_veiligheidsrendement["LCC"]
                 vr_index[section] = delta_risk / section_costs
             else:
                 vr_index[section] = 0
 
-        sorted_vr_index = dict(sorted(vr_index.items(), key=lambda item: item[1], reverse=True))
+        sorted_vr_index = dict(
+            sorted(vr_index.items(), key=lambda item: item[1], reverse=True)
+        )
 
         self.dike_traject.reinforcement_modified_order_vr = sorted_vr_index

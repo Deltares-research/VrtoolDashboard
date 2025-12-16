@@ -1,14 +1,14 @@
 import plotly.graph_objects as go
 from pandas import DataFrame
 
-from src.constants import Mechanism, REFERENCE_YEAR
+from src.constants import REFERENCE_YEAR, Mechanism
 
 
 def plot_measure_results_over_time_graph(
-        meas_betas: list[float],
-        init_betas: list[float],
-        years: list[float],
-        measure_data: dict,
+    meas_betas: list[float],
+    init_betas: list[float],
+    years: list[float],
+    measure_data: dict,
 ) -> go.Figure:
     """
 
@@ -32,8 +32,7 @@ def plot_measure_results_over_time_graph(
                 size=8,
                 color="black",
             ),
-            hovertemplate="<b>%{x}</b><br><br>"
-                          "Beta: %{y:.2f}<br>",
+            hovertemplate="<b>%{x}</b><br><br>" "Beta: %{y:.2f}<br>",
         )
     )
 
@@ -47,15 +46,14 @@ def plot_measure_results_over_time_graph(
                 size=8,
                 color="red",
             ),
-            hovertemplate="<b>%{x}</b><br><br>"
-                          "Beta: %{y:.2f}<br>",
+            hovertemplate="<b>%{x}</b><br><br>" "Beta: %{y:.2f}<br>",
         )
     )
 
     _fig.update_layout(
         title=f"{measure_data['measure_name']} <br>"
-              f"dberm={measure_data['dberm']}m <br>"
-              f"dcrest={measure_data['dcrest']}m",
+        f"dberm={measure_data['dberm']}m <br>"
+        f"dcrest={measure_data['dcrest']}m",
         xaxis_title="Jaar",
         yaxis_title="Beta",
     )
@@ -80,17 +78,19 @@ def update_measure_results_over_time_graph(fig: dict, click_data: dict) -> go.Fi
     measure_results_ids = list(map(int, click_custom_data.split(" + ")))
 
     measure_fig_data = fig["data"][0]
-    for id, point in enumerate(measure_fig_data['customdata']):
+    for id, point in enumerate(measure_fig_data["customdata"]):
         if point[3] in measure_results_ids:
-            _fig.add_trace(go.Scatter(
-                name='clicked',
-                x=[measure_fig_data['x'][id]],
-                y=[measure_fig_data['y'][id]],
-                mode='markers',
-                marker=dict(size=10, color='black'),
-                showlegend=False,
-                hovertemplate=f"{point[0]}  <br>"
-                              f"Dberm: {point[1]}m <br>"
-                              f"Dcrest: {point[2]}m <br>")
+            _fig.add_trace(
+                go.Scatter(
+                    name="clicked",
+                    x=[measure_fig_data["x"][id]],
+                    y=[measure_fig_data["y"][id]],
+                    mode="markers",
+                    marker=dict(size=10, color="black"),
+                    showlegend=False,
+                    hovertemplate=f"{point[0]}  <br>"
+                    f"Dberm: {point[1]}m <br>"
+                    f"Dcrest: {point[2]}m <br>",
+                )
             )
     return _fig

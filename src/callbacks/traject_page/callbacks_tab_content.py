@@ -2,34 +2,44 @@ from bisect import bisect_right
 from pathlib import Path
 
 import dash
-from dash import dcc, Output, Input, callback, State
+from dash import Input, Output, State, callback, dcc
 from plotly.graph_objs import Figure
 from vrtool.defaults.vrtool_config import VrtoolConfig
 
 from src.component_ids import (
-    SLIDER_YEAR_RELIABILITY_RESULTS_ID,
-    SELECT_DIKE_SECTION_FOR_MEASURES_ID,
+    CLOSE_MEASURE_MODAL_BUTTON_ID,
+    DIKE_TRAJECT_PF_COST_GRAPH_ID,
     GRAPH_MEASURE_COMPARISON_ID,
-    STORE_CONFIG, MEASURE_MODAL_ID, CLOSE_MEASURE_MODAL_BUTTON_ID, DIKE_TRAJECT_PF_COST_GRAPH_ID,
-    GRAPH_MEASURE_RELIABILITY_TIME_ID, SELECT_LENGTH_COST_SWITCH
+    GRAPH_MEASURE_RELIABILITY_TIME_ID,
+    MEASURE_MODAL_ID,
+    SELECT_DIKE_SECTION_FOR_MEASURES_ID,
+    SELECT_LENGTH_COST_SWITCH,
+    SLIDER_YEAR_RELIABILITY_RESULTS_ID,
+    STORE_CONFIG,
 )
 from src.constants import REFERENCE_YEAR, Mechanism
 from src.linear_objects.dike_traject import DikeTraject
-from src.orm.import_database import get_all_measure_results, get_measure_reliability_over_time
+from src.orm.import_database import (
+    get_all_measure_results,
+    get_measure_reliability_over_time,
+)
 from src.plotly_graphs.measure_comparison_graph import plot_measure_results_graph
-from src.plotly_graphs.measure_reliability_time import plot_measure_results_over_time_graph, \
-    update_measure_results_over_time_graph
+from src.plotly_graphs.measure_reliability_time import (
+    plot_measure_results_over_time_graph,
+    update_measure_results_over_time_graph,
+)
 from src.plotly_graphs.pf_length_cost import (
-    plot_pf_length_cost,
     plot_default_scatter_dummy,
+    plot_pf_length_cost,
 )
 from src.plotly_graphs.plotly_maps import (
-    plot_overview_map,
+    dike_traject_pf_cost_helping_map_detail,
+    dike_traject_pf_cost_helping_map_simple,
     plot_default_overview_map_dummy,
     plot_dike_traject_reliability_initial_assessment_map,
     plot_dike_traject_reliability_measures_assessment_map,
     plot_dike_traject_urgency,
-    dike_traject_pf_cost_helping_map_simple, dike_traject_pf_cost_helping_map_detail,
+    plot_overview_map,
 )
 from src.utils.utils import export_to_json
 
@@ -66,7 +76,7 @@ def make_graph_overview_dike(dike_traject_data: dict) -> dcc.Graph:
     ],
 )
 def make_graph_map_initial_assessment(
-        dike_traject_data: dict, selected_year: float, result_type: str, mechanism_type: str
+    dike_traject_data: dict, selected_year: float, result_type: str, mechanism_type: str
 ) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
@@ -106,13 +116,13 @@ def make_graph_map_initial_assessment(
     ],
 )
 def make_graph_map_measures(
-        dike_traject_data: dict,
-        selected_year: float,
-        result_type: str,
-        calc_type: str,
-        color_bar_result_type: str,
-        mechanism_type: str,
-        sub_result_type: str,
+    dike_traject_data: dict,
+    selected_year: float,
+    result_type: str,
+    calc_type: str,
+    color_bar_result_type: str,
+    mechanism_type: str,
+    sub_result_type: str,
 ) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
@@ -159,10 +169,10 @@ def make_graph_map_measures(
     ],
 )
 def make_graph_pf_vs_cost(
-        dike_traject_data: dict,
-        selected_year: float,
-        result_type: str,
-        cost_length_switch: str,
+    dike_traject_data: dict,
+    selected_year: float,
+    result_type: str,
+    cost_length_switch: str,
 ):
     """
     Call to display the graph of the plot of the probability of failure vs the cost of the measures.
@@ -193,7 +203,7 @@ def make_graph_pf_vs_cost(
     ],
 )
 def make_graph_map_urgency(
-        dike_traject_data: dict, selected_year: float, length_urgency: float, calc_type: str
+    dike_traject_data: dict, selected_year: float, length_urgency: float, calc_type: str
 ) -> dcc.Graph:
     """
     Call to display the graph of the overview map of the dike from the saved imported dike data.
@@ -224,9 +234,11 @@ def make_graph_map_urgency(
     Output("dike_traject_pf_cost_helping_map", "figure"),
     Input("stored-data", "data"),
     Input(DIKE_TRAJECT_PF_COST_GRAPH_ID, "clickData"),
-    Input("select_helper_map_switch", 'value')
+    Input("select_helper_map_switch", "value"),
 )
-def update_click(dike_traject_data: dict, click_data: dict, switch_map_helper_type: str) -> Figure:
+def update_click(
+    dike_traject_data: dict, click_data: dict, switch_map_helper_type: str
+) -> Figure:
     """
     Trigger callback when clicking over the Pf_vs_cost graph. This callback will update the accompanying map of the
     traject by highlighting the selected dike section.
@@ -254,11 +266,17 @@ def update_click(dike_traject_data: dict, click_data: dict, switch_map_helper_ty
         _reinforced_sections = _order[: int(click_data["points"][0]["pointNumber"])]
 
         if switch_map_helper_type == "DETAILED":
-            return dike_traject_pf_cost_helping_map_detail(_dike_traject, click_data["points"][0]["curveNumber"],
-                                                           _reinforced_sections)
+            return dike_traject_pf_cost_helping_map_detail(
+                _dike_traject,
+                click_data["points"][0]["curveNumber"],
+                _reinforced_sections,
+            )
         else:
-            return dike_traject_pf_cost_helping_map_simple(_dike_traject, click_data["points"][0]["curveNumber"],
-                                                       _reinforced_sections)
+            return dike_traject_pf_cost_helping_map_simple(
+                _dike_traject,
+                click_data["points"][0]["curveNumber"],
+                _reinforced_sections,
+            )
 
 
 ### TAB Maatregelen ###
@@ -296,11 +314,11 @@ def fill_dike_section_selection(dike_traject_data: dict) -> list[dict]:
     ],
 )
 def make_graph_measure_results_comparison(
-        dike_traject_data: dict,
-        vr_config: dict,
-        selected_year: float,
-        selected_dike_section: str,
-        selected_mechanism: str,
+    dike_traject_data: dict,
+    vr_config: dict,
+    selected_year: float,
+    selected_dike_section: str,
+    selected_mechanism: str,
 ) -> Figure:
     """
 
@@ -365,8 +383,7 @@ def make_graph_measure_results_comparison(
     ],
     prevent_initial_call=True,
 )
-def close_modal_measure_reliability_time(close_n_click: int
-                                         ) -> tuple[bool, int]:
+def close_modal_measure_reliability_time(close_n_click: int) -> tuple[bool, int]:
     """
     Dummy call to trigger the opening of the canvas so the `update_timestamp`
     can output the vrtool logging.
@@ -376,24 +393,32 @@ def close_modal_measure_reliability_time(close_n_click: int
     return True, 0
 
 
-@callback(output=[
-    Output(MEASURE_MODAL_ID, "is_open"),
-    Output(GRAPH_MEASURE_RELIABILITY_TIME_ID, "figure"),
-    Output(GRAPH_MEASURE_COMPARISON_ID, "figure", allow_duplicate=True)
-],
-    inputs=[Input(GRAPH_MEASURE_COMPARISON_ID, "clickData"),
-            ],
-    state=[State("select_mechanism_type", "value"),
-           State(STORE_CONFIG, "data"),
-           State("stored-data", "data"),
-           State(SELECT_DIKE_SECTION_FOR_MEASURES_ID, "value"),
-           State(GRAPH_MEASURE_COMPARISON_ID, "figure"),
-           ]
-    ,
+@callback(
+    output=[
+        Output(MEASURE_MODAL_ID, "is_open"),
+        Output(GRAPH_MEASURE_RELIABILITY_TIME_ID, "figure"),
+        Output(GRAPH_MEASURE_COMPARISON_ID, "figure", allow_duplicate=True),
+    ],
+    inputs=[
+        Input(GRAPH_MEASURE_COMPARISON_ID, "clickData"),
+    ],
+    state=[
+        State("select_mechanism_type", "value"),
+        State(STORE_CONFIG, "data"),
+        State("stored-data", "data"),
+        State(SELECT_DIKE_SECTION_FOR_MEASURES_ID, "value"),
+        State(GRAPH_MEASURE_COMPARISON_ID, "figure"),
+    ],
     prevent_initial_call=True,
 )
-def open_modal_measure_reliability_time(click_data: dict, selected_mechanism, vr_config, dike_traject_data: dict,
-                                        section_name: str, fig: dict) -> tuple:
+def open_modal_measure_reliability_time(
+    click_data: dict,
+    selected_mechanism,
+    vr_config,
+    dike_traject_data: dict,
+    section_name: str,
+    fig: dict,
+) -> tuple:
     """
 
     :param click_data: data clicked from the figure showing beta vs cost of all measures for a selected dike section.
@@ -413,10 +438,13 @@ def open_modal_measure_reliability_time(click_data: dict, selected_mechanism, vr
     if click_data["points"][0]["curveNumber"] == 0:
 
         _clicked_measure_result_id = click_data["points"][0]["customdata"][
-            3]  # fourth position is the measure_result_id
-        _measure_data = {"measure_name": click_data["points"][0]["customdata"][0],
-                         "dberm": click_data["points"][0]["customdata"][1],
-                         "dcrest": click_data["points"][0]["customdata"][2]}
+            3
+        ]  # fourth position is the measure_result_id
+        _measure_data = {
+            "measure_name": click_data["points"][0]["customdata"][0],
+            "dberm": click_data["points"][0]["customdata"][1],
+            "dcrest": click_data["points"][0]["customdata"][2],
+        }
 
         _vr_config = VrtoolConfig()
         _vr_config.traject = vr_config["traject"]
@@ -426,14 +454,23 @@ def open_modal_measure_reliability_time(click_data: dict, selected_mechanism, vr
 
         _mechanism_name = get_mechanism_name_ORM(selected_mechanism)
 
-        betas_meas = get_measure_reliability_over_time(_vr_config, _clicked_measure_result_id,
-                                                       _mechanism_name)
+        betas_meas = get_measure_reliability_over_time(
+            _vr_config, _clicked_measure_result_id, _mechanism_name
+        )
 
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
         _years = _dike_traject.get_section(section_name).years
 
-        _betas_ini = _dike_traject.get_section(section_name).initial_assessment[_mechanism_name]
-        return True, plot_measure_results_over_time_graph(betas_meas, _betas_ini, _years, _measure_data), dash.no_update
+        _betas_ini = _dike_traject.get_section(section_name).initial_assessment[
+            _mechanism_name
+        ]
+        return (
+            True,
+            plot_measure_results_over_time_graph(
+                betas_meas, _betas_ini, _years, _measure_data
+            ),
+            dash.no_update,
+        )
     else:
         _fig = update_measure_results_over_time_graph(fig, click_data)
 

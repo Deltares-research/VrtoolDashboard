@@ -2,11 +2,21 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 
-from src.constants import REFERENCE_YEAR, CLASSIC_PLOTLY_COLOR_SEQUENCE, PROJECTS_COLOR_SEQUENCE, ResultType
+from src.constants import (
+    CLASSIC_PLOTLY_COLOR_SEQUENCE,
+    PROJECTS_COLOR_SEQUENCE,
+    REFERENCE_YEAR,
+    ResultType,
+)
 from src.linear_objects.dike_traject import DikeTraject, get_traject_prob_fast
 from src.linear_objects.project import DikeProject
 from src.linear_objects.reinforcement_program import DikeProgram
-from src.utils.utils import pf_to_beta, interpolate_beta_values, beta_to_pf, get_traject_reliability
+from src.utils.utils import (
+    beta_to_pf,
+    get_traject_reliability,
+    interpolate_beta_values,
+    pf_to_beta,
+)
 
 
 def plot_cost_vs_time_projects(projects: list[DikeProject]):
@@ -26,28 +36,31 @@ def plot_cost_vs_time_projects(projects: list[DikeProject]):
         for year in range(project.start_year, project.end_year):
             cost_list[year - start_program] = cost_yearly
 
-        fig.add_trace(go.Bar(
-            name=project.name,
-            x=years,
-            y=cost_list,
-            offset=0,
-            marker=dict(color=_color, pattern_shape='/'),
+        fig.add_trace(
+            go.Bar(
+                name=project.name,
+                x=years,
+                y=cost_list,
+                offset=0,
+                marker=dict(color=_color, pattern_shape="/"),
+                # hovertemplate with start and end year, total cost cost of project
+                hovertemplate=f"{project.name}<br>Startjaar: {project.start_year}<br>"
+                f"Eindjaar: {project.end_year}<br>"
+                f"Jaarlijkse Kosten: {cost_yearly / 1e6:.2f} mln €<br>"
+                f"Totale Kosten: {cost / 1e6:.1f} mln €<extra></extra>",
+            )
+        )
 
-            # hovertemplate with start and end year, total cost cost of project
-            hovertemplate=f"{project.name}<br>Startjaar: {project.start_year}<br>"
-                          f"Eindjaar: {project.end_year}<br>"
-                          f"Jaarlijkse Kosten: {cost_yearly / 1e6:.2f} mln €<br>"
-                          f"Totale Kosten: {cost / 1e6:.1f} mln €<extra></extra>"
-        ))
-
-    fig.update_layout(template='plotly_white')
+    fig.update_layout(template="plotly_white")
     fig.update_yaxes(title="Kosten (mln €/jaar)")
     fig.update_xaxes(title="Jaar")
 
     # no gap between bars
-    fig.update_layout(barmode='stack', bargap=0)
+    fig.update_layout(barmode="stack", bargap=0)
     # put legend on the right
-    fig.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
+    fig.update_layout(
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+    )
 
     return fig
 
@@ -63,7 +76,7 @@ def projects_reliability_over_time(program: DikeProgram, result_type: str) -> go
 
         years_ini, betas_ini = (
             program.trajects_pf_over_time[f"{dike_traject.name}"]["years"],
-            program.trajects_pf_over_time[f"{dike_traject.name}"]["betas"]
+            program.trajects_pf_over_time[f"{dike_traject.name}"]["betas"],
         )
 
         if result_type == ResultType.RELIABILITY.name:
@@ -92,36 +105,42 @@ def projects_reliability_over_time(program: DikeProgram, result_type: str) -> go
         elif result_type == ResultType.RISK_FACTOR.name:
             risk = beta_to_pf(betas_ini) * dike_traject.flood_damage
             discount_rate = 0.03
-            risk_norm = [dike_traject.lower_bound_value * dike_traject.flood_damage] / (1 + discount_rate) ** (
-                    years_ini - 2025)
+            risk_norm = [dike_traject.lower_bound_value * dike_traject.flood_damage] / (
+                1 + discount_rate
+            ) ** (years_ini - 2025)
             y = risk / risk_norm
             y_ondergrens = None
             name = "Risicofactor"
             hovertemplate = "Jaar: %{x}<br>Factor hoger dan bij norm: %{y:.2e}"
 
-
         else:
             raise ValueError(f"Result type {result_type} not recognized")
         if y_ondergrens is not None:
-            _fig.add_trace(go.Scatter(name="ondergrens",
-                                      x=years_ini,
-                                      y=y_ondergrens,
-                                      line=dict(color=color_traject, dash="dot"),
-                                      mode='lines',
-                                      legendgroup=dike_traject.name,
-                                      legendgrouptitle=dict(text=dike_traject.name),
-                                      ))
+            _fig.add_trace(
+                go.Scatter(
+                    name="ondergrens",
+                    x=years_ini,
+                    y=y_ondergrens,
+                    line=dict(color=color_traject, dash="dot"),
+                    mode="lines",
+                    legendgroup=dike_traject.name,
+                    legendgrouptitle=dict(text=dike_traject.name),
+                )
+            )
 
-        _fig.add_trace(go.Scatter(name=name,
-                                  x=years_ini,
-                                  y=y,
-                                  marker=dict(color=color_traject),
-                                  line=dict(color=color_traject),
-                                  mode='lines+markers',
-                                  legendgroup=dike_traject.name,
-                                  legendgrouptitle=dict(text=dike_traject.name),
-                                  hovertemplate=hovertemplate
-                                  ))
+        _fig.add_trace(
+            go.Scatter(
+                name=name,
+                x=years_ini,
+                y=y,
+                marker=dict(color=color_traject),
+                line=dict(color=color_traject),
+                mode="lines+markers",
+                legendgroup=dike_traject.name,
+                legendgrouptitle=dict(text=dike_traject.name),
+                hovertemplate=hovertemplate,
+            )
+        )
 
     def add_shapes(y0, y1, y_text, color):
         _fig.add_shape(
@@ -137,16 +156,18 @@ def projects_reliability_over_time(program: DikeProgram, result_type: str) -> go
         )
 
         # add invisible trace for hover info
-        _fig.add_trace(go.Scatter(
-            x=[(project.start_year + project.end_year) / 2],
-            y=[(y0 + y1) / 2],
-            text=[project.name],
-            mode="markers",
-            opacity=0,
-            marker=dict(color=color, opacity=0),
-            hoverinfo="text",
-            showlegend=False,
-        ))
+        _fig.add_trace(
+            go.Scatter(
+                x=[(project.start_year + project.end_year) / 2],
+                y=[(y0 + y1) / 2],
+                text=[project.name],
+                mode="markers",
+                opacity=0,
+                marker=dict(color=color, opacity=0),
+                hoverinfo="text",
+                showlegend=False,
+            )
+        )
         # add annotation in the middle of the shape:
         # THIS IS BUGGY
         # _fig.add_annotation(
@@ -167,10 +188,10 @@ def projects_reliability_over_time(program: DikeProgram, result_type: str) -> go
             color = PROJECTS_COLOR_SEQUENCE[index]
             y0 = y0_ini + y1_ini * index
             y1 = y1_ini + y1_ini * index
-            y_text = 0.25 + 0.5 * index,
+            y_text = (0.25 + 0.5 * index,)
             add_shapes(y0, y1, y_text, color)
 
-        _fig.update_layout(xaxis_title='Jaar', yaxis_title="Betrouwbaarheid")
+        _fig.update_layout(xaxis_title="Jaar", yaxis_title="Betrouwbaarheid")
 
     elif result_type == ResultType.PROBABILITY.name:
         _fig.update_yaxes(type="log")
@@ -180,13 +201,15 @@ def projects_reliability_over_time(program: DikeProgram, result_type: str) -> go
         # Add project shapes, similar to linear case:
         for index, project in enumerate(projects):
             color = PROJECTS_COLOR_SEQUENCE[index]
-            y0 = y0_ini * (5 ** index)
-            y1 = y1_ini * (5 ** index)
-            y_text = y0_ini * (5 ** index)
+            y0 = y0_ini * (5**index)
+            y1 = y1_ini * (5**index)
+            y_text = y0_ini * (5**index)
             add_shapes(y0, y1, y_text, color)
-        ticks = [1.e-6, 1.e-5, 1.e-4, 0.001, 0.01, 0.1, 1]
-        _fig.update_yaxes(type="log", tickvals=ticks, ticktext=[str(tick) for tick in ticks])
-        _fig.update_layout(xaxis_title='Jaar', yaxis_title="Faalkans")
+        ticks = [1.0e-6, 1.0e-5, 1.0e-4, 0.001, 0.01, 0.1, 1]
+        _fig.update_yaxes(
+            type="log", tickvals=ticks, ticktext=[str(tick) for tick in ticks]
+        )
+        _fig.update_layout(xaxis_title="Jaar", yaxis_title="Faalkans")
 
     elif result_type == ResultType.DISTANCE_TO_NORM.name:
         _fig.update_yaxes(type="log")
@@ -195,28 +218,32 @@ def projects_reliability_over_time(program: DikeProgram, result_type: str) -> go
         # Add project shapes, similar to linear case:
         for index, project in enumerate(projects):
             color = PROJECTS_COLOR_SEQUENCE[index]
-            y0 = y0_ini * (5 ** index)
-            y1 = y1_ini * (5 ** index)
-            y_text = y0_ini * (5 ** index)
+            y0 = y0_ini * (5**index)
+            y1 = y1_ini * (5**index)
+            y_text = y0_ini * (5**index)
             add_shapes(y0, y1, y_text, color)
         ticks = [0.001, 0.01, 0.1, 1, 10]
-        _fig.update_yaxes(type="log", tickvals=ticks, ticktext=[str(tick) for tick in ticks])
-        _fig.update_layout(xaxis_title='Jaar', yaxis_title="Afstand tot norm")
+        _fig.update_yaxes(
+            type="log", tickvals=ticks, ticktext=[str(tick) for tick in ticks]
+        )
+        _fig.update_layout(xaxis_title="Jaar", yaxis_title="Afstand tot norm")
 
     elif result_type == ResultType.RISK.name:
-        _fig.update_layout(xaxis_title='Jaar', yaxis_title="Risico (€/jaar)")
+        _fig.update_layout(xaxis_title="Jaar", yaxis_title="Risico (€/jaar)")
         y0_ini = 10e3
         y1_ini = y0_ini * 5  # This is the range for each shape in log scale
         # Add project shapes:
         # Add project shapes, similar to linear case:
         for index, project in enumerate(projects):
             color = PROJECTS_COLOR_SEQUENCE[index]
-            y0 = y0_ini * (5 ** index)
-            y1 = y1_ini * (5 ** index)
-            y_text = y0_ini * (5 ** index)
+            y0 = y0_ini * (5**index)
+            y1 = y1_ini * (5**index)
+            y_text = y0_ini * (5**index)
             add_shapes(y0, y1, y_text, color)
         ticks = [1e5, 1e6, 1e7, 1e8, 1e9]
-        _fig.update_yaxes(type="log", tickvals=ticks, ticktext=[f"{tick:.2e}" for tick in ticks])
+        _fig.update_yaxes(
+            type="log", tickvals=ticks, ticktext=[f"{tick:.2e}" for tick in ticks]
+        )
 
     elif result_type == ResultType.RISK_FACTOR.name:
         _fig.update_yaxes(type="log")
@@ -225,17 +252,18 @@ def projects_reliability_over_time(program: DikeProgram, result_type: str) -> go
         # Add project shapes, similar to linear case:
         for index, project in enumerate(projects):
             color = PROJECTS_COLOR_SEQUENCE[index]
-            y0 = y0_ini * (5 ** index)
-            y1 = y1_ini * (5 ** index)
-            y_text = y0_ini * (5 ** index)
+            y0 = y0_ini * (5**index)
+            y1 = y1_ini * (5**index)
+            y_text = y0_ini * (5**index)
             add_shapes(y0, y1, y_text, color)
         ticks = [0.001, 0.01, 0.1, 1, 10, 100, 1000]
-        _fig.update_yaxes(type="log", tickvals=ticks, ticktext=[str(tick) for tick in ticks])
-        _fig.update_layout(xaxis_title='Jaar', yaxis_title="Risico factor")
-
+        _fig.update_yaxes(
+            type="log", tickvals=ticks, ticktext=[str(tick) for tick in ticks]
+        )
+        _fig.update_layout(xaxis_title="Jaar", yaxis_title="Risico factor")
 
     else:
         raise ValueError(f"Result type {result_type} not recognized")
 
-    _fig.update_layout(template='plotly_white')
+    _fig.update_layout(template="plotly_white")
     return _fig

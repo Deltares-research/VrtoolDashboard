@@ -59,6 +59,7 @@ class GreedyOPtimizationCriteria(Enum):
     ECONOMIC_OPTIMAL = "Economisch optimaal (standaard)"
     TARGET_PF = "Faalkans"
 
+
 class ProgramDefinitionMapType(Enum):
     SIMPLE = "Trajecten"
     PROJECTS = "Projecten"
@@ -66,15 +67,16 @@ class ProgramDefinitionMapType(Enum):
     VEILIGHEIDSRENDEMENT_INDEX = "VR index"
 
 
-
-conversion_dict_measure_names = {"GROUND_IMPROVEMENT": "Soil reinforcement",
-                                 "GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN": "Soil reinforcement with stability screen",
-                                 "GEOTEXTILE": "Vertical Piping Solution",
-                                 "DIAPHRAGM_WALL": "Diaphragm Wall",
-                                 "STABILITY_SCREEN": "Stability Screen",
-                                 "ANCHORED_SHEETPILE": "Anchored sheetpile",
-                                 "REVETMENT": "Revetment",
-                                 "CUSTOM": "Custom"}
+conversion_dict_measure_names = {
+    "GROUND_IMPROVEMENT": "Soil reinforcement",
+    "GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN": "Soil reinforcement with stability screen",
+    "GEOTEXTILE": "Vertical Piping Solution",
+    "DIAPHRAGM_WALL": "Diaphragm Wall",
+    "STABILITY_SCREEN": "Stability Screen",
+    "ANCHORED_SHEETPILE": "Anchored sheetpile",
+    "REVETMENT": "Revetment",
+    "CUSTOM": "Custom",
+}
 
 # PROJECTS_COLOR_SEQUENCE = ['rgb(214, 244, 134)',
 #                            'rgb(79, 204, 40)',
@@ -89,5 +91,7 @@ conversion_dict_measure_names = {"GROUND_IMPROVEMENT": "Soil reinforcement",
 
 import plotly.express as px
 
-PROJECTS_COLOR_SEQUENCE = px.colors.qualitative.Pastel + px.colors.qualitative.Prism # this is 22 colors
+PROJECTS_COLOR_SEQUENCE = (
+    px.colors.qualitative.Pastel + px.colors.qualitative.Prism
+)  # this is 22 colors
 CLASSIC_PLOTLY_COLOR_SEQUENCE = px.colors.qualitative.Plotly

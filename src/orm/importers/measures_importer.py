@@ -12,39 +12,40 @@ from vrtool.orm.io.importers.optimization.optimization_step_importer import (
 )
 from vrtool.orm.io.importers.orm_importer_protocol import OrmImporterProtocol
 from vrtool.orm.models import (
-    SectionData,
-    MeasurePerSection,
-    MeasureResultSection,
     Measure,
-    MeasureResultParameter,
+    MeasurePerSection,
     MeasureResultMechanism,
-    MechanismPerSection,
+    MeasureResultParameter,
+    MeasureResultSection,
 )
 from vrtool.orm.models import Mechanism as ORM_Mechanism
+from vrtool.orm.models import (
+    MechanismPerSection,
+    SectionData,
+)
 
 from src.constants import Mechanism
-
 from src.orm.importers.importer_utils import _get_measure, _get_measure_cost
 from src.orm.importers.optimization_step_importer import (
-    _get_section_lcc, _get_measure_result_ids,
+    _get_measure_result_ids,
+    _get_section_lcc,
 )
-from src.orm.models import OptimizationSelectedMeasure, OptimizationStep, MeasureResult
-
+from src.orm.models import MeasureResult, OptimizationSelectedMeasure, OptimizationStep
 from src.orm.orm_controller_custom import get_optimization_steps_ordered
 
 
 class TrajectMeasureResultsImporter(OrmImporterProtocol):
 
     def __init__(
-            self,
-            vr_config: VrtoolConfig,
-            section_name: str,
-            mechanism: str,
-            time: int,
-            run_id_vr: int,
-            run_id_dsn: int,
-            active_mechanisms: Optional[list[str]] = None,
-            final_step_number: Optional[int] = None,
+        self,
+        vr_config: VrtoolConfig,
+        section_name: str,
+        mechanism: str,
+        time: int,
+        run_id_vr: int,
+        run_id_dsn: int,
+        active_mechanisms: Optional[list[str]] = None,
+        final_step_number: Optional[int] = None,
     ) -> None:
         self.vr_config = vr_config
         self.section_name = section_name
@@ -93,7 +94,10 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
             # For combined steps sharing the same step number, skip the step if it has already been processed
             if _previous_step_number == _step_number:
                 continue
-            if self.final_step_number is not None and _step_number > self.final_step_number:
+            if (
+                self.final_step_number is not None
+                and _step_number > self.final_step_number
+            ):
                 break
 
             section = (
@@ -122,10 +126,16 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
                 )
             )
 
-            _measure = _get_measure(_optimum_section_optimization_steps, self.active_mechanisms, self.assessment_time)
+            _measure = _get_measure(
+                _optimum_section_optimization_steps,
+                self.active_mechanisms,
+                self.assessment_time,
+            )
             _measure["LCC"] = _get_section_lcc(_optimization_step)
             _measure["cost"] = _get_measure_cost(_optimum_section_optimization_steps)
-            _measure["measure_results_ids"] = _get_measure_result_ids(_optimum_section_optimization_steps)
+            _measure["measure_results_ids"] = _get_measure_result_ids(
+                _optimum_section_optimization_steps
+            )
             _step_measures.append(_measure)
             _previous_step_number = _step_number
 
@@ -176,8 +186,8 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
                         MechanismPerSection,
                         JOIN.INNER,
                         on=(
-                                MeasureResultMechanism.mechanism_per_section
-                                == MechanismPerSection.id
+                            MeasureResultMechanism.mechanism_per_section
+                            == MechanismPerSection.id
                         ),
                     )
                     .join(
@@ -188,7 +198,7 @@ class TrajectMeasureResultsImporter(OrmImporterProtocol):
                     .where(
                         MeasureResultMechanism.measure_result == measure_result.id,
                         MeasureResultMechanism.time == self.time,
-                        ORM_Mechanism.name == self.mechanism
+                        ORM_Mechanism.name == self.mechanism,
                     )
                     .get()
                 )

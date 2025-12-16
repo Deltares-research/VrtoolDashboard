@@ -1,28 +1,31 @@
 import dash
-from dash import html, dcc
 import dash_bootstrap_components as dbc
-
+from dash import dcc, html
 
 dash.register_page(__name__)
 
 
-layout = html.Div([
-    dcc.Tabs(
-        [
-            dcc.Tab(label="Definitie van projecten",
+layout = html.Div(
+    [
+        dcc.Tabs(
+            [
+                dcc.Tab(
+                    label="Definitie van projecten",
                     id="tab-111",
                     className="custom-tab",
-                    selected_className="custom-tab--selected"),
-            dcc.Tab(label="Resultaten op gebiedsniveau",
+                    selected_className="custom-tab--selected",
+                ),
+                dcc.Tab(
+                    label="Resultaten op gebiedsniveau",
                     id="tab-112",
                     className="custom-tab",
-                    selected_className="custom-tab--selected"),
-        ],
-        id="tabs_tab_project_page",
-        value="tab-111",  # Set the initial active tab
-        className="custom-tabs"
-    ),
-    html.Div(id="content_tab_project_page", children=[]),
-
-
-])
+                    selected_className="custom-tab--selected",
+                ),
+            ],
+            id="tabs_tab_project_page",
+            value="tab-111",  # Set the initial active tab
+            className="custom-tabs",
+        ),
+        html.Div(id="content_tab_project_page", children=[]),
+    ]
+)

@@ -1,8 +1,13 @@
-from pathlib import Path
 import json
+from pathlib import Path
+
 # path_to_reference_file = Path(r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\Case_31_1\reference\reference_dike_traject.json")
-path_to_reference_file = Path(r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\TestCase1_38-1_no_housing\reference\dike_traject_data.json")
-path_to_ref_2 = Path(r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\imported_runs_data.json")
+path_to_reference_file = Path(
+    r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\TestCase1_38-1_no_housing\reference\dike_traject_data.json"
+)
+path_to_ref_2 = Path(
+    r"C:\Users\hauth\bitbucket\VRtoolDashboard\tests\data\imported_runs_data.json"
+)
 
 with open(path_to_reference_file, "r") as file:
     reference = json.load(file)
@@ -26,7 +31,6 @@ with open(path_to_ref_2, "r") as file:
 ########## 2 #############
 for section in reference["dike_sections"]:
 
-
     section["flood_damages"] = 0
 for traject in ref_2.values():
 
@@ -40,4 +44,3 @@ with open(path_to_reference_file, "w") as file:
 
 with open(path_to_ref_2, "w") as file:
     json.dump(ref_2, file, indent=4)
-

@@ -4,25 +4,35 @@ from typing import Optional
 import numpy as np
 import plotly.graph_objects as go
 
-from src.constants import REFERENCE_YEAR, ResultType, ColorBarResultType, PROJECTS_COLOR_SEQUENCE, \
-    CLASSIC_PLOTLY_COLOR_SEQUENCE
-from src.linear_objects.dike_traject import DikeTraject, cum_cost_steps, get_step_traject_pf, get_initial_assessment_df, \
-    get_traject_prob
+from src.constants import (
+    CLASSIC_PLOTLY_COLOR_SEQUENCE,
+    PROJECTS_COLOR_SEQUENCE,
+    REFERENCE_YEAR,
+    ColorBarResultType,
+    ResultType,
+)
+from src.linear_objects.dike_traject import (
+    DikeTraject,
+    cum_cost_steps,
+    get_initial_assessment_df,
+    get_step_traject_pf,
+    get_traject_prob,
+)
 from src.linear_objects.project import DikeProject
-from src.utils.utils import pf_to_beta, beta_to_pf
+from src.utils.utils import beta_to_pf, pf_to_beta
 
 
 def plot_default_scatter_dummy() -> go.Figure:
-    """
-
-    """
+    """ """
     fig = go.Figure()
-    fig.update_layout(template='plotly_white')
+    fig.update_layout(template="plotly_white")
 
     return fig
 
 
-def plot_pf_project_comparison(project_data: dict, selected_year: int, result_type: str, cost_length_switch: str) -> go.Figure:
+def plot_pf_project_comparison(
+    project_data: dict, selected_year: int, result_type: str, cost_length_switch: str
+) -> go.Figure:
     """
     :return:
     """
@@ -32,7 +42,12 @@ def plot_pf_project_comparison(project_data: dict, selected_year: int, result_ty
     x_max = 0
     for index, (_, dike_traject_data) in enumerate(project_data.items()):
         dike_traject = DikeTraject.deserialize(dike_traject_data)
-        _year_index = bisect_right(dike_traject.dike_sections[0].years, selected_year - REFERENCE_YEAR) - 1
+        _year_index = (
+            bisect_right(
+                dike_traject.dike_sections[0].years, selected_year - REFERENCE_YEAR
+            )
+            - 1
+        )
 
         section_order_vr = ["Geen maatregel"] + dike_traject.reinforcement_order_vr
         # greedy_step_order = ["Geen maatregel"] + [f"Stap {o}" for o in range(1, len(dike_traject.greedy_steps))]
@@ -51,14 +66,14 @@ def plot_pf_project_comparison(project_data: dict, selected_year: int, result_ty
         else:
             raise ValueError("Wrong cost_length_switch value")
 
-
         if result_type == ResultType.RELIABILITY.name:
-            y_vr = pf_to_beta(dike_traject.calc_traject_probability_array("vr")[:, _year_index])
+            y_vr = pf_to_beta(
+                dike_traject.calc_traject_probability_array("vr")[:, _year_index]
+            )
             # y_step = pf_to_beta(get_step_traject_pf(dike_traject)[:, _year_index])
             y_ondergrens = pf_to_beta(dike_traject.lower_bound_value)
             y_signalering = pf_to_beta(dike_traject.signalering_value)
             title_y_axis = "Betrouwbaarheid"
-
 
         else:
             y_vr = dike_traject.calc_traject_probability_array("vr")[:, _year_index]
@@ -69,59 +84,74 @@ def plot_pf_project_comparison(project_data: dict, selected_year: int, result_ty
 
         color = CLASSIC_PLOTLY_COLOR_SEQUENCE[index]
 
-        fig.add_trace(go.Scatter(x=x_vr,
-                                 y=y_vr,
-                                 customdata=section_order_vr,
-                                 mode='markers+lines',
-                                 name=dike_traject.run_name,
-                                 line=dict(color=color),
-                                 marker=dict(size=6, color=color),
-                                 hovertemplate="<b>%{customdata}</b><br><br>" +
-                                               "Trajectfaalkans: %{y:.2e}<br>"
-                                 ))
+        fig.add_trace(
+            go.Scatter(
+                x=x_vr,
+                y=y_vr,
+                customdata=section_order_vr,
+                mode="markers+lines",
+                name=dike_traject.run_name,
+                line=dict(color=color),
+                marker=dict(size=6, color=color),
+                hovertemplate="<b>%{customdata}</b><br><br>"
+                + "Trajectfaalkans: %{y:.2e}<br>",
+            )
+        )
 
     iterated_trajects = []  # add the safety standard for a traject only once
     for index, (_, dike_traject_data) in enumerate(
-            project_data.items()):  # we reloop again to get the order right in the legend
+        project_data.items()
+    ):  # we reloop again to get the order right in the legend
         if dike_traject.name not in iterated_trajects:
             iterated_trajects.append(dike_traject.name)
-            add_signaleringswaarde(fig, x_max, 0, y_signalering, y_ondergrens, dike_traject.name)
+            add_signaleringswaarde(
+                fig, x_max, 0, y_signalering, y_ondergrens, dike_traject.name
+            )
 
     fig.update_xaxes(range=[0, x_max], title=title_x_axis)
-    fig.update_layout(title=title_extra, yaxis_title=title_y_axis, xaxis_title=title_x_axis)
+    fig.update_layout(
+        title=title_extra, yaxis_title=title_y_axis, xaxis_title=title_x_axis
+    )
     if result_type == ResultType.RELIABILITY.name:
         fig.update_yaxes(range=[None, 6])
     elif result_type == ResultType.PROBABILITY.name:
 
-        fig.update_yaxes(range=[None, 1e-7],
-                         type='log',
-                         exponentformat='power',
-                         )
+        fig.update_yaxes(
+            range=[None, 1e-7],
+            type="log",
+            exponentformat="power",
+        )
 
-    fig.update_layout(showlegend=True, template='plotly_white')
+    fig.update_layout(showlegend=True, template="plotly_white")
 
     return fig
 
 
-def add_signaleringswaarde(fig, max_x, min_x, y_signalering, y_ondergrens, traject_name: str = ''):
-    fig.add_trace(go.Scatter(
-        x=[min_x, max_x],
-        y=[y_ondergrens, y_ondergrens],
-        mode="lines",
-        marker=dict(size=0),
-        showlegend=True,
-        name=f"Ondergrens {traject_name}",
-        line=dict(color='black', dash='dash')
-    ))
-    fig.add_trace(go.Scatter(
-        x=[min_x, max_x],
-        y=[y_signalering, y_signalering],
-        mode="lines",
-        marker=dict(size=0),
-        showlegend=True,
-        name=f"Signaleringswaarde {traject_name}",
-        line=dict(color='black', dash='dot')
-    ))
+def add_signaleringswaarde(
+    fig, max_x, min_x, y_signalering, y_ondergrens, traject_name: str = ""
+):
+    fig.add_trace(
+        go.Scatter(
+            x=[min_x, max_x],
+            y=[y_ondergrens, y_ondergrens],
+            mode="lines",
+            marker=dict(size=0),
+            showlegend=True,
+            name=f"Ondergrens {traject_name}",
+            line=dict(color="black", dash="dash"),
+        )
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=[min_x, max_x],
+            y=[y_signalering, y_signalering],
+            mode="lines",
+            marker=dict(size=0),
+            showlegend=True,
+            name=f"Signaleringswaarde {traject_name}",
+            line=dict(color="black", dash="dot"),
+        )
+    )
 
 
 def plot_pf_time_runs_comparison(imported_runs_data: dict):
@@ -147,30 +177,38 @@ def plot_pf_time_runs_comparison(imported_runs_data: dict):
         y_vr = np.insert(y_vr, 0, initial_traject_pf)
         years = np.insert(dike_traject.dike_sections[0].years, 0, 0) + REFERENCE_YEAR
 
-        fig.add_trace(go.Scatter(x=years,
-                                 y=y_vr,
-                                 legendgroup=legend_group,
-                                 legendgrouptitle=dict(text=legend_group),
-                                 mode='markers+lines',
-                                 name='Veiligheidsrendement',
-                                 line=dict(color=color),
-                                 marker=dict(size=6, color=color),
-                                 hovertemplate="Trajectfaalkans: %{y:.2e}<br>" + hover_extra
-                                 ))
+        fig.add_trace(
+            go.Scatter(
+                x=years,
+                y=y_vr,
+                legendgroup=legend_group,
+                legendgrouptitle=dict(text=legend_group),
+                mode="markers+lines",
+                name="Veiligheidsrendement",
+                line=dict(color=color),
+                marker=dict(size=6, color=color),
+                hovertemplate="Trajectfaalkans: %{y:.2e}<br>" + hover_extra,
+            )
+        )
 
     iterated_trajects = []  # add the safety standard for a traject only once
     for index, (_, dike_traject_data) in enumerate(
-            imported_runs_data.items()):  # we reloop again to get the order right in the legend
+        imported_runs_data.items()
+    ):  # we reloop again to get the order right in the legend
         if dike_traject.name not in iterated_trajects:
             iterated_trajects.append(dike_traject.name)
             y_ondergrens = pf_to_beta(dike_traject.lower_bound_value)
             y_signalering = pf_to_beta(dike_traject.signalering_value)
-            add_signaleringswaarde(fig, years[-1], 2020, y_signalering, y_ondergrens, dike_traject.name)
+            add_signaleringswaarde(
+                fig, years[-1], 2020, y_signalering, y_ondergrens, dike_traject.name
+            )
 
-    fig.update_layout(template='plotly_white')
+    fig.update_layout(template="plotly_white")
     fig.update_yaxes(title="Betrouwbaarheid")
     fig.update_xaxes(title="Investering jaar")
 
-    fig.update_layout(barmode='group',
-                      bargroupgap=0.1, )
+    fig.update_layout(
+        barmode="group",
+        bargroupgap=0.1,
+    )
     return fig

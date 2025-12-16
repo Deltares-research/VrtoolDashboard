@@ -1,13 +1,14 @@
 import pandas as pd
-from vrtool.orm import models as orm
-
 from vrtool.defaults.vrtool_config import VrtoolConfig
-from vrtool.orm.io.importers.optimization.optimization_step_importer import OptimizationStepImporter
-from vrtool.orm.orm_controllers import open_database, get_optimization_steps
+from vrtool.orm import models as orm
+from vrtool.orm.io.importers.optimization.optimization_step_importer import (
+    OptimizationStepImporter,
+)
+from vrtool.orm.orm_controllers import get_optimization_steps, open_database
 
 
 def get_optimization_step_with_lowest_total_cost_no_closing(
-        vrtool_config: VrtoolConfig, optimization_run_id: int
+    vrtool_config: VrtoolConfig, optimization_run_id: int
 ) -> tuple[orm.OptimizationStep, pd.DataFrame, float]:
     """
     Gets the `OptimizationStep` with the lowest *total* cost.
@@ -34,7 +35,7 @@ def get_optimization_step_with_lowest_total_cost_no_closing(
 
 
 def get_optimization_step_with_lowest_total_cost_table_no_closing(
-        vrtool_config: VrtoolConfig, optimization_run_id: int
+    vrtool_config: VrtoolConfig, optimization_run_id: int
 ) -> tuple[int, pd.DataFrame, float]:
     """
     Gets the (id) optimization step, all its related betas and the
@@ -52,7 +53,9 @@ def get_optimization_step_with_lowest_total_cost_table_no_closing(
         _optimization_step,
         dataframe_betas,
         total_cost,
-    ) = get_optimization_step_with_lowest_total_cost_no_closing(vrtool_config, optimization_run_id)
+    ) = get_optimization_step_with_lowest_total_cost_no_closing(
+        vrtool_config, optimization_run_id
+    )
     return _optimization_step.get_id(), dataframe_betas, total_cost
 
 
@@ -60,7 +63,6 @@ def get_optimization_steps_ordered(run_id: int):
     """Return the optimization steps for a given id, ordered by step number"""
 
     _optimization_steps = sorted(
-        get_optimization_steps(run_id),
-        key=lambda step: step.step_number
+        get_optimization_steps(run_id), key=lambda step: step.step_number
     )
     return _optimization_steps

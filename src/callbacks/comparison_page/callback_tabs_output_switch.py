@@ -1,28 +1,46 @@
 import dash
-from dash import html, Output, Input, callback, State, dcc, Patch
+from dash import Input, Output, Patch, State, callback, dcc, html
 
-from src.component_ids import TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE, CONTENT_TABS_COMPARISON_PAGE_ID, \
-    STORED_RUNS_COMPARISONS_DATA, RUNS_COMPARISON_GRAPH_TIME_ID, \
-    SLIDER_YEAR_RELIABILITY_RESULTS_ID, OVERVIEW_COMPARISON_MAP_ID, RUNS_COMPARISON_GRAPH_ID, \
-    RADIO_COMPARISON_PAGE_RESULT_TYPE, MEASURE_COMPARISON_MAP_ID, EDITABLE_COMPARISON_TABLE_ID, \
-    TABLE_COMPARISON_MEASURES, TABLE_ORDER_COMPARISON_MEASURES, SELECT_LENGTH_COST_SWITCH
-from src.layouts.layout_comparison_page.layout_output_tabs import layout_project_output_tab_one, \
-    layout_project_output_tab_two, layout_project_output_tab_three, layout_project_output_tab_four, \
-    layout_project_output_tab_five, layout_project_output_tab_six
+from src.component_ids import (
+    CONTENT_TABS_COMPARISON_PAGE_ID,
+    EDITABLE_COMPARISON_TABLE_ID,
+    MEASURE_COMPARISON_MAP_ID,
+    OVERVIEW_COMPARISON_MAP_ID,
+    RADIO_COMPARISON_PAGE_RESULT_TYPE,
+    RUNS_COMPARISON_GRAPH_ID,
+    RUNS_COMPARISON_GRAPH_TIME_ID,
+    SELECT_LENGTH_COST_SWITCH,
+    SLIDER_YEAR_RELIABILITY_RESULTS_ID,
+    STORED_RUNS_COMPARISONS_DATA,
+    TABLE_COMPARISON_MEASURES,
+    TABLE_ORDER_COMPARISON_MEASURES,
+    TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE,
+)
+from src.layouts.layout_comparison_page.layout_output_tabs import (
+    layout_project_output_tab_five,
+    layout_project_output_tab_four,
+    layout_project_output_tab_one,
+    layout_project_output_tab_six,
+    layout_project_output_tab_three,
+    layout_project_output_tab_two,
+)
 from src.linear_objects.dike_traject import DikeTraject
-from src.plotly_graphs.comparison_page.plot_measures_comparison_map import plot_comparison_measures_map
-
+from src.plotly_graphs.comparison_page.plot_measures_comparison_map import (
+    plot_comparison_measures_map,
+)
 from src.plotly_graphs.pf_length_cost import plot_default_scatter_dummy
 from src.plotly_graphs.plotly_maps import plot_default_overview_map_dummy
-from src.plotly_graphs.project_page.pf_traject_comparison import plot_pf_project_comparison, \
-    plot_pf_time_runs_comparison
-from src.plotly_graphs.project_page.plotly_maps import plot_comparison_runs_overview_map_simple
+from src.plotly_graphs.project_page.pf_traject_comparison import (
+    plot_pf_project_comparison,
+    plot_pf_time_runs_comparison,
+)
+from src.plotly_graphs.project_page.plotly_maps import (
+    plot_comparison_runs_overview_map_simple,
+)
 
 
 @callback(
-
     Output(CONTENT_TABS_COMPARISON_PAGE_ID, "children"),
-
     [Input(TABS_SWITCH_VISUALIZATION_COMPARISON_PAGE, "active_tab")],
 )
 def render_project_overview_map_content(active_tab: str) -> html.Div:
@@ -54,10 +72,13 @@ def render_project_overview_map_content(active_tab: str) -> html.Div:
         return html.Div("Invalid tab selected")
 
 
-@callback(Output(OVERVIEW_COMPARISON_MAP_ID, "children"),
-          [Input(STORED_RUNS_COMPARISONS_DATA, "data"),
-           # Input("tabs_tab_project_page", "active_tab")
-           ])
+@callback(
+    Output(OVERVIEW_COMPARISON_MAP_ID, "children"),
+    [
+        Input(STORED_RUNS_COMPARISONS_DATA, "data"),
+        # Input("tabs_tab_project_page", "active_tab")
+    ],
+)
 def make_graph_overview_comparison(imported_runs_data: dict) -> dcc.Graph:
     """
     IS THIS CALLBACK DEPRECATED?
@@ -68,7 +89,10 @@ def make_graph_overview_comparison(imported_runs_data: dict) -> dcc.Graph:
     if imported_runs_data is None or imported_runs_data == {}:
         _fig = plot_default_overview_map_dummy()
     else:
-        trajects = [DikeTraject.deserialize(imported_runs_data[run_name]) for run_name in imported_runs_data.keys()]
+        trajects = [
+            DikeTraject.deserialize(imported_runs_data[run_name])
+            for run_name in imported_runs_data.keys()
+        ]
         _fig = plot_comparison_runs_overview_map_simple(trajects, [])
     return dcc.Graph(
         figure=_fig,
@@ -86,18 +110,15 @@ def make_graph_overview_comparison(imported_runs_data: dict) -> dcc.Graph:
     ],
 )
 def make_graph_pf_project_comparison(
-        project_data: dict,
-        selected_year: float,
-        result_type: str,
-        switch_length_cost: str
+    project_data: dict, selected_year: float, result_type: str, switch_length_cost: str
 ):
-    """
-
-    """
+    """ """
     if project_data is None:
         return plot_default_scatter_dummy()
     else:
-        _fig = plot_pf_project_comparison(project_data, selected_year, result_type, switch_length_cost)
+        _fig = plot_pf_project_comparison(
+            project_data, selected_year, result_type, switch_length_cost
+        )
     return _fig
 
 
@@ -108,11 +129,9 @@ def make_graph_pf_project_comparison(
     ],
 )
 def make_graph_pf_time_comparison(
-        project_data: dict,
+    project_data: dict,
 ):
-    """
-
-    """
+    """ """
     if project_data is None:
         return plot_default_scatter_dummy()
     else:
@@ -125,11 +144,12 @@ def make_graph_pf_time_comparison(
     [
         Input(STORED_RUNS_COMPARISONS_DATA, "data"),
         Input(EDITABLE_COMPARISON_TABLE_ID, "rowData"),
-        Input(EDITABLE_COMPARISON_TABLE_ID, "cellValueChanged")
-
+        Input(EDITABLE_COMPARISON_TABLE_ID, "cellValueChanged"),
     ],
 )
-def make_map_comparison_measure(imported_runs: dict, table_imported_runs_data: list[dict], dummy: dict):
+def make_map_comparison_measure(
+    imported_runs: dict, table_imported_runs_data: list[dict], dummy: dict
+):
     if imported_runs is None:
         return plot_default_overview_map_dummy()
 
@@ -152,10 +172,12 @@ def make_map_comparison_measure(imported_runs: dict, table_imported_runs_data: l
     [
         State(STORED_RUNS_COMPARISONS_DATA, "data"),
         Input(EDITABLE_COMPARISON_TABLE_ID, "rowData"),
-        Input(EDITABLE_COMPARISON_TABLE_ID, "cellValueChanged")
+        Input(EDITABLE_COMPARISON_TABLE_ID, "cellValueChanged"),
     ],
 )
-def update_table_comparison_measures(imported_runs: dict, table_imported_runs_data: list[dict], dummy: dict):
+def update_table_comparison_measures(
+    imported_runs: dict, table_imported_runs_data: list[dict], dummy: dict
+):
     """
 
     Args:
@@ -178,21 +200,49 @@ def update_table_comparison_measures(imported_runs: dict, table_imported_runs_da
     dike_traject_1 = DikeTraject.deserialize(list(imported_runs.values())[id_1])
     dike_traject_2 = DikeTraject.deserialize(list(imported_runs.values())[id_2])
     data = []
-    for section_1, section_2 in zip(dike_traject_1.dike_sections, dike_traject_2.dike_sections):
-        data.append({
-            "section_name": section_1.name,
-            "section_length": section_1.length,
-            "run_1_measure": ", ".join(section_1.final_measure_veiligheidsrendement.get('type', ["Geen maatregel"])),
-            "run_1_dberm": section_1.final_measure_veiligheidsrendement.get('dberm'),
-            "run_1_dcrest": section_1.final_measure_veiligheidsrendement.get('dcrest'),
-            "run_1_Lscreen": section_1.final_measure_veiligheidsrendement.get('L_stab_screen'),
-            "run_1_cost": round(section_1.final_measure_veiligheidsrendement.get('LCC') / 1e6, 2),
-            "run_2_measure": ", ".join(section_2.final_measure_veiligheidsrendement.get('type', ["Geen maatregel"])),
-            "run_2_dberm": section_2.final_measure_veiligheidsrendement.get('dberm'),
-            "run_2_dcrest": section_2.final_measure_veiligheidsrendement.get('dcrest'),
-            "run_2_Lscreen": section_2.final_measure_veiligheidsrendement.get('L_stab_screen'),
-            "run_2_cost": round(section_2.final_measure_veiligheidsrendement.get('LCC') / 1e6, 2),
-        })
+    for section_1, section_2 in zip(
+        dike_traject_1.dike_sections, dike_traject_2.dike_sections
+    ):
+        data.append(
+            {
+                "section_name": section_1.name,
+                "section_length": section_1.length,
+                "run_1_measure": ", ".join(
+                    section_1.final_measure_veiligheidsrendement.get(
+                        "type", ["Geen maatregel"]
+                    )
+                ),
+                "run_1_dberm": section_1.final_measure_veiligheidsrendement.get(
+                    "dberm"
+                ),
+                "run_1_dcrest": section_1.final_measure_veiligheidsrendement.get(
+                    "dcrest"
+                ),
+                "run_1_Lscreen": section_1.final_measure_veiligheidsrendement.get(
+                    "L_stab_screen"
+                ),
+                "run_1_cost": round(
+                    section_1.final_measure_veiligheidsrendement.get("LCC") / 1e6, 2
+                ),
+                "run_2_measure": ", ".join(
+                    section_2.final_measure_veiligheidsrendement.get(
+                        "type", ["Geen maatregel"]
+                    )
+                ),
+                "run_2_dberm": section_2.final_measure_veiligheidsrendement.get(
+                    "dberm"
+                ),
+                "run_2_dcrest": section_2.final_measure_veiligheidsrendement.get(
+                    "dcrest"
+                ),
+                "run_2_Lscreen": section_2.final_measure_veiligheidsrendement.get(
+                    "L_stab_screen"
+                ),
+                "run_2_cost": round(
+                    section_2.final_measure_veiligheidsrendement.get("LCC") / 1e6, 2
+                ),
+            }
+        )
 
     patched_grid = Patch()
     patched_grid[2]["headerName"] = f"{dike_traject_1.name}|{dike_traject_1.run_name}"
@@ -207,10 +257,12 @@ def update_table_comparison_measures(imported_runs: dict, table_imported_runs_da
     [
         State(STORED_RUNS_COMPARISONS_DATA, "data"),
         Input(EDITABLE_COMPARISON_TABLE_ID, "rowData"),
-        Input(EDITABLE_COMPARISON_TABLE_ID, "cellValueChanged")
+        Input(EDITABLE_COMPARISON_TABLE_ID, "cellValueChanged"),
     ],
 )
-def update_table_comparison_order_measures(imported_runs: dict, table_imported_runs_data: list[dict], dummy: dict):
+def update_table_comparison_order_measures(
+    imported_runs: dict, table_imported_runs_data: list[dict], dummy: dict
+):
     """
 
     Args:
@@ -229,7 +281,7 @@ def update_table_comparison_order_measures(imported_runs: dict, table_imported_r
 
     # Iterate through the data to find the first two active items
     for i, item in enumerate(table_imported_runs_data):
-        if item.get('active'):
+        if item.get("active"):
             if id_1 is None:
                 id_1 = i
             elif id_2 is None:
@@ -243,16 +295,26 @@ def update_table_comparison_order_measures(imported_runs: dict, table_imported_r
     dike_traject_2 = DikeTraject.deserialize(list(imported_runs.values())[id_2])
     data = []
 
-    for section_1, section_2 in zip(dike_traject_1.get_sections_in_reinforcement_order(),
-                                    dike_traject_2.get_sections_in_reinforcement_order()):
-        data.append({
-
-            "run_1_section_name": section_1.name,
-            "run_1_measure": ", ".join(section_1.final_measure_veiligheidsrendement.get('type', ["Geen maatregel"])),
-            "run_2_section_name": section_2.name,
-            "run_2_measure": ", ".join(section_2.final_measure_veiligheidsrendement.get('type', ["Geen maatregel"])),
-
-        })
+    for section_1, section_2 in zip(
+        dike_traject_1.get_sections_in_reinforcement_order(),
+        dike_traject_2.get_sections_in_reinforcement_order(),
+    ):
+        data.append(
+            {
+                "run_1_section_name": section_1.name,
+                "run_1_measure": ", ".join(
+                    section_1.final_measure_veiligheidsrendement.get(
+                        "type", ["Geen maatregel"]
+                    )
+                ),
+                "run_2_section_name": section_2.name,
+                "run_2_measure": ", ".join(
+                    section_2.final_measure_veiligheidsrendement.get(
+                        "type", ["Geen maatregel"]
+                    )
+                ),
+            }
+        )
 
     patched_grid = Patch()
     patched_grid[0]["headerName"] = f"{dike_traject_1.name}|{dike_traject_1.run_name}"
@@ -266,7 +328,7 @@ def get_ids_activated_runs(table_imported_runs_data: list[dict]) -> tuple[int, i
 
     # Iterate through the data to find the first two active items
     for i, item in enumerate(table_imported_runs_data):
-        if item.get('active'):
+        if item.get("active"):
             if id_1 is None:
                 id_1 = i
             elif id_2 is None:

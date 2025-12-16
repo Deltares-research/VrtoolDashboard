@@ -1,6 +1,6 @@
-from dash import Dash, DiskcacheManager
 import dash_bootstrap_components as dbc
 import diskcache
+from dash import Dash, DiskcacheManager
 
 custom_css = "/assets/custom.css"
 

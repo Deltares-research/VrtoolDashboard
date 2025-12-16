@@ -1,10 +1,9 @@
+import json
 from pathlib import Path
 from typing import Optional
 
 import numpy as np
 from scipy.stats import norm
-import json
-
 from vrtool.common.enums import MechanismEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
 
@@ -31,7 +30,7 @@ class CombinFunctions:
 
     @staticmethod
     def combine_probabilities(
-            prob_of_failure: dict[str, np.array], selection
+        prob_of_failure: dict[str, np.array], selection
     ) -> np.array:
 
         cnt = 0
@@ -64,8 +63,8 @@ def export_to_json(data, path: Optional[Path] = None):
     # convert dike_traject_data to json :
     # write to a json file:
     if path is None:
-        path = Path(__file__).parent / 'data.json'
-    with open(path, 'w') as outfile:
+        path = Path(__file__).parent / "data.json"
+    with open(path, "w") as outfile:
         json.dump(data, outfile, cls=MyEncoder)
 
 
@@ -84,7 +83,9 @@ def get_signal_value(p_max: float):
         return p_max / 3.0
 
 
-def get_WBI_category(P_f_dsn: float, traject_length: float, Pf_eis_sign: float, Pf_eis_ond: float) -> str:
+def get_WBI_category(
+    P_f_dsn: float, traject_length: float, Pf_eis_sign: float, Pf_eis_ond: float
+) -> str:
     """
 
     Function to determine the WBI catgeory of a dike section based on its cross-sectional probability of failure and
@@ -158,7 +159,9 @@ def get_vr_config_from_dict(vr_config: dict) -> VrtoolConfig:
     return _vr_config
 
 
-def interpolate_beta_values(years_output: np.ndarray, betas: np.ndarray, years: np.ndarray) -> np.ndarray:
+def interpolate_beta_values(
+    years_output: np.ndarray, betas: np.ndarray, years: np.ndarray
+) -> np.ndarray:
     """
     Function to interpolate the beta values for the years in the years_output list.
     If years_output is before years, then assigne the first value from betas.
@@ -192,7 +195,11 @@ def calculate_traject_probability(traject_prob):
     return time, list(1 - p_nonf)
 
 
-def get_traject_reliability(dike_sections: list["DikeSection"], type: str, unreinforced_sections: Optional[list] = None) -> dict:
+def get_traject_reliability(
+    dike_sections: list["DikeSection"],
+    type: str,
+    unreinforced_sections: Optional[list] = None,
+) -> dict:
     """From a list of DikeSection, return a formatted dict with the reliability of each section for each mechanism.
     This is a preparation for the calculation of the reliability of the dike trajectory.
 
@@ -200,92 +207,182 @@ def get_traject_reliability(dike_sections: list["DikeSection"], type: str, unrei
     """
     if type == "initial":
         _traject_reliability = {
-            MechanismEnum.PIPING: {section.name: {'beta': section.initial_assessment["Piping"], "time": section.years}
-                                   for section in dike_sections},
+            MechanismEnum.PIPING: {
+                section.name: {
+                    "beta": section.initial_assessment["Piping"],
+                    "time": section.years,
+                }
+                for section in dike_sections
+            },
             MechanismEnum.OVERFLOW: {
-                section.name: {'beta': section.initial_assessment["Overflow"], "time": section.years} for section in
-                dike_sections},
+                section.name: {
+                    "beta": section.initial_assessment["Overflow"],
+                    "time": section.years,
+                }
+                for section in dike_sections
+            },
             MechanismEnum.STABILITY_INNER: {
-                section.name: {'beta': section.initial_assessment["StabilityInner"], "time": section.years} for section
-                in dike_sections},
+                section.name: {
+                    "beta": section.initial_assessment["StabilityInner"],
+                    "time": section.years,
+                }
+                for section in dike_sections
+            },
             MechanismEnum.REVETMENT: {
-                section.name: {'beta': section.initial_assessment["Revetment"], "time": section.years} for section in
-                dike_sections if section.revetment is True },
+                section.name: {
+                    "beta": section.initial_assessment["Revetment"],
+                    "time": section.years,
+                }
+                for section in dike_sections
+                if section.revetment is True
+            },
         }
         # remove key revetment is section.revetment is False
-
 
     elif type == "doorsnede":
         _traject_reliability = {
             MechanismEnum.PIPING: {
-                section.name: {'beta': section.final_measure_doorsnede["Piping"], "time": section.years}
-                for section in dike_sections},
+                section.name: {
+                    "beta": section.final_measure_doorsnede["Piping"],
+                    "time": section.years,
+                }
+                for section in dike_sections
+            },
             MechanismEnum.OVERFLOW: {
-                section.name: {'beta': section.final_measure_doorsnede["Overflow"], "time": section.years} for section
-                in
-                dike_sections},
+                section.name: {
+                    "beta": section.final_measure_doorsnede["Overflow"],
+                    "time": section.years,
+                }
+                for section in dike_sections
+            },
             MechanismEnum.STABILITY_INNER: {
-                section.name: {'beta': section.final_measure_doorsnede["StabilityInner"], "time": section.years} for
-                section
-                in dike_sections},
+                section.name: {
+                    "beta": section.final_measure_doorsnede["StabilityInner"],
+                    "time": section.years,
+                }
+                for section in dike_sections
+            },
             MechanismEnum.REVETMENT: {
-                section.name: {'beta': section.final_measure_doorsnede["Revetment"], "time": section.years} for section
-                in
-                dike_sections if section.revetment is True},
+                section.name: {
+                    "beta": section.final_measure_doorsnede["Revetment"],
+                    "time": section.years,
+                }
+                for section in dike_sections
+                if section.revetment is True
+            },
         }
     elif type == "veiligheidsrendement":
 
         _traject_reliability = {
             MechanismEnum.PIPING: {
-                section.name: {'beta': section.final_measure_veiligheidsrendement["Piping"], "time": section.years}
-                for section in dike_sections},
+                section.name: {
+                    "beta": section.final_measure_veiligheidsrendement["Piping"],
+                    "time": section.years,
+                }
+                for section in dike_sections
+            },
             MechanismEnum.OVERFLOW: {
-                section.name: {'beta': section.final_measure_veiligheidsrendement["Overflow"], "time": section.years}
-                for section in
-                dike_sections},
+                section.name: {
+                    "beta": section.final_measure_veiligheidsrendement["Overflow"],
+                    "time": section.years,
+                }
+                for section in dike_sections
+            },
             MechanismEnum.STABILITY_INNER: {
-                section.name: {'beta': section.final_measure_veiligheidsrendement["StabilityInner"],
-                               "time": section.years} for section
-                in dike_sections},
+                section.name: {
+                    "beta": section.final_measure_veiligheidsrendement[
+                        "StabilityInner"
+                    ],
+                    "time": section.years,
+                }
+                for section in dike_sections
+            },
             MechanismEnum.REVETMENT: {
-                section.name: {'beta': section.final_measure_veiligheidsrendement["Revetment"], "time": section.years}
-                for section in
-                dike_sections if section.revetment is True},
+                section.name: {
+                    "beta": section.final_measure_veiligheidsrendement["Revetment"],
+                    "time": section.years,
+                }
+                for section in dike_sections
+                if section.revetment is True
+            },
         }
 
     elif type == "partial":
         _traject_reliability = {
             MechanismEnum.PIPING: {
-                section.name: {'beta': section.final_measure_veiligheidsrendement["Piping"], "time": section.years}
-                for section in dike_sections},
+                section.name: {
+                    "beta": section.final_measure_veiligheidsrendement["Piping"],
+                    "time": section.years,
+                }
+                for section in dike_sections
+            },
             MechanismEnum.OVERFLOW: {
-                section.name: {'beta': section.final_measure_veiligheidsrendement["Overflow"], "time": section.years}
-                for section in
-                dike_sections},
+                section.name: {
+                    "beta": section.final_measure_veiligheidsrendement["Overflow"],
+                    "time": section.years,
+                }
+                for section in dike_sections
+            },
             MechanismEnum.STABILITY_INNER: {
-                section.name: {'beta': section.final_measure_veiligheidsrendement["StabilityInner"],
-                               "time": section.years} for section
-                in dike_sections},
+                section.name: {
+                    "beta": section.final_measure_veiligheidsrendement[
+                        "StabilityInner"
+                    ],
+                    "time": section.years,
+                }
+                for section in dike_sections
+            },
             MechanismEnum.REVETMENT: {
-                section.name: {'beta': section.final_measure_veiligheidsrendement["Revetment"], "time": section.years}
-                for section in
-                dike_sections if section.revetment is True},
+                section.name: {
+                    "beta": section.final_measure_veiligheidsrendement["Revetment"],
+                    "time": section.years,
+                }
+                for section in dike_sections
+                if section.revetment is True
+            },
         }
         # add unreinforced sections
         _traject_reliability[MechanismEnum.PIPING].update(
-            {section.name: {'beta': section.initial_assessment["Piping"], "time": section.years} for section in
-                unreinforced_sections})
+            {
+                section.name: {
+                    "beta": section.initial_assessment["Piping"],
+                    "time": section.years,
+                }
+                for section in unreinforced_sections
+            }
+        )
         _traject_reliability[MechanismEnum.OVERFLOW].update(
-            {section.name: {'beta': section.initial_assessment["Overflow"], "time": section.years} for section in
-                unreinforced_sections})
+            {
+                section.name: {
+                    "beta": section.initial_assessment["Overflow"],
+                    "time": section.years,
+                }
+                for section in unreinforced_sections
+            }
+        )
         _traject_reliability[MechanismEnum.STABILITY_INNER].update(
-            {section.name: {'beta': section.initial_assessment["StabilityInner"], "time": section.years} for section in
-                unreinforced_sections})
+            {
+                section.name: {
+                    "beta": section.initial_assessment["StabilityInner"],
+                    "time": section.years,
+                }
+                for section in unreinforced_sections
+            }
+        )
         _traject_reliability[MechanismEnum.REVETMENT].update(
-            {section.name: {'beta': section.initial_assessment["Revetment"], "time": section.years} for section in
-                unreinforced_sections if section.revetment is True})
+            {
+                section.name: {
+                    "beta": section.initial_assessment["Revetment"],
+                    "time": section.years,
+                }
+                for section in unreinforced_sections
+                if section.revetment is True
+            }
+        )
 
     else:
-        raise ValueError("Type should be either 'initial', 'doorsnede' or 'veiligheidsrendement'")
+        raise ValueError(
+            "Type should be either 'initial', 'doorsnede' or 'veiligheidsrendement'"
+        )
 
     return _traject_reliability

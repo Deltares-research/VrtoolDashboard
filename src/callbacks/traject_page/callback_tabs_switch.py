@@ -1,15 +1,18 @@
-from dash import html, Output, Input, callback
+from dash import Input, Output, callback, html
 
 from src.layouts.layout_traject_page.layout_main_page import (
-    layout_tab_one,
-    layout_tab_two,
-    layout_tab_three,
-    layout_tab_four,
     layout_tab_five,
+    layout_tab_four,
+    layout_tab_one,
     layout_tab_six,
+    layout_tab_three,
+    layout_tab_two,
 )
-from src.layouts.layout_traject_page.layout_radio_items import layout_radio_calc_type, layout_radio_result_type, \
-    layout_radio_mechanism
+from src.layouts.layout_traject_page.layout_radio_items import (
+    layout_radio_calc_type,
+    layout_radio_mechanism,
+    layout_radio_result_type,
+)
 
 
 @callback(

@@ -5,9 +5,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import pytest
-from vrtool.defaults.vrtool_config import VrtoolConfig
-
 from peewee import SqliteDatabase
+from vrtool.defaults.vrtool_config import VrtoolConfig
 
 from src.orm.import_database import get_dike_traject_from_config_ORM
 from src.utils.utils import export_to_json
@@ -28,7 +27,7 @@ class AcceptanceTestCase:
     database_name: str
 
     @staticmethod
-    def get_cases() -> list['AcceptanceTestCase']:
+    def get_cases() -> list["AcceptanceTestCase"]:
         # Defining acceptance test cases so they are accessible from the other test classes.
         return [
             # AcceptanceTestCase(
@@ -126,7 +125,9 @@ class TestDikeTrajectImporter:
     def test_importer_dike_traject(self, valid_vrtool_config: VrtoolConfig):
 
         # 1. Import the dike traject from database
-        _dike_traject = get_dike_traject_from_config_ORM(valid_vrtool_config, run_id_dsn=2, run_is_vr=1)
+        _dike_traject = get_dike_traject_from_config_ORM(
+            valid_vrtool_config, run_id_dsn=2, run_is_vr=1
+        )
         _dike_traject.run_name = "Basisberekening"
         _serialized_traject = _dike_traject.serialize()
 
@@ -139,16 +140,22 @@ class TestDikeTrajectImporter:
         comparison_errors = []
         for file in _files_to_compare:
             # load jsons:
-            with open(_test_reference_dir.joinpath(file), 'r') as f:
+            with open(_test_reference_dir.joinpath(file), "r") as f:
                 reference = json.load(f)
 
-            export_to_json(_serialized_traject, path=valid_vrtool_config.output_directory.joinpath(file))
-            with open(valid_vrtool_config.output_directory.joinpath(file), 'r') as f:
+            export_to_json(
+                _serialized_traject,
+                path=valid_vrtool_config.output_directory.joinpath(file),
+            )
+            with open(valid_vrtool_config.output_directory.joinpath(file), "r") as f:
                 results = json.load(f)
 
             try:
                 assert reference.keys() == results.keys()
-                assert reference['dike_sections'][0].keys() == results['dike_sections'][0].keys()
+                assert (
+                    reference["dike_sections"][0].keys()
+                    == results["dike_sections"][0].keys()
+                )
                 assert reference == results
 
             except Exception:
@@ -165,17 +172,27 @@ class TestDikeTrajectImporter:
     )
     def test_calc_traject_probability_array(self, valid_vrtool_config: VrtoolConfig):
         # 1. Import the dike traject from database
-        _dike_traject = get_dike_traject_from_config_ORM(valid_vrtool_config, run_id_dsn=2, run_is_vr=1)
+        _dike_traject = get_dike_traject_from_config_ORM(
+            valid_vrtool_config, run_id_dsn=2, run_is_vr=1
+        )
 
         # 2. Calculate the probability array
         _probability_array_vr = _dike_traject.calc_traject_probability_array("vr")
         _probability_array_dsn = _dike_traject.calc_traject_probability_array("dsn")
 
         # export to json
-        export_to_json(_probability_array_vr,
-                       path=valid_vrtool_config.output_directory.joinpath("reference_probability_array_vr.json"))
-        export_to_json(_probability_array_dsn,
-                       path=valid_vrtool_config.output_directory.joinpath("reference_probability_array_dsn.json"))
+        export_to_json(
+            _probability_array_vr,
+            path=valid_vrtool_config.output_directory.joinpath(
+                "reference_probability_array_vr.json"
+            ),
+        )
+        export_to_json(
+            _probability_array_dsn,
+            path=valid_vrtool_config.output_directory.joinpath(
+                "reference_probability_array_dsn.json"
+            ),
+        )
 
         # 3. Validate results
         _test_reference_dir = valid_vrtool_config.input_directory.joinpath("reference")
@@ -187,7 +204,7 @@ class TestDikeTrajectImporter:
         comparison_errors = []
         for file in _files_to_compare:
             # load jsons:
-            with open(_test_reference_dir.joinpath(file), 'r') as f:
+            with open(_test_reference_dir.joinpath(file), "r") as f:
                 reference = json.load(f)
 
             if "vr" in file:

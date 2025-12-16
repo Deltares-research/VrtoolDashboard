@@ -1,27 +1,27 @@
 from pathlib import Path
 
 import dash
-from dash import Output, Input, html, callback, State, ctx
+from dash import Input, Output, State, callback, ctx, html
 from vrtool.api import ApiRunWorkflows
 from vrtool.common.enums import MechanismEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
 from vrtool.vrtool_logger import VrToolLogger, logging
 
 from src.component_ids import (
-    OPTIMIZE_BUTTON_ID,
-    STORE_CONFIG,
-    DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID,
-    NAME_NEW_OPTIMIZATION_RUN_ID,
-    EDITABLE_TRAJECT_TABLE_ID,
-    DROPDOWN_SELECTION_RUN_ID,
-    OPTIMIZE_MODAL_ID,
     CLOSE_OPTIMAL_MODAL_BUTTON_ID,
+    DROPDOWN_SELECTION_RUN_ID,
+    DUMMY_OPTIMIZE_BUTTON_OUTPUT_ID,
+    EDITABLE_TRAJECT_TABLE_ID,
+    NAME_NEW_OPTIMIZATION_RUN_ID,
+    OPTIMIZE_BUTTON_ID,
+    OPTIMIZE_MODAL_ID,
+    STORE_CONFIG,
 )
 from src.constants import REFERENCE_YEAR, Measures
 from src.orm.import_database import (
+    get_all_default_selected_measure,
     get_measure_result_ids_per_section,
     get_name_optimization_runs,
-    get_all_default_selected_measure,
 )
 
 
@@ -38,7 +38,7 @@ from src.orm.import_database import (
     prevent_initial_call=True,
 )
 def open_canvas_logging_and_cancel(
-        optimize_n_click: int, close_n_click: int
+    optimize_n_click: int, close_n_click: int
 ) -> tuple[bool]:
     """
     Dummy call to trigger the opening of the canvas so the `update_timestamp`
@@ -47,7 +47,7 @@ def open_canvas_logging_and_cancel(
     if optimize_n_click is None:
         return False, 0, dash.no_update
     if close_n_click and close_n_click > 0:
-        return False, 0, ['b']
+        return False, 0, ["b"]
     return True, 0, ["Nog geen feedback van de berekening"]
 
 
@@ -56,17 +56,14 @@ def open_canvas_logging_and_cancel(
         Output(OPTIMIZE_MODAL_ID, "is_open", allow_duplicate=True),
         Output("latest-timestamp", "children"),
     ],
-
     inputs=[
         Input(OPTIMIZE_BUTTON_ID, "n_clicks"),
         Input("stored-data", "data"),
         Input(STORE_CONFIG, "data"),
-
     ],
     state=[
         State(EDITABLE_TRAJECT_TABLE_ID, "rowData"),
         State(NAME_NEW_OPTIMIZATION_RUN_ID, "value"),
-
     ],
     background=True,
     cancel=[Input(CLOSE_OPTIMAL_MODAL_BUTTON_ID, "n_clicks")],
@@ -74,15 +71,15 @@ def open_canvas_logging_and_cancel(
         Output(component_id="latest-timestamp", component_property="children"),
     ],
     prevent_initial_call=True,
-    suppress_callback_exceptions=True
+    suppress_callback_exceptions=True,
 )
 def run_optimize_algorithm(
-        set_progress,
-        n_clicks: int,
-        stored_data: dict,
-        vr_config: dict,
-        traject_optimization_table: list[dict],
-        optimization_run_name: str,
+    set_progress,
+    n_clicks: int,
+    stored_data: dict,
+    vr_config: dict,
+    traject_optimization_table: list[dict],
+    optimization_run_name: str,
 ):
     """
     This is a callback to run the optimization algorithm when the user clicks on the "Optimaliseer" button.
@@ -170,7 +167,7 @@ def run_optimize_algorithm(
 
 
 def run_vrtool_optimization(
-        _vr_config: VrtoolConfig, optimization_run_name: str, selected_measures: list[tuple]
+    _vr_config: VrtoolConfig, optimization_run_name: str, selected_measures: list[tuple]
 ):
     """Runs the optimization algorithm in a separate thread of the VRTool core"""
 
@@ -178,11 +175,13 @@ def run_vrtool_optimization(
     try:
         api.run_optimization(optimization_run_name, selected_measures)
     except KeyError as e:
-        raise(f"Error during optimization: {e}. Make sure config.T is consistent with database")
+        raise (
+            f"Error during optimization: {e}. Make sure config.T is consistent with database"
+        )
 
 
 def get_selected_measure(
-        vr_config: VrtoolConfig, dike_traject_table: list
+    vr_config: VrtoolConfig, dike_traject_table: list
 ) -> list[tuple[int, int]]:
     """Returns the input selected measures for the optimization algorithm as a list of tuples
     (measure_result_id, investment_year).

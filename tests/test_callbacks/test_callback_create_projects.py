@@ -7,26 +7,35 @@ import pytest
 from dash import dcc
 from plotly.graph_objs import Figure
 
-from src.callbacks.project_page.callback_create_projects import update_map_project_definition_page
+from src.callbacks.project_page.callback_create_projects import (
+    update_map_project_definition_page,
+)
 from src.constants import ProgramDefinitionMapType
 
 
 class TestCallbackCreateProjects:
 
-    @pytest.mark.parametrize("map_type", [
-        ProgramDefinitionMapType.SIMPLE.name,
-        ProgramDefinitionMapType.PROJECTS.name,
-        ProgramDefinitionMapType.ASSESSMENT_PROBABILITIES.name,
-        ProgramDefinitionMapType.VEILIGHEIDSRENDEMENT_INDEX.name
-    ])
+    @pytest.mark.parametrize(
+        "map_type",
+        [
+            ProgramDefinitionMapType.SIMPLE.name,
+            ProgramDefinitionMapType.PROJECTS.name,
+            ProgramDefinitionMapType.ASSESSMENT_PROBABILITIES.name,
+            ProgramDefinitionMapType.VEILIGHEIDSRENDEMENT_INDEX.name,
+        ],
+    )
     def test_update_map_project_definition_page(self, map_type):
         # 1. Define data
         _data = json.load(
-            open(Path(__file__).parent.parent.joinpath("data", "programmering_WDOD", "Programmering WDOD.json"))
+            open(
+                Path(__file__).parent.parent.joinpath(
+                    "data", "programmering_WDOD", "Programmering WDOD.json"
+                )
+            )
         )
 
-        _imported_runs_data = _data['imported_runs_data']
-        _projects_overview_data = _data['project_data']
+        _imported_runs_data = _data["imported_runs_data"]
+        _projects_overview_data = _data["project_data"]
         _dummy = "tab1234"
         _selected_sections = [
             "1|10-3",
@@ -47,13 +56,18 @@ class TestCallbackCreateProjects:
             "17|10-3",
             "18|10-3",
             "19|10-3",
-            "20|10-3"
+            "20|10-3",
         ]
 
         # 2. Define callback
         def run_callback():
-            return update_map_project_definition_page(_dummy, _selected_sections, map_type, _imported_runs_data,
-                                                      _projects_overview_data)
+            return update_map_project_definition_page(
+                _dummy,
+                _selected_sections,
+                map_type,
+                _imported_runs_data,
+                _projects_overview_data,
+            )
 
         ctx = copy_context()
         output = ctx.run(run_callback)

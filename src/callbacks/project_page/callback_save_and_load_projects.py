@@ -1,53 +1,74 @@
 import base64
 import json
 
-from dash import html, Output, Input, callback, State, dcc, no_update
+from dash import Input, Output, State, callback, dcc, html, no_update
 
-from src.component_ids import EXPORT_PROJECTS_TO_JSON_ID, BUTTON_DOWNLOAD_PROJECTS_EXPORT_NB_CLICKS, \
-    BUTTON_DOWNLOAD_PROJECTS_EXPORT, STORED_PROJECT_OVERVIEW_DATA, STORED_IMPORTED_RUNS_DATA, UPLOAD_SAVED_PROJECTS, \
-    SAVE_PROJECTS_NAME_ID
+from src.component_ids import (
+    BUTTON_DOWNLOAD_PROJECTS_EXPORT,
+    BUTTON_DOWNLOAD_PROJECTS_EXPORT_NB_CLICKS,
+    EXPORT_PROJECTS_TO_JSON_ID,
+    SAVE_PROJECTS_NAME_ID,
+    STORED_IMPORTED_RUNS_DATA,
+    STORED_PROJECT_OVERVIEW_DATA,
+    UPLOAD_SAVED_PROJECTS,
+)
 
 
 @callback(
-    [Output(EXPORT_PROJECTS_TO_JSON_ID, 'data'),
-     Output(BUTTON_DOWNLOAD_PROJECTS_EXPORT_NB_CLICKS, "value")],
     [
-        Input(BUTTON_DOWNLOAD_PROJECTS_EXPORT, 'n_clicks'),
-        Input(BUTTON_DOWNLOAD_PROJECTS_EXPORT_NB_CLICKS, 'value'),
+        Output(EXPORT_PROJECTS_TO_JSON_ID, "data"),
+        Output(BUTTON_DOWNLOAD_PROJECTS_EXPORT_NB_CLICKS, "value"),
+    ],
+    [
+        Input(BUTTON_DOWNLOAD_PROJECTS_EXPORT, "n_clicks"),
+        Input(BUTTON_DOWNLOAD_PROJECTS_EXPORT_NB_CLICKS, "value"),
         State(SAVE_PROJECTS_NAME_ID, "value"),
         State(STORED_PROJECT_OVERVIEW_DATA, "data"),
-        State(STORED_IMPORTED_RUNS_DATA, "data"), ]
+        State(STORED_IMPORTED_RUNS_DATA, "data"),
+    ],
 )
-def download_reinforced_sections_geojson(n_clicks: int, store_n_click_button: int, filename_save: int,
-                                         project_data: list[dict],
-                                         imported_runs_data: dict,
-                                         ) -> tuple[dict, int]:
+def download_reinforced_sections_geojson(
+    n_clicks: int,
+    store_n_click_button: int,
+    filename_save: int,
+    project_data: list[dict],
+    imported_runs_data: dict,
+) -> tuple[dict, int]:
     """
     Trigger the button to download and save the projects data into a json file so that it can reused later on.
 
     :return:
     """
 
-    if imported_runs_data is None or project_data is None or n_clicks == 0 or n_clicks is None:
+    if (
+        imported_runs_data is None
+        or project_data is None
+        or n_clicks == 0
+        or n_clicks is None
+    ):
         return no_update, no_update
 
-    if n_clicks is None or store_n_click_button == n_clicks:  # update when clicking on button ONLY
+    if (
+        n_clicks is None or store_n_click_button == n_clicks
+    ):  # update when clicking on button ONLY
         return no_update, no_update
 
     else:
-        _content = dict(imported_runs_data=imported_runs_data,
-                        project_data=project_data)
+        _content = dict(
+            imported_runs_data=imported_runs_data, project_data=project_data
+        )
         _content_json = json.dumps(_content)
 
-        return dict(content=_content_json,
-                    filename=f"{filename_save}.json"), n_clicks
+        return dict(content=_content_json, filename=f"{filename_save}.json"), n_clicks
 
 
 @callback(
-    [Output(STORED_IMPORTED_RUNS_DATA, "data", allow_duplicate=True),
-     Output(STORED_PROJECT_OVERVIEW_DATA, "data", allow_duplicate=True)],
-    [Input(UPLOAD_SAVED_PROJECTS, 'contents')],
-    [State(UPLOAD_SAVED_PROJECTS, 'filename')],
+    [
+        Output(STORED_IMPORTED_RUNS_DATA, "data", allow_duplicate=True),
+        Output(STORED_PROJECT_OVERVIEW_DATA, "data", allow_duplicate=True),
+    ],
+    [Input(UPLOAD_SAVED_PROJECTS, "contents")],
+    [State(UPLOAD_SAVED_PROJECTS, "filename")],
     allow_duplicate=True,
     prevent_initial_call=True,
 )
@@ -66,7 +87,7 @@ def upload_existing_saved_projects(contents: str, filename: str):
     if contents is not None:
         try:
 
-            content_type, content_string = contents.split(',')
+            content_type, content_string = contents.split(",")
 
             decoded = base64.b64decode(content_string)
             json_content = json.loads(decoded)
