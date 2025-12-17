@@ -19,7 +19,7 @@ classifiers = [
     'Topic :: Scientific/Engineering :: Hydrology',
 ]
 requires-python = ">=3.12,<3.15"
-dependencies = ["vrtool @ https://github.com/Deltares/Veiligheidsrendement/releases/download/v1.2.0-rc/vrtool-1.1.1-py3-none-any.whl", "geopandas", "numpy", "tabulate", "diskcache", "multiprocess", "plotly", "dash", "dash-ag-grid", "dash-iconify", "dash-mantine-components", "dash-bootstrap-components"]
+dependencies = ["vrtool @ https://github.com/Deltares/Veiligheidsrendement/releases/download/v1.2.0/vrtool-1.2.0-py3-none-any.whl", "geopandas", "numpy", "tabulate", "diskcache", "multiprocess", "plotly", "dash", "dash-ag-grid", "dash-iconify", "dash-mantine-components", "dash-bootstrap-components", "openturns"]
 
 [project.urls]
 homepage = "https://deltares-research.github.io/VrtoolDocumentation/"
@@ -57,6 +57,7 @@ dash-ag-grid = ">=2.4.0"
 dash-iconify = ">=0.1.2"
 dash-mantine-components = ">=0.14.0"
 dash-bootstrap-components = ">=1.4.1,<2.0.0"
+openturns = ">=1.26,<2"
 
 [tool.pixi.feature.test.dependencies]
 pytest = ">=7.2.1"
