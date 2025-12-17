@@ -15146,7 +15146,7 @@ packages:
 - pypi: ./
   name: vr-dash
   version: 1.1.5
-  sha256: d16e341b9c62c253728796bcbaddb0428f1c3b97030ce7e101761e17c4530777
+  sha256: 43e79eff35db60b4a9aa1dea76adb94f58702c127ba972e1a24a52899926edd1
   requires_dist:
   - vrtool @ https://github.com/Deltares/Veiligheidsrendement/releases/download/v1.2.0/vrtool-1.2.0-py3-none-any.whl
   - geopandas
