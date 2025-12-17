@@ -18800,9 +18800,20 @@ packages:
 - pypi: ./
   name: vr-dash
   version: 1.1.5
-  sha256: 2a5de87bc839ba20c1d189b5c0e05e44ec866ba96a624942e3fb2271d99d771c
+  sha256: b8ac06cd98d0e643cd6990cb362bf1d52a0e95fcca19b6c004d90a6cbaac7bb7
   requires_dist:
   - vrtool @ https://github.com/Deltares/Veiligheidsrendement/releases/download/v1.2.0-rc/vrtool-1.1.1-py3-none-any.whl
+  - geopandas
+  - numpy
+  - tabulate
+  - diskcache
+  - multiprocess
+  - plotly
+  - dash
+  - dash-ag-grid
+  - dash-iconify
+  - dash-mantine-components
+  - dash-bootstrap-components
   requires_python: '>=3.12,<3.15'
   editable: true
 - pypi: direct+https://github.com/Deltares/Veiligheidsrendement/releases/download/v1.2.0-rc/vrtool-1.1.1-py3-none-any.whl
