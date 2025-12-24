@@ -1,6 +1,7 @@
 import dash_bootstrap_components as dbc
 from dash import dcc, html
-from src.component_ids import OPTIMIZE_MODAL_ID, CLOSE_OPTIMAL_MODAL_BUTTON_ID
+
+from src.component_ids import CLOSE_OPTIMAL_MODAL_BUTTON_ID, OPTIMIZE_MODAL_ID
 
 modal_optimize = dbc.Modal(
     [
@@ -10,7 +11,10 @@ modal_optimize = dbc.Modal(
         ),
         html.Div(
             [
-                html.P(id="latest-timestamp", children=["Nog geen feedback van de berekening"]),
+                html.P(
+                    id="latest-timestamp",
+                    children=["Nog geen feedback van de berekening"],
+                ),
             ],
             style={"padding": "20px"},
         ),

@@ -64,3 +64,6 @@ __pycache__/
 /src/sandboxing/cache/
 /cache/
 /cache/cache.db
+# pixi environments
+.pixi/*
+!.pixi/config.toml

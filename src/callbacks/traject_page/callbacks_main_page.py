@@ -1,37 +1,48 @@
+import base64
+import json
 from pathlib import Path
 
 import dash
-from dash import html, dcc, Output, Input, State, callback
 import dash_bootstrap_components as dbc
+import pandas as pd
+from dash import Input, Output, State, callback, dcc, html
 from vrtool.common.enums import MechanismEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
-import pandas as pd
 
-from src.component_ids import STORE_CONFIG, DROPDOWN_SELECTION_RUN_ID, EDITABLE_TRAJECT_TABLE_ID, \
-    SLIDER_YEAR_RELIABILITY_RESULTS_ID, GREEDY_OPTIMIZATION_CRITERIA_BETA, GREEDY_OPTIMIZATION_CRITERIA_YEAR, \
-    BUTTON_RECOMPUTE_GREEDY_STEPS, BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA
-from src.constants import ColorBarResultType, SubResultType, Measures, REFERENCE_YEAR
+from src.component_ids import (
+    BUTTON_RECOMPUTE_GREEDY_STEPS,
+    BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS,
+    DROPDOWN_SELECTION_RUN_ID,
+    EDITABLE_TRAJECT_TABLE_ID,
+    GREEDY_OPTIMIZATION_CRITERIA_BETA,
+    GREEDY_OPTIMIZATION_CRITERIA_YEAR,
+    SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA,
+    SLIDER_YEAR_RELIABILITY_RESULTS_ID,
+    STORE_CONFIG,
+)
+from src.constants import REFERENCE_YEAR, ColorBarResultType, Measures, SubResultType
 from src.linear_objects.dike_traject import DikeTraject
+from src.orm.import_database import (
+    get_dike_traject_from_config_ORM,
+    get_name_optimization_runs,
+    get_run_optimization_ids,
+)
+from src.utils.utils import export_to_json, get_vr_config_from_dict
 
-import base64
-import json
 
-from src.orm.import_database import get_dike_traject_from_config_ORM, get_name_optimization_runs, \
-    get_run_optimization_ids
-from src.utils.utils import get_vr_config_from_dict, export_to_json
-
-
-@callback([Output('dummy_upload_id', 'children'),
-           Output("upload-toast", "is_open"),
-           Output(STORE_CONFIG, "data"),
-           Output(DROPDOWN_SELECTION_RUN_ID, "value", allow_duplicate=True),
-           Output(DROPDOWN_SELECTION_RUN_ID, "options", allow_duplicate=True),
-           ],
-          [Input('upload-data-config-json', 'contents')],
-          [State('upload-data-config-json', 'filename')],
-          allow_duplicate=True,
-          prevent_initial_call=True,
-          )
+@callback(
+    [
+        Output("dummy_upload_id", "children"),
+        Output("upload-toast", "is_open"),
+        Output(STORE_CONFIG, "data"),
+        Output(DROPDOWN_SELECTION_RUN_ID, "value", allow_duplicate=True),
+        Output(DROPDOWN_SELECTION_RUN_ID, "options", allow_duplicate=True),
+    ],
+    [Input("upload-data-config-json", "contents")],
+    [State("upload-data-config-json", "filename")],
+    allow_duplicate=True,
+    prevent_initial_call=True,
+)
 def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
     """This is the callback for the upload of the config.json file.
 
@@ -52,15 +63,24 @@ def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
     if contents is not None:
         try:
 
-            content_type, content_string = contents.split(',')
+            content_type, content_string = contents.split(",")
 
             decoded = base64.b64decode(content_string)
             json_content = json.loads(decoded)
-            _mandatory_config_args = ['traject', 'input_directory', 'input_database_name', 'excluded_mechanisms']
+            _mandatory_config_args = [
+                "traject",
+                "input_directory",
+                "input_database_name",
+                "excluded_mechanisms",
+            ]
             for _arg in _mandatory_config_args:
                 if _arg not in json_content.keys():
-                    _alert = dbc.Alert(f"Config.json file is missing argument <{_arg}>", dismissable=True, id='123456',
-                                       color="danger")
+                    _alert = dbc.Alert(
+                        f"Config.json file is missing argument <{_arg}>",
+                        dismissable=True,
+                        id="123456",
+                        color="danger",
+                    )
 
                     return _alert, False, {}, "", []
 
@@ -69,24 +89,32 @@ def upload_and_save_traject_input(contents: str, filename: str) -> tuple:
 
             # Update the selection Dropwdown with all the names of the optimization runs
             _names_optimization_run = get_name_optimization_runs(vr_config)
-            _options = [{"label": name, "value": name} for name in _names_optimization_run]
+            _options = [
+                {"label": name, "value": name} for name in _names_optimization_run
+            ]
 
-            return html.Div(), True, json_content, _value_selection_run_dropwdown, _options,
+            return (
+                html.Div(),
+                True,
+                json_content,
+                _value_selection_run_dropwdown,
+                _options,
+            )
         except:
             return html.Small("Geen bestand geüpload"), False, {}, "", []
     else:
         return html.Small("Geen bestand geüpload"), False, dash.no_update, "", []
 
 
-@callback([
-    Output(DROPDOWN_SELECTION_RUN_ID, "value", allow_duplicate=True),
-    Output(DROPDOWN_SELECTION_RUN_ID, "options", allow_duplicate=True),
-],
+@callback(
+    [
+        Output(DROPDOWN_SELECTION_RUN_ID, "value", allow_duplicate=True),
+        Output(DROPDOWN_SELECTION_RUN_ID, "options", allow_duplicate=True),
+    ],
     [Input("url", "pathname")],
     State(STORE_CONFIG, "data"),
     allow_duplicate=True,
     prevent_initial_call=True,
-
 )
 def fill_option_field_run_selection(path: str, config_data: dict) -> tuple:
     """
@@ -100,10 +128,10 @@ def fill_option_field_run_selection(path: str, config_data: dict) -> tuple:
         if config_data is None or config_data == {}:
             return dash.no_update, dash.no_update
         vr_config = VrtoolConfig()
-        vr_config.traject = config_data['traject']
-        vr_config.input_directory = config_data['input_directory']
-        vr_config.input_database_name = config_data['input_database_name']
-        vr_config.excluded_mechanisms = config_data['excluded_mechanisms']
+        vr_config.traject = config_data["traject"]
+        vr_config.input_directory = config_data["input_directory"]
+        vr_config.input_database_name = config_data["input_database_name"]
+        vr_config.excluded_mechanisms = config_data["excluded_mechanisms"]
         vr_config.T = config_data["T"]
 
         # _dike_traject = get_dike_traject_from_config_ORM(vr_config, run_id_dsn=2, run_is_vr=1)
@@ -117,7 +145,7 @@ def fill_option_field_run_selection(path: str, config_data: dict) -> tuple:
 
 
 @callback(
-    Output('stored-data', 'data'),
+    Output("stored-data", "data"),
     [Input(DROPDOWN_SELECTION_RUN_ID, "value")],
     State(STORE_CONFIG, "data"),
     prevent_initial_call=True,
@@ -136,44 +164,57 @@ def selection_traject_run(name: str, vr_config: dict) -> dict:
 
     _vr_config = get_vr_config_from_dict(vr_config)
 
-    if name == '':
+    if name == "":
         return dash.no_update
 
     if name == "Basisberekening":
-        _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=2, run_is_vr=1)
+        _dike_traject = get_dike_traject_from_config_ORM(
+            _vr_config, run_id_dsn=2, run_is_vr=1
+        )
 
     elif name in get_name_optimization_runs(_vr_config):
         run_id_vr, run_id_dsn = get_run_optimization_ids(_vr_config, name)
-        _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=run_id_dsn, run_is_vr=run_id_vr)
+        _dike_traject = get_dike_traject_from_config_ORM(
+            _vr_config, run_id_dsn=run_id_dsn, run_is_vr=run_id_vr
+        )
     else:
         raise ValueError("Name of the Optimization run is not correct.")
 
     _dike_traject.run_name = name
 
-    _path_save_dike_traject = _vr_config.input_directory.joinpath(f"dike_traject_{_vr_config.traject}_{name}.json")
+    _path_save_dike_traject = _vr_config.input_directory.joinpath(
+        f"dike_traject_{_vr_config.traject}_{name}.json"
+    )
     # export_to_json(_dike_traject.serialize(), _path_save_dike_traject)
 
     return _dike_traject.serialize()
 
 
 @callback(
-
-    [Output('stored-data', 'data', allow_duplicate=True),
-     Output(BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, 'value')],
+    [
+        Output("stored-data", "data", allow_duplicate=True),
+        Output(BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, "value"),
+    ],
     [
         Input(DROPDOWN_SELECTION_RUN_ID, "value"),
         Input(SELECT_GREEDY_OPTIMIZATION_STOP_CRITERIA, "value"),
         Input(GREEDY_OPTIMIZATION_CRITERIA_BETA, "value"),
         Input(GREEDY_OPTIMIZATION_CRITERIA_YEAR, "value"),
         Input(BUTTON_RECOMPUTE_GREEDY_STEPS, "n_clicks"),
-        Input(BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, 'value')
+        Input(BUTTON_RECOMPUTE_GREEDY_STEPS_NB_CLICKS, "value"),
     ],
     State(STORE_CONFIG, "data"),
     prevent_initial_call=True,
-
 )
-def recompute_dike_traject_with_new_greedy_criteria(name: str, name_type: str, beta: float, year: float, n_click: int,
-                                                    store_n_click_button, vr_config) -> tuple[dict, int]:
+def recompute_dike_traject_with_new_greedy_criteria(
+    name: str,
+    name_type: str,
+    beta: float,
+    year: float,
+    n_click: int,
+    store_n_click_button,
+    vr_config,
+) -> tuple[dict, int]:
     """
     Callback to recompute the dike traject with new greedy criteria.
 
@@ -189,7 +230,9 @@ def recompute_dike_traject_with_new_greedy_criteria(name: str, name_type: str, b
     :return:
     """
 
-    if n_click is None or store_n_click_button == n_click:  # update when clicking on button ONLY
+    if (
+        n_click is None or store_n_click_button == n_click
+    ):  # update when clicking on button ONLY
         return dash.no_update
 
     if vr_config is None or vr_config == {}:
@@ -198,15 +241,25 @@ def recompute_dike_traject_with_new_greedy_criteria(name: str, name_type: str, b
     _vr_config = get_vr_config_from_dict(vr_config)
 
     if name == "Basisberekening":
-        _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=2, run_is_vr=1,
-                                                         greedy_optimization_criteria=name_type,
-                                                         greedy_criteria_beta=beta, greedy_criteria_year=int(year))
+        _dike_traject = get_dike_traject_from_config_ORM(
+            _vr_config,
+            run_id_dsn=2,
+            run_is_vr=1,
+            greedy_optimization_criteria=name_type,
+            greedy_criteria_beta=beta,
+            greedy_criteria_year=int(year),
+        )
 
     elif name in get_name_optimization_runs(_vr_config):
         run_id_vr, run_id_dsn = get_run_optimization_ids(_vr_config, name)
-        _dike_traject = get_dike_traject_from_config_ORM(_vr_config, run_id_dsn=run_id_dsn, run_is_vr=run_id_vr,
-                                                         greedy_optimization_criteria=name_type,
-                                                         greedy_criteria_beta=beta, greedy_criteria_year=int(year))
+        _dike_traject = get_dike_traject_from_config_ORM(
+            _vr_config,
+            run_id_dsn=run_id_dsn,
+            run_is_vr=run_id_vr,
+            greedy_optimization_criteria=name_type,
+            greedy_criteria_beta=beta,
+            greedy_criteria_year=int(year),
+        )
     else:
         raise ValueError("Name of the Optimization run is not correct.")
 
@@ -251,8 +304,8 @@ def toggle_collapse2(n: int, is_open: bool) -> bool:
 
 @callback(
     Output("collapse_3", "is_open"),
-    Output("left-column", 'md'),
-    Output("right-column", 'md'),
+    Output("left-column", "md"),
+    Output("right-column", "md"),
     [Input("collapse_button_3", "n_clicks")],
     [State("collapse_3", "is_open")],
 )
@@ -271,9 +324,11 @@ def toggle_collapse3(n: int, is_open: bool):
 
 
 @callback(
-    [Output('select_sub_result_type_measure_map', 'options'),
-     Output('select_sub_result_type_measure_map', 'value')],
-    Input('select_measure_map_result_type', 'value'),
+    [
+        Output("select_sub_result_type_measure_map", "options"),
+        Output("select_sub_result_type_measure_map", "value"),
+    ],
+    Input("select_measure_map_result_type", "value"),
 )
 def update_radio_sub_result_type(result_type: str) -> tuple[list, str]:
     """
@@ -286,22 +341,43 @@ def update_radio_sub_result_type(result_type: str) -> tuple[list, str]:
     """
     if result_type == ColorBarResultType.RELIABILITY.name:
         options = [
-            {'label': SubResultType.ABSOLUTE.value, 'value': SubResultType.ABSOLUTE.name},
-            {'label': SubResultType.RATIO.value, 'value': SubResultType.RATIO.name},
+            {
+                "label": SubResultType.ABSOLUTE.value,
+                "value": SubResultType.ABSOLUTE.name,
+            },
+            {"label": SubResultType.RATIO.value, "value": SubResultType.RATIO.name},
         ]
         value = SubResultType.ABSOLUTE.name
     elif result_type == ColorBarResultType.COST.name:
         options = [
-            {'label': SubResultType.ABSOLUTE.value, 'value': SubResultType.ABSOLUTE.name},
-            {'label': SubResultType.DIFFERENCE.value, 'value': SubResultType.DIFFERENCE.name},
+            {
+                "label": SubResultType.ABSOLUTE.value,
+                "value": SubResultType.ABSOLUTE.name,
+            },
+            {
+                "label": SubResultType.DIFFERENCE.value,
+                "value": SubResultType.DIFFERENCE.name,
+            },
         ]
         value = SubResultType.ABSOLUTE.name
     elif result_type == ColorBarResultType.MEASURE.name:
         options = [
-            {'label': SubResultType.MEASURE_TYPE.value, 'value': SubResultType.MEASURE_TYPE.name},
-            {'label': SubResultType.BERM_WIDENING.value, 'value': SubResultType.BERM_WIDENING.name},
-            {'label': SubResultType.CREST_HIGHTENING.value, 'value': SubResultType.CREST_HIGHTENING.name},
-            {'label': SubResultType.INVESTMENT_YEAR.value, 'value': SubResultType.INVESTMENT_YEAR.name},
+            {
+                "label": SubResultType.MEASURE_TYPE.value,
+                "value": SubResultType.MEASURE_TYPE.name,
+            },
+            {
+                "label": SubResultType.BERM_WIDENING.value,
+                "value": SubResultType.BERM_WIDENING.name,
+            },
+            {
+                "label": SubResultType.CREST_HIGHTENING.value,
+                "value": SubResultType.CREST_HIGHTENING.name,
+            },
+            {
+                "label": SubResultType.INVESTMENT_YEAR.value,
+                "value": SubResultType.INVESTMENT_YEAR.name,
+            },
         ]
         value = SubResultType.MEASURE_TYPE.name
     else:
@@ -312,7 +388,7 @@ def update_radio_sub_result_type(result_type: str) -> tuple[list, str]:
 
 @callback(
     Output(EDITABLE_TRAJECT_TABLE_ID, "rowData"),
-    Input('stored-data', 'data'),
+    Input("stored-data", "data"),
 )
 def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
     """
@@ -327,44 +403,60 @@ def fill_traject_table_from_database(dike_traject_data: dict) -> list[dict]:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
 
         for section in _dike_traject.dike_sections:
-            df_add = pd.DataFrame.from_records([{"section_col": section.name,
-                                                 "reinforcement_col": True,
-                                                 "reference_year": 2025,
-                                                 Measures.GROUND_IMPROVEMENT.name: True,
-                                                 Measures.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.name: True,
-                                                 Measures.GEOTEXTILE.name: True,
-                                                 Measures.DIAPHRAGM_WALL.name: True,
-                                                 Measures.STABILITY_SCREEN.name: True,
-                                                 Measures.ANCHORED_SHEETPILE.name: True,
-                                                 Measures.REVETMENT.name: True if section.revetment else False,
-                                                 Measures.CUSTOM.name: False
-                                                 }])
+            df_add = pd.DataFrame.from_records(
+                [
+                    {
+                        "section_col": section.name,
+                        "reinforcement_col": True,
+                        "reference_year": 2025,
+                        Measures.GROUND_IMPROVEMENT.name: True,
+                        Measures.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.name: True,
+                        Measures.GEOTEXTILE.name: True,
+                        Measures.DIAPHRAGM_WALL.name: True,
+                        Measures.STABILITY_SCREEN.name: True,
+                        Measures.ANCHORED_SHEETPILE.name: True,
+                        Measures.REVETMENT.name: True if section.revetment else False,
+                        Measures.CUSTOM.name: False,
+                    }
+                ]
+            )
             df = pd.concat([df.infer_objects(), df_add], ignore_index=True)
 
-        bool_columns = ["reinforcement_col", Measures.GROUND_IMPROVEMENT.name,
-                        Measures.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.name,
-                        Measures.GEOTEXTILE.name, Measures.DIAPHRAGM_WALL.name,
-                        Measures.STABILITY_SCREEN.name, Measures.ANCHORED_SHEETPILE.name, Measures.REVETMENT.name,
-                        Measures.CUSTOM.name]
+        bool_columns = [
+            "reinforcement_col",
+            Measures.GROUND_IMPROVEMENT.name,
+            Measures.GROUND_IMPROVEMENT_WITH_STABILITY_SCREEN.name,
+            Measures.GEOTEXTILE.name,
+            Measures.DIAPHRAGM_WALL.name,
+            Measures.STABILITY_SCREEN.name,
+            Measures.ANCHORED_SHEETPILE.name,
+            Measures.REVETMENT.name,
+            Measures.CUSTOM.name,
+        ]
         df[bool_columns] = df[bool_columns].astype(bool)
-        return df.to_dict('records')
+        return df.to_dict("records")
 
 
 @callback(
     Output(SLIDER_YEAR_RELIABILITY_RESULTS_ID, "marks"),
-    Input('stored-data', 'data'),
+    Input("stored-data", "data"),
 )
 def update_slider_years_from_database(dike_traject_data: dict):
     if dike_traject_data is None:
         marks = {
-            2025: {'label': '2025'},
-            2045: {'label': '2045'},
-            2075: {'label': '2075'},
-            2125: {'label': '2125'}
+            2025: {"label": "2025"},
+            2045: {"label": "2045"},
+            2075: {"label": "2075"},
+            2125: {"label": "2125"},
         }
         return marks
     else:
         _dike_traject = DikeTraject.deserialize(dike_traject_data)
-        _assessment_years = _dike_traject.dike_sections[0].years  # all sections should have the same assessment years
-        _marks = {year + REFERENCE_YEAR: {'label': f"{year + REFERENCE_YEAR}"} for year in _assessment_years}
+        _assessment_years = _dike_traject.dike_sections[
+            0
+        ].years  # all sections should have the same assessment years
+        _marks = {
+            year + REFERENCE_YEAR: {"label": f"{year + REFERENCE_YEAR}"}
+            for year in _assessment_years
+        }
         return _marks

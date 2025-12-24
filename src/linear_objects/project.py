@@ -5,7 +5,7 @@ from src.linear_objects.dike_section import DikeSection
 
 
 @dataclass
-class DikeProject():
+class DikeProject:
     name: str
     dike_sections: list[DikeSection]
     start_year: int  # starting year of the project

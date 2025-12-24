@@ -1,12 +1,14 @@
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import axis
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from matplotlib.pyplot import axis
 from vrtool.common.enums import MechanismEnum
 
 
-def plot_lcc_tc_from_steps(steps_dict: list[dict], axis: axis, lbl: str, clr: str, mrkr: str = 'o'):
+def plot_lcc_tc_from_steps(
+    steps_dict: list[dict], axis: axis, lbl: str, clr: str, mrkr: str = "o"
+):
     """Plot the total_lcc and total_risk from the optimization steps. It will give a
 
     Args:
@@ -22,12 +24,27 @@ def plot_lcc_tc_from_steps(steps_dict: list[dict], axis: axis, lbl: str, clr: st
     """
     for count, step in enumerate(steps_dict):
         if count == 0:
-            axis.plot(step['total_lcc'], step['total_risk'], label=lbl, color=clr, marker=mrkr, markersize=0.5)
+            axis.plot(
+                step["total_lcc"],
+                step["total_risk"],
+                label=lbl,
+                color=clr,
+                marker=mrkr,
+                markersize=0.5,
+            )
         else:
-            axis.plot(step['total_lcc'], step['total_risk'], color=clr, marker=mrkr, markersize=0.5)
+            axis.plot(
+                step["total_lcc"],
+                step["total_risk"],
+                color=clr,
+                marker=mrkr,
+                markersize=0.5,
+            )
 
 
-def plot_traject_probability_for_step(traject_prob_step, ax, run_label='', color='k', linestyle='--'):
+def plot_traject_probability_for_step(
+    traject_prob_step, ax, run_label="", color="k", linestyle="--"
+):
     """Plot the probability of failure for each mechanism for each time step.
 
     Args:
@@ -54,14 +71,14 @@ def plot_traject_probability_for_step(traject_prob_step, ax, run_label='', color
     # for mechanism, data in traject_prob_step.items():
     #     time, pf = zip(*sorted(data.items()))
     #     ax.plot(time, pf, label = f'{mechanism.name.capitalize()} {run_label}')
-    ax.set_yscale('log')
-    ax.set_xlabel('Tijd')
-    ax.set_ylabel('Faalkans')
+    ax.set_yscale("log")
+    ax.set_xlabel("Tijd")
+    ax.set_ylabel("Faalkans")
     ax.legend()
 
 
 def measure_per_section_to_df(measures_per_section, section_parameters):
-    """ Convert the measures per section to a pandas dataframe.
+    """Convert the measures per section to a pandas dataframe.
 
     Args:
     measures_per_section: dict, dictionary containing the measures per section.
@@ -75,34 +92,61 @@ def measure_per_section_to_df(measures_per_section, section_parameters):
     def get_LCC(parameters, investment_years, r=1.03):
         LCC = 0
         for count, parameterset in enumerate(parameters):
-            LCC += parameterset['cost'] / (r ** investment_years[count])
+            LCC += parameterset["cost"] / (r ** investment_years[count])
         return LCC
 
     def concatenate_names(parameters):
-        return ' + '.join([parameter['name'] for parameter in parameters])
+        return " + ".join([parameter["name"] for parameter in parameters])
 
     def concatenate_investment_years(investment_years):
-        return ' + '.join([str(investment_year) for investment_year in investment_years])
+        return " + ".join(
+            [str(investment_year) for investment_year in investment_years]
+        )
 
     def get_parameters(parameters):
         # for each measure in parameters, if the key is there, add it to the combined dict
         parameter_dict = {}
         for parameter in parameters:
             parameter_dict.update(parameter)
-        del parameter_dict['name']
-        del parameter_dict['cost']
+        del parameter_dict["name"]
+        del parameter_dict["cost"]
         return parameter_dict
 
-    df = pd.DataFrame(columns=['section_id', 'name', 'LCC', 'dcrest', 'dberm', 'beta_target', 'transition_level'])
+    df = pd.DataFrame(
+        columns=[
+            "section_id",
+            "name",
+            "LCC",
+            "dcrest",
+            "dberm",
+            "beta_target",
+            "transition_level",
+        ]
+    )
     for section in section_parameters.keys():
         _LCC = get_LCC(section_parameters[section], measures_per_section[section][1])
         _name = concatenate_names(section_parameters[section])
-        _investment_years = concatenate_investment_years(measures_per_section[section][1])
+        _investment_years = concatenate_investment_years(
+            measures_per_section[section][1]
+        )
         _parameters = get_parameters(section_parameters[section])
         # append to df using concat
-        df = pd.concat([df, pd.DataFrame(
-            {'section_id': section, 'name': _name, 'LCC': _LCC, 'investment_years': _investment_years, **_parameters},
-            index=[0])], ignore_index=True)
+        df = pd.concat(
+            [
+                df,
+                pd.DataFrame(
+                    {
+                        "section_id": section,
+                        "name": _name,
+                        "LCC": _LCC,
+                        "investment_years": _investment_years,
+                        **_parameters,
+                    },
+                    index=[0],
+                ),
+            ],
+            ignore_index=True,
+        )
 
     return df
 
@@ -117,24 +161,38 @@ def plot_comparison_of_beta_values(betas_per_section_and_mechanism):
     Returns:
     None
     """
-    colors = sns.color_palette('colorblind', 8)
+    colors = sns.color_palette("colorblind", 8)
     fig, ax = plt.subplots(nrows=4, figsize=(10, 8))
-    for count, mechanism in enumerate(betas_per_section_and_mechanism['mechanism'].unique()):
-        sns.barplot(data=betas_per_section_and_mechanism[(betas_per_section_and_mechanism['mechanism'] == mechanism)],
-                    x='section_id', y='beta', hue='run', ax=ax[count], palette=[colors[2], colors[3]])
-        ax[count].set_title(mechanism, size='small')
-        ax[count].set_ylabel('Beta', size='x-small')
-        ax[count].set_xlabel('')
+    for count, mechanism in enumerate(
+        betas_per_section_and_mechanism["mechanism"].unique()
+    ):
+        sns.barplot(
+            data=betas_per_section_and_mechanism[
+                (betas_per_section_and_mechanism["mechanism"] == mechanism)
+            ],
+            x="section_id",
+            y="beta",
+            hue="run",
+            ax=ax[count],
+            palette=[colors[2], colors[3]],
+        )
+        ax[count].set_title(mechanism, size="small")
+        ax[count].set_ylabel("Beta", size="x-small")
+        ax[count].set_xlabel("")
         ax[count].set_ylim(bottom=3, top=6)
         # remove legend
         ax[count].get_legend().remove()
-    ax[count].legend(loc='upper center', bbox_to_anchor=(0.5, -0.5), ncol=2, fontsize='x-small')
-    ax[count].set_xlabel('Section ID', size='x-small')
+    ax[count].legend(
+        loc="upper center", bbox_to_anchor=(0.5, -0.5), ncol=2, fontsize="x-small"
+    )
+    ax[count].set_xlabel("Section ID", size="x-small")
     plt.subplots_adjust(hspace=0.5)
 
 
-def plot_difference_in_betas(betas_per_section_and_mechanism, has_revetment, run_1='reference', run_2='result'):
-    """ Plot the difference in beta values between two runs.
+def plot_difference_in_betas(
+    betas_per_section_and_mechanism, has_revetment, run_1="reference", run_2="result"
+):
+    """Plot the difference in beta values between two runs.
 
     Args:
     betas_per_section_and_mechanism: pd.DataFrame, dataframe containing the beta values for the different mechanisms per section.
@@ -148,23 +206,39 @@ def plot_difference_in_betas(betas_per_section_and_mechanism, has_revetment, run
     """
     fig, ax = plt.subplots()
     # diagonal line
-    ax.plot([min(betas_per_section_and_mechanism.beta), 8], [min(betas_per_section_and_mechanism.beta), 8], 'k--')
-    for mechanism in [MechanismEnum.OVERFLOW, MechanismEnum.PIPING, MechanismEnum.STABILITY_INNER,
-                      MechanismEnum.REVETMENT]:
+    ax.plot(
+        [min(betas_per_section_and_mechanism.beta), 8],
+        [min(betas_per_section_and_mechanism.beta), 8],
+        "k--",
+    )
+    for mechanism in [
+        MechanismEnum.OVERFLOW,
+        MechanismEnum.PIPING,
+        MechanismEnum.STABILITY_INNER,
+        MechanismEnum.REVETMENT,
+    ]:
         if has_revetment or mechanism != MechanismEnum.REVETMENT:
-            ax.plot(betas_per_section_and_mechanism.loc[(betas_per_section_and_mechanism['mechanism'] == mechanism) & (
-                        betas_per_section_and_mechanism['run'] == run_1)].beta,
-                    betas_per_section_and_mechanism.loc[(betas_per_section_and_mechanism['mechanism'] == mechanism) & (
-                                betas_per_section_and_mechanism['run'] == run_2)].beta,
-                    'o', label=mechanism)
+            ax.plot(
+                betas_per_section_and_mechanism.loc[
+                    (betas_per_section_and_mechanism["mechanism"] == mechanism)
+                    & (betas_per_section_and_mechanism["run"] == run_1)
+                ].beta,
+                betas_per_section_and_mechanism.loc[
+                    (betas_per_section_and_mechanism["mechanism"] == mechanism)
+                    & (betas_per_section_and_mechanism["run"] == run_2)
+                ].beta,
+                "o",
+                label=mechanism,
+            )
     ax.legend()
-    ax.set_xlabel(f'Beta {run_1}')
-    ax.set_ylabel(f'Beta {run_2}')
+    ax.set_xlabel(f"Beta {run_1}")
+    ax.set_ylabel(f"Beta {run_2}")
 
 
-def plot_difference_in_betas_per_section(betas_per_section_and_mechanism, has_revetment, run_1='reference',
-                                         run_2='result'):
-    """ Plot the difference in beta values between two runs per section.
+def plot_difference_in_betas_per_section(
+    betas_per_section_and_mechanism, has_revetment, run_1="reference", run_2="result"
+):
+    """Plot the difference in beta values between two runs per section.
 
     Args:
     betas_per_section_and_mechanism: pd.DataFrame, dataframe containing the beta values for the different mechanisms per section.
@@ -178,18 +252,35 @@ def plot_difference_in_betas_per_section(betas_per_section_and_mechanism, has_re
     """
     fig, ax = plt.subplots()
     # markers
-    markers = ['d', 'o', 's', 'v']
+    markers = ["d", "o", "s", "v"]
     for count, mechanism in enumerate(
-            [MechanismEnum.OVERFLOW, MechanismEnum.PIPING, MechanismEnum.STABILITY_INNER, MechanismEnum.REVETMENT]):
+        [
+            MechanismEnum.OVERFLOW,
+            MechanismEnum.PIPING,
+            MechanismEnum.STABILITY_INNER,
+            MechanismEnum.REVETMENT,
+        ]
+    ):
         if has_revetment or mechanism != MechanismEnum.REVETMENT:
-            ax.plot(betas_per_section_and_mechanism.loc[(betas_per_section_and_mechanism['mechanism'] == mechanism) & (
-                        betas_per_section_and_mechanism['run'] == run_1)].section_id,
-                    betas_per_section_and_mechanism.loc[(betas_per_section_and_mechanism['mechanism'] == mechanism) & (
-                                betas_per_section_and_mechanism['run'] == run_2)].beta.values -
-                    betas_per_section_and_mechanism.loc[(betas_per_section_and_mechanism['mechanism'] == mechanism) & (
-                                betas_per_section_and_mechanism['run'] == run_1)].beta.values,
-                    markers[count], label=mechanism)
+            ax.plot(
+                betas_per_section_and_mechanism.loc[
+                    (betas_per_section_and_mechanism["mechanism"] == mechanism)
+                    & (betas_per_section_and_mechanism["run"] == run_1)
+                ].section_id,
+                betas_per_section_and_mechanism.loc[
+                    (betas_per_section_and_mechanism["mechanism"] == mechanism)
+                    & (betas_per_section_and_mechanism["run"] == run_2)
+                ].beta.values
+                - betas_per_section_and_mechanism.loc[
+                    (betas_per_section_and_mechanism["mechanism"] == mechanism)
+                    & (betas_per_section_and_mechanism["run"] == run_1)
+                ].beta.values,
+                markers[count],
+                label=mechanism,
+            )
     ax.legend()
-    ax.set_xlabel('Section ID')
-    ax.set_ylabel('Beta difference')
-    ax.set_title(f'Difference of beta between {run_1} and {run_2} (positive means {run_2} is higher)')
+    ax.set_xlabel("Section ID")
+    ax.set_ylabel("Beta difference")
+    ax.set_title(
+        f"Difference of beta between {run_1} and {run_2} (positive means {run_2} is higher)"
+    )

@@ -1,5 +1,24 @@
 # Changelog
 
+## v1.2.0 (2025-12-17)
+
+## v1.1.5 [25/11/2025]
+
+### Added
+None.
+
+### Changed
+None.
+
+### Deprecated
+None.
+
+### Removed
+None.
+
+### Fixed
+Support traject with bekleding but no bekleding betas
+
 ## v1.1.4 [12/11/2025]
 
 ### Added

@@ -1,33 +1,38 @@
+import base64
+import json
 from pathlib import Path
 
 import dash
-from dash import html, dcc, Output, Input, State, callback
 import dash_bootstrap_components as dbc
+import pandas as pd
+from dash import Input, Output, State, callback, dcc, html
 from vrtool.common.enums import MechanismEnum
 from vrtool.defaults.vrtool_config import VrtoolConfig
-import pandas as pd
 
-from src.component_ids import STORED_RUNS_COMPARISONS_DATA, EDITABLE_COMPARISON_TABLE_ID
-from src.constants import ColorBarResultType, SubResultType, Measures, REFERENCE_YEAR
+from src.component_ids import EDITABLE_COMPARISON_TABLE_ID, STORED_RUNS_COMPARISONS_DATA
+from src.constants import REFERENCE_YEAR, ColorBarResultType, Measures, SubResultType
 from src.linear_objects.dike_traject import DikeTraject
-
-import base64
-import json
-
-from src.orm.import_database import get_dike_traject_from_config_ORM, get_name_optimization_runs, \
-    get_run_optimization_ids
-from src.utils.utils import get_vr_config_from_dict, export_to_json
+from src.orm.import_database import (
+    get_dike_traject_from_config_ORM,
+    get_name_optimization_runs,
+    get_run_optimization_ids,
+)
+from src.utils.utils import export_to_json, get_vr_config_from_dict
 
 
 @callback(
     Output(STORED_RUNS_COMPARISONS_DATA, "data"),
-    [Input('upload-dike-data-comparison', 'contents')],
-    [State('upload-dike-data-comparison', 'filename'),
-     State(STORED_RUNS_COMPARISONS_DATA, "data")],
+    [Input("upload-dike-data-comparison", "contents")],
+    [
+        State("upload-dike-data-comparison", "filename"),
+        State(STORED_RUNS_COMPARISONS_DATA, "data"),
+    ],
     allow_duplicate=True,
     prevent_initial_call=True,
 )
-def upload_and_save_in_project_data(contents: str, filename: str, stored_imported_runs_data: dict):
+def upload_and_save_in_project_data(
+    contents: str, filename: str, stored_imported_runs_data: dict
+):
     """This is the callback for the upload of the config.json file.
 
     :param contents: string content of the uploaded json. The file should content at least:
@@ -46,7 +51,7 @@ def upload_and_save_in_project_data(contents: str, filename: str, stored_importe
 
         try:
 
-            content_type, content_string = contents.split(',')
+            content_type, content_string = contents.split(",")
 
             decoded = base64.b64decode(content_string)
             json_content = json.loads(decoded)

@@ -1,4 +1,3 @@
-
 from contextvars import copy_context
 
 import pytest
@@ -23,5 +22,3 @@ class TestCallbackTabSwitch:
         assert isinstance(output, tuple)
         assert isinstance(output[0], html.Div)
         assert isinstance(output[1], list)
-
-

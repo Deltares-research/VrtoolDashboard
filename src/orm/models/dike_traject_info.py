@@ -1,5 +1,4 @@
 from peewee import CharField, FloatField
-
 from vrtool.orm.models.orm_base_model import (
     OrmBaseModel,
     _get_table_name,

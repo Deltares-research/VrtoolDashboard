@@ -1,23 +1,27 @@
-import dash
-from dash import html, dcc, Output, Input, State, callback
-import plotly.graph_objects as go
-
-from src.component_ids import STORED_IMPORTED_RUNS_DATA, EDITABLE_IMPORTED_RUNS_TABLE_ID, OVERVIEW_PROJECT_MAP_ID_2
-
 import base64
 import json
 
+import dash
+import plotly.graph_objects as go
+from dash import Input, Output, State, callback, dcc, html
+
+from src.component_ids import (
+    EDITABLE_IMPORTED_RUNS_TABLE_ID,
+    OVERVIEW_PROJECT_MAP_ID_2,
+    STORED_IMPORTED_RUNS_DATA,
+)
 
 
 @callback(
     Output(STORED_IMPORTED_RUNS_DATA, "data"),
-    [Input('upload-dike-data', 'contents')],
-    [State('upload-dike-data', 'filename'),
-     State(STORED_IMPORTED_RUNS_DATA, "data")],
+    [Input("upload-dike-data", "contents")],
+    [State("upload-dike-data", "filename"), State(STORED_IMPORTED_RUNS_DATA, "data")],
     allow_duplicate=True,
     prevent_initial_call=True,
 )
-def upload_and_save_in_project_data(contents: str, filename: str, stored_imported_runs_data: dict):
+def upload_and_save_in_project_data(
+    contents: str, filename: str, stored_imported_runs_data: dict
+):
     """This is the callback for the upload of the config.json file.
 
     :param contents: string content of the uploaded json. The file should content at least:
@@ -35,7 +39,7 @@ def upload_and_save_in_project_data(contents: str, filename: str, stored_importe
     if contents is not None:
         try:
 
-            content_type, content_string = contents.split(',')
+            content_type, content_string = contents.split(",")
 
             decoded = base64.b64decode(content_string)
             json_content = json.loads(decoded)
@@ -53,9 +57,11 @@ def upload_and_save_in_project_data(contents: str, filename: str, stored_importe
 @callback(
     Output(EDITABLE_IMPORTED_RUNS_TABLE_ID, "rowData"),
     Input(STORED_IMPORTED_RUNS_DATA, "data"),
-    Input("tabs_tab_project_page", "active_tab")
+    Input("tabs_tab_project_page", "active_tab"),
 )
-def fill_table_project_overview_and_update_map(imported_runs_data: dict, dummy: str) -> list[dict]:
+def fill_table_project_overview_and_update_map(
+    imported_runs_data: dict, dummy: str
+) -> list[dict]:
     """
     Fill the overview table with the project data wth the imported dike traject data.
     :param project_data:

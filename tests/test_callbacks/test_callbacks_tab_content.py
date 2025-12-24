@@ -4,24 +4,24 @@ from contextvars import copy_context
 from pathlib import Path
 
 import pytest
-from dash import html, dcc
+from dash import dcc, html
 from plotly.graph_objs import Figure
 
 from src.callbacks.traject_page.callbacks_tab_content import (
-    make_graph_measure_results_comparison,
-    make_graph_overview_dike,
     make_graph_map_initial_assessment,
     make_graph_map_measures,
-    make_graph_pf_vs_cost,
     make_graph_map_urgency,
+    make_graph_measure_results_comparison,
+    make_graph_overview_dike,
+    make_graph_pf_vs_cost,
     update_click,
 )
 from src.constants import (
     CalcType,
     ColorBarResultType,
     Mechanism,
-    SubResultType,
     ResultType,
+    SubResultType,
 )
 
 
@@ -184,18 +184,14 @@ class TestCallbackTabContent:
                 Path(__file__).parent.parent / "data/Case_38_1/reference" / "data.json"
             )
         )
-        _path_config = (
-            Path(__file__).parent.parent / "data/Case_38_1" / "config.json"
-        )
+        _path_config = Path(__file__).parent.parent / "data/Case_38_1" / "config.json"
 
         # load json:
         with open(_path_config, "r") as f:
             decoded = f.read()
             _vr_config = json.loads(decoded)
 
-        _vr_config["input_directory"] = (
-            Path(__file__).parent.parent / "data/Case_38_1"
-        )
+        _vr_config["input_directory"] = Path(__file__).parent.parent / "data/Case_38_1"
 
         # 2. Define callback
         def run_callback():

@@ -1,11 +1,17 @@
+import json
 from contextvars import copy_context
 from pathlib import Path
 
 import pytest
-import json
 
-from src.callbacks.traject_page.callbacks_main_page import toggle_collapse, toggle_collapse2, toggle_collapse3, \
-    update_radio_sub_result_type, fill_traject_table_from_database, update_slider_years_from_database
+from src.callbacks.traject_page.callbacks_main_page import (
+    fill_traject_table_from_database,
+    toggle_collapse,
+    toggle_collapse2,
+    toggle_collapse3,
+    update_radio_sub_result_type,
+    update_slider_years_from_database,
+)
 from src.constants import ColorBarResultType
 
 
@@ -46,7 +52,9 @@ class TestCallback:
         assert isinstance(output, tuple)
         assert isinstance(output[0], bool)
 
-    @pytest.mark.parametrize("result_type", [ColorBarResultType.RELIABILITY, ColorBarResultType.COST])
+    @pytest.mark.parametrize(
+        "result_type", [ColorBarResultType.RELIABILITY, ColorBarResultType.COST]
+    )
     def test_update_radio_sub_result_type(self, result_type: ColorBarResultType):
         def run_callback():
             return update_radio_sub_result_type(result_type.name)
@@ -64,7 +72,12 @@ class TestCallback:
         :return:
         """
         _dike_data = json.load(
-            open(Path(__file__).parent.parent / 'data/31-1 base coastal case/reference' / 'dike_data.json'))
+            open(
+                Path(__file__).parent.parent
+                / "data/31-1 base coastal case/reference"
+                / "dike_data.json"
+            )
+        )
 
         def run_callback():
             return fill_traject_table_from_database(_dike_data)
@@ -81,7 +94,12 @@ class TestCallback:
         """
 
         _dike_data = json.load(
-            open(Path(__file__).parent.parent / 'data/31-1 base coastal case/reference' / 'dike_data.json'))
+            open(
+                Path(__file__).parent.parent
+                / "data/31-1 base coastal case/reference"
+                / "dike_data.json"
+            )
+        )
 
         def run_callback():
             return update_slider_years_from_database(_dike_data)
@@ -91,4 +109,4 @@ class TestCallback:
 
         assert isinstance(output, dict)
         assert 2025 in output.keys()
-        assert output[2025] == {'label': '2025'}
+        assert output[2025] == {"label": "2025"}

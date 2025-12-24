@@ -7,12 +7,12 @@ from src.constants import CalcType, Mechanism
 
 # TODO: move this file to the folder src/plotly_graphs/test_comparison_page
 def plot_measure_results_graph(
-        measure_results: DataFrame,
-        vr_steps: list[dict],
-        dsn_steps: list[dict],
-        mechanism: Mechanism,
-        section_name: str,
-        year_index: int,
+    measure_results: DataFrame,
+    vr_steps: list[dict],
+    dsn_steps: list[dict],
+    mechanism: Mechanism,
+    section_name: str,
+    year_index: int,
 ) -> go.Figure:
     """
     Make the plot Beta vs cost comparing all the measures for a dike section.
@@ -33,7 +33,9 @@ def plot_measure_results_graph(
             measure_results["measure"],
             measure_results.get("dberm", None),
             measure_results.get("dcrest", None),
-            measure_results.get("measure_result_id", None)  # keep this for the clickData event
+            measure_results.get(
+                "measure_result_id", None
+            ),  # keep this for the clickData event
         ),
         axis=-1,
     )
@@ -85,11 +87,11 @@ def plot_measure_results_graph(
 
 
 def add_trace_run_results(
-        fig: go.Figure,
-        step_measures: list[dict],
-        calc_type: CalcType,
-        mechanism: Mechanism,
-        year_index: int,
+    fig: go.Figure,
+    step_measures: list[dict],
+    calc_type: CalcType,
+    mechanism: Mechanism,
+    year_index: int,
 ):
     """
     Add traces for the provided step_measures (either Veiligheidsrendement or doorsnede)
@@ -112,8 +114,8 @@ def add_trace_run_results(
             hover_extra = ""
         else:
             hover_extra = (
-                    f"Dberm: {taken_measure.get('dberm', None)}m<br>"
-                    + f"Dcrest: {taken_measure.get('dcrest', None)}m<br>"
+                f"Dberm: {taken_measure.get('dberm', None)}m<br>"
+                + f"Dcrest: {taken_measure.get('dcrest', None)}m<br>"
             )
 
         if calc_type == CalcType.VEILIGHEIDSRENDEMENT:
@@ -157,12 +159,11 @@ def add_trace_run_results(
                     ),
                 ),
                 hovertemplate=f"<b>Stap {step_number} {taken_measure['name']}</b><br><br>"
-                              + f"Investment year: {taken_measure['investment_year']}<br>"
-                              + "Beta: %{y:.2f}<br>"
-                              + "Cost: €%{x:.2f} mln<br>"
-                              + hover_extra,
+                + f"Investment year: {taken_measure['investment_year']}<br>"
+                + "Beta: %{y:.2f}<br>"
+                + "Cost: €%{x:.2f} mln<br>"
+                + hover_extra,
             ),
-
         )
 
         fig.add_annotation(
@@ -171,22 +172,22 @@ def add_trace_run_results(
             y=taken_measure[mech_key][year_index],
         )
     if step_measures:
-        fig.add_trace(go.Scatter(name="VR laatste stap",
-                                 visible=True if calc_type == CalcType.VEILIGHEIDSRENDEMENT else False,
-                                 showlegend=True,
-                                 mode="markers",
-                                 hovertemplate=f"Investment year: {taken_measure['investment_year']}<br>"
-                                               + "Beta: %{y:.2f}<br>"
-                                               + "Cost: €%{x:.2f} mln<br>"
-                                                + hover_extra,
-                                 marker=dict(
-                                     size=10,
-                                     color='red',
-                                     symbol=(
-                                         "diamond"
-                                     ),
-                                 ),
-
-                                 x=[[taken_measure["cost"] / 1e6][0]],
-                                 y=[[taken_measure[mech_key][year_index]][0]],
-                                 ))
+        fig.add_trace(
+            go.Scatter(
+                name="VR laatste stap",
+                visible=True if calc_type == CalcType.VEILIGHEIDSRENDEMENT else False,
+                showlegend=True,
+                mode="markers",
+                hovertemplate=f"Investment year: {taken_measure['investment_year']}<br>"
+                + "Beta: %{y:.2f}<br>"
+                + "Cost: €%{x:.2f} mln<br>"
+                + hover_extra,
+                marker=dict(
+                    size=10,
+                    color="red",
+                    symbol=("diamond"),
+                ),
+                x=[[taken_measure["cost"] / 1e6][0]],
+                y=[[taken_measure[mech_key][year_index]][0]],
+            )
+        )

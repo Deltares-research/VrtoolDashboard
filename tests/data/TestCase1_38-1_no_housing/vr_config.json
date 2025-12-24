@@ -1,7 +1,6 @@
 {
     "traject": "38-1",
     "input_directory": "C:/Users/hauth/repositories/VRtoolDashboard/tests/data/TestCase1_38-1_no_housing",
-    "output_directory": "C:/Users/hauth/repositories/VRtoolDashboard/tests/data/TestCase1_38-1_no_housing/results",
     "excluded_mechanisms": [],
     "input_database_name": "vrtool_input.db"
 }

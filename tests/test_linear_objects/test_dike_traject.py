@@ -11,10 +11,15 @@ from src.utils.utils import get_traject_reliability
 
 class TestDikeTraject:
     def test_deserialize(self):
-        """ Test if the DikeTraject object can be deserialized from a dict correctly"""
+        """Test if the DikeTraject object can be deserialized from a dict correctly"""
         # 1. Define data
         _dike_data = json.load(
-            open(Path(__file__).parent.parent / 'data/31-1 base coastal case/reference' / 'dike_data.json'))
+            open(
+                Path(__file__).parent.parent
+                / "data/31-1 base coastal case/reference"
+                / "dike_data.json"
+            )
+        )
 
         # 2. Define test
         _dike_traject = DikeTraject.deserialize(_dike_data)
@@ -35,18 +40,34 @@ class TestDikeTraject:
     def test_get_traject_prob(self):
         # 1. Define data
         _dike_data = json.load(
-            open(Path(__file__).parent.parent / 'data/31-1 base coastal case/reference' / 'dike_data.json'))
+            open(
+                Path(__file__).parent.parent
+                / "data/31-1 base coastal case/reference"
+                / "dike_data.json"
+            )
+        )
 
         # 2. Define test
         _dike_traject = DikeTraject.deserialize(_dike_data)
         dike_sections = _dike_traject.dike_sections
 
-        _traject_reliability = get_traject_reliability(dike_sections, 'initial')
+        _traject_reliability = get_traject_reliability(dike_sections, "initial")
         _traject_pf = get_traject_prob_fast(_traject_reliability)[1]
 
         # 3. Assert
         _expected_traject_pf = np.array(
-            [[0.02938911, 0.02957493, 0.02958784, 0.02965843, 0.03022501, 0.03147336, 0.03413831]])
+            [
+                [
+                    0.02938911,
+                    0.02957493,
+                    0.02958784,
+                    0.02965843,
+                    0.03022501,
+                    0.03147336,
+                    0.03413831,
+                ]
+            ]
+        )
         # _expected_res_2 = {'Overflow': np.array([0.00014024, 0.00027972, 0.00028995, 0.0003468, 0.00083413,
         #                                          0.00198239, 0.00452094]),
         #                    'Piping': np.array([1.68673435e-05, 2.39223517e-05, 2.43596051e-05, 2.66576876e-05,
