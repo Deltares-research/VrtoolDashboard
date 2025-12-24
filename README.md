@@ -28,7 +28,7 @@ If the installation of all the packages is not successful and error messages are
 3. The dashboard is now installed and ready to use. To run the dashboard, run the following command:
 
    ```bash
-   pixi run -e dev python -m src.index
+   pixi run -e dev -- python -m src.index --platform win-64
    ```
 
 The dashboard should pop up in your default browser. If not, navigate to http address displayed in the terminal.
@@ -37,4 +37,5 @@ Once the dashboard is already installed, only the third step is required to star
 
 
 
+Consider also using `pixi remove dev` if stuck in installation.
 

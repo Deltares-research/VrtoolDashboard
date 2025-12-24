@@ -129,6 +129,9 @@ def run_optimize_algorithm(
                 # Add this handler to the VrToolLogger to trace the messages
                 # of the given logging level.
                 VrToolLogger.add_handler(self, logging.INFO)
+                log_file =  _vr_config.input_directory / "vrtool_optimization.log"
+                VrToolLogger.init_file_handler(log_file, logging.INFO)
+
                 return self
 
             def __exit__(self, exc_type, exc_value, traceback):

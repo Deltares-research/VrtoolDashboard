@@ -18,7 +18,7 @@ classifiers = [
     'Topic :: Scientific/Engineering :: Physics',
     'Topic :: Scientific/Engineering :: Hydrology',
 ]
-requires-python = ">=3.12,<3.14"
+requires-python = "==3.12"
 dependencies = ["vrtool @ https://github.com/Deltares/Veiligheidsrendement/releases/download/v1.2.0/vrtool-1.2.0-py3-none-any.whl", "geopandas", "numpy", "tabulate", "diskcache", "multiprocess", "plotly", "dash", "dash-ag-grid", "dash-iconify", "dash-mantine-components", "dash-bootstrap-components", "openturns"]
 
 [project.urls]
@@ -46,7 +46,7 @@ channels = ["conda-forge"]
 platforms = ["linux-64","osx-arm64", "osx-64", "win-64"]
 
 [tool.pixi.dependencies]
-python = ">=3.12,<3.14"
+python = "==3.12"
 geopandas = ">=1.1.1"
 numpy = ">=1.26.4"
 tabulate = ">=0.9.0"
@@ -89,17 +89,11 @@ build = "python -m build --outdir dist/"
 python = "3.12.*"
 
 
-[tool.pixi.feature.py313.dependencies]
-python = "3.13.*"
-
-
-
 [tool.pixi.environments]
 default = { solve-group = "default" }
 test = { features = ["test"], solve-group = "default" }
 dev = { features = ["dev", "test"], solve-group = "default" }
 py312 = ["py312", "default"]
-py313 = ["py313", "default"]
 
 
 [tool.black]
